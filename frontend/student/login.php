@@ -1,0 +1,49 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/head.php';
+?>
+<title>Log In | SCES Online Learning Platform</title>
+</head>
+
+<body>
+  <div class="flex-container">
+    <div class="column left">
+      <div class="opening">
+        <h1>Welcome Back!</h1>
+        <h1>Please, Log In</h1>
+      </div>
+      <div class="wrapper">
+        <img src="/SCES/assets/images/login.png" alt="sign up icon" class="img-500px" />
+      </div>
+    </div>
+    <div class="column right">
+      <div class="form-wrapper">
+        <form id="studLogin">
+          <h1>Log In</h1>
+          <div class="input-icons">
+            <label for="email">
+              <i class="fa-solid fa-envelope icon"></i>
+            </label>
+            <input type="email" name="email" id="email" placeholder="Email" />
+          </div>
+          <div class="input-icons">
+            <label for="password">
+              <i class="fa-solid fa-lock icon"></i>
+            </label>
+            <input type="password" name="password" id="password" placeholder="Password" />
+          </div>
+          <button type="submit" id="studLoginBtn">Login</button>
+        </form>
+      </div>
+      <br>
+      <div class="separator">Or</div>
+      <br>
+      <a href="signup.php" class="button-container">
+        <div class="btn-wrapper">
+          <h1>Create an Account</h1>
+        </div>
+      </a>
+    </div>
+  </div>
+  <?php
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/footer.php';
+  ?>

@@ -1,0 +1,27 @@
+<div class="header">
+    <div class="welcome-box">
+        <div class="welcome-text">
+            <h1>Welcome back, <?php echo htmlspecialchars($studentFname); ?>!</h1>
+            <a href="/SCES/frontend/student/quizzes.php"><span>View pending quizzes <i class="fa-solid fa-arrow-right"></i></span></a>
+        </div>
+        <div class="lamp-container">
+            <img src="/SCES/assets/images/lamp.png" alt="lamp" />
+        </div>
+    </div>
+    <div class="user-info">
+        <a href="#">
+            <div class="message-btn">
+                <i class="fa-solid fa-envelope icon"></i>
+            </div>
+        </a>
+        <a href="#">
+            <div class="notif-btn">
+                <i class="fa-solid fa-bell icon"></i>
+            </div>
+        </a>
+        <div class="current-user">
+            <img src="/SCES/student-storage/images/<?php echo $image;?>" alt="user icon">
+            <h1><?php echo htmlspecialchars($studentFname. ' '. $studentLname); ?></h1>
+        </div>
+    </div>
+</div>

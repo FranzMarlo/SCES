@@ -1,0 +1,362 @@
+@import url('https://fonts.googleapis.com/css?family=Limelight');
+* {
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  list-style: none;
+  box-sizing: border-box;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+nav {
+  padding-top: 15px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-bottom: 15px;
+  background: #fff;
+  min-height: 80px;
+  width: auto;
+}
+label.logo {
+  padding-left: 10px;
+  font-size: 35px;
+  line-height: 80px;
+  font-weight: bold;
+}
+img.logo {
+  float: left;
+}
+nav ul {
+  float: right;
+  margin-right: 20px;
+}
+nav ul li {
+  display: inline-block;
+  line-height: 80px;
+  margin: 0 5px;
+}
+nav ul li a {
+  color: #565656;
+  font-size: 17px;
+  padding: 7px 13px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+nav ul li a i {
+  color: #565656;
+  font-size: 20px;
+  padding: 7px 1px;
+  border-radius: 3px;
+}
+nav ul li a button {
+  font-size: 17px;
+  padding: 7px 13px;
+  border-radius: 25px;
+  border-color: #fad9ec;
+  background-color: #fad9ec;
+  border-style: solid;
+  color: #565656;
+  font-weight: bold;
+}
+.checkbtn {
+  font-size: 30px;
+  color: #565656;
+  float: right;
+  line-height: 80px;
+  margin-right: 40px;
+  cursor: pointer;
+  display: none;
+}
+#check {
+  display: none;
+}
+nav ul li a i:hover {
+  color: #ef5098;
+}
+nav ul li a button:hover {
+  background-color: #ef5098;
+  color: #fff;
+}
+nav ul li a:hover {
+  color: #ef5098;
+}
+#check:checked ~ ul {
+  left: 0;
+}
+.hero-flex-container {
+  margin: 50px;
+  margin-top: 10px;
+}
+.hero-flex-container:after {
+  content: "";
+  display: table;
+  clear: both;
+  border: none;
+}
+.hero-column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  background-color: #fad9ec;
+}
+.hero-opening {
+  padding: 50px;
+  padding-bottom: 0;
+}
+.hero-opening h1 {
+  color: #ef5098;
+  font-size: 70px;
+  font-family: 'Limelight', sans-serif-;
+}
+.hero-content {
+  padding: 50px;
+  padding-bottom: 0;
+}
+.hero-content h5 {
+  font-size: 20px;
+}
+.hero-content p {
+  padding-top: 10px;
+  font-size: 20px;
+}
+.hero-button-container {
+  padding: 50px;
+}
+.hero-button-container button {
+  background-color: #f3e14e;
+  border-radius: 25px;
+  width: 100px;
+  padding: 10px;
+  border-style: none;
+}
+.hero-column img {
+  float: right;
+  height: 600px;
+  width: 700px;
+}
+.hero-column.text {
+  height: 620px;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+.hero-column.image {
+  padding-top: 20px;
+  padding-bottom: 0;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+@media (width < 1199px) {
+  .hero-opening h1 {
+    font-size: 40px;
+  }
+  .hero-column.text {
+    height: 430px;
+  }
+  .hero-column img {
+    height: 410px;
+    width: 450px;
+  }
+  .hero-content h5 {
+    font-size: 15px;
+  }
+  .hero-content p {
+    padding-top: 10px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 992px) {
+  label.logo {
+    font-size: 25px;
+  }
+  nav ul li a {
+    font-size: 13px;
+  }
+  .hero-opening h1 {
+    font-size: 30px;
+  }
+  .hero-column.text {
+    height: 430px;
+  }
+  .hero-column img {
+    height: 410px;
+    width: 450px;
+  }
+  .hero-content h5 {
+    font-size: 15px;
+  }
+  .hero-content p {
+    padding-top: 10px;
+    font-size: 15px;
+  }
+  nav ul li a button{
+   font-size: 13px; 
+  }
+}
+@media (width < 768px) {
+  label.logo {
+    font-size: 25px;
+  }
+  .checkbtn {
+    display: block;
+  }
+  ul {
+    position: fixed;
+    width: 100%;
+    background: #fad9ec;
+    height: 100vh;
+    top: 110px;
+    left: -100%;
+    text-align: center;
+    transition: all 0.5s;
+  }
+  nav ul li {
+    display: block;
+    margin: 50px 0;
+    line-height: 30px;
+  }
+  nav ul li a {
+    color: #ef5098;
+    font-size: 20px;
+  }
+  nav ul li a i {
+    color: #ef5098;
+    font-size: 20px;
+  }
+  nav ul li a button {
+    background-color: #ef5098;
+    color: #fff;
+  }
+  nav ul li a i:hover {
+    color: #fff;
+  }
+  nav ul li a button:hover {
+    background-color: #fff;
+    color: #ef5098;
+  }
+  nav ul li a:hover {
+    color: #fff;
+  }
+  #check:checked ~ ul {
+    left: 0;
+  }
+  .hero-opening {
+    padding: 20px;
+    padding-bottom: 0;
+  }
+  .hero-content {
+    padding: 20px;
+    padding-bottom: 0;
+  }
+  .hero-button-container {
+    padding: 20px;
+  }
+  .hero-opening h1 {
+    font-size: 30px;
+  }
+  .hero-column.text {
+    height: 430px;
+  }
+  .hero-column img {
+    height: 410px;
+    width: 410px;
+  }
+  .hero-content h5 {
+    font-size: 15px;
+  }
+  .hero-content p {
+    padding-top: 10px;
+    font-size: 15px;
+  }
+  nav ul li a button{
+   font-size: 13px; 
+  }
+}
+@media (max-width: 600px) {
+  .hero-column.text {
+    height: 300px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .hero-column.image {
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .hero-flex-container {
+    margin: 0;
+  }
+  .hero-opening {
+    padding: 10px;
+  }
+  .hero-opening h1 {
+    font-size: 40px;
+  }
+  .hero-content {
+    padding: 10px;
+  }
+  .hero-content h5 {
+    font-size: 15px;
+  }
+  .hero-content p {
+    padding-top: 10px;
+    font-size: 15px;
+  }
+  .hero-button-container {
+    padding: 10px;
+  }
+  .hero-column {
+    width: 100%;
+  }
+  .hero-column img {
+    height: 300px;
+    width: 300px;
+  }
+  nav {
+    padding-right: 0px;
+  }
+  .checkbtn {
+    display: block;
+  }
+  ul {
+    position: fixed;
+    width: 100%;
+    background: #fad9ec;
+    height: 100vh;
+    top: 110px;
+    left: -100%;
+    text-align: center;
+    transition: all 0.5s;
+  }
+  nav ul li {
+    display: block;
+    margin: 50px 0;
+    line-height: 30px;
+  }
+  nav ul li a {
+    color: #ef5098;
+    font-size: 20px;
+  }
+  nav ul li a i {
+    color: #ef5098;
+    font-size: 20px;
+  }
+  nav ul li a button {
+    background-color: #ef5098;
+    color: #fff;
+  }
+  nav ul li a i:hover {
+    color: #fff;
+  }
+  nav ul li a button:hover {
+    background-color: #fff;
+    color: #ef5098;
+  }
+  nav ul li a:hover {
+    color: #fff;
+  }
+  #check:checked ~ ul {
+    left: 0;
+  }
+}

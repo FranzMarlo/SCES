@@ -1,0 +1,366 @@
+* {
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  list-style: none;
+  box-sizing: border-box;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #fff;
+}
+.flex-container {
+  margin: 40px 70px;
+  align-items: center;
+}
+.sign-up{
+  margin: 20px 70px;
+}
+.flex-container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.opening h1 {
+  text-align: center;
+  font-size: 25px;
+  padding-bottom: 10px;
+}
+.wrapper {
+  height: 100%;
+  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.wrapper img {
+  height: 600px;
+  padding: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.wrapper img.img-500px {
+  height: 500px;
+}
+.form-wrapper {
+  background-color: #b6cbf9;
+  border-radius: 30px;
+  box-shadow: -4px 0 2px 0 #9c9c9c;
+  height: 100%;
+  width: 100%;
+}
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #b3b3b3;
+  font-weight: bold;
+  width: 100%;
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #b3b3b3;
+}
+
+.separator:not(:empty)::before {
+  margin-right: 25px;
+}
+
+.separator:not(:empty)::after {
+  margin-left: 25px;
+}
+a.button-container{
+  width: 80%;
+  border-radius: 30px;
+}
+.btn-wrapper {
+  border-radius: 30px;
+  background-color: #dae5fc;
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  box-shadow: -4px 0 5px -2px #5b5b5b;
+}
+.btn-wrapper h1 {
+  font-size: 22px;
+  text-align: center;
+  color: #353841;
+}
+.form-wrapper form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 70px;
+}
+.form-wrapper form.form-40px {
+  padding: 30px;
+}
+.form-wrapper form h1 {
+  text-align: center;
+  margin: 20px;
+  margin-bottom: 30px;
+}
+.input-icons {
+  margin-bottom: 25px;
+}
+.input-icons i {
+  position: absolute;
+}
+.icon {
+  padding: 15px;
+  color: #353841;
+  min-width: 50px;
+  text-align: center;
+}
+.form-wrapper form .input-icons input {
+  border-radius: 30px;
+  min-width: 320px;
+  padding: 0 50px;
+  height: 45px;
+  box-shadow: -4px 0 5px -2px #5b5b5b;
+  border-style: none;
+  background-color: #fff;
+  text-align: left;
+}
+.form-wrapper form .input-icons input:focus,
+.form-wrapper form .input-icons select:focus {
+  outline: none !important;
+}
+.form-wrapper form .input-icons input::placeholder {
+  font-weight: bold;
+  color: #74767c;
+  opacity: 1; /* Firefox */
+}
+::-ms-input-placeholder {
+  font-weight: bold;
+  color: #74767c;
+}
+.form-wrapper form .input-icons select {
+  border-radius: 30px;
+  min-width: 320px;
+  padding: 0 45px;
+  height: 45px;
+  box-shadow: -4px 0 5px -2px #5b5b5b;
+  border-style: none;
+  background-color: #fff;
+  text-align: left;
+  font-weight: bold;
+  color: #74767c;
+  appearance: none;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("../images/arrow-down.png");
+  background-size: 15px;
+  background-position: 95%;
+  background-repeat: no-repeat;
+}
+.form-wrapper form button[type="submit"] {
+  border-radius: 30px;
+  padding: 0 15px;
+  width: 100px;
+  height: 35px;
+  background-color: #183577;
+  color: #fff;
+  box-shadow: none;
+  font-weight: bold;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.create-btn {
+  width: 100%;
+}
+@media (width < 1199px) {
+  .separator {
+    margin-left: 10px;
+    width: 100%;
+  }
+  .btn-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .btn-wrapper h1 {
+    font-size: 22px;
+  }
+  .flex-container {
+    margin: 30px;
+  }
+  .column {
+    padding: 0;
+  }
+  .wrapper img {
+    min-height: 200px;
+    max-height: 400px;
+    height: auto;
+    padding: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .opening h1 {
+    font-size: 25px;
+  }
+  .wrapper {
+    width: 100%;
+  }
+  .form-wrapper {
+    margin: 0 10px;
+    width: 100%;
+  }
+  .form-wrapper form .input-icons input,
+  .form-wrapper form .input-icons select {
+    min-width: 0;
+    width: 250px;
+  }
+}
+@media (width < 767px) {
+  .opening {
+    padding-top: 10px;
+  }
+  .separator {
+    margin-left: 0;
+    width: 100%;
+  }
+  .btn-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .btn-wrapper h1 {
+    font-size: 16px;
+  }
+  .flex-container {
+    margin: 0;
+  }
+  .right {
+    padding: 0;
+  }
+  .column {
+    width: 100%;
+  }
+  .opening {
+    margin: 0;
+    padding: 0;
+  }
+  .opening h1 {
+    font-size: 18px;
+    padding-bottom: 10px;
+  }
+  .wrapper {
+    padding: 0;
+    margin: auto;
+  }
+  .wrapper img {
+    padding: 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 200px;
+  }
+  .right {
+    padding: 10px 20px;
+  }
+  .form-wrapper {
+    margin: 0;
+    width: 100%;
+  }
+  .form-wrapper form h1 {
+    margin: 0;
+    font-size: 25px;
+    margin-bottom: 30px;
+  }
+  .input-icons {
+    margin-bottom: 20px;
+  }
+  .form-wrapper form .input-icons input {
+    min-width: 0;
+    width: 400px;
+  }
+  .form-wrapper form .input-icons select {
+    min-width: 0;
+    width: 400px;
+  }
+  .form-wrapper form input[type="submit"] {
+    margin-top: 0;
+  }
+}
+@media (width < 600px) {
+  .opening {
+    padding-top: 10px;
+  }
+  .separator {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+  .btn-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .flex-container {
+    margin: 0;
+  }
+  .right {
+    padding: 0;
+  }
+  .column {
+    width: 100%;
+  }
+  .opening {
+    margin: 0;
+    padding: 0;
+  }
+  .opening h1 {
+    font-size: 18px;
+    padding-bottom: 10px;
+  }
+  .wrapper {
+    padding: 0;
+    margin: auto;
+  }
+  .wrapper img {
+    padding: 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 200px;
+  }
+  .right {
+    padding: 10px;
+  }
+  .form-wrapper {
+    margin: 0;
+    width: 100%;
+  }
+  .form-wrapper form h1 {
+    margin: 0;
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+  .input-icons {
+    margin-bottom: 20px;
+  }
+  .form-wrapper form .input-icons input {
+    min-width: 0;
+    width: 250px;
+  }
+  .form-wrapper form .input-icons select{
+    min-width: 0;
+    width: 250px;
+  }
+  .form-wrapper form input[type="submit"] {
+    margin-top: 0;
+  }
+}

@@ -1,0 +1,703 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #fff;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 40px;
+  gap: 20px;
+}
+.pop-up {
+  display: none;
+}
+.menu-panel {
+  display: none;
+}
+.dropdown {
+  display: none;
+}
+.sidebar {
+  position: relative;
+  width: 256px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  padding: 24px;
+  border-radius: 30px;
+  gap: 20px;
+  transition: all 0.3s;
+}
+.sidebar .head {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f6f6f6;
+}
+.school-img {
+  width: 70px;
+  height: 70px;
+  overflow: hidden;
+}
+.school-img img {
+  width: 100%;
+  object-fit: cover;
+}
+.school-details {
+  display: flex;
+  align-items: center;
+}
+.school-details .title {
+  font-size: 30px;
+  font-weight: bold;
+  color: #466a83;
+}
+.nav {
+  flex: 1;
+}
+.menu ul li {
+  position: relative;
+  list-style: none;
+  margin-bottom: 10px;
+}
+.menu ul li a {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 18px;
+  color: #4d768a;
+  text-decoration: none;
+  padding: 12px 8px;
+  border-radius: 8px;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+.menu ul li > a:hover,
+.menu ul li.active > a {
+  background-color: #e5e5e5;
+}
+.menu ul li .icon {
+  font-size: 20px;
+}
+.menu ul li .text {
+  flex: 1;
+}
+.menu ul li .icon {
+  font-size: 20px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 20px;
+}
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 20px;
+}
+.header .welcome-box {
+  display: flex;
+  background-color: #fbe1f0;
+  min-height: 80px;
+  width: 60%;
+  border-radius: 30px;
+  justify-content: space-between;
+}
+.header .welcome-box .welcome-text {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: center;
+}
+.header .welcome-box .welcome-text h1 {
+  font-size: 30px;
+  font-weight: 500;
+}
+.header .welcome-box .welcome-text a{
+  text-decoration: none;
+  color: #000;
+  font-size: 12px;
+}
+.lamp-container {
+  padding-right: 20px;
+}
+.lamp-container img {
+  height: 80px;
+}
+.user-info,
+.current-user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.user-info .message-btn,
+.user-info .notif-btn {
+  color: #4d768a;
+  padding: 20px;
+}
+.message-btn .icon,
+.notif-btn .icon {
+  font-size: 30px;
+}
+.current-user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.current-user img {
+  height: 60px;
+  border-radius: 50px;
+}
+.current-user h1 {
+  font-size: 20px;
+  font-weight: 500;
+}
+.about-panel {
+  background-color: #f4df55;
+  border-radius: 30px;
+  width: 100%;
+  height: 260px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.about-text {
+  padding: 40px 0px 0px 40px;
+  width: 50%;
+}
+.about-text h1 {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+.about-text p {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.about-text button {
+  background-color: #fbf4cb;
+  border-style: none;
+  height: 40px;
+  width: 100px;
+  padding: 5px;
+  border-radius: 30px;
+}
+.about-img {
+  padding: 10px 20px;
+}
+.about-img img {
+  height: 250px;
+  width: 500px;
+}
+.overview-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.overview-panel .overview-title {
+  padding: 0 10px;
+  padding-bottom: 10px;
+}
+.overview-panel .overview-title h1 {
+  font-size: 25px;
+}
+.overview-panel .overview-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+.overview-panel .overview-container .box {
+  height: 90px;
+  width: 22%;
+  padding: 10px;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.overview-container .box .img-container img {
+  height: 60px;
+}
+.overview-container .box .data-container {
+  padding: 5px;
+  text-align: center;
+}
+.completion {
+  background-color: #86d2c2;
+}
+.pending {
+  background-color: #f0bad1;
+}
+.excel {
+  background-color: #aac3fc;
+}
+.regress {
+  background-color: #f2e04d;
+}
+.to-do-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #f5f5f5;
+  border-radius: 30px;
+  padding: 20px;
+}
+.to-do-header {
+  display: flex;
+  flex-direction: row;
+}
+.to-do-header i {
+  font-size: 25px;
+  margin-right: 15px;
+  color: #466a83;
+}
+.to-do-header h1 {
+  color: #466a83;
+  font-size: 25px;
+}
+.to-do-item {
+  margin-top: 10px;
+  background-color: #fbe1f0;
+  border-radius: 30px;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.info-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 40%;
+  gap: 20px;
+}
+.info-box h1 {
+  font-size: 20px;
+  color: #76747c;
+}
+.info-box p {
+  font-size: 15px;
+  color: #76747c;
+}
+.date-box {
+  width: 60%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.date-box p {
+  font-size: 15px;
+  color: #46ac36;
+  font-weight: bold;
+}
+.date-box span {
+  font-size: 15px;
+  color: #76747c;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+  display: none;
+}
+
+.pop-up.active + .overlay {
+  display: block;
+}
+
+@media (width < 1199px) {
+  .container {
+    padding: 0.5rem;
+  }
+  .menu-panel {
+    display: none;
+  }
+  .sidebar {
+    width: 200px;
+    padding: 15px;
+  }
+  .header {
+    gap: 10px;
+  }
+  .header .welcome-box {
+    width: 60%;
+  }
+  .header .welcome-box .welcome-text {
+    padding: 10px 15px;
+  }
+  .header .welcome-box .welcome-text h1 {
+    font-size: 1.5rem;
+  }
+  .lamp-container {
+    padding-right: 10px;
+  }
+  .user-info .message-btn,
+  .user-info .notif-btn {
+    padding: 20px 10px;
+  }
+  .message-btn .icon,
+  .notif-btn .icon {
+    font-size: 1.5rem;
+  }
+  .current-user {
+    gap: 5px;
+  }
+  .about-panel {
+    width: 98%;
+  }
+  .about-text {
+    padding: 35px 0px 0px 35px;
+  }
+  .about-text h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  .about-text p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+  .about-img img {
+    width: 420px;
+  }
+  .overview-panel {
+    width: 98%;
+  }
+  .overview-panel .overview-title h1 {
+    font-size: 1.5rem;
+  }
+  .overview-panel .overview-container {
+    gap: 5px;
+  }
+  .overview-panel .overview-container .box {
+    height: 70px;
+    width: 25%;
+  }
+  .overview-container .box .img-container {
+    padding: 5px 5px;
+  }
+  .overview-container .box .img-container img {
+    height: 40px;
+  }
+  .overview-container .box .data-container h1 {
+    font-size: 1.5rem;
+  }
+  .to-do-panel {
+    width: 98%;
+  }
+  .to-do-header i {
+    font-size: 1.5rem;
+  }
+  .to-do-header h1 {
+    font-size: 1.5rem;
+  }
+}
+@media (width < 992px) {
+  .container {
+    padding: 5px;
+    gap: 20px;
+  }
+  .header .user-info {
+    display: none;
+  }
+  .pop-up {
+    min-height: 100vh;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    background-color: #f5f5f5;
+    padding: 10px;
+    left: -100%;
+    transition: ease 0.5s;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+  }
+  .pop-up.active {
+    left: 0;
+  }
+  .menu-panel {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-style: none;
+    border-bottom: 1px solid #f5f5f5;
+    box-shadow: 0 0 5px 0 #9c9c9c;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  .menu-part {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .menu-btn {
+    font-size: 30px;
+    height: 50px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 50px;
+  }
+  .logo-panel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .logo-panel img {
+    height: 40px;
+    margin-right: 5px;
+  }
+  .logo-panel h1 {
+    font-size: 30px;
+  }
+  .sidebar {
+    display: none;
+  }
+  .school-img {
+    height: 50px;
+    width: 50px;
+  }
+  .school-details .title {
+    font-size: 1.5rem;
+  }
+  .current-user img {
+    height: 50px;
+  }
+  .message-btn .icon,
+  .notif-btn .icon {
+    font-size: 1.5rem;
+  }
+  .header {
+    width: 100%;
+  }
+  .about-panel {
+    width: 100%;
+  }
+  .overview-panel {
+    width: 100%;
+  }
+  .header .welcome-box {
+    width: 100%;
+  }
+  .to-do-panel {
+    width: 100%;
+  }
+  .pop-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 5px;
+  }
+  .pop-menu .menu {
+    padding: 5px;
+  }
+  .pop-up .menu ul {
+    padding: 10px;
+  }
+  .menu-btn:hover {
+    background-color: #dadada;
+  }
+  .overview-panel .overview-container .box {
+    height: 70px;
+    width: 23%;
+  }
+  .overview-container .box .data-container h1 {
+    font-size: 1.5rem;
+  }
+  .overview-container .box .data-container p {
+    font-size: 0.8rem;
+  }
+}
+@media (width < 768px) {
+  .pop-up {
+    width: 230px;
+  }
+  .menu-panel {
+    padding: 5px;
+  }
+  .menu-btn {
+    margin-right: 5px;
+  }
+  .menu-part .user-info {
+    display: none;
+  }
+  .pop-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 5px;
+    padding: 5px 10px;
+    border-radius: 50px;
+  }
+  .pop-btn .icon {
+    font-size: 1.5rem;
+  }
+  .pop-btn:hover {
+    background-color: #dadada;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    overflow: auto;
+    z-index: 5;
+    right: 10%;
+    border-radius: 10px;
+    box-shadow: 0 0 3px 0 #9c9c9c;
+  }
+  .dropdown-content ul li a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+  }
+  .dropdown-content ul li a i {
+    font-size: 1.2rem;
+    color: #466a83;
+    margin-right: 15px;
+  }
+  .dropdown a:hover {
+    background-color: #ddd;
+  }
+  .show {
+    display: block;
+  }
+  .about-panel {
+    height: 250px;
+  }
+  .about-img {
+    flex: 1;
+    padding: 0;
+    padding-right: 25px;
+  }
+  .about-text {
+    position: absolute;
+  }
+  .about-img img {
+    width: 100%;
+    height: 100%;
+  }
+  .overview-panel .overview-container {
+    flex-wrap: wrap;
+  }
+  .overview-container .box .img-container img {
+    height: 30px;
+  }
+  .overview-container .box .data-container h1 {
+    font-size: 1.5rem;
+  }
+  .overview-container .box .data-container p {
+    font-size: 0.8rem;
+  }
+  .overview-container .box .img-container {
+    padding: 3px;
+  }
+  .info-box {
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+}
+@media (width < 600px) {
+  .header .welcome-box .welcome-text h1 {
+    font-size: 20px;
+  }
+  .header .welcome-box .welcome-text {
+    font-size: 10px;
+  }
+  .about-panel {
+    height: 200px;
+  }
+  .about-text {
+    padding: 1rem;
+    width: 70%;
+  }
+  .about-text h1 {
+    font-size: 1.5rem;
+  }
+  .about-text p {
+    font-size: 0.9rem;
+  }
+  .overview-panel .overview-title h1 {
+    font-size: 1.2rem;
+  }
+  .overview-panel .overview-container {
+    justify-content: space-evenly;
+  }
+  .overview-panel .overview-container .box {
+    width: 45%;
+  }
+  .overview-container .box .img-container img {
+    height: 2rem;
+  }
+  .overview-container .box .data-container h1 {
+    font-size: 1.5rem;
+  }
+  .overview-container .box .data-container p {
+    font-size: 0.7rem;
+  }
+  .overview-container .box .img-container {
+    padding: 1px;
+  }
+  .to-do-header i {
+    font-size: 1.2rem;
+  }
+  .to-do-header h1 {
+    font-size: 1.2rem;
+  }
+  .to-do-item {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .info-box {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .info-box h1 {
+    font-size: 1rem;
+  }
+  .info-box p {
+    font-size: 1rem;
+  }
+  .date-box {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .date-box p {
+    font-size: 0.8rem;
+  }
+  .date-box span {
+    font-size: 0.8rem;
+  }
+}
