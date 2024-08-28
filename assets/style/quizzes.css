@@ -36,6 +36,7 @@
   justify-content: center;
   padding: 10px 15px;
   text-align: justify;
+  border: 2px solid #000;
 }
 .pending-item span {
   font-size: 1.1rem;
@@ -60,6 +61,7 @@
   font-size: 1.5rem;
 }
 .quiz-container {
+  border: 2px solid #000;
   background: #f5f5f5;
   width: 100%;
   border-radius: 30px;
@@ -78,6 +80,7 @@
   width: 100%;
   box-shadow: 0 0 2px 0 #9c9c9c;
   border-radius: 30px;
+  border: 2px solid #000;
 }
 .header-bg {
   position: relative;
@@ -125,6 +128,7 @@
   flex-direction: column;
   box-shadow: 0 0 2px 0 #9c9c9c;
   padding: 20px;
+  border: 2px solid #000;
 }
 .question-box {
   text-align: justify;
@@ -137,10 +141,10 @@
   margin-top: 5px;
   width: 100%;
   padding: 0 20px;
-  border: 1px solid #c5c5c5;
   border-radius: 30px;
   display: flex;
   flex-direction: row;
+  border: 2px solid #000;
 }
 .quiz-ans p{
   font-size: 1.1rem;

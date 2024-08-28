@@ -76,9 +76,12 @@
   flex-direction: column;
   padding: 20px;
   gap: 20px;
+  border: 2px solid #000;
 }
 .lesson-header {
   width: 100%;
+  border: 2px solid #000;
+  border-radius: 30px;
 }
 .header-bg {
   position: relative;
@@ -134,6 +137,7 @@
   padding: 20px;
   gap: 15px;
   align-items: center;
+  border: 2px solid #000;
 }
 .module-box h1 {
   font-size: 1rem;
@@ -150,6 +154,7 @@
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 2px 0 #9c9c9c;
+  border: 2px solid #000;
 }
 .lesson-box {
   display: flex;
@@ -166,6 +171,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 30px;
+  border: 2px solid #000;
 }
 .lesson-title {
   display: flex;

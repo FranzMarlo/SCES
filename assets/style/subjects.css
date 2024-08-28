@@ -20,6 +20,7 @@
   flex-wrap: wrap;
   padding: 50px;
   gap: 40px;
+  border: 2px solid #000;
 }
 .subject-box a .box {
   width: 200px;
@@ -31,7 +32,7 @@
 }
 .subject-box a .box .box-icon {
   border-radius: 30px;
-  border: 2px solid #fff;
+  border: 2px solid #000;
 }
 .fil {
   background-color: #ff8080;
