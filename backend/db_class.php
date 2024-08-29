@@ -82,7 +82,7 @@ class globalClass extends db_connect
     }
 
     public function editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $email, $studentId)
-    {   
+    {
         $emailQuery = $this->conn->prepare("UPDATE login_tbl SET email = ? WHERE student_id = ?");
         $emailQuery->bind_param("ss", $email, $studentId);
 
@@ -169,6 +169,39 @@ class globalClass extends db_connect
         if ($query->execute()) {
             $result = $query->get_result();
             return $result;
+        }
+    }
+
+    public function getSubject($sectionId, $level_id)
+    {
+
+        $query = $this->conn->prepare("
+        SELECT 
+            s.subject_id,
+            s.subject,
+            s.level_id,
+            s.icon,
+            s.link,
+            s.subject_title,
+            s.subject_code,
+            t.teacher_fname,
+            t.teacher_lname
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        WHERE 
+            s.level_id = ? 
+        AND 
+            s.section_id = ?");
+        $query->bind_param("ss", $level_id, $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjects = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjects;
+        } else {
+            return false;
         }
     }
 

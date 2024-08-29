@@ -32,7 +32,7 @@ if (isset($_POST['submitType'])) {
                 session_start();
                 $_SESSION['student_id'] = $getStudentData['student_id'];
                 $_SESSION['level_id'] = $getStudentData['level_id'];
-                $_SESSION['section_id'] = $getStudentData['student_id'];
+                $_SESSION['section_id'] = $getStudentData['section_id'];
                 $_SESSION['student_fname'] = $getStudentData['student_fname'];
                 $_SESSION['student_mname'] = $getStudentData['student_mname'];
                 $_SESSION['student_lname'] = $getStudentData['student_lname'];

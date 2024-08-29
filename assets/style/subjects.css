@@ -21,6 +21,14 @@
   padding: 50px;
   gap: 40px;
   border: 2px solid #000;
+  flex-direction: row;
+}
+.no-data-box-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 600px;
 }
 .subject-box a .box {
   width: 200px;
@@ -58,6 +66,18 @@
 .mapeh {
   background-color: #a3adff;
 }
+.no-data-box{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.no-data-box img{
+  height: 200px;
+}
+.no-data-box h1{
+  font-size: 1.2rem;
+}
 .subject-box a .box .box-icon {
   display: flex;
   justify-content: center;
@@ -76,7 +96,7 @@
   padding: 5px 10px;
 }
 .subject-box a .box .box-title h1 {
-  font-size: 1.2rem;
+  font-size: 1.2rem;    
 }
 .subject-box a .box .box-title span {
   font-size: 0.9rem;
@@ -98,7 +118,7 @@
     height: 7rem;
   }
   .subject-box a .box .box-title h1 {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
   }
   .subject-box a .box .box-title span {
     font-size: 0.8rem;
@@ -106,9 +126,10 @@
 }
 @media (width < 992px) {
   .subject-box {
-    gap: 20px;
-    padding: 20px;
     justify-content: center;
+  }
+  .subject-box a{
+    height: fit-content;
   }
 }
 @media (width < 768px) {
