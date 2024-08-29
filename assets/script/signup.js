@@ -4,28 +4,28 @@ document.addEventListener("DOMContentLoaded", function () {
   
     const sectionOptions = {
       G0001: [
-        { value: "S0001", text: "Narra" },
-        { value: "S0002", text: "Acacia" },
+        { value: "G1-001", text: "Narra" },
+        { value: "G1-001", text: "Acacia" },
       ],
       G0002: [
-        { value: "S0003", text: "Mango" },
-        { value: "S0004", text: "Pine" },
+        { value: "G1-001", text: "Mango" },
+        { value: "G1-001", text: "Pine" },
       ],
       G0003: [
-        { value: "S0005", text: "Cedar" },
-        { value: "S0006", text: "Maple" },
+        { value: "G1-001", text: "Cedar" },
+        { value: "G1-001", text: "Maple" },
       ],
       G0004: [
-        { value: "S0007", text: "Mahogany" },
-        { value: "S0008", text: "Cherry" },
+        { value: "G1-001", text: "Mahogany" },
+        { value: "G1-001", text: "Cherry" },
       ],
       G0005: [
-        { value: "S0009", text: "Bamboo" },
-        { value: "S0010", text: "Oak" },
+        { value: "G1-001", text: "Bamboo" },
+        { value: "G1-001", text: "Oak" },
       ],
       G0006: [
-        { value: "S0011", text: "Willow" },
-        { value: "S0012", text: "Aspen" },
+        { value: "G1-001", text: "Willow" },
+        { value: "G1-001", text: "Aspen" },
       ],
     };
   

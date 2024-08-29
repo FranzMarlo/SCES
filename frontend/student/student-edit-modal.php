@@ -24,14 +24,12 @@
             <label for="lastName">Last Name:</label>
             <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($studentLname); ?>">
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
             <button type="submit" class="save-btn">Save</button>
         </form>
     </div>
 </div>
 
-<div id="editPersonalModal" class="modal">
+<div id="editPersonalModal" class="modal" novalidate>
     <div class="modal-content">
         <span class="close-btn" id="closePersonalModal">&times;</span>
         <h2>Edit Personal Information</h2>
@@ -69,7 +67,7 @@
     </div>
 </div>
 
-<div id="editBackgroundModal" class="modal">
+<div id="editBackgroundModal" class="modal" novalidate>
     <div class="modal-content">
         <span class="close-btn" id="closeBackgroundModal">&times;</span>
         <h2>Edit Background Information</h2>

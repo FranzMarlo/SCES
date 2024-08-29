@@ -243,7 +243,6 @@ $("#editProfileForm").on("submit", function (e) {
   e.preventDefault();
   var firstName = $("#firstName").val();
   var lastName = $("#lastName").val();
-  var email = $("#email").val();
 
   $.ajax({
     type: "POST",
@@ -252,7 +251,6 @@ $("#editProfileForm").on("submit", function (e) {
       submitType: "editProfileForm",
       firstName: firstName,
       lastName: lastName,
-      email: email,
     },
     success: function (response) {
       console.log(response);
@@ -271,7 +269,7 @@ $("#editProfileForm").on("submit", function (e) {
             });
           }
         );
-      } else if (response == "468") {
+      } else if (response == "100") {
         $.getScript(
           "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -304,39 +302,6 @@ $("#editProfileForm").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "457") {
-        $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "458") {
-        $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "463") {
-        $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Already In Use",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -395,7 +360,7 @@ $("#editPersonalForm").on("submit", function (e) {
             });
           }
         );
-      } else if (response == "468") {
+      } else if (response == "100") {
         $.getScript(
           "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -572,7 +537,7 @@ $("#editBackgroundForm").on("submit", function (e) {
             });
           }
         );
-      } else if (response == "468") {
+      } else if (response == "100") {
         $.getScript(
           "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {

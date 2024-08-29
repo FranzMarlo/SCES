@@ -15,7 +15,7 @@ if (isset($_SESSION['student_id'])) {
     $barangay = $_SESSION['barangay'];
     $street= $_SESSION['street'];
     $registration = $_SESSION['registration'];
-    $image = $_SESSION['image'];
+    $image = $_SESSION['profile_image'];
     $sectionId =  $_SESSION['section_id'];
     $level_id = $_SESSION['level_id'];
     $section = $_SESSION['section'];

@@ -42,7 +42,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
 							<div class="profile-info">
 								<h1><?php echo htmlspecialchars($studentFname . ' ' . $studentLname); ?></h1>
 								<span><?php echo htmlspecialchars($gradeLevel . ' - ' . $section); ?></span>
-								<span><?php echo htmlspecialchars($email); ?></span>
+								<span>Student ID: <?php echo htmlspecialchars($studentId); ?></span>
 							</div>
 						</div>
 						<div class="profile-part">
@@ -184,6 +184,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
 	</div>
 	</div>
 	<?php
-	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-edit-modal.php';
+	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/student-edit-modal.php';
 	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-footer.php';
 	?>

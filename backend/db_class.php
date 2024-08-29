@@ -11,7 +11,7 @@ class globalClass extends db_connect
 
     public function studentLogin($email, $password)
     {
-        $query = $this->conn->prepare("SELECT *, `password` FROM `student_tbl` WHERE `email` = ?");
+        $query = $this->conn->prepare("SELECT *, `password` FROM `login_tbl` WHERE `email` = ?");
         $query->bind_param("s", $email);
 
         if ($query->execute()) {
@@ -31,15 +31,28 @@ class globalClass extends db_connect
 
     public function studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $guardian_name, $guardian_contact, $city, $barangay, $street, $registration, $image)
     {
+        $year = date("Y");
+        $studentId = $year . rand(0000, 9999);
+        $checkIdResult = $this->checkStudentId($studentId);
 
-        $query = $this->conn->prepare("INSERT INTO `student_tbl` (`level_id`, `section_id`, `student_fname`, `student_mname`, `student_lname`, `age`, `gender`, `email`, `password`, `guardian_name`, `guardian_contact`, `city`, `barangay`, `street`, `registration`, `image`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        while ($checkIdResult->num_rows > 0) {
+            $studentId = $year . rand(0000, 9999);
+            $checkIdResult = $this->checkStudentId($studentId);
+        }
 
-
-        $query->bind_param("sssssissssssssss", $gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $guardian_name, $guardian_contact, $city, $barangay, $street, $registration, $image);
+        $query = $this->conn->prepare("INSERT INTO `student_tbl` (`student_id`, `level_id`, `section_id`, `student_fname`, `student_mname`, `student_lname`, `age`, `gender`, `guardian_name`, `guardian_contact`, `city`, `barangay`, `street`, `registration`, `profile_image`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssssissssssss", $studentId, $gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $age, $gender, $guardian_name, $guardian_contact, $city, $barangay, $street, $registration, $image);
 
 
         if ($query->execute()) {
-            return $this->conn->insert_id;
+            $loginQuery = $this->conn->prepare("INSERT INTO `login_tbl` (`student_id`, `email`, `password`) VALUES (?, ?, ?)");
+            $loginQuery->bind_param("sss", $studentId, $email, $hashedPassword);
+            if ($loginQuery->execute()) {
+
+            } else {
+                return false;
+            }
+            return $studentId;
         } else {
             return false;
         }
@@ -47,7 +60,7 @@ class globalClass extends db_connect
 
     public function checkEmail($email)
     {
-        $query = $this->conn->prepare("SELECT * FROM `student_tbl` WHERE `email` = ?");
+        $query = $this->conn->prepare("SELECT * FROM `login_tbl` WHERE `email` = ?");
         $query->bind_param("s", $email);
 
         if ($query->execute()) {
@@ -56,10 +69,10 @@ class globalClass extends db_connect
         }
     }
 
-    public function editProfileForm($firstName, $lastName, $email, $studentId)
+    public function editProfileForm($firstName, $lastName, $studentId)
     {
-        $query = $this->conn->prepare("UPDATE student_tbl SET student_fname = ?, student_lname = ?, email = ? WHERE student_id = ?");
-        $query->bind_param("sssi", $firstName, $lastName, $email, $studentId);
+        $query = $this->conn->prepare("UPDATE student_tbl SET student_fname = ?, student_lname = ? WHERE student_id = ?");
+        $query->bind_param("ssi", $firstName, $lastName, $studentId);
 
         if ($query->execute()) {
             return true;
@@ -69,11 +82,14 @@ class globalClass extends db_connect
     }
 
     public function editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $email, $studentId)
-    {
-        $query = $this->conn->prepare("UPDATE student_tbl SET student_fname = ?, student_lname = ?, student_mname = ?, age = ?, gender = ?, email = ? WHERE student_id = ?");
-        $query->bind_param("ssssssi", $firstName, $lastName, $middleName, $age, $gender, $email, $studentId);
+    {   
+        $emailQuery = $this->conn->prepare("UPDATE login_tbl SET email = ? WHERE student_id = ?");
+        $emailQuery->bind_param("ss", $email, $studentId);
 
-        if ($query->execute()) {
+        $query = $this->conn->prepare("UPDATE student_tbl SET student_fname = ?, student_lname = ?, student_mname = ?, age = ?, gender = ? WHERE student_id = ?");
+        $query->bind_param("sssisi", $firstName, $lastName, $middleName, $age, $gender, $studentId);
+
+        if ($query->execute() && $emailQuery->execute()) {
             return true;
         } else {
             return false;
@@ -94,13 +110,13 @@ class globalClass extends db_connect
 
     public function getSection($sectionId)
     {
-        $query = $this->conn->prepare("SELECT `section_name` FROM `section_tbl` WHERE section_id = ?");
+        $query = $this->conn->prepare("SELECT `section` FROM `section_tbl` WHERE section_id = ?");
         $query->bind_param("s", $sectionId);
 
         if ($query->execute()) {
             $result = $query->get_result();
             $row = $result->fetch_assoc();
-            return $row['section_name'];
+            return $row['section'];
         } else {
             return false;
         }
@@ -124,16 +140,37 @@ class globalClass extends db_connect
 
     public function updateAvatar($newFileName, $studentId)
     {
-        $query = $this->conn->prepare("UPDATE student_tbl SET image = ? WHERE student_id = ?");
+        $query = $this->conn->prepare("UPDATE student_tbl SET profile_image = ? WHERE student_id = ?");
         $query->bind_param("ss", $newFileName, $studentId);
         if ($query->execute()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
+    public function getStudentCredentials($studentId)
+    {
+        $query = $this->conn->prepare("SELECT * FROM student_tbl WHERE student_id = ?");
+        $query->bind_param("s", $studentId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $student = $result->fetch_assoc();
+            return $student;
+        } else {
+            return false;
+        }
+    }
 
+    public function checkStudentId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM student_tbl WHERE student_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
 
 }
 
