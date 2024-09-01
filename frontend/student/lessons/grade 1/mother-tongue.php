@@ -1,5 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
+$subject = $db->getSubjectDetails('Mother Tongue 1', $sectionId, $level_id);
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/lessons.css" />
 <title>Mother Tongue | SCES Online Learning Platform</title>
@@ -28,7 +29,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
               <i class="fa-solid fa-ellipsis-vertical icon"></i>
             </div>
             <div class="module-dropdown-content">
-              <h1>Learning Modules</h1>
+              <h1>Learning Materials</h1>
               <button class="quarter-1">
                 Quarter 1
               </button>
@@ -48,18 +49,18 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
           <div class="lesson-header">
             <div class="header-bg mt">
               <div class="icon-container">
-                <img src="/SCES/assets/images/mother-tongue-icon.png" alt="mt-icon">
+                <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>" alt="mt-icon">
               </div>
             </div>
             <div class="header-text">
-              <h1>Mother Tongue</h1>
-              <span>Ms. Ella Mae Besa</span>
+              <h1><?php echo htmlspecialchars($subject['subject_title']); ?></h1>
+              <span><?php echo htmlspecialchars($subject['teacher_fname'] . ' ' . $subject['teacher_lname']); ?></span>
             </div>
           </div>
           <div class="lesson-content">
             <div class="module-container">
               <div class="module-box">
-                <h1>Learning Modules</h1>
+                <h1>Learning Materials</h1>
                 <div class="module-item quarter-1">
                   <span>Quarter 1</span>
                 </div>

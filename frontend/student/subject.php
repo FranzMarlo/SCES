@@ -22,7 +22,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
           <img src="/SCES/assets/images/graduation-cap.png" alt="graduation-cap.png">
           <h1>Academic Subjects</h1>
         </div>
-        <?php $subjects = $db->getSubject($sectionId, $level_id); ?>
+        <?php $subjects = $db->getSubjects($sectionId, $level_id); ?>
         <div class="subject-box <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>">
           <?php if ($subjects): ?>
             <?php foreach ($subjects as $subject): ?>

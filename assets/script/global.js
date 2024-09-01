@@ -329,7 +329,6 @@ $("#editPersonalForm").on("submit", function (e) {
   var middleName = $("#personalMiddleName").val();
   var age = $("#personalAge").val();
   var gender = $("#personalGender").val();
-  var email = $("#personalEmail").val();
 
   $.ajax({
     type: "POST",
@@ -404,39 +403,6 @@ $("#editPersonalForm").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "457") {
-        $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "458") {
-        $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "463") {
-        $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Already In Use",
               confirmButtonColor: "#4CAF50",
             });
           }

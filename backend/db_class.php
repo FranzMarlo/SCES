@@ -81,15 +81,12 @@ class globalClass extends db_connect
         }
     }
 
-    public function editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $email, $studentId)
+    public function editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $studentId)
     {
-        $emailQuery = $this->conn->prepare("UPDATE login_tbl SET email = ? WHERE student_id = ?");
-        $emailQuery->bind_param("ss", $email, $studentId);
-
         $query = $this->conn->prepare("UPDATE student_tbl SET student_fname = ?, student_lname = ?, student_mname = ?, age = ?, gender = ? WHERE student_id = ?");
         $query->bind_param("sssisi", $firstName, $lastName, $middleName, $age, $gender, $studentId);
 
-        if ($query->execute() && $emailQuery->execute()) {
+        if ($query->execute()) {
             return true;
         } else {
             return false;
@@ -172,7 +169,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function getSubject($sectionId, $level_id)
+    public function getSubjects($sectionId, $level_id)
     {
 
         $query = $this->conn->prepare("
@@ -205,5 +202,38 @@ class globalClass extends db_connect
         }
     }
 
+    public function getSubjectDetails($subject, $sectionId, $level_id)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            s.subject_id,
+            s.subject,
+            s.level_id,
+            s.icon,
+            s.link,
+            s.subject_title,
+            s.subject_code,
+            t.teacher_fname,
+            t.teacher_lname
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        WHERE 
+            s.subject = ?
+        AND
+            s.level_id = ? 
+        AND 
+            s.section_id = ?");
+        $query->bind_param("sss", $subject, $level_id, $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc();
+            return $subjectDetails;
+        } else {
+            return false;
+        }
+    }
 }
 

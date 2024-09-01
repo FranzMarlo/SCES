@@ -59,9 +59,6 @@
                     echo 'selected'; ?>>Female</option>
             </select>
 
-            <label for="personalEmail">Email:</label>
-            <input type="email" id="personalEmail" name="personalEmail" value="<?php echo htmlspecialchars($email); ?>">
-
             <button type="submit" class="save-btn">Save</button>
         </form>
     </div>

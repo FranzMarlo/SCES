@@ -178,16 +178,13 @@ if (isset($_POST['submitType'])) {
         $middleName = validate($_POST['middleName']);
         $age = validate($_POST['age']);
         $gender = validate($_POST['gender']);
-        $email = validate($_POST['email']);
-        $emailPattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
 
         if (
             $firstName == $_SESSION['student_fname'] &&
             $lastName == $_SESSION['student_lname'] &&
             $middleName == $_SESSION['student_mname'] &&
             $age == $_SESSION['age'] &&
-            $gender == $_SESSION['gender'] &&
-            $email == $_SESSION['email']
+            $gender == $_SESSION['gender']
         ) {
             echo '100';
         } else if (empty($firstName)) {
@@ -204,45 +201,20 @@ if (isset($_POST['submitType'])) {
             echo '471';
         } else if (empty($gender)) {
             echo '472';
-        } else if (empty($email)) {
-            echo '457';
-        } else if (!preg_match($emailPattern, $email)) {
-            echo '458';
         } else {
-            if ($email == $_SESSION['email']) {
-                $editPersonalInfo = $db->editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $email, $studentId);
+                $editPersonalInfo = $db->editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $studentId);
                 if ($editPersonalInfo !== false) {
                     $_SESSION['student_fname'] = $firstName;
                     $_SESSION['student_lname'] = $lastName;
                     $_SESSION['student_mname'] = $middleName;
                     $_SESSION['age'] = $age;
                     $_SESSION['gender'] = $gender;
-                    $_SESSION['email'] = $email;
                     echo '200';
                 } else {
                     echo '400';
                 }
-            } else {
-                $checkEmail = $db->checkEmail($email);
-                if ($checkEmail->num_rows > 0) {
-                    echo '463';
-                } else {
-                    $editPersonalInfo = $db->editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $email, $studentId);
-                    if ($editPersonalInfo !== false) {
-                        $_SESSION['student_fname'] = $firstName;
-                        $_SESSION['student_lname'] = $lastName;
-                        $_SESSION['student_mname'] = $middleName;
-                        $_SESSION['age'] = $age;
-                        $_SESSION['gender'] = $gender;
-                        $_SESSION['email'] = $email;
-                        echo '200';
-                    } else {
-                        echo '400';
-                    }
-                }
             }
-        }
-    } else if ($_POST['submitType'] === 'editBackgroundForm') {
+        }   else if ($_POST['submitType'] === 'editBackgroundForm') {
         session_start();
         $studentId = $_SESSION['student_id'];
         $city = $_POST['city'];
