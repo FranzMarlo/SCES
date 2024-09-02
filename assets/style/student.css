@@ -340,6 +340,12 @@ body {
     width: 200px;
     padding: 15px;
   }
+  .menu ul li a {
+    font-size: 16px;
+  }
+  .menu ul li .icon {
+    font-size: 18px;
+  }
   .header {
     gap: 10px;
   }

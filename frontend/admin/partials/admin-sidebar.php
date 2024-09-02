@@ -17,16 +17,46 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/SCES/frontend/admin/subject.php">
+                    <a href="javascript:void(0)">
                         <i class="fa-solid fa-briefcase icon"></i>
-                        <span class="text">Subjects</span>
+                        <span class="text">Academics</span>
+                        <i class="fa-solid fa-chevron-down arrow"></i>
                     </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a href="#">
+                                <i class="fa-solid fa-square-poll-horizontal icon"></i>
+                                <span class="text">Subjects</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa-solid fa-pen-to-square icon"></i>
+                                <span class="text">Quizzes</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/SCES/frontend/admin/quizzes.php">
-                        <i class="fa-solid fa-user icon"></i>
+                    <a href="javascript:void(0)">
+                        <i class="fa-solid fa-user-graduate icon"></i>
                         <span class="text">Students</span>
+                        <i class="fa-solid fa-chevron-down arrow"></i>
                     </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a href="#">
+                                <i class="fa-solid fa-list icon"></i>
+                                <span class="text">Student List</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa-solid fa-list-ol icon"></i>
+                                <span class="text">Student Score</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa-solid fa-chart-pie icon"></i>
+                                <span class="text">Student Grade</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="/SCES/frontend/admin/settings.php">

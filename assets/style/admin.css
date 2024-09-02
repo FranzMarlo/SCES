@@ -83,14 +83,23 @@
   .menu ul li.active > a {
     background-color: #e5e5e5;
   }
-  .menu ul li .icon {
-    font-size: 20px;
-  }
   .menu ul li .text {
     flex: 1;
   }
   .menu ul li .icon {
     font-size: 20px;
+  }
+  .menu ul li .arrow {
+    font-size: 14px;
+  }
+  .menu .sub-menu{
+    display: none;
+    margin-left: 18px;
+    padding-left: 18px;
+    padding-top: 5px;
+  }
+  .menu .sub-menu li a{
+    font-size: 16px;
   }
   .content {
     display: flex;
@@ -122,7 +131,13 @@
     }
     .sidebar {
       width: 200px;
-      padding: 15px;
+      padding: 10px;
+    }
+    .menu ul li a {
+      font-size: 16px;
+    }
+    .menu ul li .icon {
+      font-size: 18px;
     }
     
   }
