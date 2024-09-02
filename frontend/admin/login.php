@@ -1,0 +1,44 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
+?>
+<title>Admin Log In | SCES Online Learning Platform</title>
+</head>
+
+<body>
+    <div class="flex-container">
+        <div class="column left">
+            <div class="opening">
+                <h1>Welcome, Teacher!</h1>
+                <h1>Please Log In</h1>
+            </div>
+            <div class="wrapper">
+                <img src="/SCES/assets/images/login.png" alt="sign up icon" class="img-500px" />
+            </div>
+        </div>
+        <div class="column right">
+            <div class="form-wrapper">
+                <form id="adminLogin">
+                    <h1>Log In</h1>
+                    <div class="input-icons">
+                        <label for="email">
+                            <i class="fa-solid fa-envelope icon"></i>
+                        </label>
+                        <input type="email" name="email" id="email" placeholder="Email" />
+                    </div>
+                    <div class="input-icons">
+                        <label for="password">
+                            <i class="fa-solid fa-lock icon"></i>
+                        </label>
+                        <input type="password" name="password" id="password" placeholder="Password" />
+                        <span class="toggle-password" onclick="togglePassword()">
+                            <i class="fa-solid fa-eye icon" id="toggleIcon"></i>
+                        </span>
+                    </div>
+                    <button type="submit" id="adminLoginBtn">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/footer.php';
+    ?>

@@ -2,14 +2,8 @@
 session_start();
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/global.php';
 
-
-if (isset($_SESSION['teacher_id'])) {
-    $admin = new adminloggedIn();
-    $admin->needLogout();
-} else {
-    $student = new loggedIn();
-    $student->needLogout();
-}
+$log = new loggedIn();
+$log->needLogout(); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,3 +13,6 @@ if (isset($_SESSION['teacher_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/SCES/assets/style/style.css" />
     <link rel="icon" href="/SCES/assets/images/logo.png" />
+    
+
+    

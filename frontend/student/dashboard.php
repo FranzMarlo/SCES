@@ -1,20 +1,20 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
 ?>
 <title>Home | SCES Online Learning Platform</title>
 </head>
 
 <body>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-popup.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-popup.php';
   ?>
   <div class="container">
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-sidebar.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-sidebar.php';
     ?>
     <div class="content">
       <?php
-      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-header.php';
+      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-header.php';
       ?>
       <div class="about-panel">
         <div class="about-text">
@@ -108,5 +108,5 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
     </div>
   </div>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-footer.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
   ?>

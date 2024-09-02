@@ -12,7 +12,7 @@ if (isset($_POST['submitType'])) {
 
         if ($result !== false) {
             $studentId = $result['student_id'];
-            $getStudentData = $db->getStudentCredentials($studentId);
+            $getStudentData = $db->getStudentData($studentId);
 
             if ($getStudentData !== false) {
                 $getGradeLevel = $db->getGradeLevel($getStudentData['level_id']);
@@ -202,19 +202,19 @@ if (isset($_POST['submitType'])) {
         } else if (empty($gender)) {
             echo '472';
         } else {
-                $editPersonalInfo = $db->editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $studentId);
-                if ($editPersonalInfo !== false) {
-                    $_SESSION['student_fname'] = $firstName;
-                    $_SESSION['student_lname'] = $lastName;
-                    $_SESSION['student_mname'] = $middleName;
-                    $_SESSION['age'] = $age;
-                    $_SESSION['gender'] = $gender;
-                    echo '200';
-                } else {
-                    echo '400';
-                }
+            $editPersonalInfo = $db->editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $studentId);
+            if ($editPersonalInfo !== false) {
+                $_SESSION['student_fname'] = $firstName;
+                $_SESSION['student_lname'] = $lastName;
+                $_SESSION['student_mname'] = $middleName;
+                $_SESSION['age'] = $age;
+                $_SESSION['gender'] = $gender;
+                echo '200';
+            } else {
+                echo '400';
             }
-        }   else if ($_POST['submitType'] === 'editBackgroundForm') {
+        }
+    } else if ($_POST['submitType'] === 'editBackgroundForm') {
         session_start();
         $studentId = $_SESSION['student_id'];
         $city = $_POST['city'];
@@ -290,6 +290,32 @@ if (isset($_POST['submitType'])) {
             echo '476';
         }
         exit;
+    } else if ($_POST['submitType'] === 'adminLogin') {
+        $email = validate($_POST['email']);
+        $password = validate($_POST['password']);
+
+        $result = $db->adminLogin($email, $password);
+
+        if ($result !== false) {
+            $teacherId = $result['teacher_id'];
+            $getTeacherData = $db->getTeacherData($teacherId);
+
+            if ($getTeacherData !== false) {
+
+                session_start();
+                $_SESSION['teacher_id'] = $getTeacherData['teacher_id'];
+                $_SESSION['teacher_fname'] = $getTeacherData['teacher_fname'];
+                $_SESSION['teacher_mname'] = $getTeacherData['teacher_mname'];
+                $_SESSION['teacher_lname'] = $getTeacherData['teacher_lname'];
+                $_SESSION['age'] = $getTeacherData['age'];
+                $_SESSION['gender'] = $getTeacherData['gender'];
+                $_SESSION['email'] = $result['email'];
+                $_SESSION['password'] = $result['password'];
+                echo '200';
+            }
+        }
+    } else {
+        echo '400';
     }
 }
 
@@ -315,6 +341,26 @@ class loggedIn
     }
 }
 
+class adminLoggedIn{
+    public function needLogin()
+    {
+
+        if (!isset($_SESSION['teacher_id'])) {
+            session_destroy();
+            header('Location:/SCES/frontend/admin/login.php');
+            exit();
+        }
+
+    }
+    public function needLogout()
+    {
+
+        if (isset($_SESSION['teacher_id'])) {
+            header('Location:/SCES/frontend/admin/dashboard.php');
+            exit();
+        }
+    }
+}
 
 function validate($data)
 {

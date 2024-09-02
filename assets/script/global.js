@@ -32,23 +32,6 @@ $("#studLogin").on("submit", function (e) {
   });
 });
 
-function logoutFunc() {
-  Swal.fire({
-    icon: "question",
-    title: "Do you want to log out?",
-    showCancelButton: true,
-    confirmButtonText: "Yes",
-    confirmButtonColor: "#4CAF50",
-    cancelButtonColor: "#f44336",
-    allowOutsideClick: false,
-    cancelButtonText: "No",
-  }).then((result) => {
-    if (result.value) {
-      window.location.href = "/SCES/backend/student/student-logout.php";
-    }
-  });
-}
-
 $("#studSignUp").on("submit", function (e) {
   e.preventDefault();
   var firstName = $("#firstName").val();
@@ -669,3 +652,71 @@ $("#changeAvatarForm").on("submit", function (e) {
     },
   });
 });
+
+$("#adminLogin").on("submit", function (e) {
+  e.preventDefault();
+  var email = $("#email").val();
+  var password = $("#password").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "adminLogin",
+      email: email,
+      password: password,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        window.location.href = "/SCES/frontend/admin/dashboard.php";
+      } else {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Login Failed",
+              text: "Invalid Credentials",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+function logoutFunc() {
+  Swal.fire({
+    icon: "question",
+    title: "Do you want to log out?",
+    showCancelButton: true,
+    confirmButtonText: "Yes",
+    confirmButtonColor: "#4CAF50",
+    cancelButtonColor: "#f44336",
+    allowOutsideClick: false,
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.value) {
+      window.location.href = "/SCES/backend/student/student-logout.php";
+    }
+  });
+}
+
+function adminLogoutFunc() {
+  Swal.fire({
+    icon: "question",
+    title: "Do you want to log out?",
+    showCancelButton: true,
+    confirmButtonText: "Yes",
+    confirmButtonColor: "#4CAF50",
+    cancelButtonColor: "#f44336",
+    allowOutsideClick: false,
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.value) {
+      window.location.href = "/SCES/backend/admin/admin-logout.php";
+    }
+  });
+}

@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/settings.css" />
 <script src="/SCES/assets/script/settings.js"></script>
@@ -8,15 +8,15 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
 
 <body>
 	<?php
-	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-popup.php';
+	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-popup.php';
 	?>
 	<div class="container">
 		<?php
-		include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-sidebar.php';
+		include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-sidebar.php';
 		?>
 		<div class="content">
 			<?php
-			include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-header.php';
+			include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-header.php';
 			?>
 			<div class="title-box">
 				<h1>Account Settings</h1>
@@ -185,5 +185,5 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
 	</div>
 	<?php
 	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/student-edit-modal.php';
-	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-footer.php';
+	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
 	?>

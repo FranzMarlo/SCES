@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/subjects.css" />
 <title>Subjects | SCES Online Learning Platform</title>
@@ -7,15 +7,15 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
 
 <body>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-popup.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-popup.php';
   ?>
   <div class="container">
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-sidebar.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-sidebar.php';
     ?>
     <div class="content">
       <?php
-      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-header.php';
+      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-header.php';
       ?>
       <div class="subject-panel">
         <div class="title-box">
@@ -31,14 +31,14 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
                   <div class="box-icon <?php echo strtolower($subject['subject_code']); ?>">
                     <div class="box-title">
                       <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
-                      <span><?php echo htmlspecialchars($subject['teacher_fname'] . ' ' . $subject['teacher_lname']); ?></span>
+                      <span><?php echo htmlspecialchars(($subject['gender'] == 'Female' ? 'Ms. ' : 'Mr. ') . $subject['teacher_fname'] . ' ' . $subject['teacher_lname']); ?></span>
                     </div>
                     <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>"
                       alt="<?php echo htmlspecialchars($subject['icon']); ?>">
                   </div>
                   <div class="box-title">
                     <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
-                    <span><?php echo htmlspecialchars($subject['teacher_fname'] . ' ' . $subject['teacher_lname']); ?></span>
+                    <span><?php echo htmlspecialchars(($subject['gender'] == 'Female' ? 'Ms. ' : 'Mr. ') . $subject['teacher_fname'] . ' ' . $subject['teacher_lname']); ?></span>
                   </div>
                 </div>
               </a>
@@ -54,5 +54,5 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
     </div>
   </div>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-footer.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
   ?>

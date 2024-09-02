@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-head.php';
 $subject = $db->getSubjectDetails('Mathematics 1', $sectionId, $level_id);
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/lessons.css" />
@@ -8,15 +8,15 @@ $subject = $db->getSubjectDetails('Mathematics 1', $sectionId, $level_id);
 
 <body>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-popup.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-popup.php';
   ?>
   <div class="container">
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-sidebar.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-sidebar.php';
     ?>
     <div class="content">
       <?php
-      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-header.php';
+      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-header.php';
       ?>
       <div class="lesson-panel">
         <div class="title-box">
@@ -54,7 +54,7 @@ $subject = $db->getSubjectDetails('Mathematics 1', $sectionId, $level_id);
             </div>
             <div class="header-text">
               <h1><?php echo htmlspecialchars($subject['subject_title']); ?></h1>
-              <span><?php echo htmlspecialchars($subject['teacher_fname'] . ' ' . $subject['teacher_lname']); ?></span>
+              <span><?php echo htmlspecialchars(($subject['gender'] == 'Female' ? 'Ms. ' : 'Mr. ') . $subject['teacher_fname'] . ' ' . $subject['teacher_lname']); ?></span>
             </div>
           </div>
           <div class="lesson-content">
@@ -128,5 +128,5 @@ $subject = $db->getSubjectDetails('Mathematics 1', $sectionId, $level_id);
     </div>
   </div>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student-footer.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/student/student-footer.php';
   ?>

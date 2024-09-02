@@ -146,7 +146,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function getStudentCredentials($studentId)
+    public function getStudentData($studentId)
     {
         $query = $this->conn->prepare("SELECT * FROM student_tbl WHERE student_id = ?");
         $query->bind_param("s", $studentId);
@@ -182,7 +182,8 @@ class globalClass extends db_connect
             s.subject_title,
             s.subject_code,
             t.teacher_fname,
-            t.teacher_lname
+            t.teacher_lname,
+            t.gender
         FROM subject_tbl s
         INNER JOIN
             teacher_tbl t
@@ -214,7 +215,8 @@ class globalClass extends db_connect
             s.subject_title,
             s.subject_code,
             t.teacher_fname,
-            t.teacher_lname
+            t.teacher_lname,
+            t.gender
         FROM subject_tbl s
         INNER JOIN
             teacher_tbl t
@@ -231,6 +233,40 @@ class globalClass extends db_connect
             $result = $query->get_result();
             $subjectDetails = $result->fetch_assoc();
             return $subjectDetails;
+        } else {
+            return false;
+        }
+    }
+
+    public function adminLogin($email, $password)
+    {
+        $query = $this->conn->prepare("SELECT *, `password` FROM `admin_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($result->num_rows > 0) {
+                $admin = $result->fetch_assoc();
+
+                if (password_verify($password, $admin['password'])) {
+                    return $admin;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+
+    public function getTeacherData($teacherId)
+    {
+        $query = $this->conn->prepare("SELECT * FROM teacher_tbl WHERE teacher_id = ?");
+        $query->bind_param("s", $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $admin = $result->fetch_assoc();
+            return $admin;
         } else {
             return false;
         }

@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/head.php';
 ?>
 <script src="/SCES/assets/script/signup.js"></script>
 <title>Sign up | SCES Online Learning Platform</title>
@@ -85,5 +85,5 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/head.php';
     </div>
   </div>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/footer.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/footer.php';
   ?>

@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/head.php';
 ?>
 <title>Log In | SCES Online Learning Platform</title>
 </head>
@@ -30,6 +30,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/head.php';
               <i class="fa-solid fa-lock icon"></i>
             </label>
             <input type="password" name="password" id="password" placeholder="Password" />
+            <span class="toggle-password" onclick="togglePassword()">
+              <i class="fa-solid fa-eye icon" id="toggleIcon"></i>
+            </span>
           </div>
           <button type="submit" id="studLoginBtn">Login</button>
         </form>
@@ -45,5 +48,5 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/head.php';
     </div>
   </div>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/footer.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/footer.php';
   ?>
