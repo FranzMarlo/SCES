@@ -77,7 +77,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
         </div>
       </div>
       <div class="chart-container">
-        
+        <canvas id="myDonutChart"></canvas>
+        <canvas id="myLineChart"></canvas>
       </div>
     </div>
 
