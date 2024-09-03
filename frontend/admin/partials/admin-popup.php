@@ -107,4 +107,10 @@
             <h1>SCES</h1>
         </div>
     </div>
+    <div class="menu-part">
+        <a href="#">
+            <i class="fa-solid fa-bell"></i>
+        </a>
+        <img src="/SCES/assets/images/currentuser.png" alt="admin icon" class="user-icon">
+    </div>
 </div>

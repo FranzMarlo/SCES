@@ -114,25 +114,25 @@ body {
   width: 100%;
   align-items: center;
 }
-.header-item{
+.header-item {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-.header-item i{
+.header-item i {
   font-size: 2rem;
   margin-right: 15px;
   cursor: pointer;
 }
-.header-item h1{
+.header-item h1 {
   font-size: 2rem;
 }
-.header-item img{
+.header-item img {
   height: 70px;
   width: 70px;
   border-radius: 50px;
 }
-.welcome-box{
+.welcome-box {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -140,35 +140,45 @@ body {
   border-radius: 30px;
   width: 100%;
   color: #466a83;
+  border: 2px solid #000;
 }
-.welcome-text{
+.welcome-text {
   display: flex;
   flex-direction: column;
   padding: 15px 20px;
 }
-.current-time{
+.current-time {
+  border: 2px solid #000;
   border-radius: 30px;
   background-color: #fff;
   width: fit-content;
   padding: 12px;
   margin-bottom: 20px;
 }
-.current-time i{
+.current-time i {
   margin-right: 10px;
+  font-size: 1rem;
 }
-.current-time span{
+.current-time span {
   margin-right: 10px;
+  font-size: 1rem;
 }
-.welcome-img img{
+.text-content h1 {
+  font-size: 1.7rem;
+}
+.text-content span {
+  font-size: 1rem;
+}
+.welcome-img img {
   height: 150px;
 }
-.box-container{
+.box-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.box{
+.box {
   margin-top: 5px;
   display: flex;
   flex-direction: column;
@@ -177,44 +187,52 @@ body {
   width: 23%;
   align-items: center;
   padding: 20px;
+  border: 2px solid #000;
 }
-.box-icon img{
+.box-icon img {
   margin-bottom: 10px;
 }
-.box-text{
+.box-text {
   text-align: center;
 }
-.box-text h1{
+.box-text h1 {
   font-size: 1.2rem;
   margin-bottom: 10px;
 }
-.box-text span{
+.box-text span {
   font-size: 1.1rem;
 }
-.students{
+.students {
   background-color: #faefaa;
 }
-.teachers{
+.teachers {
   background-color: #c3e9e1;
 }
-.subjects{
+.subjects {
   background-color: #f8dde8;
 }
-.quizzes{
+.quizzes {
   background-color: #dce8fe;
 }
-.chart-container{
+.chart-container {
+  margin-top: 5px;
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 400px;
-  gap: 20px;
+  gap: 10px;
 }
-canvas{
+.chart {
+  height: 100%;
+  padding: 10px;
+}
+canvas {
   background-color: #f5f5f5;
   border-radius: 30px;
+  height: 100%;
+  padding: 10px;
+  border: 2px solid #000;
 }
-
 .overlay {
   position: fixed;
   top: 0;
@@ -228,7 +246,9 @@ canvas{
 .pop-up.active + .overlay {
   display: block;
 }
-
+.cropped{
+  display: none;
+}
 @media (width < 1199px) {
   .container {
     padding: 0.5rem;
@@ -245,6 +265,24 @@ canvas{
   }
   .menu ul li .icon {
     font-size: 18px;
+  }
+  .welcome-text {
+    padding: 15px;
+  }
+  .current-time i {
+    font-size: 0.9rem;
+  }
+  .current-time span {
+    font-size: 0.9rem;
+  }
+  .text-content h1 {
+    font-size: 1.5rem;
+  }
+  .text-content span {
+    font-size: 0.9rem;
+  }
+  .welcome-img img {
+    width: 400px;
   }
 }
 @media (width < 992px) {
@@ -285,6 +323,19 @@ canvas{
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+  .menu-part .user-icon{
+    height: 60px;
+    border-radius: 50px;
+    width: 60px;
+  }
+  .menu-part a{
+    font-size: 25px;
+    color: #000;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
   }
   .menu-btn {
     font-size: 30px;
@@ -333,6 +384,21 @@ canvas{
   .menu-btn:hover {
     background-color: #dadada;
   }
+  .current-time{
+    margin-bottom: 30px;
+  }
+  .header {
+    display: none;
+  }
+  .box-icon img {
+    height: 60px;
+  }
+  .box-text h1 {
+    font-size: 1.1rem;
+  }
+  .box-text span {
+    font-size: 1rem;
+  }
 }
 @media (width < 768px) {
   .pop-up {
@@ -343,9 +409,6 @@ canvas{
   }
   .menu-btn {
     margin-right: 5px;
-  }
-  .menu-part .user-info {
-    display: none;
   }
   .pop-btn {
     display: flex;
@@ -396,6 +459,75 @@ canvas{
   .show {
     display: block;
   }
+  .box-icon img {
+    height: 50px;
+  }
+  .box-text h1 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  .box-text span {
+    font-size: 0.9rem;
+  }
+  .box {
+    height: 140px;
+    padding: 15px 10px;
+  }
+  .current-time {
+    padding: 8px;
+  }
+  .current-time i {
+    font-size: 0.8rem;
+    margin-right: 5px;
+  }
+  .current-time span {
+    font-size: 0.8rem;
+    margin-right: 5px;
+  }
+  .text-content h1 {
+    font-size: 1.3rem;
+  }
+  .text-content span {
+    font-size: 0.8rem;
+  }
+  .welcome-img img {
+    width: 320px;
+    height: 150px;
+  }
+  .current-time{
+    margin-bottom: 40px;
+  }
 }
 @media (width < 600px) {
+  .box-icon img {
+    height: 40px;
+  }
+  .box-text h1 {
+    font-size: 0.9rem;
+  }
+  .box-text span {
+    font-size: 0.9rem;
+  }
+  .box{
+    padding: 15px 5px;
+  }
+  .welcome-img{
+    flex: 1;
+  }
+  .welcome-img img{
+    width: 100%;
+    height: 150px;
+    padding-left: 100px;
+    padding-right: 15px;
+    padding-bottom: 2px;
+  }
+  .welcome-text {
+    position: absolute;
+  }
+  .cropped{
+    display: flex;
+  }
+  .normal{
+    display: none;
+  }
 }

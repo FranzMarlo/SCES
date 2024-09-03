@@ -13,15 +13,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-sidebar.php';
     ?>
     <div class="content">
-      <div class="header">
-        <div class="header-item">
-          <h1>Home</h1>
-        </div>
-        <div class="header-item">
-          <i class="fa-solid fa-bell"></i>
-          <img src="/SCES/assets/images/currentuser.png" alt="admin icon">
-        </div>
-      </div>
+      <?php
+      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-header.php';
+      ?>
       <div class="welcome-box">
         <div class="welcome-text">
           <div class="current-time">
@@ -35,7 +29,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
           </div>
         </div>
         <div class="welcome-img">
-          <img src="/SCES/assets/images/admin-dashboard-icon.png" alt="admin dashboard icon">
+          <img src="/SCES/assets/images/admin-dashboard-icon.png" alt="admin dashboard icon" class="normal">
+          <img src="/SCES/assets/images/admin-dashboard-icon-cropped.png" alt="admin dashboard icon" class="cropped">
         </div>
       </div>
       <div class="box-container">
@@ -77,11 +72,14 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
         </div>
       </div>
       <div class="chart-container">
-        <canvas id="myDonutChart"></canvas>
-        <canvas id="myLineChart"></canvas>
+        <div class="chart">
+          <canvas id="myDonutChart"></canvas>
+        </div>
+        <div class="chart">
+          <canvas id="myBarChart"></canvas>
+        </div>
       </div>
     </div>
-
   </div>
   <?php
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
