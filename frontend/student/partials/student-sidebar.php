@@ -10,31 +10,31 @@
     <div class="nav">
         <div class="menu">
             <ul>
-                <li>
+                <li class="<?= $current_page == 'dashboard.php' ? 'active' : '' ?>">
                     <a href="/SCES/frontend/student/dashboard.php">
                         <i class="fa-solid fa-house icon"></i>
                         <span class="text">Home</span>
                     </a>
                 </li>
-                <li>
+                <li class="<?= $current_page == 'subject.php' ? 'active' : '' ?>">
                     <a href="/SCES/frontend/student/subject.php">
                         <i class="fa-solid fa-briefcase icon"></i>
                         <span class="text">Subjects</span>
                     </a>
                 </li>
-                <li>
+                <li class="<?= $current_page == 'quizzes.php' ? 'active' : '' ?>">
                     <a href="/SCES/frontend/student/quizzes.php">
-                    <i class="fa-solid fa-pen-to-square icon"></i>
+                        <i class="fa-solid fa-pen-to-square icon"></i>
                         <span class="text">Quizzes</span>
                     </a>
                 </li>
-                <li>
+                <li class="<?= $current_page == 'settings.php' ? 'active' : '' ?>">
                     <a href="/SCES/frontend/student/settings.php">
                         <i class="fa-solid fa-gear icon"></i>
                         <span class="text">Settings</span>
                     </a>
                 </li>
-                <li>
+                <li class="<?= $current_page == 'help.php' ? 'active' : '' ?>">
                     <a href="/SCES/frontend/student/help.php">
                         <i class="fa-solid fa-circle-info icon"></i>
                         <span class="text">Help</span>

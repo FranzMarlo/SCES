@@ -5,6 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/student/data-setter.php';
 
 $log = new loggedIn();
 $log->needLogin();
+$current_page = basename($_SERVER['REQUEST_URI']);
 ?>
 <!DOCTYPE html>
 <html lang="en">

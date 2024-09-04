@@ -1,0 +1,170 @@
+.total-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+.item {
+  width: 32%;
+  border-radius: 30px;
+  background-color: #f5f5f5;
+  height: 100px;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 2px solid #000;
+}
+.item-icon {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+}
+.item-text {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  width: 60%;
+}
+.item-text span {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+.item-text h6 {
+  font-size: 1.7rem;
+}
+.subject-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.panel-title {
+  width: 100%;
+  padding: 10px;
+}
+.panel-title h1 {
+  font-size: 1.7rem;
+}
+.subject-container {
+  background-color: #f5f5f5;
+  border-radius: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 50px;
+  gap: 40px;
+  border: 2px solid #000;
+  flex-direction: row;
+}
+.subject-item {
+  width: 200px;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #000;
+}
+.subject-icon {
+  display: flex;
+  flex-direction: column;
+  border-radius: 30px;
+  border: 2px solid #000;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.subject-icon img {
+  padding: 20px;
+  height: 150px;
+}
+.subject-btn {
+  border-radius: 30px;
+  background-color: #f5f5f5;
+  width: 35px;
+  padding: 5px;
+  border: 2px solid #000;
+  position: absolute;
+  cursor: pointer;
+}
+.ellipsis {
+  top: 10px;
+  right: 10px;
+}
+.edit {
+  bottom: 10px;
+  right: 10px;
+}
+.subject-title {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px;
+}
+.subject-title h1 {
+  font-size: 1.2rem;
+}
+.subject-title span {
+  font-size: 1rem;
+}
+.fil {
+  background-color: #ff8080;
+}
+.eng {
+  background-color: #ffb480;
+}
+.math {
+  background-color: #e1e149;
+}
+.sci {
+  background-color: #42d6a4;
+}
+.esp {
+  background-color: #08cad1;
+}
+.mt {
+  background-color: #59adf6;
+}
+.ap {
+  background-color: #f0bad1;
+}
+.mapeh {
+  background-color: #a3adff;
+}
+@media (width < 1199px) {
+  .item-text {
+    padding: 5px;
+  }
+  .item-text span {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+  }
+  .item-text h6 {
+    font-size: 1.5rem;
+  }
+  .subject-item {
+    width: 28%;
+  }
+}
+@media (width < 992px) {
+  .subject-container {
+    padding: 30px;
+    gap: 30px;
+  }
+  .item{
+    gap: 10px;
+  }
+  .item-text{
+    padding: 0;
+  }
+  .item-text span {
+    font-size: 1.1rem;
+  }
+  .item-text h6 {
+    font-size: 1.3rem;
+  }
+  .subject-item {
+    width: 30%;
+  }
+}
+@media (width < 768px) {
+    
+}

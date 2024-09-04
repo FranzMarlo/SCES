@@ -27,7 +27,24 @@ $(".menu > ul > li").on("click", function (e) {
   $(this).siblings().find("ul").find("li").removeClass("active");
 });
 
-// Custom Plugin for Donut Chart Only
+document.addEventListener("DOMContentLoaded", function () {
+  const activeItem = document.querySelector(".sidebar .menu ul li.active");
+  if (activeItem) {
+    const subMenu = activeItem.closest(".sub-menu");
+    if (subMenu) {
+      subMenu.style.display = "block";
+      const parentMenu = subMenu.closest("li");
+      parentMenu.classList.add("active");
+    }
+  }
+  document.querySelectorAll(".subject-btn").forEach((button) => {
+    button.addEventListener("click", function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    });
+  });
+});
+
 const donutLabelPlugin = {
   id: "doughnutlabel",
   afterDatasetDraw(chart) {
@@ -58,7 +75,6 @@ const donutLabelPlugin = {
   },
 };
 
-// Donut Chart
 const donutCtx = document.getElementById("myDonutChart").getContext("2d");
 const myDonutChart = new Chart(donutCtx, {
   type: "doughnut",
@@ -68,21 +84,22 @@ const myDonutChart = new Chart(donutCtx, {
       {
         data: [60, 40],
         backgroundColor: ["#46d2b7", "#ffffff"],
-        borderColor: ["#2ea993", "#ffffff"],
+        borderColor: ["#2ea993", "#000000"],
         borderWidth: 1,
       },
     ],
   },
   options: {
     responsive: true,
+    maintainAspectRatio: false,
     cutout: "70%",
     plugins: {
       title: {
         display: true,
-        text: "Subject Quizzes Completion",
+        text: "Quizzes Completion",
         font: {
           size: 20,
-        }
+        },
       },
       legend: {
         display: true,
@@ -117,6 +134,7 @@ const myBarChart = new Chart(barCtx, {
   },
   options: {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         beginAtZero: true,
@@ -140,4 +158,3 @@ const myBarChart = new Chart(barCtx, {
     },
   },
 });
-

@@ -78,18 +78,30 @@ $(".panel-item").on("click", function () {
   $(this).addClass("active");
 });
 
-function toggleMyProfile(){
-  const myProfilePanel = document.getElementById('myProfile');
-  const securityPanel = document.getElementById('security');
+document.addEventListener("DOMContentLoaded", function () {
+  const activeItem = document.querySelector(".sidebar .menu ul li.active");
+  if (activeItem) {
+    const subMenu = activeItem.closest(".sub-menu");
+    if (subMenu) {
+      subMenu.style.display = "block";
+      const parentMenu = subMenu.closest("li");
+      parentMenu.classList.add("active");
+    }
+  }
+});
 
-  myProfilePanel.style.display = 'flex';
-  securityPanel.style.display = 'none';
+function toggleMyProfile() {
+  const myProfilePanel = document.getElementById("myProfile");
+  const securityPanel = document.getElementById("security");
+
+  myProfilePanel.style.display = "flex";
+  securityPanel.style.display = "none";
 }
 
-function toggleSecurity(){
-  const myProfilePanel = document.getElementById('myProfile');
-  const securityPanel = document.getElementById('security');
-  
-  myProfilePanel.style.display = 'none';
-  securityPanel.style.display = 'flex';
+function toggleSecurity() {
+  const myProfilePanel = document.getElementById("myProfile");
+  const securityPanel = document.getElementById("security");
+
+  myProfilePanel.style.display = "none";
+  securityPanel.style.display = "flex";
 }

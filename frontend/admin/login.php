@@ -12,7 +12,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
                 <h1>Please Log In</h1>
             </div>
             <div class="wrapper">
-                <img src="/SCES/assets/images/login.png" alt="sign up icon" class="img-500px" />
+                <img src="/SCES/assets/images/admin-login.png" alt="sign up icon" class="img-500px" />
             </div>
         </div>
         <div class="column right">
@@ -37,6 +37,14 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
                     <button type="submit" id="adminLoginBtn">Login</button>
                 </form>
             </div>
+            <br>
+            <div class="separator">Or</div>
+            <br>
+            <a href="register.php" class="button-container">
+                <div class="btn-wrapper">
+                    <h1>Create an Account</h1>
+                </div>
+            </a>
         </div>
     </div>
     <?php

@@ -72,10 +72,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
         </div>
       </div>
       <div class="chart-container">
-        <div class="chart">
+        <div class="chart" id="donutChart">
           <canvas id="myDonutChart"></canvas>
         </div>
-        <div class="chart">
+        <div class="chart" id="barChart">
           <canvas id="myBarChart"></canvas>
         </div>
       </div>

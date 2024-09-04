@@ -215,16 +215,14 @@ body {
   background-color: #dce8fe;
 }
 .chart-container {
-  margin-top: 5px;
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 400px;
-  gap: 10px;
+  gap: 20px;
 }
 .chart {
-  height: 100%;
-  padding: 10px;
+  height: 400px;
 }
 canvas {
   background-color: #f5f5f5;
@@ -232,6 +230,12 @@ canvas {
   height: 100%;
   padding: 10px;
   border: 2px solid #000;
+}
+#barChart {
+  width: 59%;
+}
+#donutChart {
+  width: 39%;
 }
 .overlay {
   position: fixed;
@@ -246,8 +250,16 @@ canvas {
 .pop-up.active + .overlay {
   display: block;
 }
-.cropped{
+.cropped {
   display: none;
+}
+@media (width < 1440px) {
+  #barChart {
+    width: 58%;
+  }
+  #donutChart {
+    width: 38%;
+  }
 }
 @media (width < 1199px) {
   .container {
@@ -283,6 +295,9 @@ canvas {
   }
   .welcome-img img {
     width: 400px;
+  }
+  .chart {
+    height: 350px;
   }
 }
 @media (width < 992px) {
@@ -324,12 +339,12 @@ canvas {
     flex-direction: row;
     align-items: center;
   }
-  .menu-part .user-icon{
+  .menu-part .user-icon {
     height: 60px;
     border-radius: 50px;
     width: 60px;
   }
-  .menu-part a{
+  .menu-part a {
     font-size: 25px;
     color: #000;
     text-decoration: none;
@@ -384,7 +399,7 @@ canvas {
   .menu-btn:hover {
     background-color: #dadada;
   }
-  .current-time{
+  .current-time {
     margin-bottom: 30px;
   }
   .header {
@@ -398,6 +413,9 @@ canvas {
   }
   .box-text span {
     font-size: 1rem;
+  }
+  .chart {
+    height: 260px;
   }
 }
 @media (width < 768px) {
@@ -494,8 +512,15 @@ canvas {
     width: 320px;
     height: 150px;
   }
-  .current-time{
+  .current-time {
     margin-bottom: 40px;
+  }
+  .chart-container {
+    justify-content: center;
+    align-items: center;
+  }
+  .chart {
+    height: 205px;
   }
 }
 @media (width < 600px) {
@@ -508,26 +533,46 @@ canvas {
   .box-text span {
     font-size: 0.9rem;
   }
-  .box{
+  .box {
     padding: 15px 5px;
   }
-  .welcome-img{
+  .welcome-img {
     flex: 1;
   }
-  .welcome-img img{
+  .welcome-img img {
     width: 100%;
     height: 150px;
-    padding-left: 100px;
+    padding-left: 40%;
     padding-right: 15px;
     padding-bottom: 2px;
   }
   .welcome-text {
     position: absolute;
   }
-  .cropped{
+  .cropped {
     display: flex;
   }
-  .normal{
+  .normal {
     display: none;
+  }
+  .chart-container {
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap
+  }
+  #barChart {
+    width: 95%;
+  }
+  #donutChart {
+    width: 95%;
+  }
+}
+@media (width < 425px) {
+  .chart{
+    padding: 0;
+  }
+  .welcome-img img {
+    padding-left: 30%;
   }
 }
