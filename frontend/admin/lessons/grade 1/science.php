@@ -1,23 +1,22 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
-$subject = $db->getSubjectDetails('MAPEH 1', $sectionId, $level_id);
-$current_page = 'subject.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-head.php';
+$subject = $db->getSubjectDetails('Science 1', $sectionId, $level_id);
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/lessons.css" />
-<title>MAPEH | SCES Online Learning Platform</title>
+<title>Science | SCES Online Learning Platform</title>
 </head>
 
 <body>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-popup.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-popup.php';
   ?>
   <div class="container">
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-sidebar.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-sidebar.php';
     ?>
     <div class="content">
       <?php
-      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-header.php';
+      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-header.php';
       ?>
       <div class="lesson-panel">
         <div class="title-box">
@@ -48,9 +47,9 @@ $current_page = 'subject.php';
         </div>
         <div class="lesson-container">
           <div class="lesson-header">
-            <div class="header-bg mapeh">
+            <div class="header-bg sci">
               <div class="icon-container">
-                <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>" alt="mapeh-icon">
+                <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>" alt="science-icon">
               </div>
             </div>
             <div class="header-text">
@@ -77,7 +76,7 @@ $current_page = 'subject.php';
               </div>
             </div>
             <div class="lesson-box">
-              <div class="lesson-item mapeh-item">
+              <div class="lesson-item sci-item">
                 <div class="lesson-title">
                   <h1>Lesson 1</h1>
                   <span>Alphabetong Filipino</span>
@@ -86,7 +85,7 @@ $current_page = 'subject.php';
                   <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
                 </div>
               </div>
-              <div class="lesson-item mapeh-item">
+              <div class="lesson-item sci-item">
                 <div class="lesson-title">
                   <h1>Lesson 2</h1>
                   <span>Patinig At Katinig</span>
@@ -95,7 +94,7 @@ $current_page = 'subject.php';
                   <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
                 </div>
               </div>
-              <div class="lesson-item mapeh-item">
+              <div class="lesson-item sci-item">
                 <div class="lesson-title">
                   <h1>Lesson 3</h1>
                   <span>Pagtukoy Sa Huni At Tunog</span>
@@ -104,7 +103,7 @@ $current_page = 'subject.php';
                   <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
                 </div>
               </div>
-              <div class="lesson-item mapeh-item">
+              <div class="lesson-item sci-item">
                 <div class="lesson-title">
                   <h1>Lesson 4</h1>
                   <span>Wastong Paggamit Ng Baybay At Bantas</span>
@@ -113,7 +112,7 @@ $current_page = 'subject.php';
                   <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
                 </div>
               </div>
-              <div class="lesson-item mapeh-item">
+              <div class="lesson-item sci-item">
                 <div class="lesson-title">
                   <h1>Lesson 5</h1>
                   <span>Salitang Pamalit Sa Ngalan Ng Tao</span>
@@ -129,5 +128,5 @@ $current_page = 'subject.php';
     </div>
   </div>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-footer.php';
   ?>

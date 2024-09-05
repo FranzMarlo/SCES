@@ -311,12 +311,79 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['gender'] = $getTeacherData['gender'];
                 $_SESSION['email'] = $result['email'];
                 $_SESSION['password'] = $result['password'];
+                $_SESSION['registration'] = $getTeacherData['registration'];
+                $_SESSION['image_profile'] = $getTeacherData['image_profile'];
                 echo '200';
             }
         }
-    } else {
+    } else if ($_POST['submitType'] === 'adminSignUp') {
+
+        $firstName = validate($_POST['firstName']);
+        $middleName = validate($_POST['middleName']);
+        $lastName = validate($_POST['lastName']);
+        $gender = validate($_POST['gender']);
+        $role = validate($_POST['role']);
+        $email = validate($_POST['email']);
+        $password = validate($_POST['password']);
+        $confirmPassword = validate($_POST['confirmPassword']);
+
+        $emailPattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+
+
+        if (empty($firstName)) {
+            echo '452';
+        } else if (empty($middleName)) {
+            echo '453';
+        } else if (empty($lastName)) {
+            echo '454';
+        } else if (empty($gender)) {
+            echo '472';
+        } else if (empty($role)) {
+            echo '478';
+        } else if (empty($email)) {
+            echo '457';
+        } else if (!preg_match($emailPattern, $email)) {
+            echo '458';
+        } else if (empty($password)) {
+            echo '459';
+        } else if (strlen($password) < 6) {
+            echo '460';
+        } else if (empty($confirmPassword)) {
+            echo '461';
+        } else if ($password !== $confirmPassword) {
+            echo '462';
+        } else {
+            $checkEmail = $db->checkAdminEmail($email);
+            if ($checkEmail->num_rows > 0) {
+                echo '463';
+            } else {
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                $signUpResult = $db->adminSignUp($firstName, $middleName, $lastName, 0, $gender, $email, $hashedPassword, 'incomplete', 'default-profile.png', $role);
+
+                if ($signUpResult !== false) {
+                    session_start();
+                    $_SESSION['teacher_id'] = $signUpResult;
+                    $_SESSION['teacher_fname'] = $firstName;
+                    $_SESSION['teacher_mname'] = $middleName;
+                    $_SESSION['teacher_lname'] = $lastName;
+                    $_SESSION['age'] = 0;
+                    $_SESSION['gender'] = $gender;
+                    $_SESSION['email'] = $email;
+                    $_SESSION['password'] = $hashedPassword;
+                    $_SESSION['registration'] = 'Incomplete';
+                    $_SESSION['image_profile'] = 'default-profile.png';
+                    echo '200';
+                } else {
+                    echo '400';
+                }
+            }
+        }
+    }
+    else {
         echo '400';
     }
+    
 }
 
 class loggedIn

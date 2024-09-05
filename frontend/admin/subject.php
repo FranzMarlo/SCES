@@ -51,15 +51,19 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                     <h1>Subjects</h1>
                 </div>
                 <div class="subject-container">
-                    <a href="#" class="subject-item">
+                    <a href="/SCES/frontend/admin/lessons/grade 1/filipino.php" class="subject-item">
                         <div class="subject-icon fil">
-                                <button class="subject-btn ellipsis">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
+                            <button class="subject-btn ellipsis">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="subject-in-title">
+                                <h1>Filipino 1</h1>
+                                <span>Grade 1 - Banana</span>
+                            </div>
                             <img src="/SCES/assets/images/filipino-icon.png" alt="filipino icon">
-                                <button class="subject-btn edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                            <button class="subject-btn edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </div>
                         <div class="subject-title">
                             <h1>Filipino 1</h1>
@@ -68,13 +72,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                     </a>
                     <a href="#" class="subject-item">
                         <div class="subject-icon eng">
-                                <button class="subject-btn ellipsis">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
+                            <button class="subject-btn ellipsis">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="subject-in-title">
+                                <h1>English 1</h1>
+                                <span>Grade 1 - Banana</span>
+                            </div>
                             <img src="/SCES/assets/images/english-icon.png" alt="english icon">
-                                <button class="subject-btn edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                            <button class="subject-btn edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </div>
                         <div class="subject-title">
                             <h1>English 1</h1>
@@ -83,13 +91,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                     </a>
                     <a href="#" class="subject-item">
                         <div class="subject-icon math">
-                                <button class="subject-btn ellipsis">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
+                            <button class="subject-btn ellipsis">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="subject-in-title">
+                                <h1>Mathematics 1</h1>
+                                <span>Grade 1 - Banana</span>
+                            </div>
                             <img src="/SCES/assets/images/math-icon.png" alt="math icon">
-                                <button class="subject-btn edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                            <button class="subject-btn edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </div>
                         <div class="subject-title">
                             <h1>Mathematics 1</h1>
@@ -98,13 +110,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                     </a>
                     <a href="#" class="subject-item">
                         <div class="subject-icon sci">
-                                <button class="subject-btn ellipsis">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
+                            <button class="subject-btn ellipsis">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="subject-in-title">
+                                <h1>Science 1</h1>
+                                <span>Grade 1 - Banana</span>
+                            </div>
                             <img src="/SCES/assets/images/science-icon.png" alt="science icon">
-                                <button class="subject-btn edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                            <button class="subject-btn edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </div>
                         <div class="subject-title">
                             <h1>Science 1</h1>
@@ -113,13 +129,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                     </a>
                     <a href="#" class="subject-item">
                         <div class="subject-icon ap">
-                                <button class="subject-btn ellipsis">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
+                            <button class="subject-btn ellipsis">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="subject-in-title">
+                                <h1>AP 1</h1>
+                                <span>Grade 1 - Banana</span>
+                            </div>
                             <img src="/SCES/assets/images/ap-icon.png" alt="ap icon">
-                                <button class="subject-btn edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                            <button class="subject-btn edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </div>
                         <div class="subject-title">
                             <h1>AP 1</h1>
@@ -128,13 +148,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                     </a>
                     <a href="#" class="subject-item">
                         <div class="subject-icon esp">
-                                <button class="subject-btn ellipsis">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
+                            <button class="subject-btn ellipsis">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="subject-in-title">
+                                <h1>ESP 1</h1>
+                                <span>Grade 1 - Banana</span>
+                            </div>
                             <img src="/SCES/assets/images/esp-icon.png" alt="esp icon">
-                                <button class="subject-btn edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                            <button class="subject-btn edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </div>
                         <div class="subject-title">
                             <h1>ESP 1</h1>
@@ -143,13 +167,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                     </a>
                     <a href="#" class="subject-item">
                         <div class="subject-icon mt">
-                                <button class="subject-btn ellipsis">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
+                            <button class="subject-btn ellipsis">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="subject-in-title">
+                                <h1>Mother Tongue 1</h1>
+                                <span>Grade 1 - Banana</span>
+                            </div>
                             <img src="/SCES/assets/images/mother-tongue-icon.png" alt="mother-tongue icon">
-                                <button class="subject-btn edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                            <button class="subject-btn edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </div>
                         <div class="subject-title">
                             <h1>Mother Tongue 1</h1>
@@ -158,13 +186,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                     </a>
                     <a href="#" class="subject-item">
                         <div class="subject-icon mapeh">
-                                <button class="subject-btn ellipsis">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
+                            <button class="subject-btn ellipsis">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="subject-in-title">
+                                <h1>MAPEH 1</h1>
+                                <span>Grade 1 - Banana</span>
+                            </div>
                             <img src="/SCES/assets/images/mapeh-icon.png" alt="mapeh icon">
-                                <button class="subject-btn edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                            <button class="subject-btn edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </div>
                         <div class="subject-title">
                             <h1>MAPEH 1</h1>

@@ -1,7 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
 ?>
-<script src="/SCES/assets/script/signup.js"></script>
 <title>Sign up | SCES Online Learning Platform</title>
 </head>
 
@@ -18,7 +17,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
     </div>
     <div class="column right">
       <div class="form-wrapper">
-        <form class="form-40px" id="studSignUp" novalidate>
+        <form class="form-40px" id="adminSignUp" novalidate>
           <h1>Sign Up</h1>
           <div class="input-icons">
             <label for="firstName">
@@ -39,26 +38,23 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
             <input type="text" name="lastName" id="lastName" placeholder="Last Name" />
           </div>
           <div class="input-icons">
-            <label for="gradeLevel">
-              <i class="fa-solid fa-graduation-cap icon"></i>
+            <label for="gender">
+              <i class="fa-solid fa-person-half-dress icon"></i>
             </label>
-            <select name="gradeLevel" id="gradeLevel">
-              <option value="" disabled selected>Select Grade Level</option>
-              <option value="G0001">Grade 1</option>
-              <option value="G0002">Grade 2</option>
-              <option value="G0003">Grade 3</option>
-              <option value="G0004">Grade 4</option>
-              <option value="G0005">Grade 5</option>
-              <option value="G0006">Grade 6</option>
+            <select name="gender" id="gender">
+              <option value="" disabled selected>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
             </select>
           </div>
           <div class="input-icons">
-            <label for="section">
-            <i class="fa-solid fa-school icon"></i>
+            <label for="role">
+              <i class="fa-solid fa-briefcase icon"></i>
             </label>
-            <select name="section" id="section">
-              <option value="" disabled selected>Select Section</option>
-              <option value="" disabled>Please Select Grade Level First</option>
+            <select name="role" id="role">
+              <option value="" disabled selected>Select Role</option>
+              <option value="Teacher">Teacher</option>
+              <option value="Admin">Admin</option>
             </select>
           </div>
           <div class="input-icons">
@@ -79,7 +75,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
             </label>
             <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" />
           </div>
-          <button type="submit" id="studSignUpBtn">Sign Up</button>
+          <button type="submit" id="adminSignUpBtn">Sign Up</button>
         </form>
       </div>
     </div>

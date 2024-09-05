@@ -4,6 +4,6 @@
     </div>
     <div class="header-item">
         <i class="fa-solid fa-bell"></i>
-        <img src="/SCES/assets/images/currentuser.png" alt="admin icon">
+        <img src="/SCES/student-storage/images/<?php echo $image; ?>" alt="admin icon">
     </div>
 </div>

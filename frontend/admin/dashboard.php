@@ -20,11 +20,11 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
         <div class="welcome-text">
           <div class="current-time">
             <i class="fa-solid fa-calendar"></i>
-            <span>September 01, 2024</span>
-            <span>3:46 pm</span>
+            <span id="current-date"><?php echo date('F d, Y'); ?></span>
+            <span id="current-time"><?php echo date('g:i a'); ?></span>
           </div>
           <div class="text-content">
-            <h1>Good Day, Ma'am Lozano!</h1>
+            <h1>Good Day, <?php echo htmlspecialchars($title) . ' ' . htmlspecialchars($teacherLname); ?>!</h1>
             <span>Have a nice learning day!</span>
           </div>
         </div>

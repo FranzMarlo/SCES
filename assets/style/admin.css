@@ -128,8 +128,8 @@ body {
   font-size: 2rem;
 }
 .header-item img {
-  height: 70px;
-  width: 70px;
+  height: 50px;
+  width: 50px;
   border-radius: 50px;
 }
 .welcome-box {
@@ -340,9 +340,9 @@ canvas {
     align-items: center;
   }
   .menu-part .user-icon {
-    height: 60px;
+    height: 50px;
     border-radius: 50px;
-    width: 60px;
+    width: 50px;
   }
   .menu-part a {
     font-size: 25px;
@@ -508,9 +508,17 @@ canvas {
   .text-content span {
     font-size: 0.8rem;
   }
+  .welcome-text {
+    position: absolute;
+  }
+  .welcome-img {
+    flex: 1;
+  }
   .welcome-img img {
-    width: 320px;
-    height: 150px;
+    width: 100%;
+    padding-left: 30%;
+    padding-right: 15px;
+    padding-bottom: 2px;
   }
   .current-time {
     margin-bottom: 40px;
@@ -540,14 +548,7 @@ canvas {
     flex: 1;
   }
   .welcome-img img {
-    width: 100%;
-    height: 150px;
     padding-left: 40%;
-    padding-right: 15px;
-    padding-bottom: 2px;
-  }
-  .welcome-text {
-    position: absolute;
   }
   .cropped {
     display: flex;
@@ -559,7 +560,7 @@ canvas {
     justify-content: center;
     align-items: center;
     gap: 20px;
-    flex-wrap: wrap
+    flex-wrap: wrap;
   }
   #barChart {
     width: 95%;
@@ -569,7 +570,7 @@ canvas {
   }
 }
 @media (width < 425px) {
-  .chart{
+  .chart {
     padding: 0;
   }
   .welcome-img img {

@@ -1,7 +1,6 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-head.php';
 $subject = $db->getSubjectDetails('MAPEH 1', $sectionId, $level_id);
-$current_page = 'subject.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/lessons.css" />
 <title>MAPEH | SCES Online Learning Platform</title>
@@ -9,15 +8,15 @@ $current_page = 'subject.php';
 
 <body>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-popup.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-popup.php';
   ?>
   <div class="container">
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-sidebar.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-sidebar.php';
     ?>
     <div class="content">
       <?php
-      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-header.php';
+      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-header.php';
       ?>
       <div class="lesson-panel">
         <div class="title-box">
@@ -129,5 +128,5 @@ $current_page = 'subject.php';
     </div>
   </div>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/student/partials/student-footer.php';
   ?>

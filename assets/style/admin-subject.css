@@ -66,7 +66,6 @@
 }
 .subject-icon {
   display: flex;
-  flex-direction: column;
   border-radius: 30px;
   border: 2px solid #000;
   justify-content: center;
@@ -98,6 +97,9 @@
   display: flex;
   flex-direction: column;
   padding: 5px 10px;
+}
+.subject-in-title {
+  display: none;
 }
 .subject-title h1 {
   font-size: 1.2rem;
@@ -149,10 +151,10 @@
     padding: 30px;
     gap: 30px;
   }
-  .item{
+  .item {
     gap: 10px;
   }
-  .item-text{
+  .item-text {
     padding: 0;
   }
   .item-text span {
@@ -166,5 +168,83 @@
   }
 }
 @media (width < 768px) {
-    
+  .subject-container {
+    gap: 25px;
+    padding: 20px;
+  }
+  .subject-title h1 {
+    font-size: 1.1rem;
+  }
+  .subject-title span {
+    font-size: 0.9rem;
+  }
+  .item {
+    height: 80px;
+  }
+  .item-icon img {
+    height: 50px;
+  }
+  .item-text span {
+    font-size: 1rem;
+  }
+  .item-text h6 {
+    font-size: 1.1rem;
+  }
+  .subject-icon img {
+    height: 8rem;
+  }
+}
+@media (width < 600px) {
+  .item {
+    width: 31%;
+    padding: 5px 10px;
+    flex-direction: column;
+    height: 130px;
+  }
+  .item-icon img {
+    height: 40px;
+  }
+  .item-text span {
+    font-size: 1rem;
+  }
+  .item-text h6 {
+    font-size: 1.2rem;
+  }
+  .subject-icon img {
+    height: 8rem;
+  }
+  .subject-container {
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+  }
+  .subject-title {
+    display: none;
+  }
+  .subject-item {
+    width: 100%;
+  }
+  .subject-icon img {
+    height: 7rem;
+  }
+  .subject-icon {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .subject-in-title {
+    display: flex;
+    row-gap: 40px;
+    padding: 10px 20px;
+    flex-direction: column;
+  }
+  .subject-in-title h1 {
+    font-size: 1.1rem;
+    color: #fff;
+  }
+  .subject-in-title span {
+    font-size: 0.8rem;
+    color: #fff;
+    font-weight: bold;
+  }
 }

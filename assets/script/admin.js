@@ -158,3 +158,29 @@ const myBarChart = new Chart(barCtx, {
     },
   },
 });
+
+function formatTime(date) {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  return hours + ":" + minutes + " " + ampm;
+}
+
+function formatDate(date) {
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return date.toLocaleDateString(undefined, options);
+}
+
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("current-date").innerText = formatDate(now);
+  document.getElementById("current-time").innerText = formatTime(now);
+}
+
+window.onload = function () {
+  updateDateTime(); // Initial call
+  setInterval(updateDateTime, 60000);
+};

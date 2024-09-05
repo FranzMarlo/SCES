@@ -48,11 +48,37 @@ class globalClass extends db_connect
             $loginQuery = $this->conn->prepare("INSERT INTO `login_tbl` (`student_id`, `email`, `password`) VALUES (?, ?, ?)");
             $loginQuery->bind_param("sss", $studentId, $email, $hashedPassword);
             if ($loginQuery->execute()) {
-
+                return $studentId;
             } else {
                 return false;
             }
-            return $studentId;
+        } else {
+            return false;
+        }
+    }
+
+    public function adminSignUp($firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $registration, $image, $role)
+    {
+        $year = date("Y");
+        $adminId = 'T' . $year . '-' . sprintf('%03d', rand(0, 999));
+        $checkIdResult = $this->checkAdminId($adminId);
+
+        while ($checkIdResult->num_rows > 0) {
+            $adminId = 'T' . $year . '-' . sprintf('%03d', rand(0, 999));
+            $checkIdResult = $this->checkAdminId($adminId);
+        }
+
+        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssisss", $adminId, $firstName, $middleName, $lastName, $age, $gender, $registration, $image);
+
+        if ($query->execute()) {
+            $loginQuery = $this->conn->prepare("INSERT INTO `admin_tbl` (`teacher_id`, `role`, `email`, `password`) VALUES (?, ?, ?, ?)");
+            $loginQuery->bind_param("ssss", $adminId, $role, $email, $hashedPassword);
+            if ($loginQuery->execute()) {
+                return $adminId;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -61,6 +87,17 @@ class globalClass extends db_connect
     public function checkEmail($email)
     {
         $query = $this->conn->prepare("SELECT * FROM `login_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $checkEmail = $query->get_result();
+            return $checkEmail;
+        }
+    }
+
+    public function checkAdminEmail($email)
+    {
+        $query = $this->conn->prepare("SELECT * FROM `admin_tbl` WHERE `email` = ?");
         $query->bind_param("s", $email);
 
         if ($query->execute()) {
@@ -162,6 +199,16 @@ class globalClass extends db_connect
     public function checkStudentId($id)
     {
         $query = $this->conn->prepare("SELECT * FROM student_tbl WHERE student_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+    public function checkAdminId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM teacher_tbl WHERE teacher_id = ?");
         $query->bind_param("s", $id);
         if ($query->execute()) {
             $result = $query->get_result();

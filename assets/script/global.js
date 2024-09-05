@@ -571,6 +571,7 @@ $("#editBackgroundForm").on("submit", function (e) {
     },
   });
 });
+
 $("#changeAvatarForm").on("submit", function (e) {
   e.preventDefault();
 
@@ -687,6 +688,195 @@ $("#adminLogin").on("submit", function (e) {
   });
 });
 
+$("#adminSignUp").on("submit", function (e) {
+  e.preventDefault();
+  var firstName = $("#firstName").val();
+  var middleName = $("#middleName").val();
+  var lastName = $("#lastName").val();
+  var gender = $("#gender").val();
+  var role = $("#role").val();
+  var email = $("#email").val();
+  var password = $("#password").val();
+  var confirmPassword = $("#confirmPassword").val();
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "adminSignUp",
+      firstName: firstName,
+      middleName: middleName,
+      lastName: lastName,
+      gender: gender,
+      role: role,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Sign Up Succesful",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/dashboard.php";
+              }
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "First Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "453") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Middle Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "454") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Last Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "472") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Your Gender",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "478") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Role In School",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "457") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Email Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "458") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Valid Email",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "459") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Password Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "460") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Password Should Be At Least 6 Characters",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "461") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Confirm Your Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "462") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Passwords Don't Match Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "463") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Email Already In Use",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Sign Up Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
 function logoutFunc() {
   Swal.fire({
     icon: "question",

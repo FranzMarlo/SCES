@@ -42,7 +42,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
             <br>
             <a href="register.php" class="button-container">
                 <div class="btn-wrapper">
-                    <h1>Create an Account</h1>
+                    <h1>Register Account</h1>
                 </div>
             </a>
         </div>
