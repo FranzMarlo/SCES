@@ -131,6 +131,25 @@
 .mapeh {
   background-color: #a3adff;
 }
+.no-data-box-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 600px;
+}
+.no-data-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.no-data-box img {
+  height: 200px;
+}
+.no-data-box h1 {
+  font-size: 1.2rem;
+}
 @media (width < 1199px) {
   .item-text {
     padding: 5px;
