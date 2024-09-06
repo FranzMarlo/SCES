@@ -54,7 +54,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                 <div class="subject-container <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>">
                     <?php if ($subjects): ?>
                         <?php foreach ($subjects as $subject): ?>
-                            <a href="<?php echo $subject['link']; ?>" class="subject-item">
+                            <a href="/SCES/frontend/admin/subjects/<?php echo $subject['link']; ?>" class="subject-item">
                                 <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>">
                                     <button class="subject-btn ellipsis">
                                         <i class="fa-solid fa-ellipsis-vertical"></i>

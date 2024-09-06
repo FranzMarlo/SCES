@@ -361,5 +361,57 @@ class globalClass extends db_connect
             return false;
         }
     }
+
+    public function getTotalStudent()
+    {
+        $query = $this->conn->prepare("SELECT COUNT(`student_id`) as total FROM student_tbl");
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return 'System Error';
+        }
+    }
+
+    public function getTotalTeacher()
+    {
+        $query = $this->conn->prepare("SELECT COUNT(`teacher_id`) as total FROM teacher_tbl");
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return 'System Error';
+        }
+    }
+
+    public function getTotalSubject()
+    {
+        $query = $this->conn->prepare("SELECT COUNT(`subject_id`) as total FROM subject_tbl");
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return 'System Error';
+        }
+    }
+
+    public function getTotalQuiz()
+    {
+        $query = $this->conn->prepare("SELECT COUNT(`quiz_id`) as total FROM quiz_tbl");
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return 'System Error';
+        }
+    }
 }
 

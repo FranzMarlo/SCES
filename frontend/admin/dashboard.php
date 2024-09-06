@@ -40,7 +40,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
           </div>
           <div class="box-text">
             <h1>Total Students</h1>
-            <span>100</span>
+            <span><?php echo htmlspecialchars($totalStudents);?></span>
           </div>
         </div>
         <div class="box teachers">
@@ -49,7 +49,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
           </div>
           <div class="box-text">
             <h1>Total Teachers</h1>
-            <span>10</span>
+            <span><?php echo htmlspecialchars($totalTeachers);?></span>
           </div>
         </div>
         <div class="box subjects">
@@ -58,7 +58,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
           </div>
           <div class="box-text">
             <h1>Total Subjects</h1>
-            <span>8</span>
+            <span><?php echo htmlspecialchars($totalSubjects);?></span>
           </div>
         </div>
         <div class="box quizzes">
@@ -67,7 +67,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
           </div>
           <div class="box-text">
             <h1>Total Quizzes</h1>
-            <span>12</span>
+            <span><?php echo htmlspecialchars($totalQuizzes);?></span>
           </div>
         </div>
       </div>

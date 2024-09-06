@@ -6,7 +6,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/admin/data-setter.php';
 $log = new adminLoggedIn();
 $log->needLogin();
 $current_page = basename($_SERVER['REQUEST_URI']);
-
+$totalStudents = $db->getTotalStudent();
+$totalTeachers = $db->getTotalTeacher();
+$totalSubjects = $db->getTotalSubject();
+$totalQuizzes = $db->getTotalQuiz();
 ?>
 <!DOCTYPE html>
 <html lang="en">
