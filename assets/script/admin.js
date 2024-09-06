@@ -1,5 +1,10 @@
 $(".menu-btn").on("click", function (e) {
   e.stopPropagation();
+  if ($(".module-dropdown-content").hasClass("show-modules")) {
+    $(".module-dropdown-content").removeClass("show-modules");
+  } else if ($(".quiz-dropdown-content").hasClass("show-quizzes")) {
+    $(".quiz-dropdown-content").removeClass("show-quizzes");
+  }
   $(".pop-up").toggleClass("active");
   $(".overlay").toggle();
 });
@@ -17,6 +22,52 @@ $(document).on("click", function (e) {
 $(".overlay").on("click", function () {
   $(".pop-up").removeClass("active");
   $(this).hide();
+});
+
+$(".pop-btn").on("click", function (e) {
+  e.stopPropagation();
+  if ($(".module-dropdown-content").hasClass("show-modules")) {
+    $(".module-dropdown-content").removeClass("show-modules");
+  } else if ($(".quiz-dropdown-content").hasClass("show-quizzes")) {
+    $(".quiz-dropdown-content").removeClass("show-quizzes");
+  }
+  $(".dropdown-content").toggleClass("show");
+});
+
+$(document).on("click", function (e) {
+  if (!$(e.target).closest(".pop-btn, .dropdown-content").length) {
+    $(".dropdown-content").removeClass("show");
+  }
+});
+
+$(".module-btn").on("click", function (e) {
+  e.stopPropagation();
+  if ($(".dropdown-content").hasClass("show")) {
+    $(".dropdown-content").removeClass("show");
+  }
+  $(".module-dropdown-content").toggleClass("show-modules");
+});
+
+$(document).on("click", function (e) {
+  if (!$(e.target).closest(".module-btn, .module-dropdown-content").length) {
+    $(".module-dropdown-content").removeClass("show-modules");
+  }
+});
+
+$(".quiz-btn").on("click", function (e) {
+  e.stopPropagation();
+  if ($(".dropdown-content").hasClass("show")) {
+    $(".dropdown-content").removeClass("show");
+  } else if ($(".module-dropdown-content").hasClass("show-modules")) {
+    $(".module-dropdown-content").removeClass("show-modules");
+  }
+  $(".quiz-dropdown-content").toggleClass("show-quizzes");
+});
+
+$(document).on("click", function (e) {
+  if (!$(e.target).closest(".quiz-btn, .quiz-dropdown-content").length) {
+    $(".quiz-dropdown-content").removeClass("show-quizzes");
+  }
 });
 
 $(".menu > ul > li").on("click", function (e) {
@@ -37,150 +88,42 @@ document.addEventListener("DOMContentLoaded", function () {
       parentMenu.classList.add("active");
     }
   }
-  document.querySelectorAll(".subject-btn").forEach((button) => {
-    button.addEventListener("click", function (event) {
-      event.stopPropagation();
-      event.preventDefault();
-    });
-  });
 });
+let openPopupMenu = null;
 
-const donutLabelPlugin = {
-  id: "doughnutlabel",
-  afterDatasetDraw(chart) {
-    if (chart.config.type === "doughnut") {
-      const {
-        ctx,
-        chartArea: { top, bottom, left, right },
-      } = chart;
-      const { datasets } = chart.data;
+function subjectBtn(event, button) {
+  event.preventDefault();
+  event.stopPropagation();
 
-      ctx.save();
+  var subjectItem = button.closest(".subject-item");
+  var popupMenu = subjectItem.querySelector(".popup-menu");
 
-      const fontSize = (bottom - top) / 4;
-      ctx.font = `${fontSize}px sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillStyle = "#273b4a";
+  if (openPopupMenu && openPopupMenu !== popupMenu) {
+    openPopupMenu.classList.remove("show");
+  }
 
-      // Calculate the center point
-      const textX = (left + right) / 2;
-      const textY = (top + bottom) / 2;
+  if (popupMenu) {
+    popupMenu.classList.toggle("show");
+    openPopupMenu = popupMenu.classList.contains("show") ? popupMenu : null;
+  }
 
-      const text = `${datasets[0].data[0]}%`;
-
-      ctx.fillText(text, textX, textY);
-      ctx.restore();
-    }
-  },
-};
-
-const donutCtx = document.getElementById("myDonutChart").getContext("2d");
-const myDonutChart = new Chart(donutCtx, {
-  type: "doughnut",
-  data: {
-    labels: ["Accomplished", "Pending"],
-    datasets: [
-      {
-        data: [60, 40],
-        backgroundColor: ["#46d2b7", "#ffffff"],
-        borderColor: ["#2ea993", "#000000"],
-        borderWidth: 1,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: "70%",
-    plugins: {
-      title: {
-        display: true,
-        text: "Quizzes Completion",
-        font: {
-          size: 20,
-        },
-      },
-      legend: {
-        display: true,
-        position: "bottom",
-      },
+  document.addEventListener(
+    "click",
+    function (e) {
+      if (!subjectItem.contains(e.target) && openPopupMenu) {
+        openPopupMenu.classList.remove("show");
+        openPopupMenu = null;
+      }
     },
-  },
-  plugins: [donutLabelPlugin],
-});
-
-const barCtx = document.getElementById("myBarChart").getContext("2d");
-const myBarChart = new Chart(barCtx, {
-  type: "bar",
-  data: {
-    labels: ["Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6"],
-    datasets: [
-      {
-        label: "2023",
-        data: [205, 216, 170, 149, 146, 206],
-        backgroundColor: "#ffaade",
-        borderColor: "#ff66c4",
-        borderWidth: 1,
-      },
-      {
-        label: "2024",
-        data: [210, 220, 165, 155, 150, 210],
-        backgroundColor: "#e4c2f3",
-        borderColor: "#c964f9",
-        borderWidth: 1,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        beginAtZero: true,
-      },
-      y: {
-        beginAtZero: true,
-      },
-    },
-    plugins: {
-      title: {
-        display: true,
-        text: "Students By Grade Level Per Year",
-        font: {
-          size: 18,
-        },
-      },
-      legend: {
-        display: true,
-        position: "bottom",
-      },
-    },
-  },
-});
-
-function formatTime(date) {
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  let ampm = hours >= 12 ? "pm" : "am";
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-  return hours + ":" + minutes + " " + ampm;
+    { once: true }
+  );
 }
 
-function formatDate(date) {
-  const options = { year: "numeric", month: "long", day: "numeric" };
-  return date.toLocaleDateString(undefined, options);
-}
+function hiddenLink(element) {
+  var subjectItem = element.closest(".subject-item");
+  var hiddenLink = subjectItem.querySelector(".hidden-link");
 
-function updateDateTime() {
-  const now = new Date();
-  document.getElementById("current-date").innerText = formatDate(now);
-  document.getElementById("current-time").innerText = formatTime(now);
+  if (hiddenLink) {
+    hiddenLink.click(); // Trigger the hidden link click
+  }
 }
-
-window.onload = function () {
-  updateDateTime(); // Initial call
-  setInterval(updateDateTime, 60000);
-};

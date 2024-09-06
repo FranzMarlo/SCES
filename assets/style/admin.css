@@ -573,6 +573,9 @@ canvas {
   .chart {
     padding: 0;
   }
+  canvas{
+    padding: 5px;
+  }
   .welcome-img img {
     padding-left: 30%;
   }

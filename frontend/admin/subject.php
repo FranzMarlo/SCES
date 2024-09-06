@@ -3,6 +3,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
 $teacherStudent = $db->getTotalTeacherStudent($teacherId);
 $teacherLesson = $db->getTotalTeacherLesson($teacherId);
 $teacherArchived = $db->getTotalTeacherArchived($teacherId);
+$page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-subject.css" />
 <title>Subjects | SCES Online Learning Platform</title>
@@ -57,36 +58,42 @@ $teacherArchived = $db->getTotalTeacherArchived($teacherId);
                 <div class="subject-container <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>">
                     <?php if ($subjects): ?>
                         <?php foreach ($subjects as $subject): ?>
-                            <a href="/SCES/frontend/admin/subjects/<?php echo $subject['link']; ?>" class="subject-item">
-                                <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>">
-                                    <button class="subject-btn ellipsis">
+                            <div class="subject-item">
+                                <a href="/SCES/frontend/admin/subjects/<?php echo htmlspecialchars($subject['link']); ?>?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>"
+                                    class="hidden-link"></a>
+                                <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>" onclick="hiddenLink(this)">
+                                    <button class="subject-btn" onclick="subjectBtn(event, this)">
                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                     </button>
-                                    <div class="subject-in-title">
+                                    <div class="subject-in-title" onclick="hiddenLink(this)">
                                         <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
                                         <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
                                     </div>
                                     <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>"
                                         alt="<?php echo htmlspecialchars($subject['icon']); ?>">
-                                    <button class="subject-btn edit">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
                                 </div>
-                                <div class="subject-title">
+                                <div class="subject-title" onclick="hiddenLink(this)">
                                     <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
                                     <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
                                 </div>
-                            </a>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="no-data-box">
-                            <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
-                            <h1>No subject found.</h1>
-                        </div>
-                    <?php endif; ?>
+                                <div class="popup-menu">
+                                    <ul>
+                                        <li><a href="#">Edit</a></li>
+                                        <li><a href="#">Archive</a></li>
+                                        <li><a href="#">View Details</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="no-data-box">
+                                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                                <h1>No subject found.</h1>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
-        </div>
-        <?php
-        include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
-        ?>
+            <?php
+            include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
+            ?>

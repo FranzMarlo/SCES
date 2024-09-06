@@ -1,9 +1,13 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.php';
-$subject = $db->getSubjectDetails('Mother Tongue 1', $sectionId, $level_id);
+$section = isset($_GET['section']) ? htmlspecialchars($_GET['section']) : '';
+$currentSubject = isset($_GET['subject']) ? htmlspecialchars($_GET['subject']) : '';
+$gradeLevel = isset($_GET['gradelevel']) ? htmlspecialchars($_GET['gradelevel']) : '';
+$subject = $db->getTeacherSubjectDetails($teacherId, $section, $currentSubject, $gradeLevel);
 $current_page = 'subject.php';
+$page = 'Lessons';
 ?>
-<link rel="stylesheet" href="/SCES/assets/style/lessons.css" />
+<link rel="stylesheet" href="/SCES/assets/style/admin-lesson.css" />
 <title>Mother Tongue | SCES Online Learning Platform</title>
 </head>
 
@@ -55,7 +59,7 @@ $current_page = 'subject.php';
             </div>
             <div class="header-text">
               <h1><?php echo htmlspecialchars($subject['subject_title']); ?></h1>
-              <span><?php echo htmlspecialchars(($subject['gender'] == 'Female' ? 'Ms. ' : 'Mr. ') . $subject['teacher_fname'] . ' ' . $subject['teacher_lname']); ?></span>
+              <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
             </div>
           </div>
           <div class="lesson-content">
@@ -77,6 +81,15 @@ $current_page = 'subject.php';
               </div>
             </div>
             <div class="lesson-box">
+              <div class="add-lesson">
+                <div class="add-item">
+                  <img src="/SCES/assets/images/bag-icon.png" alt="add lesson icon">
+                  <span>Add lesson to class subject</span>
+                </div>
+                <div class="add-item">
+                  <i class="fa-solid fa-circle-plus"></i>
+                </div>
+              </div>
               <div class="lesson-item mt-item">
                 <div class="lesson-title">
                   <h1>Lesson 1</h1>

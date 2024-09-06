@@ -63,6 +63,8 @@
   flex-direction: column;
   text-decoration: none;
   color: #000;
+  cursor: pointer;
+  position: relative;
 }
 .subject-icon {
   display: flex;
@@ -84,14 +86,44 @@
   border: 2px solid #000;
   position: absolute;
   cursor: pointer;
-}
-.ellipsis {
   top: 10px;
   right: 10px;
 }
-.edit {
-  bottom: 10px;
-  right: 10px;
+.hidden-link{
+  display: none;
+}
+.popup-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 0 3px 0 #9c9c9c;
+  border-radius: 10px;
+  list-style: none;
+  padding: 10px;
+  z-index: 5;
+  top: 40px;
+  right: 20px;
+}
+.popup-menu.show {
+  display: block;
+}
+.popup-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.popup-menu li {
+  margin: 5px 0;
+}
+.popup-menu li a {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: black;
+  padding: 5px;
+  display: block;
+}
+.popup-menu li a:hover {
+  background-color: #f0f0f0;
 }
 .subject-title {
   display: flex;

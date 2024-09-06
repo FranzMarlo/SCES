@@ -47,19 +47,19 @@
                     </a>
                     <ul class="sub-menu">
                         <li class="<?= $current_page == 'student-list.php' ? 'active' : '' ?>">
-                            <a href="#">
+                            <a href="/SCES/frontend/admin/student-list.php">
                                 <i class="fa-solid fa-list icon"></i>
                                 <span class="text">Student List</span>
                             </a>
                         </li>
                         <li class="<?= $current_page == 'student-score.php' ? 'active' : '' ?>">
-                            <a href="#">
+                            <a href="/SCES/frontend/admin/student-score.php">
                                 <i class="fa-solid fa-list-ol icon"></i>
                                 <span class="text">Student Score</span>
                             </a>
                         </li>
                         <li class="<?= $current_page == 'student-grade.php' ? 'active' : '' ?>">
-                            <a href="#">
+                            <a href="/SCES/frontend/admin/student-grade.php">
                                 <i class="fa-solid fa-chart-pie icon"></i>
                                 <span class="text">Student Grade</span>
                             </a>
@@ -67,13 +67,13 @@
                     </ul>
                 </li>
                 <li class="<?= $current_page == 'analytics.php' ? 'active' : '' ?>">
-                    <a href="/SCES/frontend/admin/settings.php">
+                    <a href="/SCES/frontend/admin/analytics.php">
                         <i class="fa-solid fa-chart-simple icon"></i>
                         <span class="text">Analytics</span>
                     </a>
                 </li>
                 <li class="<?= $current_page == 'reports.php' ? 'active' : '' ?>">
-                    <a href="/SCES/frontend/admin/settings.php">
+                    <a href="/SCES/frontend/admin/reports.php">
                         <i class="fa-solid fa-print icon"></i>
                         <span class="text">Reports</span>
                     </a>

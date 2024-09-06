@@ -208,25 +208,25 @@
 .fil {
   background-color: #ff8080;
 }
-.fil-item{
+.fil-item {
   background-color: #ffbebf;
 }
 .eng {
   background-color: #ffb480;
 }
-.eng-item{
+.eng-item {
   background-color: #ffd3a8;
 }
 .math {
   background-color: #fff981;
 }
-.math-item{
+.math-item {
   background-color: #e0dc97;
 }
 .sci {
   background-color: #42d6a4;
 }
-.sci-item{
+.sci-item {
   background-color: #8fe3c7;
 }
 .esp {
@@ -341,6 +341,9 @@
   .header-text {
     padding: 15px;
   }
+  .header-text h1 {
+    font-size: 1.3rem;
+  }
   .lesson-title h1 {
     font-size: 1.1rem;
   }
@@ -354,12 +357,17 @@
     font-size: 0.8rem;
   }
 }
+@media (width < 425px) {
+  .header-text h1 {
+    font-size: 1.1rem;
+  }
+}
 @media (width < 375px) {
   .lesson-item {
     padding: 10px;
   }
   .icon-container {
-    left: 60%;
+    left: 70%;
     top: 50%;
   }
   .icon-container img {

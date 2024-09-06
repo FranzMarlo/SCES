@@ -262,6 +262,7 @@ class globalClass extends db_connect
             s.level_id,
             s.icon,
             s.link,
+            s.section_id,
             s.subject_title,
             s.subject_code,
             t.teacher_fname,
@@ -323,6 +324,55 @@ class globalClass extends db_connect
         AND 
             s.section_id = ?");
         $query->bind_param("sss", $subject, $level_id, $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc();
+            return $subjectDetails;
+        } else {
+            return false;
+        }
+    }
+
+    public function getTeacherSubjectDetails($teacherId, $section, $subject, $gradeLevelId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            s.subject_id,
+            s.subject,
+            s.level_id,
+            s.icon,
+            s.link,
+            s.subject_title,
+            s.subject_code,
+            t.teacher_fname,
+            t.teacher_lname,
+            t.gender,
+            l.level_id,
+            l.grade_level,
+            c.section
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        INNER JOIN
+            section_tbl c
+        ON
+            s.section_id = c.section_id
+        INNER JOIN
+            level_tbl l
+        ON
+            s.level_id = l.level_id
+        WHERE 
+            s.teacher_id = ?
+        AND
+            s.section_id = ?
+        AND
+            s.subject = ?
+        AND
+            s.level_id = ?
+        ");
+        $query->bind_param("ssss", $teacherId, $section, $subject, $gradeLevelId);
         if ($query->execute()) {
             $result = $query->get_result();
             $subjectDetails = $result->fetch_assoc();
