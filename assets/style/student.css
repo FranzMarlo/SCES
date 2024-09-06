@@ -102,7 +102,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  gap: 20px;
+  justify-content: space-between;
 }
 .header .welcome-box {
   display: flex;
@@ -120,13 +120,13 @@ body {
   justify-content: center;
 }
 .header .welcome-box .welcome-text h1 {
-  font-size: 30px;
+  font-size: 1.7rem;
   font-weight: 500;
 }
-.header .welcome-box .welcome-text a{
+.header .welcome-box .welcome-text a {
   text-decoration: none;
   color: #000;
-  font-size: 12px;
+  font-size: 0.8rem;
 }
 .lamp-container {
   padding-right: 20px;
@@ -143,26 +143,22 @@ body {
 .user-info .message-btn,
 .user-info .notif-btn {
   color: #4d768a;
-  padding: 20px;
+  padding: 15px;
 }
 .message-btn .icon,
 .notif-btn .icon {
-  font-size: 30px;
+  font-size: 1.8rem;
 }
 .current-user {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 10px;
 }
 .current-user img {
-  height: 60px;
+  height: 50px;
   border-radius: 50px;
-}
-.current-user h1 {
-  font-size: 20px;
-  font-weight: 500;
+  margin-right: 10px;
 }
 .about-panel {
   background-color: #f4df55;
@@ -179,7 +175,7 @@ body {
   width: 50%;
 }
 .about-text h1 {
-  font-size: 40px;
+  font-size: 2.7rem;
   margin-bottom: 10px;
 }
 .about-text p {
@@ -200,7 +196,7 @@ body {
 }
 .about-img img {
   height: 250px;
-  width: 500px;
+  width: 450px;
 }
 .overview-panel {
   display: flex;

@@ -239,7 +239,9 @@ class globalClass extends db_connect
         WHERE 
             s.level_id = ? 
         AND 
-            s.section_id = ?");
+            s.section_id = ?
+        AND
+            s.archived = 'No'");
         $query->bind_param("ss", $level_id, $sectionId);
         if ($query->execute()) {
             $result = $query->get_result();
@@ -282,7 +284,9 @@ class globalClass extends db_connect
         ON
             s.section_id = c.section_id
         WHERE 
-            s.teacher_id = ? ");
+            s.teacher_id = ? 
+         AND
+            s.archived = 'No'");
         $query->bind_param("s", $teacherId);
         if ($query->execute()) {
             $result = $query->get_result();
@@ -375,6 +379,85 @@ class globalClass extends db_connect
         }
     }
 
+    public function getTotalTeacherStudent($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT `student_id`) as total
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        INNER JOIN
+            student_tbl c
+        ON
+            s.section_id = c.section_id
+        WHERE
+            t.teacher_id = ?
+            ");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return false;
+        }
+    }
+
+    public function getTotalTeacherLesson($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT `lesson_id`) as total
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        INNER JOIN
+            lesson_tbl c
+        ON
+            s.subject_id = c.subject_id
+        WHERE
+            t.teacher_id = ?
+            ");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return false;
+        }
+    }
+
+    public function getTotalTeacherArchived($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(`subject_id`) as total
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        WHERE
+            t.teacher_id = ?
+        AND
+            s.archived = 'Yes'
+            ");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return false;
+        }
+    }
+
     public function getTotalTeacher()
     {
         $query = $this->conn->prepare("SELECT COUNT(`teacher_id`) as total FROM teacher_tbl");
@@ -413,5 +496,7 @@ class globalClass extends db_connect
             return 'System Error';
         }
     }
+
+
 }
 

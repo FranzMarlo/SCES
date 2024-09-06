@@ -21,7 +21,6 @@
         </a>
         <div class="current-user">
             <img src="/SCES/student-storage/images/<?php echo $image;?>" alt="user icon">
-            <h1><?php echo htmlspecialchars($studentFname. ' '. $studentLname); ?></h1>
         </div>
     </div>
 </div>

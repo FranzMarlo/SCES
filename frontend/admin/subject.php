@@ -1,5 +1,8 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.php';
+$teacherStudent = $db->getTotalTeacherStudent($teacherId);
+$teacherLesson = $db->getTotalTeacherLesson($teacherId);
+$teacherArchived = $db->getTotalTeacherArchived($teacherId);
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-subject.css" />
 <title>Subjects | SCES Online Learning Platform</title>
@@ -24,25 +27,25 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
                     </div>
                     <div class="item-text">
                         <span>Total Students</span>
-                        <h6>40</h6>
+                        <h6><?php echo htmlspecialchars($teacherStudent); ?></h6>
                     </div>
                 </div>
                 <div class="item">
                     <div class="item-icon">
-                        <img src="/SCES/assets/images/subject-lessons.png" alt="total students icon">
+                        <img src="/SCES/assets/images/subject-lessons.png" alt="total lessons icon">
                     </div>
                     <div class="item-text">
                         <span>Total Lessons</span>
-                        <h6>24</h6>
+                        <h6><?php echo htmlspecialchars($teacherLesson); ?></h6>
                     </div>
                 </div>
                 <div class="item">
                     <div class="item-icon">
-                        <img src="/SCES/assets/images/subject-archived.png" alt="total students icon">
+                        <img src="/SCES/assets/images/subject-archived.png" alt="total archived icon">
                     </div>
                     <div class="item-text">
                         <span>Total Archived</span>
-                        <h6>14</h6>
+                        <h6><?php echo htmlspecialchars($teacherArchived); ?></h6>
                     </div>
                 </div>
             </div>
