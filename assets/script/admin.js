@@ -127,3 +127,19 @@ function hiddenLink(element) {
     hiddenLink.click(); // Trigger the hidden link click
   }
 }
+
+function toggleMyProfile() {
+  const myProfilePanel = document.getElementById("myProfile");
+  const securityPanel = document.getElementById("security");
+
+  myProfilePanel.style.display = "flex";
+  securityPanel.style.display = "none";
+}
+
+function toggleSecurity() {
+  const myProfilePanel = document.getElementById("myProfile");
+  const securityPanel = document.getElementById("security");
+
+  myProfilePanel.style.display = "none";
+  securityPanel.style.display = "flex";
+}

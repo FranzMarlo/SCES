@@ -20,7 +20,7 @@
             </div>
         </a>
         <div class="current-user">
-            <img src="/SCES/student-storage/images/<?php echo $image;?>" alt="user icon">
+            <img src="/SCES/storage/student/images/<?php echo $image;?>" alt="user icon">
         </div>
     </div>
 </div>

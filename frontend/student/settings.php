@@ -34,7 +34,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
 					<div class="user-profile">
 						<div class="profile-part">
 							<div class="user-icon">
-								<img src="/SCES/student-storage/images/<?php echo $image; ?>" alt="user icon"
+								<img src="/SCES/storage/student/images/<?php echo $image; ?>" alt="user icon"
 									id="current-user-avatar">
 								<img src="/SCES/assets/images/change-avatar.png" alt="user icon"
 									id="change-avatar-icon">

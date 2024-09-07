@@ -323,7 +323,6 @@ $("#editPersonalForm").on("submit", function (e) {
       middleName: middleName,
       age: age,
       gender: gender,
-      email: email,
     },
     success: function (response) {
       console.log(response);
@@ -877,6 +876,425 @@ $("#adminSignUp").on("submit", function (e) {
     },
   });
 });
+
+$("#adminEditProfileForm").on("submit", function (e) {
+  e.preventDefault();
+  var firstName = $("#firstName").val();
+  var lastName = $("#lastName").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "adminEditProfileForm",
+      firstName: firstName,
+      lastName: lastName,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Profile Updated",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/settings.php";
+              }
+            });
+          }
+        );
+      } else if (response == "100") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "info",
+              title: "No Changes Has Been Made",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/settings.php";
+              }
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "First Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "454") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Last Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Update Profile Failed Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+$("#adminEditPersonalForm").on("submit", function (e) {
+  e.preventDefault();
+  var firstName = $("#personalFirstName").val();
+  var lastName = $("#personalLastName").val();
+  var middleName = $("#personalMiddleName").val();
+  var age = $("#personalAge").val();
+  var gender = $("#personalGender").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "adminEditPersonalForm",
+      firstName: firstName,
+      lastName: lastName,
+      middleName: middleName,
+      age: age,
+      gender: gender,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Profile Updated",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/settings.php";
+              }
+            });
+          }
+        );
+      } else if (response == "100") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "info",
+              title: "No Changes Has Been Made",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/settings.php";
+              }
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "First Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "453") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Middle Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "454") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Last Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "469") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Age Cannot Be Zero Or Null",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "470") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Age Shall Be At Least 5",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "471") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Age Cannot Be Higher Than 100",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "472") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Your Gender",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Update Profile Failed Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+$("#adminEditBackgroundForm").on("submit", function (e) {
+  e.preventDefault();
+  var city = $("#city").val();
+  var barangay = $("#barangay").val();
+  var street = $("#street").val();
+  var contactNumber = $("#contactNumber").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "adminEditBackgroundForm",
+      city: city,
+      barangay: barangay,
+      street: street,
+      contactNumber: contactNumber,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Profile Updated",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/settings.php";
+              }
+            });
+          }
+        );
+      } else if (response == "100") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "info",
+              title: "No Changes Has Been Made",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/settings.php";
+              }
+            });
+          }
+        );
+      } else if (response == "465") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Your City Address",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "466") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Your Barangay Address",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "467") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Street Address Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "474") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your Contact Number",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Update Profile Failed Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+$("#adminChangeAvatarForm").on("submit", function (e) {
+  e.preventDefault();
+
+  var formData = new FormData(this);
+  formData.append("submitType", "adminUploadAvatar");
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "User Icon Updated",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/settings.php";
+              }
+            });
+          }
+        );
+      } else if (response == "475") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Error In Moving The Uploaded File Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "476") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Upload Valid Image File",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "477") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Error In Uploading File Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Update Profile Failed Please Try Again Later",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/settings.php";
+              }
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
 function logoutFunc() {
   Swal.fire({
     icon: "question",

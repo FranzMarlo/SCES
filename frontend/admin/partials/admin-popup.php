@@ -118,6 +118,6 @@
         <a href="#">
             <i class="fa-solid fa-bell"></i>
         </a>
-        <img src="/SCES/student-storage/images/<?php echo $image; ?>" alt="admin icon" class="user-icon">
+        <img src="/SCES/storage/admin/images/<?php echo $image; ?>" alt="admin icon" class="user-icon">
     </div>
 </div>

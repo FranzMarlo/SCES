@@ -1,50 +1,50 @@
-<div id="changeAvatarModal" class="modal">
+<div id="adminChangeAvatarModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeAvatarModal">&times;</span>
         <h2>Change Avatar</h2>
         <div class="current-avatar">
-            <img src="/SCES/storage/student/images/<?php echo $image; ?>" alt="user icon" id="avatar-preview">
+            <img src="/SCES/storage/admin/images/<?php echo $image; ?>" alt="user icon" id="avatar-preview">
             <img src="/SCES/assets/images/change-avatar.png" alt="change user icon" id="change-user-icon">
         </div>
-        <form id="changeAvatarForm" enctype="multipart/form-data">
+        <form id="adminChangeAvatarForm" enctype="multipart/form-data">
             <input type="file" id="new-avatar" name="new-avatar" accept="image/*" style="display: none;">
             <button type="submit" class="save-btn">Save</button>
         </form>
     </div>
 </div>
 
-<div class="modal" id="editProfileModal">
+<div class="modal" id="adminEditProfileModal">
     <div class="modal-content">
         <span class="close-btn" id="closeModal">&times;</span>
         <h2>Edit Profile Information</h2>
-        <form id="editProfileForm">
+        <form id="adminEditProfileForm">
             <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($studentFname); ?>">
+            <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($teacherFname); ?>">
 
             <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($studentLname); ?>">
+            <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($teacherLname); ?>">
 
             <button type="submit" class="save-btn">Save</button>
         </form>
     </div>
 </div>
 
-<div id="editPersonalModal" class="modal" novalidate>
+<div id="adminEditPersonalModal" class="modal" novalidate>
     <div class="modal-content">
         <span class="close-btn" id="closePersonalModal">&times;</span>
         <h2>Edit Personal Information</h2>
-        <form id="editPersonalForm">
+        <form id="adminEditPersonalForm">
             <label for="personalFirstName">First Name:</label>
             <input type="text" id="personalFirstName" name="personalFirstName"
-                value="<?php echo htmlspecialchars($studentFname); ?>">
+                value="<?php echo htmlspecialchars($teacherFname); ?>">
 
             <label for="personalLastName">Last Name:</label>
             <input type="text" id="personalLastName" name="personalLastName"
-                value="<?php echo htmlspecialchars($studentLname); ?>">
+                value="<?php echo htmlspecialchars($teacherLname); ?>">
 
             <label for="personalMiddleName">Middle Name:</label>
             <input type="text" id="personalMiddleName" name="personalMiddleName"
-                value="<?php echo htmlspecialchars($studentMname); ?>">
+                value="<?php echo htmlspecialchars($teacherMname); ?>">
 
             <label for="personalAge">Age:</label>
             <input type="number" id="personalAge" name="personalAge" value="<?php echo htmlspecialchars($age); ?>">
@@ -64,11 +64,11 @@
     </div>
 </div>
 
-<div id="editBackgroundModal" class="modal" novalidate>
+<div id="adminEditBackgroundModal" class="modal" novalidate>
     <div class="modal-content">
         <span class="close-btn" id="closeBackgroundModal">&times;</span>
         <h2>Edit Background Information</h2>
-        <form id="editBackgroundForm">
+        <form id="adminEditBackgroundForm">
             <label for="city">City:</label>
             <select id="city" name="city" data-initial-city="<?php echo htmlspecialchars($city); ?>">
                 <option value="Not Set" disabled <?php if ($city == 'Not Set')
@@ -155,11 +155,8 @@
             <label for="street">Street:</label>
             <input type="text" id="street" name="street" value="<?php echo htmlspecialchars($street); ?>">
 
-            <label for="guardianFullName">Guardian Full Name:</label>
-            <input type="text" id="guardianFullName" name="guardianFullName" value="<?php echo htmlspecialchars($guardianName); ?>">
-
-            <label for="guardianContact">Guardian Contact Number:</label>
-            <input type="text" id="guardianContact" name="guardianContact" value="<?php echo htmlspecialchars($guardianContact); ?>">
+            <label for="contactNumber">Contact Number:</label>
+            <input type="text" id="contactNumber" name="contactNumber" value="<?php echo htmlspecialchars($contactNumber); ?>">
 
             <button type="submit" class="save-btn">Save</button>
         </form>

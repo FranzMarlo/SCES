@@ -11,6 +11,12 @@ if (isset($_SESSION['teacher_id'])) {
     $password= $_SESSION['password']; 
     $registration = $_SESSION['registration'];
     $image = $_SESSION['image_profile'];
+    $role = $_SESSION['role'];
+    $city = $_SESSION['city'];
+    $barangay = $_SESSION['barangay'];
+    $street = $_SESSION['street'];
+    $contactNumber = $_SESSION['contact_number'];
+    $emailVerification = $_SESSION['email_verification'];
     $title = ($gender == 'Female') ? 'Ma\'am' : 'Sir';
 }
 else{

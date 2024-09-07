@@ -49,6 +49,7 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['registration'] = $getStudentData['registration'];
                 $_SESSION['section'] = $section;
                 $_SESSION['grade_level'] = $gradeLevel;
+                $_SESSION['email_verification'] = $result['email_verification'];
                 echo '200';
             }
         } else {
@@ -97,7 +98,7 @@ if (isset($_POST['submitType'])) {
             } else {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-                $signUpResult = $db->studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, 0, 'Not Set', $email, $hashedPassword, 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'incomplete', 'default-profile.png');
+                $signUpResult = $db->studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, 0, 'Not Set', $email, $hashedPassword, 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'Incomplete', 'default-profile.png', 'Not Verified');
 
 
                 if ($signUpResult !== false) {
@@ -131,10 +132,11 @@ if (isset($_POST['submitType'])) {
                     $_SESSION['city'] = 'Not Set';
                     $_SESSION['barangay'] = 'Not Set';
                     $_SESSION['street'] = 'Not Set';
-                    $_SESSION['registration'] = 'incomplete';
+                    $_SESSION['registration'] = 'Incomplete';
                     $_SESSION['profile_image'] = 'default-profile.png';
                     $_SESSION['section'] = $section;
                     $_SESSION['grade_level'] = $gradeLevel;
+                    $_SESSION['email_verification'] = 'Not Verified';
                     echo '200';
                 } else {
                     echo '400';
@@ -146,7 +148,6 @@ if (isset($_POST['submitType'])) {
         $studentId = $_SESSION['student_id'];
         $firstName = validate($_POST['firstName']);
         $lastName = validate($_POST['lastName']);
-        $emailPattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
 
         if (
             $firstName == $_SESSION['student_fname'] &&
@@ -266,7 +267,7 @@ if (isset($_POST['submitType'])) {
             $allowedfileExtensions = array('jpg', 'gif', 'png', 'jpeg');
             if (in_array($fileExtension, $allowedfileExtensions)) {
 
-                $uploadFileDir = $_SERVER['DOCUMENT_ROOT'] . '/SCES/student-storage/images/';
+                $uploadFileDir = $_SERVER['DOCUMENT_ROOT'] . '/SCES/storage/student/images/';
                 $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
                 $dest_path = $uploadFileDir . $newFileName;
 
@@ -313,6 +314,12 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['password'] = $result['password'];
                 $_SESSION['registration'] = $getTeacherData['registration'];
                 $_SESSION['image_profile'] = $getTeacherData['image_profile'];
+                $_SESSION['role'] = $result['role'];
+                $_SESSION['email_verification'] = $result['email_verification'];
+                $_SESSION['city'] = $getTeacherData['city'];
+                $_SESSION['barangay'] = $getTeacherData['barangay'];
+                $_SESSION['street'] = $getTeacherData['street'];
+                $_SESSION['contact_number'] = $getTeacherData['contact_number'];
                 echo '200';
             }
         }
@@ -359,7 +366,7 @@ if (isset($_POST['submitType'])) {
             } else {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-                $signUpResult = $db->adminSignUp($firstName, $middleName, $lastName, 0, $gender, $email, $hashedPassword, 'incomplete', 'default-profile.png', $role);
+                $signUpResult = $db->adminSignUp($firstName, $middleName, $lastName, 0, $gender, $email, $hashedPassword, 'Incomplete', 'default-profile.png', $role, 'Not Verified', 'Not Set', 'Not Set', 'Not Set', 'Not Set');
 
                 if ($signUpResult !== false) {
                     session_start();
@@ -373,17 +380,159 @@ if (isset($_POST['submitType'])) {
                     $_SESSION['password'] = $hashedPassword;
                     $_SESSION['registration'] = 'Incomplete';
                     $_SESSION['image_profile'] = 'default-profile.png';
+                    $_SESSION['role'] = $role;
+                    $_SESSION['email_verification'] = 'Not Verified';
                     echo '200';
                 } else {
                     echo '400';
                 }
             }
         }
-    }
-    else {
+    } else if ($_POST['submitType'] === 'adminEditProfileForm') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $firstName = validate($_POST['firstName']);
+        $lastName = validate($_POST['lastName']);
+
+        if (
+            $firstName == $_SESSION['teacher_fname'] &&
+            $lastName == $_SESSION['teacher_lname']
+        ) {
+            echo '100';
+        } else if (empty($firstName)) {
+            echo '452';
+        } else if (empty($lastName)) {
+            echo '454';
+        } else {
+            $editProfileInfo = $db->adminEditProfileForm($firstName, $lastName, $teacherId);
+            if ($editProfileInfo !== false) {
+                $_SESSION['teacher_fname'] = $firstName;
+                $_SESSION['teacher_lname'] = $lastName;
+                echo '200';
+            } else {
+                echo '400';
+
+            }
+        }
+    } else if ($_POST['submitType'] === 'adminEditPersonalForm') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $firstName = validate($_POST['firstName']);
+        $lastName = validate($_POST['lastName']);
+        $middleName = validate($_POST['middleName']);
+        $age = validate($_POST['age']);
+        $gender = validate($_POST['gender']);
+
+        if (
+            $firstName == $_SESSION['teacher_fname'] &&
+            $lastName == $_SESSION['teacher_lname'] &&
+            $middleName == $_SESSION['teacher_mname'] &&
+            $age == $_SESSION['age'] &&
+            $gender == $_SESSION['gender']
+        ) {
+            echo '100';
+        } else if (empty($firstName)) {
+            echo '452';
+        } else if (empty($lastName)) {
+            echo '454';
+        } else if (empty($middleName)) {
+            echo '453';
+        } else if (empty($age)) {
+            echo '469';
+        } else if ($age < 5) {
+            echo '470';
+        } else if ($age > 100) {
+            echo '471';
+        } else if (empty($gender)) {
+            echo '472';
+        } else {
+            $editPersonalInfo = $db->adminEditPersonalForm($firstName, $lastName, $middleName, $age, $gender, $teacherId);
+            if ($editPersonalInfo !== false) {
+                $_SESSION['teacher_fname'] = $firstName;
+                $_SESSION['teacher_lname'] = $lastName;
+                $_SESSION['teacher_mname'] = $middleName;
+                $_SESSION['age'] = $age;
+                $_SESSION['gender'] = $gender;
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'adminEditBackgroundForm') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $city = $_POST['city'];
+        $barangay = $_POST['barangay'];
+        $street = validate($_POST['street']);
+        $contactNumber = validate($_POST['contactNumber']);
+        if (
+            $city == $_SESSION['city'] &&
+            $barangay == $_SESSION['barangay'] &&
+            $street == $_SESSION['street'] &&
+            $contactNumber == $_SESSION['contact_number']
+        ) {
+            echo '100';
+        } else if (empty($city) || $city == "Not Set") {
+            echo '465';
+        } else if (empty($barangay) || $barangay == "Not Set") {
+            echo '466';
+        } else if (empty($street) || $street == "Not Set") {
+            echo '467';
+        } else if (empty($contactNumber) || $contactNumber == "Not Set") {
+            echo '474';
+        } else {
+            $editBackgroundInfo = $db->adminEditBackgroundForm($city, $barangay, $street, $contactNumber, $teacherId);
+            if ($editBackgroundInfo !== false) {
+                $_SESSION['city'] = $city;
+                $_SESSION['barangay'] = $barangay;
+                $_SESSION['street'] = $street;
+                $_SESSION['contact_number'] = $contactNumber;
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'adminUploadAvatar') {
+        if (isset($_FILES['new-avatar']) && $_FILES['new-avatar']['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $_FILES['new-avatar']['tmp_name'];
+            $fileName = $_FILES['new-avatar']['name'];
+            $fileSize = $_FILES['new-avatar']['size'];
+            $fileType = $_FILES['new-avatar']['type'];
+            $fileNameCmps = explode(".", $fileName);
+            $fileExtension = strtolower(end($fileNameCmps));
+
+
+            $allowedfileExtensions = array('jpg', 'gif', 'png', 'jpeg');
+            if (in_array($fileExtension, $allowedfileExtensions)) {
+
+                $uploadFileDir = $_SERVER['DOCUMENT_ROOT'] . '/SCES/storage/admin/images/';
+                $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+                $dest_path = $uploadFileDir . $newFileName;
+
+                if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                    session_start();
+                    $teacherId = $_SESSION['teacher_id'];
+                    $updateAvatar = $db->adminUpdateAvatar($newFileName, $teacherId);
+                    if ($updateAvatar !== false) {
+                        $_SESSION['image_profile'] = $newFileName;
+                        echo '200';
+                    } else {
+                        echo '400';
+                    }
+                } else {
+                    echo '475';
+                }
+            } else {
+                echo '476';
+            }
+        } else {
+            echo '476';
+        }
+        exit;
+    } else {
         echo '400';
     }
-    
+
 }
 
 class loggedIn
@@ -408,7 +557,8 @@ class loggedIn
     }
 }
 
-class adminLoggedIn{
+class adminLoggedIn
+{
     public function needLogin()
     {
 

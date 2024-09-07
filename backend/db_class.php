@@ -29,7 +29,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $guardian_name, $guardian_contact, $city, $barangay, $street, $registration, $image)
+    public function studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $guardian_name, $guardian_contact, $city, $barangay, $street, $registration, $image, $emailVerification)
     {
         $year = date("Y");
         $studentId = $year . rand(0000, 9999);
@@ -45,8 +45,8 @@ class globalClass extends db_connect
 
 
         if ($query->execute()) {
-            $loginQuery = $this->conn->prepare("INSERT INTO `login_tbl` (`student_id`, `email`, `password`) VALUES (?, ?, ?)");
-            $loginQuery->bind_param("sss", $studentId, $email, $hashedPassword);
+            $loginQuery = $this->conn->prepare("INSERT INTO `login_tbl` (`student_id`, `email`, `password`, `email_verification`) VALUES (?, ?, ?, ?)");
+            $loginQuery->bind_param("ssss", $studentId, $email, $hashedPassword, $emailVerification);
             if ($loginQuery->execute()) {
                 return $studentId;
             } else {
@@ -57,7 +57,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function adminSignUp($firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $registration, $image, $role)
+    public function adminSignUp($firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $registration, $image, $role, $emailVerification, $city, $street, $barangay, $contactNumber)
     {
         $year = date("Y");
         $adminId = 'T' . $year . '-' . sprintf('%03d', rand(0, 999));
@@ -68,12 +68,12 @@ class globalClass extends db_connect
             $checkIdResult = $this->checkAdminId($adminId);
         }
 
-        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $query->bind_param("ssssisss", $adminId, $firstName, $middleName, $lastName, $age, $gender, $registration, $image);
+        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`, `city`, `barangay`, `street`, `contact_number`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,)");
+        $query->bind_param("ssssisssssss", $adminId, $firstName, $middleName, $lastName, $age, $gender, $registration, $image, $city, $barangay, $street, $contactNumber);
 
         if ($query->execute()) {
-            $loginQuery = $this->conn->prepare("INSERT INTO `admin_tbl` (`teacher_id`, `role`, `email`, `password`) VALUES (?, ?, ?, ?)");
-            $loginQuery->bind_param("ssss", $adminId, $role, $email, $hashedPassword);
+            $loginQuery = $this->conn->prepare("INSERT INTO `admin_tbl` (`teacher_id`, `role`, `email`, `password`, `email_verification`) VALUES (?, ?, ?, ?, ?)");
+            $loginQuery->bind_param("sssss", $adminId, $role, $email, $hashedPassword, $emailVerification);
             if ($loginQuery->execute()) {
                 return $adminId;
             } else {
@@ -547,6 +547,51 @@ class globalClass extends db_connect
         }
     }
 
+    public function adminEditProfileForm($firstName, $lastName, $teacherId)
+    {
+        $query = $this->conn->prepare("UPDATE teacher_tbl SET teacher_fname = ?, teacher_lname = ? WHERE teacher_id = ?");
+        $query->bind_param("sss", $firstName, $lastName, $teacherId);
 
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function adminEditPersonalForm($firstName, $lastName, $middleName, $age, $gender, $teacherId)
+    {
+        $query = $this->conn->prepare("UPDATE teacher_tbl SET teacher_fname = ?, teacher_lname = ?, teacher_mname = ?, age = ?, gender = ? WHERE teacher_id = ?");
+        $query->bind_param("sssiss", $firstName, $lastName, $middleName, $age, $gender, $teacherId);
+
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function adminEditBackgroundForm($city, $barangay, $street, $contactNumber, $teacherId)
+    {
+        $query = $this->conn->prepare("UPDATE teacher_tbl SET city = ?, barangay = ?, street = ?, contact_number = ? WHERE teacher_id = ?");
+        $query->bind_param("sssss", $city, $barangay, $street, $contactNumber, $teacherId);
+
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function adminUpdateAvatar($newFileName, $teacherId)
+    {
+        $query = $this->conn->prepare("UPDATE teacher_tbl SET image_profile = ? WHERE teacher_id = ?");
+        $query->bind_param("ss", $newFileName, $teacherId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 

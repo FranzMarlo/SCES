@@ -3,7 +3,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
 $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/settings.css" />
-<title>Quizzes | SCES Online Learning Platform</title>
+<script src="/SCES/assets/script/admin-settings.js"></script>
+<title>Settings | SCES Online Learning Platform</title>
 </head>
 
 <body>
@@ -34,15 +35,15 @@ $page = '';
                     <div class="user-profile">
                         <div class="profile-part">
                             <div class="user-icon">
-                                <img src="/SCES/student-storage/images/<?php echo $image; ?>" alt="user icon"
+                                <img src="/SCES/storage/admin/images/<?php echo $image; ?>" alt="user icon"
                                     id="current-user-avatar">
                                 <img src="/SCES/assets/images/change-avatar.png" alt="user icon"
                                     id="change-avatar-icon">
                             </div>
                             <div class="profile-info">
-                                <h1><?php echo htmlspecialchars($studentFname . ' ' . $studentLname); ?></h1>
-                                <span><?php echo htmlspecialchars($gradeLevel . ' - ' . $section); ?></span>
-                                <span>Student ID: <?php echo htmlspecialchars($studentId); ?></span>
+                                <h1><?php echo htmlspecialchars($teacherFname . ' ' . $teacherLname); ?></h1>
+                                <span>SCES <?php echo htmlspecialchars($role); ?></span>
+                                <span>Teacher ID: <?php echo htmlspecialchars($teacherId); ?></span>
                             </div>
                         </div>
                         <div class="profile-part">
@@ -66,15 +67,15 @@ $page = '';
                             <div class="info-part">
                                 <div class="info-data">
                                     <span>First Name</span>
-                                    <p><?php echo htmlspecialchars($studentFname); ?></p>
+                                    <p><?php echo htmlspecialchars($teacherFname); ?></p>
                                 </div>
                                 <div class="info-data">
                                     <span>Last Name</span>
-                                    <p><?php echo htmlspecialchars($studentLname); ?></p>
+                                    <p><?php echo htmlspecialchars($teacherLname); ?></p>
                                 </div>
                                 <div class="info-data">
                                     <span>Middle Name</span>
-                                    <p><?php echo htmlspecialchars($studentMname); ?></p>
+                                    <p><?php echo htmlspecialchars($teacherMname); ?></p>
                                 </div>
                             </div>
                             <div class="info-part">
@@ -121,12 +122,8 @@ $page = '';
                             </div>
                             <div class="info-part">
                                 <div class="info-data">
-                                    <span>Guardian Full Name</span>
-                                    <p><?php echo htmlspecialchars($guardianName); ?></p>
-                                </div>
-                                <div class="info-data">
-                                    <span>Guardian Contact Number</span>
-                                    <p><?php echo htmlspecialchars($guardianContact); ?></p>
+                                    <span>Contact Number</span>
+                                    <p><?php echo htmlspecialchars($contactNumber); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -150,15 +147,15 @@ $page = '';
                             <div class="info-part">
                                 <div class="info-data">
                                     <span>First Name</span>
-                                    <p><?php echo htmlspecialchars($studentFname); ?></p>
+                                    <p><?php echo htmlspecialchars($teacherFname); ?></p>
                                 </div>
                                 <div class="info-data">
                                     <span>Last Name</span>
-                                    <p><?php echo htmlspecialchars($studentLname); ?></p>
+                                    <p><?php echo htmlspecialchars($teacherLname); ?></p>
                                 </div>
                                 <div class="info-data">
                                     <span>Middle Name</span>
-                                    <p><?php echo htmlspecialchars($studentMname); ?></p>
+                                    <p><?php echo htmlspecialchars($teacherMname); ?></p>
                                 </div>
                             </div>
                             <div class="info-part">
@@ -183,6 +180,8 @@ $page = '';
         </div>
     </div>
     </div>
+
     <?php
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/admin-edit-modal.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
     ?>
