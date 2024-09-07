@@ -80,8 +80,8 @@
   margin-right: 15px;
 }
 img#current-user-avatar {
-  max-height: 70px;
-  max-width: 70px;
+  height: 70px;
+  width: 70px;
   display: block;
   position: relative;
   border-radius: 50px;

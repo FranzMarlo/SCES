@@ -128,6 +128,12 @@ function hiddenLink(element) {
   }
 }
 
+$(".panel-item").on("click", function () {
+  $(".panel-item").removeClass("active");
+
+  $(this).addClass("active");
+});
+
 function toggleMyProfile() {
   const myProfilePanel = document.getElementById("myProfile");
   const securityPanel = document.getElementById("security");

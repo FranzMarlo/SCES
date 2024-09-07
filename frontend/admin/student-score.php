@@ -3,7 +3,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
 $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-quizzes.css" />
-<title>Quizzes | SCES Online Learning Platform</title>
+<title>Student Score | SCES Online Learning Platform</title>
 </head>
 
 <body>

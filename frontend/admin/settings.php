@@ -4,6 +4,8 @@ $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/settings.css" />
 <script src="/SCES/assets/script/admin-settings.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <title>Settings | SCES Online Learning Platform</title>
 </head>
 
