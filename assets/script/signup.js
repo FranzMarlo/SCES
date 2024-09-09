@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
     const sectionOptions = {
       G0001: [
-        { value: "G1-001", text: "Narra" },
+        { value: "G1-001", text: "Banana" },
         { value: "G1-001", text: "Acacia" },
       ],
       G0002: [

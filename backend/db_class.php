@@ -32,14 +32,13 @@ class globalClass extends db_connect
     public function studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $guardian_name, $guardian_contact, $city, $barangay, $street, $registration, $image, $emailVerification)
     {
         $year = date("Y");
-        $studentId = $year . rand(0000, 9999);
+        $studentId = $year . sprintf('%04d', rand(0, 9999));
         $checkIdResult = $this->checkStudentId($studentId);
 
         while ($checkIdResult->num_rows > 0) {
-            $studentId = $year . rand(0000, 9999);
+            $studentId = $year . sprintf('%04d', rand(0, 9999));
             $checkIdResult = $this->checkStudentId($studentId);
         }
-
         $query = $this->conn->prepare("INSERT INTO `student_tbl` (`student_id`, `level_id`, `section_id`, `student_fname`, `student_mname`, `student_lname`, `age`, `gender`, `guardian_name`, `guardian_contact`, `city`, `barangay`, `street`, `registration`, `profile_image`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $query->bind_param("ssssssissssssss", $studentId, $gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $age, $gender, $guardian_name, $guardian_contact, $city, $barangay, $street, $registration, $image);
 
@@ -68,7 +67,7 @@ class globalClass extends db_connect
             $checkIdResult = $this->checkAdminId($adminId);
         }
 
-        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`, `city`, `barangay`, `street`, `contact_number`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,)");
+        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`, `city`, `barangay`, `street`, `contact_number`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $query->bind_param("ssssisssssss", $adminId, $firstName, $middleName, $lastName, $age, $gender, $registration, $image, $city, $barangay, $street, $contactNumber);
 
         if ($query->execute()) {

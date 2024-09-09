@@ -50,6 +50,7 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['section'] = $section;
                 $_SESSION['grade_level'] = $gradeLevel;
                 $_SESSION['email_verification'] = $result['email_verification'];
+                $_SESSION['password_change'] = $result['password_change'];
                 echo '200';
             }
         } else {
@@ -137,6 +138,7 @@ if (isset($_POST['submitType'])) {
                     $_SESSION['section'] = $section;
                     $_SESSION['grade_level'] = $gradeLevel;
                     $_SESSION['email_verification'] = 'Not Verified';
+                    $_SESSION['password_change'] = NULL;
                     echo '200';
                 } else {
                     echo '400';
@@ -320,12 +322,12 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['barangay'] = $getTeacherData['barangay'];
                 $_SESSION['street'] = $getTeacherData['street'];
                 $_SESSION['contact_number'] = $getTeacherData['contact_number'];
+                $_SESSION['password_change'] = $result['password_change'];
                 echo '200';
-            }
-            else{
+            } else {
                 echo '400';
             }
-        }else{
+        } else {
             echo '400';
         }
     } else if ($_POST['submitType'] === 'adminSignUp') {
@@ -387,6 +389,11 @@ if (isset($_POST['submitType'])) {
                     $_SESSION['image_profile'] = 'default-profile.png';
                     $_SESSION['role'] = $role;
                     $_SESSION['email_verification'] = 'Not Verified';
+                    $_SESSION['city'] = 'Not Set';
+                    $_SESSION['barangay'] = 'Not Set';
+                    $_SESSION['street'] = 'Not Set';
+                    $_SESSION['contact_number'] = 'Not Set';
+                    $_SESSION['password_change'] = NULL;
                     echo '200';
                 } else {
                     echo '400';

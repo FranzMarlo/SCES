@@ -146,7 +146,8 @@ $page = '';
                                         <i class="fa-solid fa-lock"></i>
                                         <div class="data-text">
                                             <span>Change Password</span>
-                                            <p>Last Changed Sept 20, 2024</p>
+                                            <p><?php echo htmlspecialchars($passwordChange == NULL) ? 'Unchanged' : 'Last Changed ' . $passwordChange; ?>
+                                            </p>
                                         </div>
                                     </div>
                                     <i class="fa-solid fa-chevron-right"></i>
@@ -156,7 +157,7 @@ $page = '';
                                         <i class="fa-solid fa-envelope-circle-check"></i>
                                         <div class="data-text">
                                             <span>Verify Email</span>
-                                            <p>Not Verified</p>
+                                            <p><?php echo htmlspecialchars($emailVerification); ?></p>
                                         </div>
                                     </div>
                                     <i class="fa-solid fa-chevron-right"></i>

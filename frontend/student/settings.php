@@ -133,52 +133,42 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
 					</div>
 				</div>
 				<div class="main-panel" id="security">
-					<div class="panel-title">
-						<h1>Security</h1>
-					</div>
-					<div class="current-user-info">
-						<div class="current-user-info-header">
-							<div class="current-user-header-title">
-								<h2>Password</h2>
-							</div>
-							<div class="info-button-container">
-								<button class="edit-btn" id="edit-personal-info">Edit<i
-										class="fa-solid fa-pencil"></i></button>
-							</div>
-						</div>
-						<div class="info-content">
-							<div class="info-part">
-								<div class="info-data">
-									<span>First Name</span>
-									<p><?php echo htmlspecialchars($studentFname); ?></p>
-								</div>
-								<div class="info-data">
-									<span>Last Name</span>
-									<p><?php echo htmlspecialchars($studentLname); ?></p>
-								</div>
-								<div class="info-data">
-									<span>Middle Name</span>
-									<p><?php echo htmlspecialchars($studentMname); ?></p>
-								</div>
-							</div>
-							<div class="info-part">
-								<div class="info-data">
-									<span>Age</span>
-									<p><?php echo ($age == 0) ? 'Not Set' : htmlspecialchars($age); ?></p>
-								</div>
-								<div class="info-data">
-									<span>Gender</span>
-									<p><?php echo htmlspecialchars($gender); ?></p>
-								</div>
-								<div class="info-data">
-									<span>Email Address</span>
-									<p><?php echo htmlspecialchars($email); ?></p>
-								</div>
-
-							</div>
-						</div>
-					</div>
-				</div>
+                    <div class="panel-title">
+                        <h1>Security</h1>
+                    </div>
+                    <div class="current-user-info">
+                        <div class="current-user-info-header">
+                            <div class="current-user-header-title padded">
+                                <h2>Security Options</h2>
+                            </div>
+                        </div>
+                        <div class="info-content">
+                            <div class="security-panel">
+                                <div class="security-data">
+                                    <div class="security-part">
+                                        <i class="fa-solid fa-lock"></i>
+                                        <div class="data-text">
+                                            <span>Change Password</span>
+                                            <p><?php echo htmlspecialchars($passwordChange == NULL) ? 'Unchanged' : 'Last Changed ' . $passwordChange; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                                <div class="security-data">
+                                    <div class="security-part">
+                                        <i class="fa-solid fa-envelope-circle-check"></i>
+                                        <div class="data-text">
+                                            <span>Verify Email</span>
+                                            <p><?php echo htmlspecialchars($emailVerification); ?></p>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</div>

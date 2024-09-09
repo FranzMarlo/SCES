@@ -20,6 +20,8 @@ if (isset($_SESSION['student_id'])) {
     $level_id = $_SESSION['level_id'];
     $section = $_SESSION['section'];
     $gradeLevel = $_SESSION['grade_level'];
+    $passwordChange = $_SESSION['password_change'];
+    $emailVerification = $_SESSION['email_verification'];
 }
 else{
     header('Location: /SCES/frontend/student/login.php');

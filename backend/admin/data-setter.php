@@ -16,6 +16,7 @@ if (isset($_SESSION['teacher_id'])) {
     $barangay = $_SESSION['barangay'];
     $street = $_SESSION['street'];
     $contactNumber = $_SESSION['contact_number'];
+    $passwordChange = $_SESSION['password_change'];
     $emailVerification = $_SESSION['email_verification'];
     $title = ($gender == 'Female') ? 'Ma\'am' : 'Sir';
 }
