@@ -141,7 +141,7 @@ $page = '';
                         </div>
                         <div class="info-content">
                             <div class="security-panel">
-                                <div class="security-data">
+                                <div class="security-data" id="changePassword">
                                     <div class="security-part">
                                         <i class="fa-solid fa-lock"></i>
                                         <div class="data-text">
@@ -153,7 +153,7 @@ $page = '';
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </div>
                                 <div class="security-data">
-                                    <div class="security-part">
+                                    <div class="security-part" id="verifyEmail">
                                         <i class="fa-solid fa-envelope-circle-check"></i>
                                         <div class="data-text">
                                             <span>Verify Email</span>

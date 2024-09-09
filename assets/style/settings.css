@@ -264,7 +264,8 @@ img#change-avatar-icon {
 }
 input[type="text"],
 input[type="email"],
-input[type="number"] {
+input[type="number"],
+input[type="password"] {
   width: 100%;
   padding: 10px 15px;
   margin: 5px 0 15px 0;
@@ -272,6 +273,7 @@ input[type="number"] {
   border: 2px solid #000;
   border-radius: 30px;
   box-sizing: border-box;
+  font-size: 1rem;
 }
 select {
   width: 100%;
@@ -290,6 +292,7 @@ select {
   background-repeat: no-repeat;
   background-position: right 15px center;
   background-size: 15px;
+  font-size: 1rem;
 }
 select:focus {
   border: 2px solid #000;
@@ -309,6 +312,25 @@ select option {
 }
 .save-btn:hover {
   background-color: #45a049;
+}
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-container input {
+  width: 100%;
+  padding-right: 30px; /* Make space for the icon */
+}
+
+.input-container .toggle-password {
+  position: absolute;
+  right: 15px;
+  bottom: 25px;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #7f8185;
 }
 .current-avatar {
   position: relative;

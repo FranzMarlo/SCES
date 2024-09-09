@@ -541,6 +541,42 @@ if (isset($_POST['submitType'])) {
             echo '476';
         }
         exit;
+    } else if ($_POST['submitType'] === 'adminUpdatePassword') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $currentPassword = validate($_POST['currentPassword']);
+        $newPassword = validate($_POST['newPassword']);
+        $confirmPassword = validate($_POST['confirmPassword']);
+
+        if (empty($currentPassword)) {
+            echo '479';
+        } else if (empty($newPassword)) {
+            echo '480';
+        } else if (empty($confirmPassword)) {
+            echo '481';
+        } else if (strlen($newPassword) < 6) {
+            echo '460';
+        } else if ($newPassword != $confirmPassword) {
+            echo '462';
+        } else {
+            $hashedPassword = $db->adminGetPassword($teacherId);
+            if (!password_verify($currentPassword, $hashedPassword)) {
+                echo '482';
+            } else if (password_verify($newPassword, $hashedPassword)) {
+                echo '483';
+            } else {
+                $currentDate = date("Y-m-d");
+                $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+                $updatePassword = $db->updateAdminPassword($newPasswordHash, $currentDate, $teacherId);
+                if ($updatePassword != false) {
+                    $_SESSION['password'] = $newPasswordHash;
+                    $_SESSION['password_change'] = $currentDate;
+                    echo '200';
+                } else {
+                    echo '400';
+                }
+            }
+        }
     } else {
         echo '400';
     }

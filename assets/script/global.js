@@ -1295,6 +1295,132 @@ $("#adminChangeAvatarForm").on("submit", function (e) {
   });
 });
 
+$("#adminUpdatePassword").on("submit", function (e) {
+  e.preventDefault();
+  var currentPassword = $("#currentPassword").val();
+  var newPassword = $("#newPassword").val();
+  var confirmPassword = $("#confirmPassword").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "adminUpdatePassword",
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Password Updated",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/admin/settings.php";
+              }
+            });
+          }
+        );
+      } else if (response == "479") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Current Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "480") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter New Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "481") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Confirm New Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "462") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "New Passwords Don't Match Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "482") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Current Password Incorrect Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "483") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Use A New Different Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "460") {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "New Password Should Be At Least 6 Characters",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Update Password Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
 function logoutFunc() {
   Swal.fire({
     icon: "question",
