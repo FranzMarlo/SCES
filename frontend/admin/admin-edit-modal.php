@@ -164,7 +164,7 @@
     </div>
 </div>
 
-<div id="passwordModal" class="modal" novalidate>
+<div id="adminPasswordModal" class="modal" novalidate>
     <div class="modal-content">
         <span class="close-btn" id="closePasswordModal">&times;</span>
         <h2>Update Password</h2>

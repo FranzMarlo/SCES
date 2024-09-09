@@ -1291,4 +1291,32 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("closeAvatarModal").addEventListener("click", () => {
     document.getElementById("changeAvatarModal").style.display = "none";
   });
+
+  const modal = document.getElementById("passwordModal");
+  const changePasswordBtn = document.getElementById("changePassword");
+  const closeBtn = document.getElementById("closePasswordModal");
+  const updatePasswordForm = document.getElementById("updatePassword");
+
+  changePasswordBtn.onclick = function () {
+    modal.style.display = "flex";
+  };
+
+  closeBtn.onclick = function () {
+    modal.style.display = "none";
+    updatePasswordForm.reset();
+  };
+
+  document.querySelectorAll(".toggle-password").forEach(function (eyeIcon) {
+    eyeIcon.onclick = togglePasswordVisibility;
+  });
 });
+
+function togglePasswordVisibility(event) {
+  const eyeIcon = event.currentTarget;
+  const input = document.querySelector(eyeIcon.getAttribute('toggle'));
+  const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+  input.setAttribute('type', type);
+  
+  eyeIcon.classList.toggle('fa-eye');
+  eyeIcon.classList.toggle('fa-eye-slash');
+}

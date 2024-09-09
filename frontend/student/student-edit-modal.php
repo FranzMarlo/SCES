@@ -156,12 +156,42 @@
             <input type="text" id="street" name="street" value="<?php echo htmlspecialchars($street); ?>">
 
             <label for="guardianFullName">Guardian Full Name:</label>
-            <input type="text" id="guardianFullName" name="guardianFullName" value="<?php echo htmlspecialchars($guardianName); ?>">
+            <input type="text" id="guardianFullName" name="guardianFullName"
+                value="<?php echo htmlspecialchars($guardianName); ?>">
 
             <label for="guardianContact">Guardian Contact Number:</label>
-            <input type="text" id="guardianContact" name="guardianContact" value="<?php echo htmlspecialchars($guardianContact); ?>">
+            <input type="text" id="guardianContact" name="guardianContact"
+                value="<?php echo htmlspecialchars($guardianContact); ?>">
 
             <button type="submit" class="save-btn">Save</button>
+        </form>
+    </div>
+</div>
+
+<div id="passwordModal" class="modal" novalidate>
+    <div class="modal-content">
+        <span class="close-btn" id="closePasswordModal">&times;</span>
+        <h2>Update Password</h2>
+        <form id="updatePassword">
+            <label for="currentPassword">Current Password:</label>
+            <div class="input-container">
+                <input type="password" id="currentPassword" name="currentPassword" placeholder="Enter Current Password">
+                <i class="fa-solid fa-eye toggle-password" toggle="#currentPassword"></i>
+            </div>
+
+            <label for="newPassword">New Password:</label>
+            <div class="input-container">
+                <input type="password" id="newPassword" name="newPassword" placeholder="Enter New Password">
+                <i class="fa-solid fa-eye toggle-password" toggle="#newPassword"></i>
+            </div>
+
+            <label for="confirmPassword">Confirm New Password:</label>
+            <div class="input-container">
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password">
+                <i class="fa-solid fa-eye toggle-password" toggle="#confirmPassword"></i>
+            </div>
+
+            <button type="submit" class="save-btn">Update Password</button>
         </form>
     </div>
 </div>

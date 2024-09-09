@@ -617,5 +617,30 @@ class globalClass extends db_connect
             return false;
         }
     }
+
+    public function studentGetPassword($studentId)
+    {
+        $query = $this->conn->prepare("SELECT password FROM login_tbl WHERE student_id = ?");
+        $query->bind_param("s", $studentId);
+        if($query->execute()){
+            $result = $query->get_result()->fetch_assoc();
+            return $result['password'];
+        }
+        else{
+            return false;
+        }
+    }
+    public function updateStudentPassword($newPassword, $currentDate, $studentId)
+    {
+
+        $query = $this->conn->prepare("UPDATE login_tbl SET password = ?, password_change = ? WHERE student_id =?");
+        $query->bind_param("sss", $newPassword, $currentDate, $studentId);
+
+        if($query->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
 

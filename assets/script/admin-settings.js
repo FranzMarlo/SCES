@@ -1294,9 +1294,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("adminChangeAvatarModal").style.display = "none";
   });
   
-  const modal = document.getElementById("passwordModal");
+  const modal = document.getElementById("adminPasswordModal");
   const changePasswordBtn = document.getElementById("changePassword");
   const closeBtn = document.getElementById("closePasswordModal");
+  const updatePasswordForm = document.getElementById("adminUpdatePassword");
 
   changePasswordBtn.onclick = function () {
     modal.style.display = "flex";
@@ -1304,17 +1305,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   closeBtn.onclick = function () {
     modal.style.display = "none";
+    updatePasswordForm.reset();
   };
 
-  window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  };
   document.querySelectorAll('.toggle-password').forEach(function(eyeIcon) {
     eyeIcon.onclick = togglePasswordVisibility;
 });
 });
+
 function togglePasswordVisibility(event) {
   const eyeIcon = event.currentTarget;
   const input = document.querySelector(eyeIcon.getAttribute('toggle'));
