@@ -4,8 +4,6 @@ $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/settings.css" />
 <script src="/SCES/assets/script/admin-settings.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <title>Settings | SCES Online Learning Platform</title>
 </head>
 
@@ -137,43 +135,32 @@ $page = '';
                     </div>
                     <div class="current-user-info">
                         <div class="current-user-info-header">
-                            <div class="current-user-header-title">
-                                <h2>Password</h2>
-                            </div>
-                            <div class="info-button-container">
-                                <button class="edit-btn" id="edit-personal-info">Edit<i
-                                        class="fa-solid fa-pencil"></i></button>
+                            <div class="current-user-header-title padded">
+                                <h2>Security Options</h2>
                             </div>
                         </div>
                         <div class="info-content">
-                            <div class="info-part">
-                                <div class="info-data">
-                                    <span>First Name</span>
-                                    <p><?php echo htmlspecialchars($teacherFname); ?></p>
+                            <div class="security-panel">
+                                <div class="security-data">
+                                    <div class="security-part">
+                                        <i class="fa-solid fa-lock"></i>
+                                        <div class="data-text">
+                                            <span>Change Password</span>
+                                            <p>Last Changed Sept 20, 2024</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right"></i>
                                 </div>
-                                <div class="info-data">
-                                    <span>Last Name</span>
-                                    <p><?php echo htmlspecialchars($teacherLname); ?></p>
+                                <div class="security-data">
+                                    <div class="security-part">
+                                        <i class="fa-solid fa-envelope-circle-check"></i>
+                                        <div class="data-text">
+                                            <span>Verify Email</span>
+                                            <p>Not Verified</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right"></i>
                                 </div>
-                                <div class="info-data">
-                                    <span>Middle Name</span>
-                                    <p><?php echo htmlspecialchars($teacherMname); ?></p>
-                                </div>
-                            </div>
-                            <div class="info-part">
-                                <div class="info-data">
-                                    <span>Age</span>
-                                    <p><?php echo ($age == 0) ? 'Not Set' : htmlspecialchars($age); ?></p>
-                                </div>
-                                <div class="info-data">
-                                    <span>Gender</span>
-                                    <p><?php echo htmlspecialchars($gender); ?></p>
-                                </div>
-                                <div class="info-data">
-                                    <span>Email Address</span>
-                                    <p><?php echo htmlspecialchars($email); ?></p>
-                                </div>
-
                             </div>
                         </div>
                     </div>

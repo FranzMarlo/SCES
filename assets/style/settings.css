@@ -46,11 +46,11 @@
   min-height: 700px;
 }
 
-#myProfile{
-  display: flex;
-}
-#security{
+#myProfile {
   display: none;
+}
+#security {
+  display: flex;
 }
 .settings-container .main-panel .panel-title {
   width: 100%;
@@ -113,6 +113,9 @@ img#change-avatar-icon {
 .info-button-container {
   padding: 5px;
 }
+.padded {
+  padding: 20px 0px;
+}
 .edit-btn {
   border-radius: 30px;
   border: 2px solid #000;
@@ -148,6 +151,7 @@ img#change-avatar-icon {
   display: flex;
   flex-direction: row;
   width: 100%;
+  min-height: 150px;
 }
 .info-part {
   width: 50%;
@@ -167,10 +171,61 @@ img#change-avatar-icon {
   font-size: 1.1rem;
   font-weight: 500;
 }
+.security-panel {
+  width: 100%;
+}
+.security-data {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 100%;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 30px;
+  min-height: 3rem;
+}
+.security-data:hover {
+  background-color: #fbe1f0;
+  border: 2px solid #000;
+  font-weight: bold;
+}
+.security-part {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+.security-part i {
+  font-size: 1.1rem;
+  color: #7f8185;
+  margin-right: 20px;
+}
+.data-text {
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  justify-content: space-between;
+  text-align: start;
+  align-items: center;
+}
+.data-text span {
+  font-size: 1.1rem;
+  width: 50%;
+}
+.data-text p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #7f8185;
+  width: 50%;
+}
+.security-data i {
+  font-size: 1.1rem;
+}
 .modal {
-  display: none; 
-  position: fixed; 
-  z-index: 1; 
+  display: none;
+  position: fixed;
+  z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
@@ -180,7 +235,6 @@ img#change-avatar-icon {
   align-items: center;
   justify-content: center;
 }
-
 .modal-content {
   background-color: #fff;
   margin: 5% auto;
@@ -193,26 +247,24 @@ img#change-avatar-icon {
   overflow-y: auto;
   box-sizing: border-box;
 }
-
 .close-btn {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
-
 .close-btn:hover,
 .close-btn:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
 }
-
 .modal-content h2 {
   margin-bottom: 10px;
 }
-
-input[type="text"], input[type="email"], input[type="number"] {
+input[type="text"],
+input[type="email"],
+input[type="number"] {
   width: 100%;
   padding: 10px 15px;
   margin: 5px 0 15px 0;
@@ -221,7 +273,6 @@ input[type="text"], input[type="email"], input[type="number"] {
   border-radius: 30px;
   box-sizing: border-box;
 }
-
 select {
   width: 100%;
   padding: 10px 15px;
@@ -235,22 +286,19 @@ select {
   -moz-appearance: none;
   appearance: none;
   box-sizing: border-box;
-  background-image: url('../images/arrow-down.png');
+  background-image: url("../images/arrow-down.png");
   background-repeat: no-repeat;
   background-position: right 15px center;
   background-size: 15px;
 }
-
 select:focus {
   border: 2px solid #000;
 }
-
 select option {
   padding: 10px;
 }
-
 .save-btn {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -259,11 +307,9 @@ select option {
   border-radius: 30px;
   border: 2px solid #000;
 }
-
 .save-btn:hover {
   background-color: #45a049;
 }
-
 .current-avatar {
   position: relative;
   display: flex;
@@ -273,13 +319,11 @@ select option {
   width: 100%;
   height: 100%;
 }
-
 .current-avatar img {
   border-radius: 50%;
   width: 200px;
   height: 200px;
 }
-
 #change-user-icon {
   position: absolute;
   bottom: 5px;
@@ -288,8 +332,17 @@ select option {
   width: 50px;
   height: 50px;
 }
-
-
+@media (width < 1199px) {
+  .data-text {
+    flex-direction: column;
+  }
+  .data-text span {
+    width: 100%;
+  }
+  .data-text p {
+    width: 100%;
+  }
+}
 @media (width < 992px) {
   .title-box {
     padding-left: 10px;
@@ -327,6 +380,15 @@ select option {
   .settings-container .main-panel {
     padding: 10px;
     width: 100%;
+  }
+  .data-text {
+    flex-direction: row;
+  }
+  .data-text span {
+    width: 50%;
+  }
+  .data-text p {
+    width: 50%;
   }
 }
 @media (width < 600px) {
@@ -370,6 +432,20 @@ select option {
   }
   #change-user-icon {
     right: 25%;
+  }
+  .security-part i {
+    font-size: 0.9rem;
+  }
+  .data-text {
+    flex-direction: column;
+  }
+  .data-text span {
+    font-size: 0.9rem;
+    width: 100%;
+  }
+  .data-text p {
+    font-size: 0.9rem;
+    width: 100%;
   }
 }
 @media (width < 425px) {

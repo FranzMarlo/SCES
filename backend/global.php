@@ -322,6 +322,11 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['contact_number'] = $getTeacherData['contact_number'];
                 echo '200';
             }
+            else{
+                echo '400';
+            }
+        }else{
+            echo '400';
         }
     } else if ($_POST['submitType'] === 'adminSignUp') {
 
