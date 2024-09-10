@@ -176,22 +176,32 @@
             <label for="currentPassword">Current Password:</label>
             <div class="input-container">
                 <input type="password" id="currentPassword" name="currentPassword" placeholder="Enter Current Password">
-                <i class="fa-solid fa-eye toggle-password" toggle="#currentPassword"></i>
+                <i class="fa-solid fa-eye-slash toggle-password" toggle="#currentPassword"></i>
             </div>
 
             <label for="newPassword">New Password:</label>
             <div class="input-container">
                 <input type="password" id="newPassword" name="newPassword" placeholder="Enter New Password">
-                <i class="fa-solid fa-eye toggle-password" toggle="#newPassword"></i>
+                <i class="fa-solid fa-eye-slash toggle-password" toggle="#newPassword"></i>
             </div>
 
             <label for="confirmPassword">Confirm New Password:</label>
             <div class="input-container">
                 <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password">
-                <i class="fa-solid fa-eye toggle-password" toggle="#confirmPassword"></i>
+                <i class="fa-solid fa-eye-slash toggle-password" toggle="#confirmPassword"></i>
             </div>
 
             <button type="submit" class="save-btn">Update Password</button>
         </form>
+    </div>
+</div>
+
+<div id="emailVerificationModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeEmailVerifModal">&times;</span>
+        <h2>Verify Your Email</h2>
+        <p>Please enter the verification code sent to your email:</p>
+        <input type="text" id="verificationCode" placeholder="Enter verification code">
+        <button id="verifyCodeBtn" class="save-btn">Verify</button>
     </div>
 </div>

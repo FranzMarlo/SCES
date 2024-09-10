@@ -1309,14 +1309,23 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".toggle-password").forEach(function (eyeIcon) {
     eyeIcon.onclick = togglePasswordVisibility;
   });
+
+  document.getElementById("verifyEmail").addEventListener("click", function () {
+    document.getElementById("emailVerificationModal").style.display = "flex";
+  });
+
+  document.getElementById("closeEmailVerifModal").addEventListener("click", function () {
+    document.getElementById("emailVerificationModal").style.display = "none";
+  });
+
 });
 
 function togglePasswordVisibility(event) {
   const eyeIcon = event.currentTarget;
-  const input = document.querySelector(eyeIcon.getAttribute('toggle'));
-  const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-  input.setAttribute('type', type);
-  
-  eyeIcon.classList.toggle('fa-eye');
-  eyeIcon.classList.toggle('fa-eye-slash');
+  const input = document.querySelector(eyeIcon.getAttribute("toggle"));
+  const type = input.getAttribute("type") === "password" ? "text" : "password";
+  input.setAttribute("type", type);
+
+  eyeIcon.classList.toggle("fa-eye-slash");
+  eyeIcon.classList.toggle("fa-eye");
 }

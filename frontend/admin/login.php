@@ -31,7 +31,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
                         </label>
                         <input type="password" name="password" id="password" placeholder="Password" />
                         <span class="toggle-password" onclick="togglePassword()">
-                            <i class="fa-solid fa-eye icon" id="toggleIcon"></i>
+                            <i class="fa-solid fa-eye-slash icon" id="toggleIcon"></i>
                         </span>
                     </div>
                     <button type="submit" id="adminLoginBtn">Login</button>

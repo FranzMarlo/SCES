@@ -1319,6 +1319,6 @@ function togglePasswordVisibility(event) {
   const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
   input.setAttribute('type', type);
   
-  eyeIcon.classList.toggle('fa-eye');
   eyeIcon.classList.toggle('fa-eye-slash');
+  eyeIcon.classList.toggle('fa-eye');
 }
