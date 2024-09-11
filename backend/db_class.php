@@ -597,11 +597,10 @@ class globalClass extends db_connect
     {
         $query = $this->conn->prepare("SELECT password FROM admin_tbl WHERE teacher_id = ?");
         $query->bind_param("s", $teacherId);
-        if($query->execute()){
+        if ($query->execute()) {
             $result = $query->get_result()->fetch_assoc();
             return $result['password'];
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -611,9 +610,9 @@ class globalClass extends db_connect
         $query = $this->conn->prepare("UPDATE admin_tbl SET password = ?, password_change = ? WHERE teacher_id =?");
         $query->bind_param("sss", $newPassword, $currentDate, $teacherId);
 
-        if($query->execute()){
+        if ($query->execute()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -622,11 +621,10 @@ class globalClass extends db_connect
     {
         $query = $this->conn->prepare("SELECT password FROM login_tbl WHERE student_id = ?");
         $query->bind_param("s", $studentId);
-        if($query->execute()){
+        if ($query->execute()) {
             $result = $query->get_result()->fetch_assoc();
             return $result['password'];
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -636,9 +634,22 @@ class globalClass extends db_connect
         $query = $this->conn->prepare("UPDATE login_tbl SET password = ?, password_change = ? WHERE student_id =?");
         $query->bind_param("sss", $newPassword, $currentDate, $studentId);
 
-        if($query->execute()){
+        if ($query->execute()) {
             return true;
-        }else{
+        } else {
+            return false;
+        }
+    }
+
+    public function updateStudentEmailVerif($studentId)
+    {   
+        $verified = 'Verified';
+        $query = $this->conn->prepare("UPDATE login_tbl SET email_verification = ? WHERE student_id =?");
+        $query->bind_param("ss", $verified, $studentId);
+
+        if ($query->execute()) {
+            return true;
+        } else {
             return false;
         }
     }

@@ -1343,7 +1343,7 @@ document.addEventListener("DOMContentLoaded", function () {
               } else {
                 Swal.fire({
                   icon: "error",
-                  title: "Verification Email Cannot Be Sent",
+                  title: "Verification Code Not Sent",
                   text: "Please Try Again Later",
                   confirmButtonColor: "#4CAF50",
                 });
@@ -1417,12 +1417,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById(
                       "emailVerificationModal"
                     ).style.display = "none";
+                    window.location.reload();
                   });
                 } else {
                   Swal.fire({
                     icon: "error",
                     title: "Verification Failed",
-                    text: "Incorrect Verification Code. Please Try Again.",
+                    text: response,
                     confirmButtonColor: "#4CAF50",
                   });
                 }

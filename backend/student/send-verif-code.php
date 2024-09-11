@@ -1,4 +1,5 @@
 <?php
+use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -6,6 +7,9 @@ session_start();
 header('Content-Type: text/plain');
 
 require $_SERVER['DOCUMENT_ROOT'] . '/SCES/vendor/autoload.php';
+
+$dotenv = Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'] . '/SCES');
+$dotenv->load();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -26,12 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'scesonlinelearningplatform@gmail.com';
-            $mail->Password = 'nnbd fzig vpos lapu';
+            $mail->Username = $_ENV['SMTP_EMAIL'];
+            $mail->Password = $_ENV['SMTP_PASSWORD'];
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
-            $mail->setFrom('scesonlinelearningplatform@gmail.com', 'SCES Online Learning Platform');
+            $mail->setFrom($_ENV['SMTP_EMAIL'], 'SCES Online Learning Platform');
             $mail->addAddress($email);
 
             $mail->isHTML(true);
@@ -109,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "200";
 
         } catch (Exception $e) {
-            echo "400";
+            echo '400';
         }
     }
 }
