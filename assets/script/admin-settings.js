@@ -1424,7 +1424,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   Swal.fire({
                     icon: "error",
                     title: "Verification Failed",
-                    text: "Please Try Again Later",
+                    text: "Incorrect Verification Code",
                     confirmButtonColor: "#4CAF50",
                   });
                 }
