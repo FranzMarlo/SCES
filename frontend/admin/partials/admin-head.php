@@ -22,4 +22,4 @@ $totalQuizzes = $db->getTotalQuiz();
   <link rel="stylesheet" href="/SCES/assets/style/admin.css" />
   <link rel="icon" href="/SCES/assets/images/logo.png" type="image/x-icon" />
   <script src="https://kit.fontawesome.com/c835ba47b5.js" crossorigin="anonymous"></script>
-  <script src="/SCES/vendors/node_modules/chart.js/dist/chart.umd.js"></script>
+  <script src="/SCES/vendor/node_modules/chart.js/dist/chart.umd.js"></script>

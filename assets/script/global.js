@@ -17,7 +17,7 @@ $("#studLogin").on("submit", function (e) {
         window.location.href = "/SCES/frontend/student/dashboard.php";
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -60,7 +60,7 @@ $("#studSignUp").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -75,7 +75,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "452") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -86,7 +86,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "453") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -97,7 +97,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "454") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -108,7 +108,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "455") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -119,7 +119,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "456") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -130,7 +130,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "457") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -141,7 +141,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "458") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -152,7 +152,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "459") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -163,7 +163,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "460") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -174,7 +174,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "461") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -185,7 +185,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "462") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -196,7 +196,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else if (response == "463") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -207,7 +207,7 @@ $("#studSignUp").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -239,7 +239,7 @@ $("#editProfileForm").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -254,7 +254,7 @@ $("#editProfileForm").on("submit", function (e) {
         );
       } else if (response == "100") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "info",
@@ -269,7 +269,7 @@ $("#editProfileForm").on("submit", function (e) {
         );
       } else if (response == "452") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -280,7 +280,7 @@ $("#editProfileForm").on("submit", function (e) {
         );
       } else if (response == "454") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -291,7 +291,7 @@ $("#editProfileForm").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -328,7 +328,7 @@ $("#editPersonalForm").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -343,7 +343,7 @@ $("#editPersonalForm").on("submit", function (e) {
         );
       } else if (response == "100") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "info",
@@ -358,7 +358,7 @@ $("#editPersonalForm").on("submit", function (e) {
         );
       } else if (response == "452") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -369,7 +369,7 @@ $("#editPersonalForm").on("submit", function (e) {
         );
       } else if (response == "453") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -380,7 +380,7 @@ $("#editPersonalForm").on("submit", function (e) {
         );
       } else if (response == "454") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -391,7 +391,7 @@ $("#editPersonalForm").on("submit", function (e) {
         );
       } else if (response == "469") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -402,7 +402,7 @@ $("#editPersonalForm").on("submit", function (e) {
         );
       } else if (response == "470") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -413,7 +413,7 @@ $("#editPersonalForm").on("submit", function (e) {
         );
       } else if (response == "471") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -424,7 +424,7 @@ $("#editPersonalForm").on("submit", function (e) {
         );
       } else if (response == "472") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -435,7 +435,7 @@ $("#editPersonalForm").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -472,7 +472,7 @@ $("#editBackgroundForm").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -487,7 +487,7 @@ $("#editBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "100") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "info",
@@ -502,7 +502,7 @@ $("#editBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "465") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -513,7 +513,7 @@ $("#editBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "466") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -524,7 +524,7 @@ $("#editBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "467") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -535,7 +535,7 @@ $("#editBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "473") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -546,7 +546,7 @@ $("#editBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "474") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -557,7 +557,7 @@ $("#editBackgroundForm").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -587,7 +587,7 @@ $("#changeAvatarForm").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -602,7 +602,7 @@ $("#changeAvatarForm").on("submit", function (e) {
         );
       } else if (response == "475") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -613,7 +613,7 @@ $("#changeAvatarForm").on("submit", function (e) {
         );
       } else if (response == "476") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -624,7 +624,7 @@ $("#changeAvatarForm").on("submit", function (e) {
         );
       } else if (response == "477") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -635,7 +635,7 @@ $("#changeAvatarForm").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -672,7 +672,7 @@ $("#updatePassword").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -687,7 +687,7 @@ $("#updatePassword").on("submit", function (e) {
         );
       } else if (response == "479") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -698,7 +698,7 @@ $("#updatePassword").on("submit", function (e) {
         );
       } else if (response == "480") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -709,7 +709,7 @@ $("#updatePassword").on("submit", function (e) {
         );
       } else if (response == "481") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -720,7 +720,7 @@ $("#updatePassword").on("submit", function (e) {
         );
       } else if (response == "462") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -731,7 +731,7 @@ $("#updatePassword").on("submit", function (e) {
         );
       } else if (response == "482") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -742,7 +742,7 @@ $("#updatePassword").on("submit", function (e) {
         );
       } else if (response == "483") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -753,7 +753,7 @@ $("#updatePassword").on("submit", function (e) {
         );
       } else if (response == "460") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -764,7 +764,7 @@ $("#updatePassword").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -798,7 +798,7 @@ $("#adminLogin").on("submit", function (e) {
         window.location.href = "/SCES/frontend/admin/dashboard.php";
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -841,7 +841,7 @@ $("#adminSignUp").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -856,7 +856,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "452") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -867,7 +867,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "453") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -878,7 +878,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "454") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -889,7 +889,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "472") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -900,7 +900,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "478") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -911,7 +911,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "457") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -922,7 +922,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "458") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -933,7 +933,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "459") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -944,7 +944,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "460") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -955,7 +955,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "461") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -966,7 +966,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "462") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -977,7 +977,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else if (response == "463") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -988,7 +988,7 @@ $("#adminSignUp").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -1020,7 +1020,7 @@ $("#adminEditProfileForm").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -1035,7 +1035,7 @@ $("#adminEditProfileForm").on("submit", function (e) {
         );
       } else if (response == "100") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "info",
@@ -1050,7 +1050,7 @@ $("#adminEditProfileForm").on("submit", function (e) {
         );
       } else if (response == "452") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1061,7 +1061,7 @@ $("#adminEditProfileForm").on("submit", function (e) {
         );
       } else if (response == "454") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1072,7 +1072,7 @@ $("#adminEditProfileForm").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -1109,7 +1109,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -1124,7 +1124,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
         );
       } else if (response == "100") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "info",
@@ -1139,7 +1139,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
         );
       } else if (response == "452") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1150,7 +1150,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
         );
       } else if (response == "453") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1161,7 +1161,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
         );
       } else if (response == "454") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1172,7 +1172,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
         );
       } else if (response == "469") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1183,7 +1183,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
         );
       } else if (response == "470") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1194,7 +1194,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
         );
       } else if (response == "471") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1205,7 +1205,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
         );
       } else if (response == "472") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1216,7 +1216,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -1251,7 +1251,7 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -1266,7 +1266,7 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "100") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "info",
@@ -1281,7 +1281,7 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "465") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1292,7 +1292,7 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "466") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1303,7 +1303,7 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "467") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1314,7 +1314,7 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
         );
       } else if (response == "474") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1325,7 +1325,7 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -1355,7 +1355,7 @@ $("#adminChangeAvatarForm").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -1370,7 +1370,7 @@ $("#adminChangeAvatarForm").on("submit", function (e) {
         );
       } else if (response == "475") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -1381,7 +1381,7 @@ $("#adminChangeAvatarForm").on("submit", function (e) {
         );
       } else if (response == "476") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1392,7 +1392,7 @@ $("#adminChangeAvatarForm").on("submit", function (e) {
         );
       } else if (response == "477") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -1403,7 +1403,7 @@ $("#adminChangeAvatarForm").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
@@ -1440,7 +1440,7 @@ $("#adminUpdatePassword").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "success",
@@ -1455,7 +1455,7 @@ $("#adminUpdatePassword").on("submit", function (e) {
         );
       } else if (response == "479") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1466,7 +1466,7 @@ $("#adminUpdatePassword").on("submit", function (e) {
         );
       } else if (response == "480") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1477,7 +1477,7 @@ $("#adminUpdatePassword").on("submit", function (e) {
         );
       } else if (response == "481") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1488,7 +1488,7 @@ $("#adminUpdatePassword").on("submit", function (e) {
         );
       } else if (response == "462") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1499,7 +1499,7 @@ $("#adminUpdatePassword").on("submit", function (e) {
         );
       } else if (response == "482") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1510,7 +1510,7 @@ $("#adminUpdatePassword").on("submit", function (e) {
         );
       } else if (response == "483") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1521,7 +1521,7 @@ $("#adminUpdatePassword").on("submit", function (e) {
         );
       } else if (response == "460") {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
@@ -1532,7 +1532,7 @@ $("#adminUpdatePassword").on("submit", function (e) {
         );
       } else {
         $.getScript(
-          "/SCES/vendors/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "error",
