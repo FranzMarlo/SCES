@@ -191,3 +191,13 @@
         </form>
     </div>
 </div>
+
+<div id="emailVerificationModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeEmailVerifModal">&times;</span>
+        <h2>Verify Your Email</h2>
+        <p>Please enter the verification code sent to your email:</p>
+        <input type="text" id="verificationCode" placeholder="Enter verification code">
+        <button id="verifyCodeBtn" class="save-btn">Verify</button>
+    </div>
+</div>

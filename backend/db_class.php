@@ -653,5 +653,18 @@ class globalClass extends db_connect
             return false;
         }
     }
+
+    public function updateAdminEmailVerif($teacherId)
+    {   
+        $verified = 'Verified';
+        $query = $this->conn->prepare("UPDATE admin_tbl SET email_verification = ? WHERE teacher_id =?");
+        $query->bind_param("ss", $verified, $teacherId);
+
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 

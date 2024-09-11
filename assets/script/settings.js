@@ -1423,7 +1423,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   Swal.fire({
                     icon: "error",
                     title: "Verification Failed",
-                    text: response,
+                    text: "Please Try Again Later",
                     confirmButtonColor: "#4CAF50",
                   });
                 }
