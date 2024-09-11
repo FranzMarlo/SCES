@@ -1311,13 +1311,134 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("verifyEmail").addEventListener("click", function () {
-    document.getElementById("emailVerificationModal").style.display = "flex";
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/SCES/backend/student/send-verif-code.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.send();
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          var response = xhr.response.trim();
+          $.getScript(
+            "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+            function () {
+              if (response === "200") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Verification Code Sent To Email",
+                  confirmButtonColor: "#4CAF50",
+                }).then(() => {
+                  document.getElementById(
+                    "emailVerificationModal"
+                  ).style.display = "flex";
+                });
+              } else if (response === "403") {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Email Already Verified",
+                  confirmButtonColor: "#4CAF50",
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Verification Email Cannot Be Sent",
+                  text: "Please Try Again Later",
+                  confirmButtonColor: "#4CAF50",
+                });
+              }
+            }
+          );
+        } else {
+          $.getScript(
+            "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+            function () {
+              Swal.fire({
+                icon: "error",
+                title: "Server Error",
+                text: "Server error: " + xhr.status,
+                confirmButtonColor: "#4CAF50",
+              });
+            }
+          );
+        }
+      }
+    };
   });
 
-  document.getElementById("closeEmailVerifModal").addEventListener("click", function () {
-    document.getElementById("emailVerificationModal").style.display = "none";
-  });
+  document
+    .getElementById("closeEmailVerifModal")
+    .addEventListener("click", function () {
+      document.getElementById("emailVerificationModal").style.display = "none";
+    });
 
+  document
+    .getElementById("verifyCodeBtn")
+    .addEventListener("click", function () {
+      var enteredCode = document
+        .getElementById("verificationCode")
+        .value.trim();
+
+      if (enteredCode === "") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Invalid Input",
+              text: "Please Enter The Verification Code Sent To Your Email",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+        return;
+      }
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/SCES/backend/student/verify-code.php", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      xhr.send("verificationCode=" + encodeURIComponent(enteredCode));
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          $.getScript(
+            "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+            function () {
+              if (xhr.status === 200) {
+                var response = xhr.response.trim();
+                if (response === "200") {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Email Verified Successfully",
+                    confirmButtonColor: "#4CAF50",
+                  }).then(() => {
+                    document.getElementById(
+                      "emailVerificationModal"
+                    ).style.display = "none";
+                  });
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Verification Failed",
+                    text: "Incorrect Verification Code. Please Try Again.",
+                    confirmButtonColor: "#4CAF50",
+                  });
+                }
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Server Error",
+                  text: "Server error: " + xhr.status,
+                  confirmButtonColor: "#FF0000",
+                });
+              }
+            }
+          );
+        }
+      };
+    });
 });
 
 function togglePasswordVisibility(event) {

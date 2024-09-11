@@ -47,10 +47,10 @@
 }
 
 #myProfile {
-  display: flex;
+  display: none;
 }
 #security {
-  display: none;
+  display: flex;
 }
 .settings-container .main-panel .panel-title {
   width: 100%;
