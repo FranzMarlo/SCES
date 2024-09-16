@@ -3,9 +3,12 @@ session_start();
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/global.php';
 
 
-if (isset($_SESSION['teacher_id'])) {
-    $admin = new adminloggedIn();
+if (isset($_SESSION['admin_id'])) {
+    $admin = new adminLoggedIn();
     $admin->needLogout();
+} else if (isset($_SESSION['faculty_id'])) {
+    $faculty = new facultyLoggedIn();
+    $faculty->needLogout();
 } else {
     $student = new loggedIn();
     $student->needLogout();

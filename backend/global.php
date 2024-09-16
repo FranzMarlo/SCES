@@ -663,11 +663,34 @@ class adminLoggedIn
     }
 }
 
+class facultyLoggedIn
+{
+    public function needLogin()
+    {
+
+        if (!isset($_SESSION['teacher_id'])) {
+            session_destroy();
+            header('Location:/SCES/frontend/faculty/login.php');
+            exit();
+        }
+
+    }
+    public function needLogout()
+    {
+
+        if (isset($_SESSION['teacher_id'])) {
+            header('Location:/SCES/frontend/faculty/dashboard.php');
+            exit();
+        }
+    }
+}
+
 function validate($data)
 {
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
+    $data = ucwords($data);
     return $data;
 }
 

@@ -21,5 +21,5 @@ if (isset($_SESSION['teacher_id'])) {
     $title = ($gender == 'Female') ? 'Ma\'am' : 'Sir';
 }
 else{
-    header('Location: /SCES/frontend/admin/login.php');
+    header('Location: /SCES/frontend/faculty/login.php');
 }

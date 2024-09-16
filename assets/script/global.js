@@ -1580,3 +1580,20 @@ function adminLogoutFunc() {
     }
   });
 }
+
+function facultyLogoutFunc() {
+  Swal.fire({
+    icon: "question",
+    title: "Do you want to log out?",
+    showCancelButton: true,
+    confirmButtonText: "Yes",
+    confirmButtonColor: "#4CAF50",
+    cancelButtonColor: "#f44336",
+    allowOutsideClick: false,
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.value) {
+      window.location.href = "/SCES/backend/admin/admin-logout.php";
+    }
+  });
+}
