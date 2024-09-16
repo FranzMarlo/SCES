@@ -1,8 +1,9 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/data-tables.php';
 $page = '';
+
 ?>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
 <link rel="stylesheet" href="/SCES/assets/style/student-list.css" />
 <title>Student List | SCES Online Learning Platform</title>
 </head>
@@ -22,36 +23,31 @@ $page = '';
             <div class="panel-title">
                 <h1>Students</h1>
                 <div class="number-icon">
-                    <span>2</span>
+                    <span><?php echo htmlspecialchars($totalStudents); ?></span>
                 </div>
             </div>
             <div class="table-container">
-                <table id="studentsTable" class="display">
+                <table id="studentTable" class="display" class="display responsive nowrap" style="width:100%">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
+                            <th>Profile</th>
+                            <th>Student ID</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Grade</th>
+                            <th>Section</th>
+                            <th>More</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>John Doe</td>
-                            <td>john@example.com</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Jane Smith</td>
-                            <td>jane@example.com</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
-    <script src="/SCES/assets/script/student-list.js"></script>
     <?php
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/view-student-modal.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
     ?>
