@@ -3,7 +3,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-hea
 $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/settings.css" />
-<script src="/SCES/assets/script/admin-settings.js"></script>
+<script src="/SCES/assets/script/faculty-settings.js"></script>
 <title>Settings | SCES Online Learning Platform</title>
 </head>
 

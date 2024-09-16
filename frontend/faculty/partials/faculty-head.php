@@ -1,9 +1,9 @@
 <?php
 session_start();
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/global.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/admin/data-setter.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/faculty/data-setter.php';
 
-$log = new adminLoggedIn();
+$log = new facultyLoggedIn();
 $log->needLogin();
 $current_page = basename($_SERVER['REQUEST_URI']);
 $totalStudents = $db->getTotalStudent();

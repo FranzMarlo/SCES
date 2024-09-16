@@ -819,7 +819,6 @@ $("#adminSignUp").on("submit", function (e) {
   var middleName = $("#middleName").val();
   var lastName = $("#lastName").val();
   var gender = $("#gender").val();
-  var role = $("#role").val();
   var email = $("#email").val();
   var password = $("#password").val();
   var confirmPassword = $("#confirmPassword").val();
@@ -832,7 +831,6 @@ $("#adminSignUp").on("submit", function (e) {
       middleName: middleName,
       lastName: lastName,
       gender: gender,
-      role: role,
       email: email,
       password: password,
       confirmPassword: confirmPassword,
@@ -894,17 +892,6 @@ $("#adminSignUp").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Please Select Your Gender",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "478") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Role In School",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -1599,7 +1586,6 @@ $("#facultySignUp").on("submit", function (e) {
       middleName: middleName,
       lastName: lastName,
       gender: gender,
-      role: role,
       email: email,
       password: password,
       confirmPassword: confirmPassword,
@@ -1661,17 +1647,6 @@ $("#facultySignUp").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Please Select Your Gender",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "478") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Role In School",
               confirmButtonColor: "#4CAF50",
             });
           }

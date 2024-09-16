@@ -2,7 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-head.php';
 $page = '';
 ?>
-<link rel="stylesheet" href="/SCES/assets/style/faculty-quizzes.css" />
+<link rel="stylesheet" href="/SCES/assets/style/admin-quizzes.css" />
 <title>Quizzes | SCES Online Learning Platform</title>
 </head>
 

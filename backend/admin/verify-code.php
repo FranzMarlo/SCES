@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_SESSION['verification_code']) && $_SESSION['verification_code'] == $enteredCode) {
 
-        $updateVerification = $db->updateAdminEmailVerif($teacherId);
+        $updateVerification = $db->updateFacultyEmailVerif($teacherId);
         if ($updateVerification) {
             echo "200";
             $_SESSION['email_verification'] = 'Verified';

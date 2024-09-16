@@ -8,7 +8,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
     <div class="flex-container">
         <div class="column left">
             <div class="opening">
-                <h1>Welcome, Teacher!</h1>
+                <h1>Welcome, Admin!</h1>
                 <h1>Please Log In</h1>
             </div>
             <div class="wrapper">

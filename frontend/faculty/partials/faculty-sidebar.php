@@ -11,7 +11,7 @@
         <div class="menu">
             <ul>
                 <li class="<?= $current_page == 'dashboard.php' ? 'active' : '' ?>">
-                    <a href="/SCES/frontend/admin/dashboard.php">
+                    <a href="/SCES/frontend/faculty/dashboard.php">
                         <i class="fa-solid fa-house icon"></i>
                         <span class="text">Home</span>
                     </a>
@@ -24,13 +24,13 @@
                     </a>
                     <ul class="sub-menu">
                         <li class="<?= $current_page == 'subject.php' ? 'active' : '' ?>">
-                            <a href="/SCES/frontend/admin/subject.php">
+                            <a href="/SCES/frontend/faculty/subject.php">
                                 <i class="fa-solid fa-square-poll-horizontal icon"></i>
                                 <span class="text">Subjects</span>
                             </a>
                         </li>
                         <li class="<?= $current_page == 'quizzes.php' ? 'active' : '' ?>">
-                            <a href="/SCES/frontend/admin/quizzes.php">
+                            <a href="/SCES/frontend/faculty/quizzes.php">
                                 <i class="fa-solid fa-pen-to-square icon"></i>
                                 <span class="text">Quizzes</span>
                             </a>
@@ -46,19 +46,19 @@
                     </a>
                     <ul class="sub-menu">
                         <li class="<?= $current_page == 'student-list.php' ? 'active' : '' ?>">
-                            <a href="/SCES/frontend/admin/student-list.php">
+                            <a href="/SCES/frontend/faculty/student-list.php">
                                 <i class="fa-solid fa-list icon"></i>
                                 <span class="text">Student List</span>
                             </a>
                         </li>
                         <li class="<?= $current_page == 'student-score.php' ? 'active' : '' ?>">
-                            <a href="/SCES/frontend/admin/student-score.php">
+                            <a href="/SCES/frontend/faculty/student-score.php">
                                 <i class="fa-solid fa-list-ol icon"></i>
                                 <span class="text">Student Score</span>
                             </a>
                         </li>
                         <li class="<?= $current_page == 'student-grade.php' ? 'active' : '' ?>">
-                            <a href="/SCES/frontend/admin/student-grade.php">
+                            <a href="/SCES/frontend/faculty/student-grade.php">
                                 <i class="fa-solid fa-chart-pie icon"></i>
                                 <span class="text">Student Grade</span>
                             </a>
@@ -66,25 +66,25 @@
                     </ul>
                 </li>
                 <li class="<?= $current_page == 'analytics.php' ? 'active' : '' ?>">
-                    <a href="/SCES/frontend/admin/analytics.php">
+                    <a href="/SCES/frontend/faculty/analytics.php">
                         <i class="fa-solid fa-chart-simple icon"></i>
                         <span class="text">Analytics</span>
                     </a>
                 </li>
                 <li class="<?= $current_page == 'reports.php' ? 'active' : '' ?>">
-                    <a href="/SCES/frontend/admin/reports.php">
+                    <a href="/SCES/frontend/faculty/reports.php">
                         <i class="fa-solid fa-print icon"></i>
                         <span class="text">Reports</span>
                     </a>
                 </li>
                 <li class="<?= $current_page == 'settings.php' ? 'active' : '' ?>">
-                    <a href="/SCES/frontend/admin/settings.php">
+                    <a href="/SCES/frontend/faculty/settings.php">
                         <i class="fa-solid fa-gear icon"></i>
                         <span class="text">Settings</span>
                     </a>
                 </li>
                 <li class="<?= $current_page == 'help.php' ? 'active' : '' ?>">
-                    <a href="/SCES/frontend/admin/help.php">
+                    <a href="/SCES/frontend/faculty/help.php">
                         <i class="fa-solid fa-circle-info icon"></i>
                         <span class="text">Help</span>
                     </a>
@@ -95,7 +95,7 @@
     <div class="menu">
         <ul>
             <li>
-                <a href="javascript:void(0)" onclick="adminLogoutFunc()">
+                <a href="javascript:void(0)" onclick="facultyLogoutFunc()">
                     <i class="fa-solid fa-right-from-bracket icon"></i>
                     <span class="text">Logout</span>
                 </a>

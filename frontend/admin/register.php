@@ -8,8 +8,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
   <div class="flex-container sign-up">
     <div class="column left">
       <div class="opening">
-        <h1>Hi There, Teacher!</h1>
-        <h1>Let's Register</h1>
+        <h1>Hi There, Admin!</h1>
+        <h1>Let's Sign Up</h1>
       </div>
       <div class="wrapper">
         <img src="/SCES/assets/images/admin-signup.png" alt="sign up icon" />
@@ -45,16 +45,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
               <option value="" disabled selected>Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
-            </select>
-          </div>
-          <div class="input-icons">
-            <label for="role">
-              <i class="fa-solid fa-briefcase icon"></i>
-            </label>
-            <select name="role" id="role">
-              <option value="" disabled selected>Select Role</option>
-              <option value="Teacher">Teacher</option>
-              <option value="Admin">Admin</option>
             </select>
           </div>
           <div class="input-icons">

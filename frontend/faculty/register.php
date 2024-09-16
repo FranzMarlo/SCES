@@ -9,7 +9,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/head.php';
     <div class="column left">
       <div class="opening">
         <h1>Hi There, Teacher!</h1>
-        <h1>Let's Register</h1>
+        <h1>Let's Sign Up</h1>
       </div>
       <div class="wrapper">
         <img src="/SCES/assets/images/admin-signup.png" alt="sign up icon" />

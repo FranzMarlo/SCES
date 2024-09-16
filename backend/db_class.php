@@ -67,14 +67,41 @@ class globalClass extends db_connect
             $checkIdResult = $this->checkAdminId($adminId);
         }
 
-        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`, `city`, `barangay`, `street`, `contact_number`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $query->bind_param("ssssisssssss", $adminId, $firstName, $middleName, $lastName, $age, $gender, $registration, $image, $city, $barangay, $street, $contactNumber);
+        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`, `city`, `barangay`, `street`, `contact_number`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssissssssss", $adminId, $firstName, $middleName, $lastName, $age, $gender, $registration, $image, $city, $barangay, $street, $contactNumber, $role);
 
         if ($query->execute()) {
-            $loginQuery = $this->conn->prepare("INSERT INTO `admin_tbl` (`teacher_id`, `role`, `email`, `password`, `email_verification`) VALUES (?, ?, ?, ?, ?)");
-            $loginQuery->bind_param("sssss", $adminId, $role, $email, $hashedPassword, $emailVerification);
+            $loginQuery = $this->conn->prepare("INSERT INTO `admin_tbl` (`teacher_id`, `email`, `password`, `email_verification`) VALUES (?, ?, ?, ?)");
+            $loginQuery->bind_param("ssss", $adminId, $email, $hashedPassword, $emailVerification);
             if ($loginQuery->execute()) {
                 return $adminId;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function facultySignUp($firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $registration, $image, $role, $emailVerification, $city, $street, $barangay, $contactNumber)
+    {
+        $year = date("Y");
+        $facultyId = 'T' . $year . '-' . sprintf('%03d', rand(0, 999));
+        $checkIdResult = $this->checkAdminId($facultyId);
+
+        while ($checkIdResult->num_rows > 0) {
+            $facultyId = 'T' . $year . '-' . sprintf('%03d', rand(0, 999));
+            $checkIdResult = $this->checkAdminId($facultyId);
+        }
+
+        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`, `city`, `barangay`, `street`, `contact_number`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssissssssss", $facultyId, $firstName, $middleName, $lastName, $age, $gender, $registration, $image, $city, $barangay, $street, $contactNumber, $role);
+
+        if ($query->execute()) {
+            $loginQuery = $this->conn->prepare("INSERT INTO `faculty_tbl` (`teacher_id`, `email`, `password`, `email_verification`) VALUES (?, ?, ?, ?)");
+            $loginQuery->bind_param("ssss", $facultyId, $email, $hashedPassword, $emailVerification);
+            if ($loginQuery->execute()) {
+                return $facultyId;
             } else {
                 return false;
             }
@@ -97,6 +124,17 @@ class globalClass extends db_connect
     public function checkAdminEmail($email)
     {
         $query = $this->conn->prepare("SELECT * FROM `admin_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $checkEmail = $query->get_result();
+            return $checkEmail;
+        }
+    }
+
+    public function checkFacultyEmail($email)
+    {
+        $query = $this->conn->prepare("SELECT * FROM `faculty_tbl` WHERE `email` = ?");
         $query->bind_param("s", $email);
 
         if ($query->execute()) {
@@ -401,6 +439,26 @@ class globalClass extends db_connect
         }
     }
 
+    public function facultyLogin($email, $password)
+    {
+        $query = $this->conn->prepare("SELECT *, `password` FROM `faculty_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($result->num_rows > 0) {
+                $faculty = $result->fetch_assoc();
+
+                if (password_verify($password, $faculty['password'])) {
+                    return $faculty;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+
     public function getTeacherData($teacherId)
     {
         $query = $this->conn->prepare("SELECT * FROM teacher_tbl WHERE teacher_id = ?");
@@ -604,10 +662,35 @@ class globalClass extends db_connect
             return false;
         }
     }
+
+    public function facultyGetPassword($teacherId)
+    {
+        $query = $this->conn->prepare("SELECT password FROM faculty_tbl WHERE teacher_id = ?");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result()->fetch_assoc();
+            return $result['password'];
+        } else {
+            return false;
+        }
+    }
     public function updateAdminPassword($newPassword, $currentDate, $teacherId)
     {
 
         $query = $this->conn->prepare("UPDATE admin_tbl SET password = ?, password_change = ? WHERE teacher_id =?");
+        $query->bind_param("sss", $newPassword, $currentDate, $teacherId);
+
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function updateFacultyPassword($newPassword, $currentDate, $teacherId)
+    {
+
+        $query = $this->conn->prepare("UPDATE faculty_tbl SET password = ?, password_change = ? WHERE teacher_id =?");
         $query->bind_param("sss", $newPassword, $currentDate, $teacherId);
 
         if ($query->execute()) {
@@ -642,7 +725,7 @@ class globalClass extends db_connect
     }
 
     public function updateStudentEmailVerif($studentId)
-    {   
+    {
         $verified = 'Verified';
         $query = $this->conn->prepare("UPDATE login_tbl SET email_verification = ? WHERE student_id =?");
         $query->bind_param("ss", $verified, $studentId);
@@ -655,9 +738,22 @@ class globalClass extends db_connect
     }
 
     public function updateAdminEmailVerif($teacherId)
-    {   
+    {
         $verified = 'Verified';
         $query = $this->conn->prepare("UPDATE admin_tbl SET email_verification = ? WHERE teacher_id =?");
+        $query->bind_param("ss", $verified, $teacherId);
+
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function updateFacultyEmailVerif($teacherId)
+    {
+        $verified = 'Verified';
+        $query = $this->conn->prepare("UPDATE faculty_tbl SET email_verification = ? WHERE teacher_id =?");
         $query->bind_param("ss", $verified, $teacherId);
 
         if ($query->execute()) {
