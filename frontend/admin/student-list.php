@@ -29,7 +29,7 @@ $page = '';
                 <table id="studentTable" class="display">
                     <thead>
                         <tr>
-
+                            <th>Profile</th>
                             <th>Student ID</th>
                             <th>Full Name</th>
                             <th>Grade</th>

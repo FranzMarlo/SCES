@@ -39,6 +39,23 @@ class fetchClass extends db_connect
             return false;
         }
     }
+    public function getStudentDetails($studentId)
+    {
+        $query = $this->conn->prepare("SELECT * FROM `student_tbl` WHERE student_id = ?");
+        $query->bind_param("s", $studentId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($result->num_rows > 0) {
+                $student = $result->fetch_assoc();
+
+                return $student;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
 
 }

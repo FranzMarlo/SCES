@@ -169,6 +169,7 @@
   margin-right: 10px;
   cursor: pointer;
   background-color: #fff;
+  text-align: center;
 }
 .menu-controller .menu-btn:hover {
   background-color: #dce8fe;
@@ -182,13 +183,13 @@
   padding: 10px;
   overflow-x: auto;
 }
-table#studentTable {
+#studentTable {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
 }
-table#studentTable th,
-table#studentTable td {
+#studentTable th,
+#studentTable td {
   padding: 10px;
   text-align: center;
   border: 1px solid #ddd;
@@ -213,52 +214,54 @@ table#studentTable td {
   font-size: 1rem;
   cursor: pointer;
 }
-@media (width < 768px) {
-  table#studentTable {
-    display: block; /* Make the table block */
+@media (max-width: 767px) {
+  .table-container {
+    width: 95%;
+    align-self: center;
+  }
+  #studentTable td {
+    text-align: left;
+  }
+}
+@media (max-width: 530px) {
+  .table-container {
+    width: 90%;
+  }
+  .data-container {
+    flex-direction: column;
+    padding: 10px 20px;
+  }
+  .data-part {
+    padding: 0;
     width: 100%;
-    overflow-x: auto; /* Enable horizontal scrolling */
   }
-
-  table#studentTable thead {
-    display: none; /* Hide table headers for mobile */
+  .data-part .data {
+    margin-bottom: 10px;
   }
-
-  table#studentTable tbody tr {
-    display: block;
-    margin-bottom: 1rem;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    padding: 10px;
+  .data-part .data span {
+    font-size: 1rem;
   }
-
-  table#studentTable td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    text-align: left;
-    border: none;
+  .data-part .data p {
+    font-size: 1rem;
   }
-
-  table#studentTable td::before {
-    content: attr(
-      data-label
-    ); /* Dynamically use the label from data-attribute */
-    flex: 1;
-    font-weight: bold;
-    text-align: left;
+}
+@media (max-width: 450px) {
+  .table-container {
+    width: 400px;
   }
-
-  .student-img {
-    width: 40px;
-    height: 40px;
+}
+@media (max-width: 400px) {
+  .table-container {
+    width: 350px;
   }
-
-  .student-menu {
-    height: 25px;
-    width: 25px;
-    font-size: 0.8rem;
+}
+@media (max-width: 375px) {
+  .table-container {
+    width: 330px;
   }
-  
+}
+@media (max-width: 340px) {
+  .table-container {
+    width: 300px;
+  }
 }

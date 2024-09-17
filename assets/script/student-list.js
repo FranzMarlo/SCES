@@ -1,75 +1,105 @@
-var table = $("#studentTable").DataTable({
-  ajax: {
-    url: "/SCES/backend/admin/fetch-students.php",
-    type: "GET",
-    dataSrc: "",
-  },
-  columns: [
-    {
-      data: "student_id",
-      createdCell: function (td, cellData, rowData, row, col) {
-        $(td).attr("data-label", "Student ID");
+$(document).ready(function () {
+  var table = $("#studentTable").DataTable({
+    ajax: {
+      url: "/SCES/backend/admin/fetch-class.php",
+      type: "POST",
+      dataSrc: "",
+      data: {
+        fetchType: "adminGetStudents",
       },
     },
-    {
-      data: null,
-      render: function (data, type, row, meta) {
-        let middleName =
-          row.student_mname && row.student_mname !== "N/A"
-            ? row.student_mname + " "
-            : "";
-        return row.student_fname + " " + middleName + row.student_lname;
+    columns: [
+      {
+        data: "profile_image",
+        render: function (data, type, row, meta) {
+          return (
+            '<img class="student-img" src="/SCES/storage/student/images/' +
+            data +
+            '" alt="Profile Image">'
+          );
+        },
       },
-      createdCell: function (td, cellData, rowData, row, col) {
-        $(td).attr("data-label", "Full Name");
+      { data: "student_id" },
+      {
+        data: null,
+        render: function (data, type, row, meta) {
+          let middleName =
+            row.student_mname && row.student_mname !== "N/A"
+              ? row.student_mname + " "
+              : "";
+          return row.student_fname + " " + middleName + row.student_lname;
+        },
       },
-    },
-    {
-      data: "grade_level",
-      createdCell: function (td, cellData, rowData, row, col) {
-        $(td).attr("data-label", "Grade");
+      { data: "grade_level" },
+      { data: "section" },
+      {
+        data: null,
+        defaultContent:
+          '<button class="student-menu"><i class="fa-solid fa-chevron-right"></i></button>',
       },
-    },
-    {
-      data: "section",
-      createdCell: function (td, cellData, rowData, row, col) {
-        $(td).attr("data-label", "Section");
+    ],
+    responsive: true,
+    columnDefs: [
+      {
+        targets: [3, 4, 5],
+        responsivePriority: 3,
       },
-    },
-    {
-      data: null,
-      defaultContent:
-        '<button class="student-menu"><i class="fa-solid fa-chevron-right"></i></button>',
-      createdCell: function (td, cellData, rowData, row, col) {
-        $(td).attr("data-label", "More");
+      {
+        targets: [0, 1, 2],
+        responsivePriority: 1,
       },
-    },
-  ],
-  responsive: true,
-});
+    ],
+    autoWidth: false,
+    scrollX: true,
+  });
 
-$("#studentTable tbody").on("click", "button.student-menu", function () {
-  var data = table.row($(this).parents("tr")).data();
-  showStudentModal(data);
-});
-var modal = document.getElementById("studentModal");
-var studentAvatar = $("#studentAvatar");
-var studentData = $("#studentData");
-function showStudentModal(data) {
-  studentAvatar.html(
-    '<img src="/SCES/storage/student/images/' +
-      data.profile_image +
-      '" alt="Profile Image">'
-  );
-  studentData.html(`
-        <span>${data.student_fname} ${data.student_lname}</span>
-        <p>${data.student_id}</p>
-        <p>${data.grade_level} - ${data.section}</p>
-    `);
+  $("#studentTable tbody").on("click", "button.student-menu", function () {
+    var data = table.row($(this).parents("tr")).data();
+    var studentId = data.student_id;
+    showStudentModal(studentId);
+  });
+  var modal = document.getElementById("studentModal");
+  var studentAvatar = $("#studentAvatar");
+  var studentData = $("#studentData");
+  function showStudentModal(studentId) {
+    $.ajax({
+      url: "/SCES/backend/admin/fetch-class.php",
+      type: "POST",
+      data: { student_id: studentId, fetchType: "getStudentDetails" },
+      success: function (response) {
+        console.log("Raw response from server:", response); // Log raw response for debugging
 
-  modal.style.display = "flex";
-}
+        var student;
+        if (typeof response === "object") {
+          student = response;
+        } else {
+          try {
+            student = JSON.parse(response);
+          } catch (error) {
+            console.error("Error parsing JSON:", error);
+            console.log("Invalid JSON response:", response);
+            return;
+          }
+        }
+        studentAvatar.html(
+          '<img src="/SCES/storage/student/images/' +
+            student.profile_image +
+            '" alt="Profile Image">'
+        );
+        studentData.html(`
+    <span>${student.student_fname} ${student.student_lname}</span>
+    <p>${student.student_id}</p>
+    <p>${student.grade_level} - ${student.section}</p>
+  `);
 
-$(".close-btn").on("click", function () {
-  modal.style.display = "none";
+        // Show the modal
+        modal.style.display = "flex";
+      },
+    });
+  }
+
+  // Close modal
+  $(".close-btn").on("click", function () {
+    modal.style.display = "none";
+  });
 });
