@@ -24,33 +24,6 @@
   font-size: 1.2rem;
   font-weight: bold;
 }
-.table-container {
-  width: 100%;
-  background-color: #f5f5f5;
-  border-radius: 30px;
-  min-height: 650px;
-  border: 2px solid #000;
-  padding: 10px;
-}
-.student-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-.student-menu {
-  border-radius: 50px;
-  color: #fff;
-  border: 2px solid #000;
-  background-color: #4caf50;
-  height: 30px;
-  width: 30px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
 .modal {
   display: none;
   position: fixed;
@@ -70,9 +43,16 @@
   width: 90%;
   max-width: 600px;
   min-height: 600px;
-  border-radius: 10px;
+  border-radius: 30px;
   max-height: 80vh;
   overflow-y: auto;
+}
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+.modal-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .modal-header {
   height: 150px;
@@ -99,7 +79,7 @@
   flex-direction: row;
   align-items: center;
 }
-.student-info .avatar{
+.student-info .avatar {
   padding: 5px;
 }
 .student-info .avatar img {
@@ -144,7 +124,7 @@
   flex-direction: column;
   padding: 10px;
 }
-.data-container{
+.data-container {
   border: 2px solid #000;
   width: 100%;
   display: flex;
@@ -175,12 +155,12 @@
   color: #000;
   font-size: 1.1rem;
 }
-.menu-controller{
+.menu-controller {
   width: 100%;
   display: flex;
   flex-direction: row;
 }
-.menu-controller .menu-btn{
+.menu-controller .menu-btn {
   border-radius: 30px;
   width: 100px;
   height: 35px;
@@ -190,9 +170,95 @@
   cursor: pointer;
   background-color: #fff;
 }
-.menu-controller .menu-btn:hover{
+.menu-controller .menu-btn:hover {
   background-color: #dce8fe;
 }
-@media (width < 1199px) {
+.table-container {
+  width: 100%;
+  background-color: #f5f5f5;
+  border-radius: 30px;
+  min-height: 650px;
+  border: 2px solid #000;
+  padding: 10px;
+  overflow-x: auto;
+}
+table#studentTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+table#studentTable th,
+table#studentTable td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+.student-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.student-menu {
+  border-radius: 50px;
+  color: #fff;
+  border: 2px solid #000;
+  background-color: #4caf50;
+  height: 30px;
+  width: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+@media (width < 768px) {
+  table#studentTable {
+    display: block; /* Make the table block */
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scrolling */
+  }
+
+  table#studentTable thead {
+    display: none; /* Hide table headers for mobile */
+  }
+
+  table#studentTable tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  table#studentTable td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    text-align: left;
+    border: none;
+  }
+
+  table#studentTable td::before {
+    content: attr(
+      data-label
+    ); /* Dynamically use the label from data-attribute */
+    flex: 1;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .student-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .student-menu {
+    height: 25px;
+    width: 25px;
+    font-size: 0.8rem;
+  }
   
 }

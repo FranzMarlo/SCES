@@ -1,9 +1,8 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.php';
 $page = '';
-
 ?>
-<link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
+<link rel="stylesheet" href="/SCES/assets/style/datatables.min.css" />
 <link rel="stylesheet" href="/SCES/assets/style/student-list.css" />
 <title>Student List | SCES Online Learning Platform</title>
 </head>
@@ -27,14 +26,12 @@ $page = '';
                 </div>
             </div>
             <div class="table-container">
-                <table id="studentTable" class="display" class="display responsive nowrap" style="width:100%">
+                <table id="studentTable" class="display">
                     <thead>
                         <tr>
-                            <th>Profile</th>
+
                             <th>Student ID</th>
-                            <th>Last Name</th>
-                            <th>First Name</th>
-                            <th>Middle Name</th>
+                            <th>Full Name</th>
                             <th>Grade</th>
                             <th>Section</th>
                             <th>More</th>
@@ -44,10 +41,11 @@ $page = '';
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
     <?php
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/view-student-modal.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
     ?>
+    <script src="/SCES/assets/script/datatables.min.js"></script>
+    <script src="/SCES/assets/script/student-list.js"></script>

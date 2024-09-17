@@ -10,7 +10,6 @@ class fetchClass extends db_connect
     }
     public function adminGetStudentsData()
     {
-        // Prepare the SQL query
         $query = $this->conn->prepare("
             SELECT
                 student.profile_image,
@@ -31,14 +30,12 @@ class fetchClass extends db_connect
             ON
                 student.section_id = section.section_id
         ");
-
-        // Execute the query
         if ($query->execute()) {
             $result = $query->get_result();
             $students = $result->fetch_all(MYSQLI_ASSOC);
             return $students;
         } else {
-            // Handle the error
+
             return false;
         }
     }
