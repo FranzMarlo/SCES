@@ -20,64 +20,15 @@
                 <button class="menu-btn">Records</button>
                 <button class="menu-btn">Analytics</button>
             </div>
-            <div class="student-data-container" id="profile">
-                <div class="data-container">
-                    <div class="data-part">
-                        <div class="data">
-                            <span>First Name</span>
-                            <p>Franz Marlo</p>
-                        </div>
-                        <div class="data">
-                            <span>Middle Name</span>
-                            <p>Barroga</p>
-                        </div>
-                    </div>
-                    <div class="data-part">
-                        <div class="data">
-                            <span>Last Name</span>
-                            <p>Andal</p>
-                        </div>
-                    </div>
+            <div class="student-data-container">
+                <div class="data-container" id="namePart">
+                        
                 </div>
-                <div class="data-container">
-                    <div class="data-part">
-                        <div class="data">
-                            <span>Age</span>
-                            <p>7</p>
-                        </div>
-                        <div class="data">
-                            <span>Gender</span>
-                            <p>Male</p>
-                        </div>
-                    </div>
-                    <div class="data-part">
-                        <div class="data">
-                            <span>Guardian</span>
-                            <p>Juan Dela Cruz</p>
-                        </div>
-                        <div class="data">
-                            <span>Contact Number</span>
-                            <p>09914387349</p>
-                        </div>
-                    </div>
+                <div class="data-container" id="profilePart">
+                    
                 </div>
-                <div class="data-container">
-                    <div class="data-part">
-                        <div class="data">
-                            <span>City</span>
-                            <p>Batangas City</p>
-                        </div>
-                        <div class="data">
-                            <span>Barangay</span>
-                            <p>Santa Clara</p>
-                        </div>
-                    </div>
-                    <div class="data-part">
-                        <div class="data">
-                            <span>Street</span>
-                            <p>SCES</p>
-                        </div>
-                    </div>
+                <div class="data-container" id="addressPart">
+                    
                 </div>
             </div>
         </div>

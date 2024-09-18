@@ -41,7 +41,36 @@ class fetchClass extends db_connect
     }
     public function getStudentDetails($studentId)
     {
-        $query = $this->conn->prepare("SELECT * FROM `student_tbl` WHERE student_id = ?");
+        $query = $this->conn->prepare(
+            "SELECT
+                student.profile_image,
+                student.student_id,
+                student.student_lname,
+                student.student_fname,
+                student.student_mname,
+                student.age,
+                student.gender,
+                student.city,
+                student.barangay,
+                student.street,
+                student.guardian_name,
+                student.guardian_contact,
+                level.grade_level,
+                section.section
+            FROM
+                student_tbl student
+            INNER JOIN
+                level_tbl level
+            ON
+                student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section
+            ON
+                student.section_id = section.section_id
+            WHERE
+                student.student_id = ?
+            "
+        );
         $query->bind_param("s", $studentId);
         if ($query->execute()) {
             $result = $query->get_result();

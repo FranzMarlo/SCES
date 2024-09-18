@@ -61,13 +61,16 @@ $(document).ready(function () {
   var modal = document.getElementById("studentModal");
   var studentAvatar = $("#studentAvatar");
   var studentData = $("#studentData");
+  var namePart = $("#namePart");
+  var profilePart = $("#profilePart");
+  var addressPart = $("#addressPart");
   function showStudentModal(studentId) {
     $.ajax({
       url: "/SCES/backend/admin/fetch-class.php",
       type: "POST",
       data: { student_id: studentId, fetchType: "getStudentDetails" },
       success: function (response) {
-        console.log("Raw response from server:", response); // Log raw response for debugging
+        console.log("Raw response from server:", response);
 
         var student;
         if (typeof response === "object") {
@@ -91,6 +94,64 @@ $(document).ready(function () {
     <p>${student.student_id}</p>
     <p>${student.grade_level} - ${student.section}</p>
   `);
+        namePart.html(`
+              <div class="data-part">
+                        <div class="data">
+                            <span>First Name</span>
+                            <p>${student.student_fname}</p>
+                        </div>
+                        <div class="data">
+                            <span>Middle Name</span>
+                            <p>${student.student_mname}</p>
+                        </div>
+              </div>
+                <div class="data-part">
+                        <div class="data">
+                            <span>Last Name</span>
+                            <p>${student.student_lname}</p>
+                        </div>
+                </div>
+    `);
+        profilePart.html(`
+              <div class="data-part">
+                        <div class="data">
+                            <span>Age</span>
+                            <p>${student.age}</p>
+                        </div>
+                        <div class="data">
+                            <span>Gender</span>
+                            <p>${student.gender}</p>
+                        </div>
+              </div>
+                    <div class="data-part">
+                        <div class="data">
+                            <span>Guardian</span>
+                            <p>${student.guardian_name}</p>
+                        </div>
+                        <div class="data">
+                            <span>Contact Number</span>
+                            <p>${student.guardian_contact}</p>
+                        </div>
+                </div>
+      `);
+        addressPart.html(`
+              <div class="data-part">
+                        <div class="data">
+                            <span>City</span>
+                            <p>${student.city}</p>
+                        </div>
+                        <div class="data">
+                            <span>Barangay</span>
+                            <p>${student.barangay}</p>
+                        </div>
+                    </div>
+                    <div class="data-part">
+                        <div class="data">
+                            <span>Street</span>
+                            <p>${student.street}</p>
+                        </div>
+              </div>
+        `);
 
         // Show the modal
         modal.style.display = "flex";
