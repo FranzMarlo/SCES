@@ -318,12 +318,10 @@ select option {
   display: flex;
   align-items: center;
 }
-
 .input-container input {
   width: 100%;
-  padding-right: 30px; /* Make space for the icon */
+  padding-right: 30px;
 }
-
 .input-container .toggle-password {
   position: absolute;
   right: 15px;

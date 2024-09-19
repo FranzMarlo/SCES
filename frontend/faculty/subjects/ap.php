@@ -4,10 +4,16 @@ $section = isset($_GET['section']) ? htmlspecialchars($_GET['section']) : '';
 $currentSubject = isset($_GET['subject']) ? htmlspecialchars($_GET['subject']) : '';
 $gradeLevel = isset($_GET['gradelevel']) ? htmlspecialchars($_GET['gradelevel']) : '';
 $subject = $db->getTeacherSubjectDetails($teacherId, $section, $currentSubject, $gradeLevel);
+
+$_SESSION['section'] = $subject['section_id'];
+$_SESSION['grade_level'] = $subject['level_id'];
+$_SESSION['section'] = $subject['subject_id'];
+
 $current_page = 'subject.php';
 $page = 'Lessons';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-lesson.css" />
+<script src="/SCES/assets/script/admin-lesson.js"></script>
 <title>Araling Panlipunan | SCES Online Learning Platform</title>
 </head>
 
@@ -87,7 +93,7 @@ $page = 'Lessons';
                   <span>Add lesson to class subject</span>
                 </div>
                 <div class="add-item">
-                  <i class="fa-solid fa-circle-plus"></i>
+                  <i class="fa-solid fa-circle-plus" id="addLesson"></i>
                 </div>
               </div>
               <div class="lesson-item ap-item">
@@ -142,5 +148,7 @@ $page = 'Lessons';
     </div>
   </div>
   <?php
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-add-lesson.php';
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
   ?>
+  

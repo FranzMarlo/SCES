@@ -204,7 +204,7 @@
   text-align: center;
   border: 1px solid #ddd;
   vertical-align: middle;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap;
 }
 .student-img {
   width: 50px;

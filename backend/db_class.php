@@ -386,7 +386,8 @@ class globalClass extends db_connect
             t.gender,
             l.level_id,
             l.grade_level,
-            c.section
+            c.section,
+            c.section_id
         FROM subject_tbl s
         INNER JOIN
             teacher_tbl t

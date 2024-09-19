@@ -59,7 +59,7 @@ $page = '';
                     <?php if ($subjects): ?>
                         <?php foreach ($subjects as $subject): ?>
                             <div class="subject-item">
-                                <a href="/SCES/frontend/admin/subjects/<?php echo htmlspecialchars($subject['link']); ?>?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>"
+                                <a href="/SCES/frontend/faculty/subjects/<?php echo htmlspecialchars($subject['link']); ?>?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>"
                                     class="hidden-link"></a>
                                 <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>" onclick="hiddenLink(this)">
                                     <button class="subject-btn" onclick="subjectBtn(event, this)">

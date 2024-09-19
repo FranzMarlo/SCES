@@ -220,6 +220,7 @@
 }
 .add-item i {
   font-size: 1.5rem;
+  cursor: pointer;
 }
 .quarter-1 {
   background-color: #ff8080;
@@ -280,6 +281,155 @@
 }
 .mapeh-item {
   background-color: #b8bff3;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.4);
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  border: 2px solid #000;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 30px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+@keyframes slide-down {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.form-group {
+  margin-bottom: 10px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close-btn:hover,
+.close-btn:focus {
+  color: #000;
+  text-decoration: none;
+}
+.modal-content h2 {
+  margin-bottom: 10px;
+}
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px 15px;
+  margin: 5px 0 15px 0;
+  display: inline-block;
+  border: 2px solid #000;
+  border-radius: 30px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+select {
+  width: 100%;
+  padding: 10px 15px;
+  margin: 5px 0 15px 0;
+  display: inline-block;
+  border: 2px solid #000;
+  border-radius: 30px;
+  background-color: #fff;
+  color: #333;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  background-image: url("../images/arrow-down.png");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
+  font-size: 1rem;
+}
+select:focus {
+  border: 2px solid #000;
+}
+select option {
+  padding: 10px;
+}
+.save-btn {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 30px;
+  border: 2px solid #000;
+}
+.save-btn:hover {
+  background-color: #45a049;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #000;
+}
+#pdfLabel {
+  color: #fff;
+}
+#lessonFile {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+.custom-file-label {
+  display: inline-block;
+  background-color: #45a049;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.custom-file-label:hover {
+  background-color: #4caf50;
+}
+#fileName {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+}
+@media (max-width: 600px) {
+  .modal-content {
+    width: 95%;
+  }
 }
 @media (width < 1199px) {
   .module-box .module-item {

@@ -893,6 +893,46 @@ if (isset($_POST['submitType'])) {
                 }
             }
         }
+    } else if ($_POST['submitType'] === 'facultyAddLesson') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $levelId = $_SESSION['level_id'];
+        $sectionId = $_SESSION['section_id'];
+        $subjectId = $_SESSION['subject_id'];
+        $lessonNumber = validate($_POST['lessonNumber']);
+        $lessonTitle = validate($_POST['lessonTitle']);
+        $quarter = validate($_POST['quarter']);
+        $confirmPassword = validate($_POST['confirmPassword']);
+
+        if (empty($lessonNumber)) {
+            echo '479';
+        } else if (empty($lessonTitle)) {
+            echo '480';
+        } else if (empty($confirmPassword)) {
+            echo '481';
+        } else if (strlen($newPassword) < 6) {
+            echo '460';
+        } else if ($newPassword != $confirmPassword) {
+            echo '462';
+        } else {
+            $hashedPassword = $db->facultyGetPassword($teacherId);
+            if (!password_verify($currentPassword, $hashedPassword)) {
+                echo '482';
+            } else if (password_verify($newPassword, $hashedPassword)) {
+                echo '483';
+            } else {
+                $currentDate = date("Y-m-d");
+                $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+                $updatePassword = $db->updateFacultyPassword($newPasswordHash, $currentDate, $teacherId);
+                if ($updatePassword != false) {
+                    $_SESSION['password'] = $newPasswordHash;
+                    $_SESSION['password_change'] = $currentDate;
+                    echo '200';
+                } else {
+                    echo '400';
+                }
+            }
+        }
     } else {
         echo '400';
     }

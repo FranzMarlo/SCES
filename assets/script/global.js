@@ -2289,6 +2289,134 @@ $("#facultyUpdatePassword").on("submit", function (e) {
   });
 });
 
+$("#facultyAddLesson").on("submit", function (e) {
+  e.preventDefault();
+  var lessonNumber = $("#lessonNumber").val();
+  var lessonTitle = $("#lessonTitle").val();
+  var quarter = $("#quarter").val();
+  var lessonFile = $("#lessonFile").val();
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "facultyAddLesson",
+      lessonNumber: lessonNumber,
+      lessonTitle: lessonTitle,
+      quarter: quarter,
+      lessonFile: lessonFile,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Lesson Added",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.href = "/SCES/frontend/faculty/settings.php";
+              }
+            });
+          }
+        );
+      } else if (response == "479") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Current Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "480") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter New Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "481") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Confirm New Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "462") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "New Passwords Don't Match Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "482") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Current Password Incorrect Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "483") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Use A New Different Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "460") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "New Password Should Be At Least 6 Characters",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Update Password Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+
 function logoutFunc() {
   Swal.fire({
     icon: "question",
