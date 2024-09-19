@@ -8,11 +8,11 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
   <div class="flex-container sign-up">
     <div class="column left">
       <div class="opening">
-        <h1>Hi There, Admin!</h1>
+        <h1>Hi there, Admin!</h1>
         <h1>Let's Sign Up</h1>
       </div>
       <div class="wrapper">
-        <img src="/SCES/assets/images/admin-signup.png" alt="sign up icon" />
+        <img src="/SCES/assets/images/signup-admin.png" alt="sign up icon" />
       </div>
     </div>
     <div class="column right">

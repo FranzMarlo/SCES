@@ -12,7 +12,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
                 <h1>Please Log In</h1>
             </div>
             <div class="wrapper">
-                <img src="/SCES/assets/images/admin-login.png" alt="sign up icon" class="img-500px" />
+                <img src="/SCES/assets/images/login-admin.png" alt="sign up icon" class="img-500px" />
             </div>
         </div>
         <div class="column right">

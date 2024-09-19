@@ -149,3 +149,48 @@ function toggleSecurity() {
   myProfilePanel.style.display = "none";
   securityPanel.style.display = "flex";
 }
+
+function toggleRecords(){
+  const recordSection = document.getElementById("records");
+  const profileSection = document.getElementById("profile");
+  const analyticsSection = document.getElementById("analytics");
+
+  recordSection.style.display = "flex";
+  profileSection.style.display = "none";
+  analyticsSection.style.display ="none";
+}
+
+function toggleProfile(){
+  const recordSection = document.getElementById("records");
+  const profileSection = document.getElementById("profile");
+  const analyticsSection = document.getElementById("analytics");
+
+  recordSection.style.display = "none";
+  profileSection.style.display = "flex";
+  analyticsSection.style.display ="none";
+}
+
+function toggleAnalytics() {
+    const recordSection = document.getElementById("records");
+    const profileSection = document.getElementById("profile");
+    const analyticsSection = document.getElementById("analytics");
+
+    recordSection.style.display = "none";
+    profileSection.style.display = "none";
+    analyticsSection.style.display = "flex";
+}
+
+
+document.querySelectorAll('.menu-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const targetSection = this.getAttribute('data-target');
+        if (targetSection === "analytics") {
+            toggleAnalytics();
+        } else if (targetSection === "profile") {
+            toggleProfile();  // Your function to toggle profile section
+        } else if (targetSection === "records") {
+            toggleRecords();  // Your function to toggle records section
+        }
+    });
+});
+
