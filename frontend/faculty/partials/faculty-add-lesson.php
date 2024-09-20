@@ -17,7 +17,7 @@
         <div class="form-group">
           <label for="quarter">Quarter:</label>
             <select name="quarter" id="quarter">
-              <option value="" disabled selected>Select Quarter</option>
+              <option value="Not Set" selected>Select Quarter</option>
               <option value="1st">1st Quarter</option>
               <option value="2nd">2nd Quarter</option>
               <option value="3rd">3rd Quarter</option>

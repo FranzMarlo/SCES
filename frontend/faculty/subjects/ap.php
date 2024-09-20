@@ -1,16 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-head.php';
-$section = isset($_GET['section']) ? htmlspecialchars($_GET['section']) : '';
-$currentSubject = isset($_GET['subject']) ? htmlspecialchars($_GET['subject']) : '';
-$gradeLevel = isset($_GET['gradelevel']) ? htmlspecialchars($_GET['gradelevel']) : '';
-$subject = $db->getTeacherSubjectDetails($teacherId, $section, $currentSubject, $gradeLevel);
-
-$_SESSION['section'] = $subject['section_id'];
-$_SESSION['grade_level'] = $subject['level_id'];
-$_SESSION['section'] = $subject['subject_id'];
-
-$current_page = 'subject.php';
-$page = 'Lessons';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-head.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-lesson.css" />
 <script src="/SCES/assets/script/admin-lesson.js"></script>
@@ -87,13 +77,13 @@ $page = 'Lessons';
               </div>
             </div>
             <div class="lesson-box">
-              <div class="add-lesson">
+              <div class="add-lesson"  id="addLesson">
                 <div class="add-item">
                   <img src="/SCES/assets/images/bag-icon.png" alt="add lesson icon">
                   <span>Add lesson to class subject</span>
                 </div>
                 <div class="add-item">
-                  <i class="fa-solid fa-circle-plus" id="addLesson"></i>
+                  <i class="fa-solid fa-circle-plus"></i>
                 </div>
               </div>
               <div class="lesson-item ap-item">

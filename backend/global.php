@@ -897,40 +897,52 @@ if (isset($_POST['submitType'])) {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
         $levelId = $_SESSION['level_id'];
+        $gradeLevel = $_SESSION['grade_level'];
         $sectionId = $_SESSION['section_id'];
         $subjectId = $_SESSION['subject_id'];
+        $subject = $_SESSION['subject_title'];
         $lessonNumber = validate($_POST['lessonNumber']);
         $lessonTitle = validate($_POST['lessonTitle']);
         $quarter = validate($_POST['quarter']);
-        $confirmPassword = validate($_POST['confirmPassword']);
 
         if (empty($lessonNumber)) {
-            echo '479';
+            echo '484';
         } else if (empty($lessonTitle)) {
-            echo '480';
-        } else if (empty($confirmPassword)) {
-            echo '481';
-        } else if (strlen($newPassword) < 6) {
-            echo '460';
-        } else if ($newPassword != $confirmPassword) {
-            echo '462';
+            echo '485';
+        } else if (empty($quarter) || $quarter == 'Not Set') {
+            echo '486';
         } else {
-            $hashedPassword = $db->facultyGetPassword($teacherId);
-            if (!password_verify($currentPassword, $hashedPassword)) {
-                echo '482';
-            } else if (password_verify($newPassword, $hashedPassword)) {
-                echo '483';
-            } else {
-                $currentDate = date("Y-m-d");
-                $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
-                $updatePassword = $db->updateFacultyPassword($newPasswordHash, $currentDate, $teacherId);
-                if ($updatePassword != false) {
-                    $_SESSION['password'] = $newPasswordHash;
-                    $_SESSION['password_change'] = $currentDate;
-                    echo '200';
+            if (isset($_FILES['lessonFile']) && $_FILES['lessonFile']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['lessonFile'];
+                $fileName = $file['name'];
+                $fileTmpName = $file['tmp_name'];
+                $fileError = $file['error'];
+                $fileSize = $file['size'];
+                $fileType = mime_content_type($fileTmpName);
+                $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                if ($fileType === 'application/pdf' && $fileExtension === 'pdf') {
+                    $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/SCES/storage/lessons/'.$gradeLevel.'/'.$quarter.' Quarter/'.$subject.'/';
+                    $fileDestination = $uploadDir . basename($fileName);
+
+                    if (move_uploaded_file($fileTmpName, $fileDestination)) {
+                        $currentDate = date("Y-m-d");
+
+                        $result = $db->facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $fileDestination);
+
+                        if ($result) {
+                            echo '200';
+                        } else {
+                            echo '400';
+                        }
+                    } else {
+                        echo '487';
+                    }
                 } else {
-                    echo '400';
+                    echo '488';
                 }
+            } else {
+                echo '489';
             }
         }
     } else {

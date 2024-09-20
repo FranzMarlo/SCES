@@ -763,5 +763,34 @@ class globalClass extends db_connect
             return false;
         }
     }
+
+    public function facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $fileDestination)
+    {   
+        $year = date("Y");
+        $lessonId = 'L' . $year . sprintf('%04d', rand(0, 9999));
+        $checkIdResult = $this->checkLessonId($lessonId);
+
+        while ($checkIdResult->num_rows > 0) {
+            $lessonId = 'L' . $year . sprintf('%04d', rand(0, 9999));
+            $checkIdResult = $this->checkLessonId($lessonId);
+        }
+        $query = $this->conn->prepare("INSERT INTO `lesson_tbl` (`lesson_id`, `level_id`, `subject_id`, `teacher_id`, `section_id`, `lesson_title`, `lesson_number`, `quarter`, `pdf_file`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("sssssssss", $lessonId, $levelId, $subjectId, $teacherId, $sectionId, $lessonTitle, $lessonNumber, $quarter, $fileDestination);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function checkLessonId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE lesson_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
 }
 

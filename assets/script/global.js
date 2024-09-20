@@ -2291,20 +2291,15 @@ $("#facultyUpdatePassword").on("submit", function (e) {
 
 $("#facultyAddLesson").on("submit", function (e) {
   e.preventDefault();
-  var lessonNumber = $("#lessonNumber").val();
-  var lessonTitle = $("#lessonTitle").val();
-  var quarter = $("#quarter").val();
-  var lessonFile = $("#lessonFile").val();
+  var formData = new FormData(this);
+  formData.append("submitType", "facultyAddLesson");
+  
   $.ajax({
     type: "POST",
     url: "/SCES/backend/global.php",
-    data: {
-      submitType: "facultyAddLesson",
-      lessonNumber: lessonNumber,
-      lessonTitle: lessonTitle,
-      quarter: quarter,
-      lessonFile: lessonFile,
-    },
+    data: formData,
+    processData: false,
+    contentType: false,
     success: function (response) {
       console.log(response);
       if (response == "200") {
@@ -2322,79 +2317,70 @@ $("#facultyAddLesson").on("submit", function (e) {
             });
           }
         );
-      } else if (response == "479") {
+      } else if (response == "484") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
-              title: "Please Enter Current Password",
+              title: "Lesson Number Cannot Be Empty",
               confirmButtonColor: "#4CAF50",
             });
           }
         );
-      } else if (response == "480") {
+      } else if (response == "485") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
-              title: "Please Enter New Password",
+              title: "Lesson Title Cannot Be Empty",
               confirmButtonColor: "#4CAF50",
             });
           }
         );
-      } else if (response == "481") {
+      } else if (response == "486") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
-              title: "Please Confirm New Password",
+              title: "Please Select Lesson Quarter",
               confirmButtonColor: "#4CAF50",
             });
           }
         );
-      } else if (response == "462") {
+      } else if (response == "487") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
-              icon: "warning",
-              title: "New Passwords Don't Match Please Try Again",
+              icon: "error",
+              title: "PDF File Upload Failed",
+              text: "Please Try Again",
               confirmButtonColor: "#4CAF50",
             });
           }
         );
-      } else if (response == "482") {
+      } else if (response == "488") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
-              title: "Current Password Incorrect Please Try Again",
+              title: "File Type Not Supported",
+              text: "Please Upload PDF Files Only",
               confirmButtonColor: "#4CAF50",
             });
           }
         );
-      } else if (response == "483") {
+      } else if (response == "489") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
             Swal.fire({
               icon: "warning",
-              title: "Please Use A New Different Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "460") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Password Should Be At Least 6 Characters",
+              title: "Please Attach A PDF File",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -2405,7 +2391,7 @@ $("#facultyAddLesson").on("submit", function (e) {
           function () {
             Swal.fire({
               icon: "error",
-              title: "Update Password Failed",
+              title: "Lesson Upload Failed",
               text: "Please Try Again",
               confirmButtonColor: "#4CAF50",
             });
@@ -2415,7 +2401,6 @@ $("#facultyAddLesson").on("submit", function (e) {
     },
   });
 });
-
 
 function logoutFunc() {
   Swal.fire({
