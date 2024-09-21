@@ -2312,7 +2312,7 @@ $("#facultyAddLesson").on("submit", function (e) {
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
               if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+                window.location.reload();
               }
             });
           }

@@ -495,11 +495,14 @@ select option {
   .lesson-title span {
     font-size: 0.9rem;
   }
-  .view-lesson span {
+  .view-lesson a {
     font-size: 0.9rem;
+    text-decoration: none;
+    color: #fff;
   }
-  .view-lesson span i {
+  .view-lesson a i {
     font-size: 0.9rem;
+    color: #fff;
   }
 }
 @media (width < 600px) {

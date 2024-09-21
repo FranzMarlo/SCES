@@ -77,7 +77,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-hea
               </div>
             </div>
             <div class="lesson-box">
-              <div class="add-lesson"  id="addLesson">
+              <div class="add-lesson" id="addLesson">
                 <div class="add-item">
                   <img src="/SCES/assets/images/bag-icon.png" alt="add lesson icon">
                   <span>Add lesson to class subject</span>
@@ -86,51 +86,22 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-hea
                   <i class="fa-solid fa-circle-plus"></i>
                 </div>
               </div>
-              <div class="lesson-item ap-item">
-                <div class="lesson-title">
-                  <h1>Lesson 1</h1>
-                  <span>Alphabetong Filipino</span>
-                </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
-              <div class="lesson-item ap-item">
-                <div class="lesson-title">
-                  <h1>Lesson 2</h1>
-                  <span>Patinig At Katinig</span>
-                </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
-              <div class="lesson-item ap-item">
-                <div class="lesson-title">
-                  <h1>Lesson 3</h1>
-                  <span>Pagtukoy Sa Huni At Tunog</span>
-                </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
-              <div class="lesson-item ap-item">
-                <div class="lesson-title">
-                  <h1>Lesson 4</h1>
-                  <span>Wastong Paggamit Ng Baybay At Bantas</span>
-                </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
-              <div class="lesson-item ap-item">
-                <div class="lesson-title">
-                  <h1>Lesson 5</h1>
-                  <span>Salitang Pamalit Sa Ngalan Ng Tao</span>
-                </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
+              <?php $lessons = $db->facultyGetLessons($subject['level_id'], $subject['subject_id'], $teacherId, $subject['section_id']); ?>
+              <?php if ($lessons): ?>
+                <?php foreach ($lessons as $lesson): ?>
+                  <div class="lesson-item ap-item">
+                    <div class="lesson-title">
+                      <h1>Lesson <?php echo htmlspecialchars($lesson['lesson_number']); ?></h1>
+                      <span><?php echo htmlspecialchars($lesson['lesson_title']); ?></span>
+                    </div>
+                    <div class="view-lesson">
+                      <a href="/SCES/storage/lessons<?php echo $lesson['pdf_file']?>">View Lesson <i class="fa-solid fa-circle-chevron-right"></i></a>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <p>No lessons available.</p>
+              <?php endif; ?>
             </div>
           </div>
         </div>
@@ -141,4 +112,3 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-hea
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-add-lesson.php';
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
   ?>
-  

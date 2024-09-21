@@ -765,7 +765,7 @@ class globalClass extends db_connect
     }
 
     public function facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $fileDestination)
-    {   
+    {
         $year = date("Y");
         $lessonId = 'L' . $year . sprintf('%04d', rand(0, 9999));
         $checkIdResult = $this->checkLessonId($lessonId);
@@ -791,6 +791,20 @@ class globalClass extends db_connect
             return $result;
         }
     }
+
+    public function facultyGetLessons($levelId, $subjectID, $teacherId, $sectionId)
+    {
+        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND teacher_id = ? AND section_id = ? ORDER BY lesson_number ASC");
+        $query->bind_param("ssss", $levelId, $subjectID, $teacherId, $sectionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
 
 }
 

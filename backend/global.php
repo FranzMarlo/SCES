@@ -927,8 +927,8 @@ if (isset($_POST['submitType'])) {
 
                     if (move_uploaded_file($fileTmpName, $fileDestination)) {
                         $currentDate = date("Y-m-d");
-
-                        $result = $db->facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $fileDestination);
+                        $filePath = $gradeLevel.'/'.$quarter.' Quarter/'.$subject.'/'.basename($fileName);
+                        $result = $db->facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $filePath);
 
                         if ($result) {
                             echo '200';
