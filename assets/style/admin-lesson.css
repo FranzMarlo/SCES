@@ -187,12 +187,31 @@
   font-size: 1rem;
   color: #8f6e7c;
 }
-.view-lesson span {
+.view-lesson{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
   color: #fff;
-  font-size: 1rem;
 }
-.view-lesson span i {
+.view-lesson i {
   font-size: 1rem;
+  margin-left: 5px;
+}
+.view-lesson:hover{
+  color: #555;
+}
+.no-data-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.no-data-box img {
+  height: 200px;
+}
+.no-data-box h1 {
+  font-size: 1.2rem;
 }
 .add-lesson {
   display: flex;
@@ -450,6 +469,9 @@ select option {
   .icon-container img {
     height: 7rem;
   }
+  .no-data-box h1 {
+    font-size: 1rem;
+  }
 }
 @media (width < 768px) {
   .lesson-container {
@@ -495,14 +517,15 @@ select option {
   .lesson-title span {
     font-size: 0.9rem;
   }
-  .view-lesson a {
+  .view-lesson {
     font-size: 0.9rem;
-    text-decoration: none;
-    color: #fff;
   }
-  .view-lesson a i {
+  .view-lesson i {
     font-size: 0.9rem;
-    color: #fff;
+  }
+  .no-data-box h1 {
+    font-size: 0.9rem;
+    text-align: center;
   }
 }
 @media (width < 600px) {
@@ -532,10 +555,10 @@ select option {
   .lesson-title span {
     font-size: 0.8rem;
   }
-  .view-lesson span {
+  .view-lesson {
     font-size: 0.8rem;
   }
-  .view-lesson span i {
+  .view-lesson i {
     font-size: 0.8rem;
   }
   .add-item span {
@@ -564,10 +587,10 @@ select option {
   .lesson-title span {
     font-size: 0.6rem;
   }
-  .view-lesson span {
+  .view-lesson {
     font-size: 0.6rem;
   }
-  .view-lesson span i {
+  .view-lesson i {
     font-size: 0.6rem;
   }
 }

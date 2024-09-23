@@ -799,7 +799,10 @@ class globalClass extends db_connect
 
         if ($query->execute()) {
             $result = $query->get_result();
-            return $result;
+
+            $lessons = $result->fetch_all(MYSQLI_ASSOC);
+
+            return $lessons;
         } else {
             return false;
         }

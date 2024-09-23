@@ -94,13 +94,16 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-hea
                       <h1>Lesson <?php echo htmlspecialchars($lesson['lesson_number']); ?></h1>
                       <span><?php echo htmlspecialchars($lesson['lesson_title']); ?></span>
                     </div>
-                    <div class="view-lesson">
-                      <a href="/SCES/storage/lessons<?php echo $lesson['pdf_file']?>">View Lesson <i class="fa-solid fa-circle-chevron-right"></i></a>
-                    </div>
+                    <a href="/SCES/frontend/faculty/view-lesson.php?pdf=<?php echo urlencode($lesson['pdf_file']); ?>"
+                      class="view-lesson">View Lesson <i class="fa-solid fa-circle-chevron-right"></i></a>
                   </div>
                 <?php endforeach; ?>
               <?php else: ?>
-                <p>No lessons available.</p>
+                <div class="no-data-box">
+                  <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                  <h1>No lessons uploaded.</h1>
+                  <h1>Upload a lesson by clicking the button above.</h1>
+                </div>
               <?php endif; ?>
             </div>
           </div>
