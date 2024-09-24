@@ -2293,7 +2293,7 @@ $("#facultyAddLesson").on("submit", function (e) {
   e.preventDefault();
   var formData = new FormData(this);
   formData.append("submitType", "facultyAddLesson");
-  
+
   $.ajax({
     type: "POST",
     url: "/SCES/backend/global.php",
@@ -2381,6 +2381,18 @@ $("#facultyAddLesson").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Please Attach A PDF File",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "490") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Lesson Number Exists",
+              text: "Please Enter A Different Lesson Number",
               confirmButtonColor: "#4CAF50",
             });
           }

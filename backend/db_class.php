@@ -808,6 +808,26 @@ class globalClass extends db_connect
         }
     }
 
+    public function checkLessonNumber($levelId, $subjectID, $teacherId, $sectionId, $lessonNumber)
+    {
+        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND teacher_id = ? AND section_id = ? AND lesson_number = ?");
+        $query->bind_param("ssssi", $levelId, $subjectID, $teacherId, $sectionId, $lessonNumber);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+    public function getSubject($subjectId)
+    {
+        $query = $this->conn->prepare("SELECT * FROM subject_tbl WHERE subject_id = ?");
+        $query->bind_param("s", $subjectId);
+        if ($query->execute()) {
+            $result = $query->get_result()->fetch_assoc();
+            return $result;
+        }
+    }
+
 
 }
 

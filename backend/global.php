@@ -904,30 +904,38 @@ if (isset($_POST['submitType'])) {
         $lessonNumber = validate($_POST['lessonNumber']);
         $lessonTitle = validate($_POST['lessonTitle']);
         $quarter = validate($_POST['quarter']);
-
+        $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $teacherId, $sectionId, $lessonNumber);
         if (empty($lessonNumber)) {
             echo '484';
-        } else if (empty($lessonTitle)) {
+        } else if ($checkNumber->num_rows > 0){
+            echo '490';
+        }
+        else if (empty($lessonTitle)) {
             echo '485';
         } else if (empty($quarter) || $quarter == 'Not Set') {
             echo '486';
         } else {
             if (isset($_FILES['lessonFile']) && $_FILES['lessonFile']['error'] === UPLOAD_ERR_OK) {
                 $file = $_FILES['lessonFile'];
-                $fileName = $file['name'];
                 $fileTmpName = $file['tmp_name'];
-                $fileError = $file['error'];
                 $fileSize = $file['size'];
                 $fileType = mime_content_type($fileTmpName);
-                $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
                 if ($fileType === 'application/pdf' && $fileExtension === 'pdf') {
-                    $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/SCES/storage/lessons/'.$gradeLevel.'/'.$quarter.' Quarter/'.$subject.'/';
-                    $fileDestination = $uploadDir . basename($fileName);
+                    $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/SCES/storage/lessons/' . $gradeLevel . '/' . $quarter . ' Quarter/' . $subject . '/';
+
+                    $newFileName = 'Lesson_' . $lessonNumber . '_' . uniqid() . '.pdf';
+                    $fileDestination = $uploadDir . $newFileName;
+
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
 
                     if (move_uploaded_file($fileTmpName, $fileDestination)) {
                         $currentDate = date("Y-m-d");
-                        $filePath = $gradeLevel.'/'.$quarter.' Quarter/'.$subject.'/'.basename($fileName);
+                        $filePath = $gradeLevel . '/' . $quarter . ' Quarter/' . $subject . '/' . $newFileName;
+
                         $result = $db->facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $filePath);
 
                         if ($result) {
@@ -936,7 +944,7 @@ if (isset($_POST['submitType'])) {
                             echo '400';
                         }
                     } else {
-                        echo '487';
+                        echo '487'; 
                     }
                 } else {
                     echo '488';

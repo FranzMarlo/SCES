@@ -94,7 +94,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-hea
                       <h1>Lesson <?php echo htmlspecialchars($lesson['lesson_number']); ?></h1>
                       <span><?php echo htmlspecialchars($lesson['lesson_title']); ?></span>
                     </div>
-                    <a href="/SCES/frontend/faculty/view-lesson.php?pdf=<?php echo urlencode($lesson['pdf_file']); ?>"
+                    <a href="/SCES/frontend/faculty/view-lesson.php?pdf=<?php echo urlencode($lesson['pdf_file']); ?>&lesson_number=<?php echo urlencode($lesson['lesson_number']); ?>&subject_id=<?php echo urlencode($lesson['subject_id']); ?>"
                       class="view-lesson">View Lesson <i class="fa-solid fa-circle-chevron-right"></i></a>
                   </div>
                 <?php endforeach; ?>
@@ -105,6 +105,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-hea
                   <h1>Upload a lesson by clicking the button above.</h1>
                 </div>
               <?php endif; ?>
+
             </div>
           </div>
         </div>
