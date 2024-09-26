@@ -22,15 +22,25 @@ body {
   align-items: center;
   flex-wrap: wrap;
 }
+.pdf-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
 .pdf-container {
   position: relative;
   width: 100%;
   max-width: 100%;
   margin-top: 60px;
+  display: flex;
+  justify-content: center;
 }
 canvas {
   max-width: 100%;
-  max-height: calc(100vh - 60px);
+  max-height: calc(100vh - 100px);
   margin: auto;
   display: block;
 }
@@ -49,14 +59,11 @@ canvas {
   color: #3f8a41;
 }
 .controls {
+  margin-top: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
   font-size: 1.1rem;
   background-color: rgba(255, 255, 255, 0.8);
   padding: 10px 20px;
@@ -156,13 +163,34 @@ button:focus {
     font-size: 0.9rem;
   }
 }
-@media (width < 426px) {
+@media (width < 768px) {
+  #prev-page,
+  #next-page {
+    font-size: 18px;
+  }
+  #prev-page {
+    left: 10px;
+  }
+  #next-page {
+    right: 10px;
+  }
+  .controls {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+  }
+  #page-input {
+    font-size: 0.8rem;
+  }
+  #go-page {
+    font-size: 0.8rem;
+  }
+}
+@media (width < 600px) {
   body {
     height: 100vh;
   }
   .pdf-header,
-  .pdf-container,
-  .controls {
+  .pdf-wrapper {
     display: none;
   }
   .rotate-box {

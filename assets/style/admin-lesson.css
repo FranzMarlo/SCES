@@ -162,6 +162,7 @@
   flex-direction: column;
   width: 75%;
   gap: 20px;
+  min-height: 450px;
 }
 .lesson-item {
   border-radius: 30px;

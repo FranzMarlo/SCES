@@ -18,27 +18,29 @@ $subjectTitle = $db->getSubject($subjectId);
 <body>
     <div class="pdf-header">
         <h2>Lesson <?php echo htmlspecialchars($lessonNumber); ?> -
-            <?php echo htmlspecialchars($subjectTitle['subject_title']); ?></h2>
+            <?php echo htmlspecialchars($subjectTitle['subject_title']); ?>
+        </h2>
         <a href="/SCES/storage/lessons/<?php echo $pdf; ?>" download class="download-link">
             <i class="fas fa-download download-icon"></i>
         </a>
     </div>
-    <div class="pdf-container">
-        <canvas id="pdf-canvas"></canvas>
-
-        <button id="prev-page"><i class="fas fa-chevron-left"></i></button>
-        <button id="next-page"><i class="fas fa-chevron-right"></i></button>
-    </div>
-    <div class="controls">
-        <span>Page: <span id="page-num"></span> / <span id="page-count"></span></span>
-        <form id="page-form" onsubmit="return false;">
-            <input type="number" id="page-input" min="1" style="width: 50px;" />
-            <button id="go-page">Go</button>
-        </form>
+    <div class="pdf-wrapper">
+        <div class="pdf-container">
+            <canvas id="pdf-canvas"></canvas>
+            <button id="prev-page"><i class="fas fa-chevron-left"></i></button>
+            <button id="next-page"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="controls">
+            <span>Page: <span id="page-num"></span> / <span id="page-count"></span></span>
+            <form id="page-form" onsubmit="return false;">
+                <input type="number" id="page-input" min="1" style="width: 50px;" />
+                <button id="go-page">Go</button>
+            </form>
+        </div>
     </div>
     <div class="rotate-box">
         <img src="/SCES/assets/images/rotate-icon.png" alt="rotate icon">
-        <span>Please Rotate Your Phone For Better Lesson Viewing Experience</span>
+        <span>Please Rotate Your Device For Better Lesson Viewing Experience</span>
     </div>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
