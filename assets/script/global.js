@@ -1534,6 +1534,131 @@ $("#adminUpdatePassword").on("submit", function (e) {
   });
 });
 
+$("#adminAddLesson").on("submit", function (e) {
+  e.preventDefault();
+  var formData = new FormData(this);
+  formData.append("submitType", "adminAddLesson");
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Lesson Added",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.reload();
+              }
+            });
+          }
+        );
+      } else if (response == "484") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Lesson Number Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "485") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Lesson Title Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "486") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Lesson Quarter",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "487") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "PDF File Upload Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "488") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "File Type Not Supported",
+              text: "Please Upload PDF Files Only",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "489") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Attach A PDF File",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "490") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Lesson Number Exists",
+              text: "Please Enter A Different Lesson Number",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Lesson Upload Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
 $("#facultyLogin").on("submit", function (e) {
   e.preventDefault();
   var email = $("#email").val();

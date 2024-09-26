@@ -782,6 +782,26 @@ class globalClass extends db_connect
             return false;
         }
     }
+
+    public function adminAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $fileDestination)
+    {
+        $year = date("Y");
+        $lessonId = 'L' . $year . sprintf('%04d', rand(0, 9999));
+        $checkIdResult = $this->checkLessonId($lessonId);
+
+        while ($checkIdResult->num_rows > 0) {
+            $lessonId = 'L' . $year . sprintf('%04d', rand(0, 9999));
+            $checkIdResult = $this->checkLessonId($lessonId);
+        }
+        $query = $this->conn->prepare("INSERT INTO `lesson_tbl` (`lesson_id`, `level_id`, `subject_id`, `teacher_id`, `section_id`, `lesson_title`, `lesson_number`, `quarter`, `pdf_file`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("sssssssss", $lessonId, $levelId, $subjectId, $teacherId, $sectionId, $lessonTitle, $lessonNumber, $quarter, $fileDestination);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function checkLessonId($id)
     {
         $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE lesson_id = ?");
@@ -793,6 +813,22 @@ class globalClass extends db_connect
     }
 
     public function facultyGetLessons($levelId, $subjectID, $teacherId, $sectionId)
+    {
+        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND teacher_id = ? AND section_id = ? ORDER BY lesson_number ASC");
+        $query->bind_param("ssss", $levelId, $subjectID, $teacherId, $sectionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            $lessons = $result->fetch_all(MYSQLI_ASSOC);
+
+            return $lessons;
+        } else {
+            return false;
+        }
+    }
+
+    public function adminGetLessons($levelId, $subjectID, $teacherId, $sectionId)
     {
         $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND teacher_id = ? AND section_id = ? ORDER BY lesson_number ASC");
         $query->bind_param("ssss", $levelId, $subjectID, $teacherId, $sectionId);

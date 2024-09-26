@@ -611,6 +611,65 @@ if (isset($_POST['submitType'])) {
                 }
             }
         }
+    } else if ($_POST['submitType'] === 'adminAddLesson') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $levelId = $_SESSION['level_id'];
+        $gradeLevel = $_SESSION['grade_level'];
+        $sectionId = $_SESSION['section_id'];
+        $subjectId = $_SESSION['subject_id'];
+        $subject = $_SESSION['subject_title'];
+        $lessonNumber = validate($_POST['lessonNumber']);
+        $lessonTitle = validate($_POST['lessonTitle']);
+        $quarter = validate($_POST['quarter']);
+        $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $teacherId, $sectionId, $lessonNumber);
+        if (empty($lessonNumber)) {
+            echo '484';
+        } else if ($checkNumber->num_rows > 0) {
+            echo '490';
+        } else if (empty($lessonTitle)) {
+            echo '485';
+        } else if (empty($quarter) || $quarter == 'Not Set') {
+            echo '486';
+        } else {
+            if (isset($_FILES['lessonFile']) && $_FILES['lessonFile']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['lessonFile'];
+                $fileTmpName = $file['tmp_name'];
+                $fileSize = $file['size'];
+                $fileType = mime_content_type($fileTmpName);
+                $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+                if ($fileType === 'application/pdf' && $fileExtension === 'pdf') {
+                    $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/SCES/storage/lessons/' . $gradeLevel . '/' . $quarter . ' Quarter/' . $subject . '/';
+
+                    $newFileName = 'Lesson_' . $lessonNumber . '_' . uniqid() . '.pdf';
+                    $fileDestination = $uploadDir . $newFileName;
+
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+
+                    if (move_uploaded_file($fileTmpName, $fileDestination)) {
+                        $currentDate = date("Y-m-d");
+                        $filePath = $gradeLevel . '/' . $quarter . ' Quarter/' . $subject . '/' . $newFileName;
+
+                        $result = $db->facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $filePath);
+
+                        if ($result) {
+                            echo '200';
+                        } else {
+                            echo '400';
+                        }
+                    } else {
+                        echo '487';
+                    }
+                } else {
+                    echo '488';
+                }
+            } else {
+                echo '489';
+            }
+        }
     } else if ($_POST['submitType'] === 'facultyLogin') {
         $email = validate($_POST['email']);
         $password = validate($_POST['password']);
@@ -907,10 +966,9 @@ if (isset($_POST['submitType'])) {
         $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $teacherId, $sectionId, $lessonNumber);
         if (empty($lessonNumber)) {
             echo '484';
-        } else if ($checkNumber->num_rows > 0){
+        } else if ($checkNumber->num_rows > 0) {
             echo '490';
-        }
-        else if (empty($lessonTitle)) {
+        } else if (empty($lessonTitle)) {
             echo '485';
         } else if (empty($quarter) || $quarter == 'Not Set') {
             echo '486';
@@ -944,7 +1002,7 @@ if (isset($_POST['submitType'])) {
                             echo '400';
                         }
                     } else {
-                        echo '487'; 
+                        echo '487';
                     }
                 } else {
                     echo '488';
