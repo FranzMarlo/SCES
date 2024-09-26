@@ -4,7 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-hea
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/faculty-lesson.css" />
 <script src="/SCES/assets/script/faculty-lesson.js"></script>
-<title>Araling Panlipunan | SCES Online Learning Platform</title>
+<title>EPP | SCES Online Learning Platform</title>
 </head>
 
 <body>

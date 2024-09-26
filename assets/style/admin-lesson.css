@@ -117,6 +117,10 @@
 .header-text h1 {
   font-size: 1.7rem;
   margin-bottom: 5px;
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .header-text span {
   font-size: 1rem;
@@ -504,6 +508,7 @@ select option {
     width: 100%;
   }
   .header-text h1 {
+    max-width: 500px;
     font-size: 1.5rem;
   }
   .header-text span {
@@ -554,6 +559,7 @@ select option {
     padding: 15px;
   }
   .header-text h1 {
+    max-width: 300px;
     font-size: 1.3rem;
   }
   .lesson-title h1 {
@@ -577,6 +583,7 @@ select option {
 }
 @media (width < 425px) {
   .header-text h1 {
+    max-width: 250px;
     font-size: 1.1rem;
   }
   .icon-container {
