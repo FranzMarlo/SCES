@@ -1,23 +1,23 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-head.php';
 ?>
-<link rel="stylesheet" href="/SCES/assets/style/admin-lesson.css" />
-<script src="/SCES/assets/script/admin-lesson.js"></script>
-<title>MAPEH | SCES Online Learning Platform</title>
+<link rel="stylesheet" href="/SCES/assets/style/faculty-lesson.css" />
+<script src="/SCES/assets/script/faculty-lesson.js"></script>
+<title>Araling Panlipunan | SCES Online Learning Platform</title>
 </head>
 
 <body>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-popup.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-popup.php';
   ?>
   <div class="container">
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-sidebar.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-sidebar.php';
     ?>
     <div class="content">
       <?php
-      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-header.php';
+      include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-header.php';
       ?>
       <div class="lesson-panel">
         <div class="title-box">
@@ -48,9 +48,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.
         </div>
         <div class="lesson-container">
           <div class="lesson-header">
-            <div class="header-bg mapeh">
+            <div class="header-bg epp">
               <div class="icon-container">
-                <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>" alt="mapeh-icon">
+                <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>" alt="epp-icon">
               </div>
             </div>
             <div class="header-text">
@@ -86,15 +86,15 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.
                   <i class="fa-solid fa-circle-plus"></i>
                 </div>
               </div>
-              <?php $lessons = $db->adminGetLessons($subject['level_id'], $subject['subject_id'], $teacherId, $subject['section_id']); ?>
+              <?php $lessons = $db->facultyGetLessons($subject['level_id'], $subject['subject_id'], $teacherId, $subject['section_id']); ?>
               <?php if ($lessons): ?>
                 <?php foreach ($lessons as $lesson): ?>
-                  <div class="lesson-item mapeh-item">
+                  <div class="lesson-item epp-item">
                     <div class="lesson-title">
                       <h1>Lesson <?php echo htmlspecialchars($lesson['lesson_number']); ?></h1>
                       <span><?php echo htmlspecialchars($lesson['lesson_title']); ?></span>
                     </div>
-                    <a href="/SCES/frontend/admin/view-lesson.php?pdf=<?php echo urlencode($lesson['pdf_file']); ?>&lesson_number=<?php echo urlencode($lesson['lesson_number']); ?>&subject_id=<?php echo urlencode($lesson['subject_id']); ?>"
+                    <a href="/SCES/frontend/faculty/view-lesson.php?pdf=<?php echo urlencode($lesson['pdf_file']); ?>&lesson_number=<?php echo urlencode($lesson['lesson_number']); ?>&subject_id=<?php echo urlencode($lesson['subject_id']); ?>"
                       class="view-lesson" target="_blank">View Lesson <i class="fa-solid fa-circle-chevron-right"></i></a>
                   </div>
                 <?php endforeach; ?>
@@ -112,6 +112,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.
     </div>
   </div>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-add-lesson.php';
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-add-lesson.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
   ?>

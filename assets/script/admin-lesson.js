@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var addLessonModal = document.getElementById("addLessonModal");
   var addLessonBtn = document.getElementById("addLesson");
   var closeBtn = document.querySelector(".close-btn");
-  var addLessonForm = document.getElementById("facultyAddLesson");
+  var addLessonForm = document.getElementById("adminAddLesson");
 
   addLessonBtn.onclick = function () {
     addLessonModal.style.display = "flex";

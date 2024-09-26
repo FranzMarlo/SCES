@@ -4,7 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-lesson.css" />
 <script src="/SCES/assets/script/admin-lesson.js"></script>
-<title>MAPEH | SCES Online Learning Platform</title>
+<title>Araling Panlipunan | SCES Online Learning Platform</title>
 </head>
 
 <body>
@@ -48,9 +48,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.
         </div>
         <div class="lesson-container">
           <div class="lesson-header">
-            <div class="header-bg mapeh">
+            <div class="header-bg epp">
               <div class="icon-container">
-                <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>" alt="mapeh-icon">
+                <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>" alt="epp-icon">
               </div>
             </div>
             <div class="header-text">
@@ -89,7 +89,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.
               <?php $lessons = $db->adminGetLessons($subject['level_id'], $subject['subject_id'], $teacherId, $subject['section_id']); ?>
               <?php if ($lessons): ?>
                 <?php foreach ($lessons as $lesson): ?>
-                  <div class="lesson-item mapeh-item">
+                  <div class="lesson-item epp-item">
                     <div class="lesson-title">
                       <h1>Lesson <?php echo htmlspecialchars($lesson['lesson_number']); ?></h1>
                       <span><?php echo htmlspecialchars($lesson['lesson_title']); ?></span>

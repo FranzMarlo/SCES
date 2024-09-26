@@ -306,6 +306,12 @@
 .mapeh-item {
   background-color: #b8bff3;
 }
+.epp{
+  background-color: #d9ae9d;
+}
+.epp-item{
+  background-color: #edc9bb;
+}
 .modal {
   display: none;
   position: fixed;
@@ -572,6 +578,9 @@ select option {
 @media (width < 425px) {
   .header-text h1 {
     font-size: 1.1rem;
+  }
+  .icon-container {
+    left: 73%;
   }
 }
 @media (width < 375px) {

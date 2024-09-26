@@ -3,7 +3,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-hea
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-head.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-lesson.css" />
-<script src="/SCES/assets/script/admin-lesson.js"></script>
+<script src="/SCES/assets/script/faculty-lesson.js"></script>
 <title>Mathematics | SCES Online Learning Platform</title>
 </head>
 
