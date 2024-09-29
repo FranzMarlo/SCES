@@ -1,7 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
-$subject = $db->getSubjectDetails('Science 1', $sectionId, $level_id);
-$current_page = 'subject.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/subject-head.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/lessons.css" />
 <title>Science | SCES Online Learning Platform</title>
@@ -77,51 +76,25 @@ $current_page = 'subject.php';
               </div>
             </div>
             <div class="lesson-box">
-              <div class="lesson-item sci-item">
-                <div class="lesson-title">
-                  <h1>Lesson 1</h1>
-                  <span>Alphabetong Filipino</span>
+              <?php $lessons = $db->studentGetLessons($subject['level_id'], $subject['subject_id'], $subject['section_id']); ?>
+              <?php if ($lessons): ?>
+                <?php foreach ($lessons as $lesson): ?>
+                  <div class="lesson-item sci-item">
+                    <div class="lesson-title">
+                      <h1>Lesson <?php echo htmlspecialchars($lesson['lesson_number']); ?></h1>
+                      <span><?php echo htmlspecialchars($lesson['lesson_title']); ?></span>
+                    </div>
+                    <a href="/SCES/frontend/student/view-lesson.php?pdf=<?php echo urlencode($lesson['pdf_file']); ?>&lesson_number=<?php echo urlencode($lesson['lesson_number']); ?>&subject_id=<?php echo urlencode($lesson['subject_id']); ?>"
+                      class="view-lesson" target="_blank">View Lesson <i class="fa-solid fa-circle-chevron-right"></i></a>
+                  </div>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <div class="no-data-box">
+                  <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                  <h1>No lessons uploaded.</h1>
+                  <h1>Upload a lesson by clicking the button above.</h1>
                 </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
-              <div class="lesson-item sci-item">
-                <div class="lesson-title">
-                  <h1>Lesson 2</h1>
-                  <span>Patinig At Katinig</span>
-                </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
-              <div class="lesson-item sci-item">
-                <div class="lesson-title">
-                  <h1>Lesson 3</h1>
-                  <span>Pagtukoy Sa Huni At Tunog</span>
-                </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
-              <div class="lesson-item sci-item">
-                <div class="lesson-title">
-                  <h1>Lesson 4</h1>
-                  <span>Wastong Paggamit Ng Baybay At Bantas</span>
-                </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
-              <div class="lesson-item sci-item">
-                <div class="lesson-title">
-                  <h1>Lesson 5</h1>
-                  <span>Salitang Pamalit Sa Ngalan Ng Tao</span>
-                </div>
-                <div class="view-lesson">
-                  <span>View Lesson <i class="fa-solid fa-circle-chevron-right"></i></span>
-                </div>
-              </div>
+              <?php endif; ?>
             </div>
           </div>
         </div>

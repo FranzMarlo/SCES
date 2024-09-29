@@ -276,6 +276,12 @@
 .mapeh-item {
   background-color: #b8bff3;
 }
+.epp{
+  background-color: #d9ae9d;
+}
+.epp-item{
+  background-color: #edc9bb;
+}
 @media (width < 1199px) {
   .lesson-panel .title-box .text-box img {
     height: 2.7rem;

@@ -66,6 +66,9 @@
 .mapeh {
   background-color: #a3adff;
 }
+.epp{
+  background-color: #d9ae9d;
+}
 .no-data-box{
   display: flex;
   flex-direction: column;

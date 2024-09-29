@@ -1,9 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
-$subjectName = isset($_GET['subject']) ? $_GET['subject'] : 'Default Subject';
-$subjectName = htmlspecialchars($subjectName, ENT_QUOTES, 'UTF-8');
-$subject = $db->getSubjectDetails($subjectName, $sectionId, $level_id);
-$current_page = 'subject.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/subject-head.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/lessons.css" />
 <title>Araling Panlipunan | SCES Online Learning Platform</title>
