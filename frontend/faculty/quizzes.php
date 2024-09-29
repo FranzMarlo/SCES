@@ -106,41 +106,43 @@ $page = '';
                                     </div>
                                 </div>
 
-                                <?php if (!empty($quiz['questions'])): ?>
-                                    <?php foreach ($quiz['questions'] as $qIndex => $question): ?>
-                                        <div class="quiz-item" data-quiz-index="<?php echo $index; ?>">
-                                            <div class="question-box">
-                                                <span><?php echo ($qIndex + 1) . '. ' . htmlspecialchars($question['question_text']); ?></span>
-                                            </div>
-
-                                            <?php foreach ($question['answers'] as $ansIndex => $answer): ?>
-                                                <div
-                                                    class="quiz-ans <?php echo $answer['is_correct'] ? 'correct' : ($answer['is_wrong'] ? 'wrong' : ''); ?>">
-                                                    <p><?php echo chr(65 + $ansIndex) . '. ' . htmlspecialchars($answer['answer_text']); ?>
-                                                    </p>
-                                                </div>
-                                            <?php endforeach; ?>
+                                <?php $facultyGetQuestions = $db->getQuestions($quiz['quiz_id']); ?>
+                                <div class="quiz-questions">
+                                    <div class="quiz-item add-question" data-quiz-index="<?php echo $index; ?>">
+                                        <div class="no-data-box">
+                                            <i class="fa-solid fa-circle-plus"></i>
+                                            <span>Add Question Here</span>
                                         </div>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-
-                                <?php endif; ?>
-                                <div class="quiz-item add-question">
-                                    <div class="no-data-box">
-                                        <i class="fa-solid fa-circle-plus"></i>
-                                        <span>Add Question Here</span>
                                     </div>
+                                    <?php if (!empty($facultyGetQuestions)): ?>
+                                        <?php foreach ($facultyGetQuestions as $qIndex => $question): ?>
+                                            <div class="quiz-item" data-quiz-index="<?php echo $index; ?>">
+                                                <div class="question-box">
+                                                    <span><?php echo ($qIndex + 1) . '. ' . htmlspecialchars($question['question']); ?></span>
+                                                </div>
+                                                <?php $facultyGetChoices = $db->getChoices($question['question_id'], $question['quiz_id']); ?>
+                                                <?php foreach ($facultyGetChoices as $ansIndex => $answer): ?>
+                                                    <div
+                                                        class="quiz-ans <?php echo $answer['value'] == 1 ? 'correct' : ($answer['value'] == 0 ? 'wrong' : ''); ?>">
+                                                        <p><?php echo chr(65 + $ansIndex) . '. ' . htmlspecialchars($answer['choice']); ?>
+                                                        </p>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+
+                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
-
                         <?php else: ?>
                             <div class="no-quiz-header">
                                 <img src="/SCES/assets/images/info-icon.png" alt="info-icon.png">
                                 <h1>Please Add A Quiz First</h1>
                             </div>
                         <?php endif; ?>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>

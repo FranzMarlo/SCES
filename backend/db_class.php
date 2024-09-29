@@ -965,5 +965,31 @@ class globalClass extends db_connect
             return $result;
         }
     }
+    public function getQuestions($quizId): array
+    {
+        $query = $this->conn->prepare("SELECT * FROM question_tbl WHERE quiz_id = ?");
+        $query->bind_param("s", $quizId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
+    public function getChoices($questionId, $quizId): array
+    {
+        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE question_id = ? AND quiz_id = ?");
+        $query->bind_param("ss", $questionId, $quizId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
 }
 
