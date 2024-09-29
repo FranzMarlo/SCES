@@ -5,8 +5,10 @@
         <form id="facultyAddQuiz">
             <label for="quizNumber">Quiz Number</label>
             <input type="number" id="quizNumber" name="quizNumber" placeholder="Enter Quiz Number">
+
             <label for="quizTitle">Quiz Title</label>
             <input type="text" id="quizTitle" name="quizTitle" placeholder="Enter Quiz Title">
+
             <label for="subject">Subject</label>
             <?php $selectSubject = $db->getAdminSubjects($teacherId); ?>
             <select id="subject" name="subject">
@@ -21,6 +23,7 @@
                     <?php endforeach; ?>
                 <?php endif; ?>
             </select>
+            
             <label for="lesson">Lesson</label>
             <select id="lesson" name="lesson">
                 <option value="" selected>Select Subject First</option>

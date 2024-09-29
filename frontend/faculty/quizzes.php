@@ -72,7 +72,8 @@ $page = '';
                         <?php if ($quizzes): ?>
                             <?php foreach ($quizzes as $index => $quiz): ?>
                                 <?php if ($quiz['status'] == 'Active'): ?>
-                                    <div class="pending-item" data-quiz-index="<?php echo $index; ?>">
+                                    <div class="pending-item <?php echo strtolower($quiz['subject_code']); ?>"
+                                        data-quiz-index="<?php echo $index; ?>">
                                         <span><?php echo htmlspecialchars($quiz['subject']) ?> - Quiz
                                             <?php echo htmlspecialchars($quiz['quiz_number']) ?></span>
                                     </div>
@@ -104,20 +105,34 @@ $page = '';
                                         </h1>
                                     </div>
                                 </div>
-                                <div class="quiz-item" data-quiz-index="<?php echo $index; ?>" style="display: none;">
-                                    <?php if (!empty($quiz['questions'])): ?>
-                                        <?php foreach ($quiz['questions'] as $question): ?>
+
+                                <?php if (!empty($quiz['questions'])): ?>
+                                    <?php foreach ($quiz['questions'] as $qIndex => $question): ?>
+                                        <div class="quiz-item" data-quiz-index="<?php echo $index; ?>">
                                             <div class="question-box">
-                                                <span><?php echo htmlspecialchars($question['question_text']); ?></span>
+                                                <span><?php echo ($qIndex + 1) . '. ' . htmlspecialchars($question['question_text']); ?></span>
                                             </div>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <div class="question-box">
-                                            <span>No questions available for this quiz.</span>
+
+                                            <?php foreach ($question['answers'] as $ansIndex => $answer): ?>
+                                                <div
+                                                    class="quiz-ans <?php echo $answer['is_correct'] ? 'correct' : ($answer['is_wrong'] ? 'wrong' : ''); ?>">
+                                                    <p><?php echo chr(65 + $ansIndex) . '. ' . htmlspecialchars($answer['answer_text']); ?>
+                                                    </p>
+                                                </div>
+                                            <?php endforeach; ?>
                                         </div>
-                                    <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+
+                                <?php endif; ?>
+                                <div class="quiz-item add-question">
+                                    <div class="no-data-box">
+                                        <i class="fa-solid fa-circle-plus"></i>
+                                        <span>Add Question Here</span>
+                                    </div>
                                 </div>
                             <?php endforeach; ?>
+
                         <?php else: ?>
                             <div class="no-quiz-header">
                                 <img src="/SCES/assets/images/info-icon.png" alt="info-icon.png">
@@ -125,6 +140,7 @@ $page = '';
                             </div>
                         <?php endif; ?>
                     </div>
+
                 </div>
             </div>
         </div>

@@ -29,7 +29,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
             </div>
             <div class="quiz-dropdown-content">
               <div class="quiz-dropdown-title">
-              <img src="/SCES/assets/images/pending-quiz.png" alt="pending-quiz.png">
+                <img src="/SCES/assets/images/pending-quiz.png" alt="pending-quiz.png">
                 <h1>Pending Quiz</h1>
               </div>
               <button class="math">

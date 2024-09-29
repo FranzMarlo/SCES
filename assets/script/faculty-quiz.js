@@ -6,13 +6,16 @@ document.addEventListener("DOMContentLoaded", function () {
   var form = document.getElementById("facultyAddQuiz");
   var lessonDropdown = document.getElementById("lesson");
   var closeModal = document.querySelector(".close-btn");
+  var lastOpenedIndex = null; // Keep track of the last opened quiz index
 
   if (modal && addQuizBtn && addQuizItem && closeModal) {
     addQuizBtn.onclick = function () {
       modal.style.display = "flex";
+      hideQuizContent(); // Hide quiz headers and content when modal is opened
     };
     addQuizItem.onclick = function () {
       modal.style.display = "flex";
+      hideQuizContent(); // Hide quiz headers and content when modal is opened
     };
 
     var noDataItems = document.querySelectorAll(".no-data-item");
@@ -20,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
       noDataItems.forEach(function (item) {
         item.onclick = function () {
           modal.style.display = "flex";
+          hideQuizContent(); // Hide quiz headers and content when modal is opened
         };
       });
     }
@@ -27,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (noQuizHeader) {
       noQuizHeader.onclick = function () {
         modal.style.display = "flex";
+        hideQuizContent(); // Hide quiz headers and content when modal is opened
       };
     }
 
@@ -34,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
       modal.style.display = "none";
       form.reset();
       resetLessonDropdown();
+      restoreQuizContent(); // Show quiz headers and content when modal is closed
     };
 
     window.onclick = function (event) {
@@ -41,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.style.display = "none";
         form.reset();
         resetLessonDropdown();
+        restoreQuizContent(); // Show quiz headers and content when modal is closed
       }
     };
   }
@@ -50,33 +57,31 @@ document.addEventListener("DOMContentLoaded", function () {
       '<option value="" selected>Select Subject First</option>';
   }
 
-  document.getElementById("subject").addEventListener("change", function () {
-    var selectedOption = this.options[this.selectedIndex];
-    var levelId = selectedOption.getAttribute("data-level-id");
-    var subjectId = selectedOption.value;
-    var sectionId = selectedOption.getAttribute("data-section-id");
+  function hideQuizContent() {
+    // Hide all quiz headers and quiz items
+    var quizHeaders = document.querySelectorAll(".quiz-header");
+    var quizItems = document.querySelectorAll(".quiz-item");
 
-    if (subjectId) {
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/SCES/backend/faculty/fetch-lessons.php", true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    quizHeaders.forEach(function (header) {
+      header.style.display = "none";
+    });
+    quizItems.forEach(function (item) {
+      item.style.display = "none";
+    });
+  }
 
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-          lessonDropdown.innerHTML = xhr.responseText;
-        }
-      };
+  function restoreQuizContent() {
+    if (lastOpenedIndex !== null) {
+      // Restore the last opened quiz header and content
+      var quizHeader = document.querySelector(`.quiz-header[data-quiz-index="${lastOpenedIndex}"]`);
+      var quizItem = document.querySelector(`.quiz-item[data-quiz-index="${lastOpenedIndex}"]`);
 
-      xhr.send(
-        "levelId=" +
-          levelId +
-          "&subjectId=" +
-          subjectId +
-          "&sectionId=" +
-          sectionId
-      );
+      if (quizHeader && quizItem) {
+        quizHeader.style.display = "block";
+        quizItem.style.display = "block";
+      }
     }
-  });
+  }
 
   // New Functionality: Display quiz headers and questions
   var pendingItems = document.querySelectorAll(".pending-item");
@@ -109,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (quizHeaders[index]) {
         quizHeaders[index].style.display = "block";
         quizItems[index].style.display = "block";
+        lastOpenedIndex = index; // Keep track of the last opened quiz
       }
     });
   });
@@ -134,12 +140,15 @@ document.addEventListener("DOMContentLoaded", function () {
       if (quizHeaders[index]) {
         quizHeaders[index].style.display = "block";
         quizItems[index].style.display = "block";
+        lastOpenedIndex = index; // Keep track of the last opened quiz
       }
     });
   });
+
   if (quizHeaders.length > 0 && quizItems.length > 0) {
     quizHeaders[0].style.display = "block";
     quizItems[0].style.display = "block";
+    lastOpenedIndex = 0; // Initialize lastOpenedIndex with the first quiz
   } else if (pendingItems.length > 0) {
     pendingItems[0].click(); // Simulate click on the first pending item
   }

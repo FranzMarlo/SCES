@@ -173,6 +173,25 @@
   box-shadow: 0 0 2px 0 #9c9c9c;
   padding: 20px;
   border: 2px solid #000;
+  cursor: pointer;
+}
+.add-question{
+  cursor: pointer;
+}
+.add-question:hover {
+  background-color: #f0f0f0;
+}
+.no-data-box {
+  display: flex;
+  align-items: center;
+  text-align: justify;
+}
+.no-data-box i{
+  font-size: 1.2rem;
+  margin-right: 10px;
+}
+.no-data-box span {
+  font-size: 1.1rem;
 }
 .question-box {
   text-align: justify;
@@ -196,26 +215,56 @@
 .fil {
   background-color: #ff8080;
 }
+.pending-item.fil:hover {
+  background-color: #ea7474;
+}
 .eng {
   background-color: #ffb480;
+}
+.pending-item.eng:hover {
+  background-color: #e39d6b;
 }
 .math {
   background-color: #f8f28d;
 }
+.pending-item.math:hover {
+  background-color: #d9d479;
+}
 .sci {
   background-color: #42d6a4;
+}
+.pending-item.sci:hover {
+  background-color: #3baf88;
 }
 .esp {
   background-color: #08cad1;
 }
+.pending-item.esp:hover {
+  background-color: #0ca1a6;
+}
 .mt {
   background-color: #59adf6;
+}
+.pending-item.mt:hover {
+  background-color: #5694ca;
 }
 .ap {
   background-color: #f0bad1;
 }
+.pending-item.ap:hover {
+  background-color: #c98da7;
+}
 .mapeh {
   background-color: #a3adff;
+}
+.pending-item.mapeh:hover {
+  background-color: #8690db;
+}
+.epp{
+  background-color: #d9ae9d;
+}
+.pending-item.epp:hover{
+  background-color: #b68a79;
 }
 .correct {
   background-color: #addca5;
