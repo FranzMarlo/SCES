@@ -26,7 +26,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
         <div class="subject-box <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>">
           <?php if ($subjects): ?>
             <?php foreach ($subjects as $subject): ?>
-              <a href="/SCES/frontend/student/subjects/<?php echo $subject['link']; ?>">
+              <a href="/SCES/frontend/student/subjects/<?php echo $subject['link']?>?subject=<?php echo urlencode($subject['subject']); ?>">
                 <div class="box">
                   <div class="box-icon <?php echo strtolower($subject['subject_code']); ?>">
                     <div class="box-title">

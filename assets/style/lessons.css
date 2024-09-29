@@ -116,6 +116,10 @@
 .header-text h1 {
   font-size: 1.7rem;
   margin-bottom: 5px;
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .header-text span {
   font-size: 1rem;
@@ -186,12 +190,31 @@
   font-size: 1rem;
   color: #8f6e7c;
 }
-.view-lesson span {
+.view-lesson{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
   color: #fff;
-  font-size: 1rem;
 }
-.view-lesson span i {
+.view-lesson i {
   font-size: 1rem;
+  margin-left: 5px;
+}
+.view-lesson:hover{
+  color: #555;
+}
+.no-data-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.no-data-box img {
+  height: 200px;
+}
+.no-data-box h1 {
+  font-size: 1.2rem;
 }
 .quarter-1 {
   background-color: #ff8080;
@@ -296,6 +319,7 @@
     width: 100%;
   }
   .header-text h1 {
+    max-width: 500px;
     font-size: 1.5rem;
   }
   .header-text span {
@@ -342,6 +366,7 @@
     padding: 15px;
   }
   .header-text h1 {
+    max-width: 300px;
     font-size: 1.3rem;
   }
   .lesson-title h1 {
@@ -359,6 +384,7 @@
 }
 @media (width < 425px) {
   .header-text h1 {
+    max-width: 250px;
     font-size: 1.1rem;
   }
 }

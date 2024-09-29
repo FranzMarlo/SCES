@@ -102,6 +102,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  width: 100%;
   justify-content: space-between;
 }
 .header .welcome-box {
@@ -320,11 +321,16 @@ body {
   z-index: 9;
   display: none;
 }
-
 .pop-up.active + .overlay {
   display: block;
 }
-
+canvas {
+  background-color: #f5f5f5;
+  border-radius: 30px;
+  height: 100%;
+  padding: 10px;
+  border: 2px solid #000;
+}
 @media (width < 1199px) {
   .container {
     padding: 0.5rem;

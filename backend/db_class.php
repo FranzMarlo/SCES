@@ -348,7 +348,8 @@ class globalClass extends db_connect
             s.subject_code,
             t.teacher_fname,
             t.teacher_lname,
-            t.gender
+            t.gender,
+            s.section_id
         FROM subject_tbl s
         INNER JOIN
             teacher_tbl t
@@ -832,6 +833,21 @@ class globalClass extends db_connect
     {
         $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND teacher_id = ? AND section_id = ? ORDER BY lesson_number ASC");
         $query->bind_param("ssss", $levelId, $subjectID, $teacherId, $sectionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            $lessons = $result->fetch_all(MYSQLI_ASSOC);
+
+            return $lessons;
+        } else {
+            return false;
+        }
+    }
+    public function studentGetLessons($levelId, $subjectID, $sectionId)
+    {
+        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND section_id = ? ORDER BY lesson_number ASC");
+        $query->bind_param("sss", $levelId, $subjectID, $sectionId);
 
         if ($query->execute()) {
             $result = $query->get_result();
