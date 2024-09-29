@@ -1011,6 +1011,31 @@ if (isset($_POST['submitType'])) {
                 echo '489';
             }
         }
+    } else if ($_POST['submitType'] === 'facultyAddQuiz') {
+        session_start();
+        $quizNumber = validate($_POST['quizNumber']);
+        $quizTitle = validate($_POST['quizTitle']);
+        $subjectId = validate($_POST['subject']);
+        $lessonId = validate($_POST['lesson']);
+        $checkNumber = $db->checkQuizNumber($subjectId, $lessonId, $quizNumber);
+        if (empty($quizNumber)) {
+            echo '482';
+        } else if ($checkNumber->num_rows > 0) {
+            echo '483';
+        } else if (empty($quizTitle)) {
+            echo '484';
+        } else if (empty($subjectId)) {
+            echo '485';
+        } else if (empty($lessonId)) {
+            echo '486';
+        } else {
+            $addQuiz = $db->facultyAddQuiz($subjectId, $lessonId, $quizNumber, $quizTitle, 0);
+            if ($addQuiz != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
     } else {
         echo '400';
     }

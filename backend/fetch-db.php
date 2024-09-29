@@ -85,7 +85,21 @@ class fetchClass extends db_connect
             return false;
         }
     }
-    
+    public function facultyGetLessons($levelId, $subjectID, $teacherId, $sectionId)
+    {
+        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND teacher_id = ? AND section_id = ? ORDER BY lesson_number ASC");
+        $query->bind_param("ssss", $levelId, $subjectID, $teacherId, $sectionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            $lessons = $result->fetch_all(MYSQLI_ASSOC);
+
+            return $lessons;
+        } else {
+            return false;
+        }
+    }
 
 
 }

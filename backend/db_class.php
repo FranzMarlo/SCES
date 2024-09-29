@@ -880,6 +880,90 @@ class globalClass extends db_connect
         }
     }
 
+    public function facultyGetQuizzes($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            subject.subject_id,
+            subject.subject,
+            subject.level_id,
+            subject.icon,
+            subject.subject_title,
+            subject.subject_code,
+            level.level_id,
+            level.grade_level,
+            section.section,
+            section.section_id,
+            quiz.quiz_id,
+            quiz.title,
+            quiz.quiz_number,
+            quiz.status,
+            lesson.lesson_id
+        FROM quiz_tbl quiz
+        INNER JOIN
+            subject_tbl subject
+        ON
+            subject.subject_id = quiz.subject_id
+        INNER JOIN
+            section_tbl section
+        ON
+            subject.section_id = section.section_id
+        INNER JOIN
+            level_tbl level
+        ON
+            subject.level_id = level.level_id
+        INNER JOIN
+            lesson_tbl lesson
+        ON
+            quiz.lesson_id = lesson.lesson_id
+        WHERE 
+            subject.teacher_id = ?
+        ");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjectDetails;
+        }
 
+        return [];
+    }
+    public function facultyAddQuiz($subjectId, $lessonId, $quizNumber, $quizTitle, $itemNumber)
+    {
+        $year = date("Y");
+        $quizId = 'Q' . $year . sprintf('%05d', rand(0, 99999));
+        $checkIdResult = $this->checkQuizId($quizId);
+
+        while ($checkIdResult->num_rows > 0) {
+            $quizId = 'Q' . $year . sprintf('%05d', rand(0, 99999));
+            $checkIdResult = $this->checkQuizId($quizId);
+        }
+        $query = $this->conn->prepare("INSERT INTO `quiz_tbl` (`quiz_id`, `subject_id`, `lesson_id`, `quiz_number`, `title`, `item_number`) VALUES (?, ?, ?, ?, ?, ?)");
+        $query->bind_param("sssisi", $quizId, $subjectId, $lessonId, $quizNumber, $quizTitle, $itemNumber);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function checkQuizId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM quiz_tbl WHERE quiz_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+    public function checkQuizNumber($subjectID, $lessonId, $quizNumber)
+    {
+        $query = $this->conn->prepare("SELECT * FROM quiz_tbl WHERE subject_id = ? AND lesson_id = ? AND quiz_number = ?");
+        $query->bind_param("ssi", $subjectID, $lessonId, $quizNumber);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
 }
 
