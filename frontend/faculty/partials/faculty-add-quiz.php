@@ -68,3 +68,22 @@
         </form>
     </div>
 </div>
+
+<div id="editQuestionModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-btn" id="closeEditQuestion">&times;</span>
+        <h2>Edit Question</h2>
+
+        <form id="editQuestionForm" method="POST" action="save-question.php">
+            <input type="hidden" id="editQuestionId" name="question_id" />
+            <label for="editQuestionText">Question:</label>
+            <input type="text" id="editQuestionText" name="question_text" />
+
+            <div id="editChoicesContainer">
+                <!-- Choices will be dynamically inserted here -->
+            </div>
+
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+    </div>
+</div>

@@ -101,5 +101,31 @@ class fetchClass extends db_connect
         }
     }
 
+    public function fetchQuestion($questionId): array
+    {
+        $query = $this->conn->prepare("SELECT * FROM question_tbl WHERE question_id = ?");
+        $query->bind_param("s", $questionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_assoc();
+        } else {
+            return [];
+        }
+    }
+
+    public function fetchChoices($questionId): array
+    {
+        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE question_id = ?");
+        $query->bind_param("s", $questionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
 
 }

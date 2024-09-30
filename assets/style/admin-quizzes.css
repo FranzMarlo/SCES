@@ -527,6 +527,19 @@ select option {
 .save-btn:hover {
   background-color: #45a049;
 }
+.add-btn {
+  background-color: #2b90e8;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 30px;
+  border: 2px solid #000;
+}
+.add-btn:hover {
+  background-color: #1c74c2;
+}
 @media (width < 1199px) {
   .pending-title img {
     height: 1.9rem;
