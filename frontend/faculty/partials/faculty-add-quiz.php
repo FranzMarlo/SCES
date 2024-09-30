@@ -41,7 +41,7 @@
             <input type="hidden" id="quizId" name="quizId" value="" />
 
             <label for="question">Question:</label>
-            <input type="text" id="question" name="question" placeholder="Enter Question" />
+            <textarea class="long-input" rows="5" id="question" name="question" placeholder="Enter Question"></textarea>
 
             <label for="choice1">Choice 1:</label>
             <input type="text" id="choice1" name="choice1" placeholder="Enter Choice 1" />
@@ -77,7 +77,7 @@
         <form id="editQuestionForm" method="POST" action="save-question.php">
             <input type="hidden" id="editQuestionId" name="question_id" />
             <label for="editQuestionText">Question:</label>
-            <input type="text" id="editQuestionText" name="question_text" />
+            <textarea id="editQuestionText" name="question_text" class="long-input" rows="5"></textarea>
 
             <div id="editChoicesContainer">
                 <!-- Choices will be dynamically inserted here -->

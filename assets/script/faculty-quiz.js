@@ -201,20 +201,66 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.querySelectorAll(".edit-question").forEach((editBtn) => {
     editBtn.onclick = function () {
-        // Get the question ID from the button's data attributes
         const questionId = this.getAttribute("data-question-id");
-
-        // Set the hidden input value for the question ID
         document.getElementById("editQuestionId").value = questionId;
 
-        // Fetch the question text from the closest sibling element
-        const questionTextElement = this.closest('.quiz-item').querySelector(".question-box span").innerText;
-
-        // Remove the question number (everything up to and including the first dot)
-        const questionText = questionTextElement.replace(/^\d+\.\s*/, '');
-
-        // Populate the modal input with the question text
+        const questionTextElement = this.closest(".quiz-item").querySelector(".question-box span").innerText;
+        const questionText = questionTextElement.replace(/^\d+\.\s*/, ""); // Remove question number
         document.getElementById("editQuestionText").value = questionText;
+
+        const editChoicesContainer = document.getElementById("editChoicesContainer");
+        editChoicesContainer.innerHTML = ""; // Clear existing choices
+
+        const choicesElements = this.closest(".quiz-item").querySelectorAll(".quiz-ans");
+
+        // Create a select input for the correct answer
+        const correctAnswerSelect = document.createElement("select");
+        correctAnswerSelect.name = "correct_choice";
+        
+        // Add placeholder option
+        const placeholderOption = document.createElement("option");
+        placeholderOption.value = "";
+        placeholderOption.textContent = "Select Correct Answer";
+        correctAnswerSelect.appendChild(placeholderOption);
+
+        choicesElements.forEach((choiceElement, index) => {
+            const choiceText = choiceElement.innerText.replace(/^[A-Z]\.\s*/, ""); // Remove letter prefix if present
+            const isCorrect = choiceElement.classList.contains("correct");
+
+            // Create a new input for each choice
+            const choiceInput = document.createElement("input");
+            choiceInput.type = "text";
+            choiceInput.name = "choices[]";
+            choiceInput.value = choiceText; // Set the value to the choice text without letters
+            
+            // Create a label for the choice input
+            const choiceLabel = document.createElement("label");
+            choiceLabel.innerText = `Choice ${index + 1}:`;
+            choiceLabel.htmlFor = choiceInput.id = `choice-${index}`; // Set the 'for' attribute
+
+            // Create an option for the correct answer select
+            const choiceOption = document.createElement("option");
+            choiceOption.value = choiceText;
+            choiceOption.textContent = choiceText;
+            if (isCorrect) {
+                choiceOption.selected = true; // Mark this option as selected if it's the correct answer
+            }
+            correctAnswerSelect.appendChild(choiceOption);
+
+            // Append inputs and labels to the container
+            editChoicesContainer.appendChild(choiceLabel);
+            editChoicesContainer.appendChild(choiceInput);
+            editChoicesContainer.appendChild(document.createElement("br")); // Line break for spacing
+        });
+
+        // Create and append label for correct answer select
+        const correctAnswerLabel = document.createElement("label");
+        correctAnswerLabel.innerText = "Select Correct Answer:";
+        correctAnswerLabel.htmlFor = correctAnswerSelect.id = "correctAnswer"; // Set the 'for' attribute
+        editChoicesContainer.appendChild(correctAnswerLabel);
+        
+        // Append the correct answer select to the container
+        editChoicesContainer.appendChild(correctAnswerSelect);
 
         // Display the modal
         const editQuestionModal = document.getElementById("editQuestionModal");
@@ -235,4 +281,6 @@ window.onclick = function (event) {
     }
 };
 
+  
+  
 });

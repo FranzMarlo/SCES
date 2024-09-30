@@ -479,7 +479,8 @@
 input[type="text"],
 input[type="email"],
 input[type="number"],
-input[type="password"] {
+input[type="password"],
+textarea {
   width: 100%;
   padding: 10px 15px;
   margin: 5px 0 15px 0;
@@ -539,6 +540,14 @@ select option {
 }
 .add-btn:hover {
   background-color: #1c74c2;
+}
+.long-input {
+  height: auto;
+  min-height: 100px;
+  padding: 10px;
+}
+textarea {
+  resize: none;
 }
 @media (width < 1199px) {
   .pending-title img {
