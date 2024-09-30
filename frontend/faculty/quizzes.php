@@ -41,12 +41,10 @@ $page = '';
                             </button>
                             <?php if ($quizzes): ?>
                                 <?php foreach ($quizzes as $index => $quiz): ?>
-                                    <?php if ($quiz['status'] == 'Active'): ?>
-                                        <button class="<?php echo strtolower($quiz['subject_code']); ?>"
-                                            data-quiz-index="<?php echo $index; ?>">
-                                            <span><?php echo htmlspecialchars($quiz['title']); ?></span>
-                                        </button>
-                                    <?php endif; ?>
+                                    <button class="<?php echo strtolower($quiz['subject_code']); ?>"
+                                        data-quiz-index="<?php echo $index; ?>">
+                                        <span><?php echo htmlspecialchars($quiz['title']); ?></span>
+                                    </button>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <div class="no-data-item">
@@ -64,7 +62,7 @@ $page = '';
                             <img src="/SCES/assets/images/pending-quiz.png" alt="pending-quiz.png">
                             <h1>Pending Quiz</h1>
                         </div>
-                        <div class="pending-item" id="addQuizItem">
+                        <div class="add-pending-item" id="addQuizItem">
                             <img src="/SCES/assets/images/add-quiz-icon.png" alt="add-quiz-icon.png">
                             <span>Add Quiz</span>
                         </div>
@@ -108,7 +106,8 @@ $page = '';
 
                                 <?php $facultyGetQuestions = $db->getQuestions($quiz['quiz_id']); ?>
                                 <div class="quiz-questions">
-                                    <div class="quiz-item add-question" data-quiz-index="<?php echo $index; ?>">
+                                    <div class="quiz-item add-question" data-quiz-index="<?php echo $index; ?>"
+                                        data-quiz-id="<?php echo $quiz['quiz_id']; ?>">
                                         <div class="no-data-box">
                                             <i class="fa-solid fa-circle-plus"></i>
                                             <span>Add Question Here</span>
@@ -117,6 +116,17 @@ $page = '';
                                     <?php if (!empty($facultyGetQuestions)): ?>
                                         <?php foreach ($facultyGetQuestions as $qIndex => $question): ?>
                                             <div class="quiz-item" data-quiz-index="<?php echo $index; ?>">
+                                                <button class="question-menu">
+                                                    <i class="fa-solid fa-ellipsis"></i>
+                                                </button>
+                                                <div class="question-popup-menu">
+                                                    <ul>
+                                                        <li class="edit-question"
+                                                            data-question-id="<?php echo $question['question_id']; ?>">Edit</li>
+                                                        <li class="remove-question"
+                                                            data-question-id="<?php echo $question['question_id']; ?>">Remove</li>
+                                                    </ul>
+                                                </div>
                                                 <div class="question-box">
                                                     <span><?php echo ($qIndex + 1) . '. ' . htmlspecialchars($question['question']); ?></span>
                                                 </div>

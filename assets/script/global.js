@@ -2590,7 +2590,7 @@ $("#facultyAddQuiz").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Quiz Number Exists",
-              text:"Enter A Different Quiz Number",
+              text: "Enter A Different Quiz Number",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -2635,6 +2635,128 @@ $("#facultyAddQuiz").on("submit", function (e) {
             Swal.fire({
               icon: "error",
               title: "Quiz Upload Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+$("#facultyAddQuestion").on("submit", function (e) {
+  e.preventDefault();
+  var quizId = $("#quizId").val();
+  var question = $("#question").val();
+  var choice1 = $("#choice1").val();
+  var choice2 = $("#choice2").val();
+  var choice3 = $("#choice3").val();
+  var choice4 = $("#choice4").val();
+  var correctAnswer = $("#correctAnswer").val();
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "facultyAddQuestion",
+      quizId: quizId,
+      question: question,
+      choice1: choice1,
+      choice2: choice2,
+      choice3: choice3,
+      choice4: choice4,
+      correctAnswer: correctAnswer,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Question Added To Quiz Successfully",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.reload();
+              }
+            });
+          }
+        );
+      } else if (response == "482") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter A Valid Question For Quiz",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "483") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter The First Answer Choice For Question",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "484") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter The Second Answer Choice For Question",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "485") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter At Least 2 Answer Choice For Question",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "486") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select The Correct Answer Choice For Question",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "487") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Valid Correct Answer",
+              text: "Correct Answer Cannot Be Null Please Check Your Input",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Question Upload Failed",
               text: "Please Try Again",
               confirmButtonColor: "#4CAF50",
             });

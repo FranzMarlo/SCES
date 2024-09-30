@@ -1036,6 +1036,57 @@ if (isset($_POST['submitType'])) {
                 echo '400';
             }
         }
+    } else if ($_POST['submitType'] === 'facultyAddQuestion') {
+        session_start();
+        $quizId = validate($_POST['quizId']);
+        $question = validate($_POST['question']);
+        $choice1 = validate($_POST['choice1']);
+        $choice2 = validate($_POST['choice2']);
+        $choice3 = validate($_POST['choice3']);
+        $choice4 = validate($_POST['choice4']);
+        $correctAnswer = validate($_POST['correctAnswer']);
+        if (empty($question)) {
+            echo '482';
+        } else if (empty($choice1)) {
+            echo '483';
+        } else if (empty($choice2)) {
+            echo '484';
+        } else if ((empty($choice3) || empty($choice4)) && (empty($choice1) || empty($choice2))) {
+            echo '485';
+        } else if (empty($correctAnswer)) {
+            echo '486';
+        } else if ($correctAnswer == 'choice1' && empty($choice1)) {
+            echo '487';
+        } else if ($correctAnswer == 'choice2' && empty($choice2)) {
+            echo '487';
+        } else if ($correctAnswer == 'choice3' && empty($choice3)) {
+            echo '487';
+        } else if ($correctAnswer == 'choice4' && empty($choice4)) {
+            echo '487';
+        } else {
+            $addQuestion = $db->facultyAddQuestion($quizId, $question);
+            if ($addQuestion != false) {
+                $questionId = $addQuestion;
+
+                $value1 = $correctAnswer == 'choice1' ? 1 : 0;
+                $value2 = $correctAnswer == 'choice2' ? 1 : 0;
+                $value3 = $correctAnswer == 'choice3' ? 1 : 0;
+                $value4 = $correctAnswer == 'choice4' ? 1 : 0;
+
+                $db->addChoice($questionId, $quizId, $choice1, $value1);
+                $db->addChoice($questionId, $quizId, $choice2, $value2);
+                if (!empty($choice3)) {
+                    $db->addChoice($questionId, $quizId, $choice3, $value3);
+                }
+
+                if (!empty($choice4)) {
+                    $db->addChoice($questionId, $quizId, $choice4, $value4);
+                }
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
     } else {
         echo '400';
     }

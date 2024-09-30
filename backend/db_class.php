@@ -990,6 +990,62 @@ class globalClass extends db_connect
             return [];
         }
     }
+    public function facultyAddQuestion($quizId, $question)
+    {
+        $questionId = $quizId. sprintf('%02d', rand(0, 99));
+        $checkIdResult = $this->checkQuestionId($questionId);
 
+        while ($checkIdResult->num_rows > 0) {
+            $questionId = $quizId. sprintf('%02d', rand(0, 99));
+            $checkIdResult = $this->checkQuestionId($questionId);
+        }
+        $query = $this->conn->prepare("INSERT INTO `question_tbl` (`question_id`, `quiz_id`, `question`) VALUES (?, ?, ?)");
+        $query->bind_param("sss", $questionId, $quizId, $question);
+        if ($query->execute()) {
+            return $questionId;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkQuestionId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM question_tbl WHERE question_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+    public function addChoice($questionId, $quizId, $choice, $value)
+
+    {
+        $year = date("Y");
+        $choiceId = 'C' . $year . sprintf('%05d', rand(0, 99999));
+        $checkIdResult = $this->checkChoiceId($choiceId);
+
+        while ($checkIdResult->num_rows > 0) {
+            $choiceId = 'C' . $year . sprintf('%05d', rand(0, 99999));
+            $checkIdResult = $this->checkChoiceId($choiceId);
+        }
+        $query = $this->conn->prepare("INSERT INTO `choices_tbl` (`choice_id`, `question_id`, `quiz_id`, `choice`, `value`) VALUES (?, ?, ?, ?, ?)");
+        $query->bind_param("ssssi", $choiceId, $questionId, $quizId, $choice, $value);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkChoiceId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE choice_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
 }
 
