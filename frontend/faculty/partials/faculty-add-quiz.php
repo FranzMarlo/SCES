@@ -83,20 +83,24 @@
                 <label for="choice1_update">Choice 1:</label>
                 <input type="hidden" id="choice1_id" name="choice_ids[]" />
                 <input type="text" id="choice1_update" name="choice1_update" placeholder="Enter Answer Choice"/>
+                <input type="hidden" id="choice1_value"/>
 
                 <label for="choice2_update">Choice 2:</label>
                 <input type="hidden" id="choice2_id" name="choice_ids[]" />
                 <input type="text" id="choice2_update" name="choice2_update" placeholder="Enter Answer Choice" />
+                <input type="hidden" id="choice2_value"/>
 
                 <label for="choice3_update">Choice 3:</label>
                 <input type="hidden" id="choice3_id" name="choice_ids[]" />
                 <input type="text" id="choice3_update" name="choice3_update" placeholder="Enter Answer Choice" />
+                <input type="hidden" id="choice3_value"/>
 
                 <label for="choice4_update">Choice 4:</label>
                 <input type="hidden" id="choice4_id" name="choice_ids[]" />
                 <input type="text" id="choice4_update" name="choice4_update" placeholder="Enter Answer Choice" />
+                <input type="hidden" id="choice4_value"/>
 
-                <!-- Correct answer select -->
+                <input type="hidden" id="correct_value"/>
                 <label for="correctChoice">Select Correct Answer:</label>
                 <select id="correctChoice" name="correctChoice">
                     <option value="">Select Correct Answer</option>

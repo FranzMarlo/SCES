@@ -11,12 +11,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // Extract quiz_id from URL or set to first pending_item by default
   function getQuizIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('quiz_id');
+    return urlParams.get("quiz_id");
   }
 
   function setQuizIdInURL(quizId) {
     const newUrl = `${window.location.pathname}?quiz_id=${quizId}`;
-    history.replaceState(null, '', newUrl); // Replace URL without reloading
+    history.replaceState(null, "", newUrl); // Replace URL without reloading
   }
 
   function openModal() {
@@ -91,8 +91,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const quizItems = document.querySelectorAll(".quiz-item");
 
   // Initially hide all quiz headers and items
-  quizHeaders.forEach(header => header.style.display = "none");
-  quizItems.forEach(item => item.style.display = "none");
+  quizHeaders.forEach((header) => (header.style.display = "none"));
+  quizItems.forEach((item) => (item.style.display = "none"));
 
   pendingItems.forEach((item) => {
     const quizId = item.getAttribute("data-quiz-id");
@@ -129,7 +129,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Display the first pending item or quiz by URL on page load
-  const initialQuizId = getQuizIdFromURL() || pendingItems[0]?.getAttribute("data-quiz-id");
+  const initialQuizId =
+    getQuizIdFromURL() || pendingItems[0]?.getAttribute("data-quiz-id");
   if (initialQuizId) {
     displayQuizById(initialQuizId);
   } else if (pendingItems.length > 0) {
@@ -224,26 +225,27 @@ document.addEventListener("DOMContentLoaded", function () {
       const questionId = this.getAttribute("data-question-id");
       document.getElementById("editQuestionId").value = questionId;
 
-      const questionTextElement = this
-        .closest(".quiz-item")
-        .querySelector(".question-box span").innerText;
+      const questionTextElement =
+        this.closest(".quiz-item").querySelector(
+          ".question-box span"
+        ).innerText;
       const questionText = questionTextElement.replace(/^\d+\.\s*/, "");
       document.getElementById("editQuestionText").value = questionText;
 
-      const choicesElements = this
-        .closest(".quiz-item")
-        .querySelectorAll(".quiz-ans");
+      const choicesElements =
+        this.closest(".quiz-item").querySelectorAll(".quiz-ans");
 
       choicesElements.forEach((choiceElement, index) => {
         const choiceText = choiceElement.innerText.replace(/^[A-Z]\.\s*/, "");
         const choiceId = choiceElement.getAttribute("data-choice-id");
         const isCorrect = choiceElement.classList.contains("correct");
 
-        document.getElementById(`choice${index + 1}_update`).value =
-          choiceText;
+        document.getElementById(`choice${index + 1}_update`).value = choiceText;
+        document.getElementById(`choice${index + 1}_value`).value = choiceText;
         document.getElementById(`choice${index + 1}_id`).value = choiceId;
 
         if (isCorrect) {
+          document.getElementById("correct_value").value = `choice${index + 1}`;
           document.getElementById("correctChoice").value = `choice${index + 1}`;
         }
       });
@@ -251,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
       editQuestionModal.style.display = "flex";
     };
   });
-  const editQuestionForm =  document.getElementById("editQuestion");
+  const editQuestionForm = document.getElementById("editQuestion");
   document.getElementById("closeEditQuestion").onclick = function () {
     document.getElementById("editQuestionModal").style.display = "none";
     editQuestionForm.reset();

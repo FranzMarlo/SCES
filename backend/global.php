@@ -1078,13 +1078,13 @@ if (isset($_POST['submitType'])) {
                 $value4 = $correctAnswer == 'choice4' ? 1 : 0;
 
                 $db->addChoice($questionId, $quizId, $choice1, 1, $value1);
-                $db->addChoice($questionId, $quizId, $choice2, 2,$value2);
+                $db->addChoice($questionId, $quizId, $choice2, 2, $value2);
                 if (!empty($choice3)) {
                     $db->addChoice($questionId, $quizId, $choice3, 3, $value3);
                 }
 
                 if (!empty($choice4)) {
-                    $db->addChoice($questionId, $quizId, $choice4, 4,$value4);
+                    $db->addChoice($questionId, $quizId, $choice4, 4, $value4);
                 }
                 echo '200';
             } else {
@@ -1104,7 +1104,14 @@ if (isset($_POST['submitType'])) {
         $choice4_update = validate($_POST['choice4_update']);
         $choice4_id = validate($_POST['choice4_id']);
         $correctChoice = validate($_POST['correctChoice']);
-        if (empty($editQuestionText)) {
+        $choice1_value = validate($_POST['choice1_value']);
+        $choice2_value = validate($_POST['choice2_value']);
+        $choice3_value = validate($_POST['choice3_value']);
+        $choice4_value = validate($_POST['choice4_value']);
+        $correct_value = validate($_POST['correct_value']);
+        if ($choice1_update == $choice1_value && $choice2_update == $choice2_value && $choice3_update == $choice3_value && $choice4_update == $choice4_value && $correctChoice == $correct_value) {
+            echo '481';
+        } else if (empty($editQuestionText)) {
             echo '482';
         } else if (empty($choice1_update)) {
             echo '483';

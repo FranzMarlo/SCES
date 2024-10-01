@@ -2555,7 +2555,7 @@ $("#facultyAddQuiz").on("submit", function (e) {
       subject: subject,
       lesson: lesson,
     },
-    dataType: 'json',
+    dataType: "json",
     success: function (response) {
       console.log(response);
       if (response.status == "200") {
@@ -2781,6 +2781,11 @@ $("#editQuestion").on("submit", function (e) {
   var choice4_update = $("#choice4_update").val();
   var choice4_id = $("#choice4_id").val();
   var correctChoice = $("#correctChoice").val();
+  var choice1_value = $("#choice1_value").val();
+  var choice2_value = $("#choice2_value").val();
+  var choice3_value = $("#choice3_value").val();
+  var choice4_value = $("#choice4_value").val();
+  var correct_value = $("#correct_value").val();
   $.ajax({
     type: "POST",
     url: "/SCES/backend/global.php",
@@ -2797,6 +2802,11 @@ $("#editQuestion").on("submit", function (e) {
       choice4_update: choice4_update,
       choice4_id: choice4_id,
       correctChoice: correctChoice,
+      choice1_value: choice1_value,
+      choice2_value: choice2_value,
+      choice3_value: choice3_value,
+      choice4_value: choice4_value,
+      correct_value: correct_value,
     },
     success: function (response) {
       console.log(response);
@@ -2807,6 +2817,21 @@ $("#editQuestion").on("submit", function (e) {
             Swal.fire({
               icon: "success",
               title: "Question Updated",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.reload();
+              }
+            });
+          }
+        );
+      } else if (response == "481") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "info",
+              title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
               if (result.value) {
