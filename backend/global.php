@@ -1012,28 +1012,32 @@ if (isset($_POST['submitType'])) {
             }
         }
     } else if ($_POST['submitType'] === 'facultyAddQuiz') {
+        header('Content-Type: application/json');
         session_start();
         $quizNumber = validate($_POST['quizNumber']);
         $quizTitle = validate($_POST['quizTitle']);
         $subjectId = validate($_POST['subject']);
         $lessonId = validate($_POST['lesson']);
         $checkNumber = $db->checkQuizNumber($subjectId, $lessonId, $quizNumber);
+
         if (empty($quizNumber)) {
-            echo '482';
+            echo json_encode(['status' => '482']);
         } else if ($checkNumber->num_rows > 0) {
-            echo '483';
+            echo json_encode(['status' => '483']);
         } else if (empty($quizTitle)) {
-            echo '484';
+            echo json_encode(['status' => '484']);
         } else if (empty($subjectId)) {
-            echo '485';
+            echo json_encode(['status' => '485']);
         } else if (empty($lessonId)) {
-            echo '486';
+            echo json_encode(['status' => '486']);
         } else {
             $addQuiz = $db->facultyAddQuiz($subjectId, $lessonId, $quizNumber, $quizTitle, 0);
+
             if ($addQuiz != false) {
-                echo '200';
+                $quizId = $addQuiz;
+                echo json_encode(['status' => '200', 'quizId' => $quizId]);
             } else {
-                echo '400';
+                echo json_encode(['status' => '400']);
             }
         }
     } else if ($_POST['submitType'] === 'facultyAddQuestion') {
@@ -1073,14 +1077,14 @@ if (isset($_POST['submitType'])) {
                 $value3 = $correctAnswer == 'choice3' ? 1 : 0;
                 $value4 = $correctAnswer == 'choice4' ? 1 : 0;
 
-                $db->addChoice($questionId, $quizId, $choice1, $value1);
-                $db->addChoice($questionId, $quizId, $choice2, $value2);
+                $db->addChoice($questionId, $quizId, $choice1, 1, $value1);
+                $db->addChoice($questionId, $quizId, $choice2, 2,$value2);
                 if (!empty($choice3)) {
-                    $db->addChoice($questionId, $quizId, $choice3, $value3);
+                    $db->addChoice($questionId, $quizId, $choice3, 3, $value3);
                 }
 
                 if (!empty($choice4)) {
-                    $db->addChoice($questionId, $quizId, $choice4, $value4);
+                    $db->addChoice($questionId, $quizId, $choice4, 4,$value4);
                 }
                 echo '200';
             } else {
@@ -1132,7 +1136,7 @@ if (isset($_POST['submitType'])) {
                 $db->editChoice($choice2_id, $choice2_update, $value2, $questionId);
 
                 if (!empty($choice3_update) && empty($choice3_id)) {
-                    $db->addChoice($questionId, $quizId, $choice3_update, $value3);
+                    $db->addChoice($questionId, $quizId, $choice3_update, 3, $value3);
                 } else if (!empty($choice3_update) && !empty($choice3_id)) {
                     $db->editChoice($choice3_id, $choice3_update, $value3, $questionId);
                 } else if (empty($choice3_update) && !empty($choice3_id)) {
@@ -1140,7 +1144,7 @@ if (isset($_POST['submitType'])) {
                 }
 
                 if (!empty($choice4_update) && empty($choice4_id)) {
-                    $db->addChoice($questionId, $quizId, $choice4_update, $value4);
+                    $db->addChoice($questionId, $quizId, $choice4_update, 4, $value4);
                 } else if (!empty($choice4_update) && !empty($choice4_id)) {
                     $db->editChoice($choice4_id, $choice4_update, $value4, $questionId);
                 } else if (empty($choice4_update) && !empty($choice4_id)) {

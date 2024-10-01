@@ -69,9 +69,9 @@ $page = '';
 
                         <?php if ($quizzes): ?>
                             <?php foreach ($quizzes as $index => $quiz): ?>
-                                <?php if ($quiz['status'] == 'Active'): ?>
+                                <?php if ($quiz['status'] == 'Active' || $quiz['status'] == 'Inactive'): ?>
                                     <div class="pending-item <?php echo strtolower($quiz['subject_code']); ?>"
-                                        data-quiz-index="<?php echo $index; ?>">
+                                        data-quiz-index="<?php echo $index; ?>" data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id'])?>">
                                         <span><?php echo htmlspecialchars($quiz['subject']) ?> - Quiz
                                             <?php echo htmlspecialchars($quiz['quiz_number']) ?></span>
                                     </div>
@@ -89,7 +89,7 @@ $page = '';
                     <div class="header-container">
                         <?php if ($quizzes): ?>
                             <?php foreach ($quizzes as $index => $quiz): ?>
-                                <div class="quiz-header" data-quiz-index="<?php echo $index; ?>">
+                                <div class="quiz-header" data-quiz-index="<?php echo $index; ?>" data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id'])?>">
                                     <div class="header-bg <?php echo strtolower($quiz['subject_code']); ?>">
                                         <div class="icon-container">
                                             <img src="/SCES/assets/images/<?php echo htmlspecialchars($quiz['icon']); ?>"
@@ -115,7 +115,7 @@ $page = '';
                                     </div>
                                     <?php if (!empty($facultyGetQuestions)): ?>
                                         <?php foreach ($facultyGetQuestions as $qIndex => $question): ?>
-                                            <div class="quiz-item" data-quiz-index="<?php echo $index; ?>">
+                                            <div class="quiz-item" data-quiz-index="<?php echo $index; ?>" data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id'])?>">
                                                 <button class="question-menu">
                                                     <i class="fa-solid fa-ellipsis"></i>
                                                 </button>

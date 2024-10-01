@@ -918,6 +918,8 @@ class globalClass extends db_connect
             quiz.lesson_id = lesson.lesson_id
         WHERE 
             subject.teacher_id = ?
+        ORDER BY
+            quiz.add_time DESC
         ");
         $query->bind_param("s", $teacherId);
         if ($query->execute()) {
@@ -941,7 +943,7 @@ class globalClass extends db_connect
         $query = $this->conn->prepare("INSERT INTO `quiz_tbl` (`quiz_id`, `subject_id`, `lesson_id`, `quiz_number`, `title`, `item_number`) VALUES (?, ?, ?, ?, ?, ?)");
         $query->bind_param("sssisi", $quizId, $subjectId, $lessonId, $quizNumber, $quizTitle, $itemNumber);
         if ($query->execute()) {
-            return true;
+            return $quizId;
         } else {
             return false;
         }
@@ -967,7 +969,7 @@ class globalClass extends db_connect
     }
     public function getQuestions($quizId): array
     {
-        $query = $this->conn->prepare("SELECT * FROM question_tbl WHERE quiz_id = ?");
+        $query = $this->conn->prepare("SELECT * FROM question_tbl WHERE quiz_id = ? ORDER BY add_time ASC");
         $query->bind_param("s", $quizId);
 
         if ($query->execute()) {
@@ -980,7 +982,7 @@ class globalClass extends db_connect
 
     public function getChoices($questionId, $quizId): array
     {
-        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE question_id = ? AND quiz_id = ?");
+        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE question_id = ? AND quiz_id = ? ORDER BY choice_order ASC");
         $query->bind_param("ss", $questionId, $quizId);
 
         if ($query->execute()) {
@@ -1018,7 +1020,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function addChoice($questionId, $quizId, $choice, $value)
+    public function addChoice($questionId, $quizId, $choice, $order, $value)
     {
         $year = date("Y");
         $choiceId = 'C' . $year . sprintf('%05d', rand(0, 99999));
@@ -1028,8 +1030,8 @@ class globalClass extends db_connect
             $choiceId = 'C' . $year . sprintf('%05d', rand(0, 99999));
             $checkIdResult = $this->checkChoiceId($choiceId);
         }
-        $query = $this->conn->prepare("INSERT INTO `choices_tbl` (`choice_id`, `question_id`, `quiz_id`, `choice`, `value`) VALUES (?, ?, ?, ?, ?)");
-        $query->bind_param("ssssi", $choiceId, $questionId, $quizId, $choice, $value);
+        $query = $this->conn->prepare("INSERT INTO `choices_tbl` (`choice_id`, `question_id`, `quiz_id`, `choice`, `choice_order`, `value`) VALUES (?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssii", $choiceId, $questionId, $quizId, $choice, $order, $value);
         if ($query->execute()) {
             return true;
         } else {

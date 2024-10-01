@@ -8,6 +8,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeModal = document.getElementById("closeAddQuiz");
   let quizDisplayState = [];
 
+  // Extract quiz_id from URL or set to first pending_item by default
+  function getQuizIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('quiz_id');
+  }
+
+  function setQuizIdInURL(quizId) {
+    const newUrl = `${window.location.pathname}?quiz_id=${quizId}`;
+    history.replaceState(null, '', newUrl); // Replace URL without reloading
+  }
+
   function openModal() {
     modal.style.display = "flex";
     storeQuizDisplayState();
@@ -79,24 +90,52 @@ document.addEventListener("DOMContentLoaded", function () {
   const quizHeaders = document.querySelectorAll(".quiz-header");
   const quizItems = document.querySelectorAll(".quiz-item");
 
-  pendingItems.forEach((item) => {
-    item.addEventListener("click", function () {
-      const index = item.getAttribute("data-quiz-index");
+  // Initially hide all quiz headers and items
+  quizHeaders.forEach(header => header.style.display = "none");
+  quizItems.forEach(item => item.style.display = "none");
 
+  pendingItems.forEach((item) => {
+    const quizId = item.getAttribute("data-quiz-id");
+    item.href = `?quiz_id=${quizId}`;
+
+    item.addEventListener("click", function (event) {
+      event.preventDefault();
+      setQuizIdInURL(quizId); // Update URL with quiz_id
+
+      // Hide all quiz headers and items
       quizHeaders.forEach((header) => (header.style.display = "none"));
       quizItems.forEach((item) => (item.style.display = "none"));
 
-      if (quizHeaders[index]) {
-        quizHeaders[index].style.display = "block";
-      }
-
-      quizItems.forEach((quizItem) => {
-        if (quizItem.getAttribute("data-quiz-index") === index) {
-          quizItem.style.display = "block";
-        }
-      });
+      // Display the selected quiz by quiz_id
+      displayQuizById(quizId);
     });
   });
+
+  function displayQuizById(quizId) {
+    const quizHeader = document.querySelector(
+      `.quiz-header[data-quiz-id="${quizId}"]`
+    );
+    const quizItemsToShow = document.querySelectorAll(
+      `.quiz-item[data-quiz-id="${quizId}"]`
+    );
+
+    if (quizHeader) {
+      quizHeader.style.display = "block";
+    }
+
+    quizItemsToShow.forEach((quizItem) => {
+      quizItem.style.display = "block";
+    });
+  }
+
+  // Display the first pending item or quiz by URL on page load
+  const initialQuizId = getQuizIdFromURL() || pendingItems[0]?.getAttribute("data-quiz-id");
+  if (initialQuizId) {
+    displayQuizById(initialQuizId);
+  } else if (pendingItems.length > 0) {
+    // If there's no initial quizId, display the first pending item's quiz
+    displayQuizById(pendingItems[0].getAttribute("data-quiz-id"));
+  }
 
   const addQuestionModal = document.getElementById("addQuestionModal");
   const addQuestionForm = document.getElementById("facultyAddQuestion");
@@ -105,9 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.querySelectorAll(".add-question").forEach((button) => {
     button.addEventListener("click", function () {
-      const quizIndex = button.getAttribute("data-quiz-index");
       const quizId = button.getAttribute("data-quiz-id");
-
       quizIdInput.value = quizId;
       addQuestionModal.style.display = "flex";
     });
@@ -125,32 +162,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  if (pendingItems.length > 0) {
-    const firstIndex = pendingItems[0].getAttribute("data-quiz-index");
-
-    quizHeaders.forEach((header) => (header.style.display = "none"));
-    quizItems.forEach((item) => (item.style.display = "none"));
-
-    if (quizHeaders[firstIndex]) {
-      quizHeaders[firstIndex].style.display = "block";
-    }
-
-    quizItems.forEach((quizItem) => {
-      if (quizItem.getAttribute("data-quiz-index") === firstIndex) {
-        quizItem.style.display = "block";
-      }
-    });
-  }
-
   document.getElementById("subject").addEventListener("change", function () {
-    var selectedOption = this.options[this.selectedIndex];
-
-    var levelId = selectedOption.getAttribute("data-level-id");
-    var subjectId = selectedOption.value;
-    var sectionId = selectedOption.getAttribute("data-section-id");
+    const selectedOption = this.options[this.selectedIndex];
+    const levelId = selectedOption.getAttribute("data-level-id");
+    const subjectId = selectedOption.value;
+    const sectionId = selectedOption.getAttribute("data-section-id");
 
     if (subjectId) {
-      var xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.open("POST", "/SCES/backend/faculty/fetch-lessons.php", true);
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
@@ -170,6 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     }
   });
+
   document.querySelectorAll(".question-menu").forEach((menuButton) => {
     menuButton.addEventListener("click", function (event) {
       const quizItem = event.target.closest(".quiz-item");
@@ -201,46 +221,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.querySelectorAll(".edit-question").forEach((editBtn) => {
     editBtn.onclick = function () {
-        const questionId = this.getAttribute("data-question-id");
-        document.getElementById("editQuestionId").value = questionId;
+      const questionId = this.getAttribute("data-question-id");
+      document.getElementById("editQuestionId").value = questionId;
 
-        const questionTextElement = this.closest(".quiz-item").querySelector(".question-box span").innerText;
-        const questionText = questionTextElement.replace(/^\d+\.\s*/, "");
-        document.getElementById("editQuestionText").value = questionText;
+      const questionTextElement = this
+        .closest(".quiz-item")
+        .querySelector(".question-box span").innerText;
+      const questionText = questionTextElement.replace(/^\d+\.\s*/, "");
+      document.getElementById("editQuestionText").value = questionText;
 
-        const choicesElements = this.closest(".quiz-item").querySelectorAll(".quiz-ans");
+      const choicesElements = this
+        .closest(".quiz-item")
+        .querySelectorAll(".quiz-ans");
 
-        // Set the values for the 4 choices and the hidden inputs for choice IDs
-        choicesElements.forEach((choiceElement, index) => {
-            const choiceText = choiceElement.innerText.replace(/^[A-Z]\.\s*/, ""); // Remove the letter
-            const choiceId = choiceElement.getAttribute("data-choice-id");
-            const isCorrect = choiceElement.classList.contains("correct");
+      choicesElements.forEach((choiceElement, index) => {
+        const choiceText = choiceElement.innerText.replace(/^[A-Z]\.\s*/, "");
+        const choiceId = choiceElement.getAttribute("data-choice-id");
+        const isCorrect = choiceElement.classList.contains("correct");
 
-            // Update choice text and id in the modal
-            document.getElementById(`choice${index + 1}_update`).value = choiceText;
-            document.getElementById(`choice${index + 1}_id`).value = choiceId;
+        document.getElementById(`choice${index + 1}_update`).value =
+          choiceText;
+        document.getElementById(`choice${index + 1}_id`).value = choiceId;
 
-            // Set the correct choice in the select dropdown
-            if (isCorrect) {
-              document.getElementById("correctChoice").value = `choice${index + 1}`;
-            }
-        });
-
-        // Display the modal
-        const editQuestionModal = document.getElementById("editQuestionModal");
-        editQuestionModal.style.display = "flex";
+        if (isCorrect) {
+          document.getElementById("correctChoice").value = `choice${index + 1}`;
+        }
+      });
+      const editQuestionModal = document.getElementById("editQuestionModal");
+      editQuestionModal.style.display = "flex";
     };
-});
-
-
+  });
+  const editQuestionForm =  document.getElementById("editQuestion");
   document.getElementById("closeEditQuestion").onclick = function () {
     document.getElementById("editQuestionModal").style.display = "none";
+    editQuestionForm.reset();
   };
 
   window.onclick = function (event) {
     const editQuestionModal = document.getElementById("editQuestionModal");
     if (event.target == editQuestionModal) {
       editQuestionModal.style.display = "none";
+      editQuestionForm.reset();
     }
   };
 });

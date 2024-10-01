@@ -2555,9 +2555,10 @@ $("#facultyAddQuiz").on("submit", function (e) {
       subject: subject,
       lesson: lesson,
     },
+    dataType: 'json',
     success: function (response) {
       console.log(response);
-      if (response == "200") {
+      if (response.status == "200") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -2567,12 +2568,12 @@ $("#facultyAddQuiz").on("submit", function (e) {
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
               if (result.value) {
-                window.location.reload();
+                window.location.href = `?quiz_id=${response.quizId}`;
               }
             });
           }
         );
-      } else if (response == "482") {
+      } else if (response.status == "482") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -2583,7 +2584,7 @@ $("#facultyAddQuiz").on("submit", function (e) {
             });
           }
         );
-      } else if (response == "483") {
+      } else if (response.status == "483") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -2595,7 +2596,7 @@ $("#facultyAddQuiz").on("submit", function (e) {
             });
           }
         );
-      } else if (response == "484") {
+      } else if (response.status == "484") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -2606,7 +2607,7 @@ $("#facultyAddQuiz").on("submit", function (e) {
             });
           }
         );
-      } else if (response == "485") {
+      } else if (response.status == "485") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -2617,7 +2618,7 @@ $("#facultyAddQuiz").on("submit", function (e) {
             });
           }
         );
-      } else if (response == "486") {
+      } else if (response.status == "486") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -2644,6 +2645,7 @@ $("#facultyAddQuiz").on("submit", function (e) {
     },
   });
 });
+
 $("#facultyAddQuestion").on("submit", function (e) {
   e.preventDefault();
   var quizId = $("#quizId").val();
