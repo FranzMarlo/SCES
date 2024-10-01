@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const pendingItems = document.querySelectorAll(".pending-item");
+  const pendingButton = document.querySelectorAll(".pending");
   const quizHeaders = document.querySelectorAll(".quiz-header");
   const quizItems = document.querySelectorAll(".quiz-item");
 
@@ -95,6 +96,23 @@ document.addEventListener("DOMContentLoaded", function () {
   quizItems.forEach((item) => (item.style.display = "none"));
 
   pendingItems.forEach((item) => {
+    const quizId = item.getAttribute("data-quiz-id");
+    item.href = `?quiz_id=${quizId}`;
+
+    item.addEventListener("click", function (event) {
+      event.preventDefault();
+      setQuizIdInURL(quizId); // Update URL with quiz_id
+
+      // Hide all quiz headers and items
+      quizHeaders.forEach((header) => (header.style.display = "none"));
+      quizItems.forEach((item) => (item.style.display = "none"));
+
+      // Display the selected quiz by quiz_id
+      displayQuizById(quizId);
+    });
+  });
+
+  pendingButton.forEach((item) => {
     const quizId = item.getAttribute("data-quiz-id");
     item.href = `?quiz_id=${quizId}`;
 
