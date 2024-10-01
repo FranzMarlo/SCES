@@ -44,7 +44,8 @@ $page = '';
                                     <button class="pending <?php echo strtolower($quiz['subject_code']); ?>"
                                         data-quiz-index="<?php echo $index; ?>"
                                         data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
-                                        <span>Quiz <?php echo htmlspecialchars($quiz['quiz_number']) . ' - ' . htmlspecialchars($quiz['title']); ?></span>
+                                        <span>Quiz
+                                            <?php echo htmlspecialchars($quiz['quiz_number']) . ' - ' . htmlspecialchars($quiz['title']); ?></span>
                                     </button>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -76,6 +77,9 @@ $page = '';
                                         data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
                                         <span><?php echo htmlspecialchars($quiz['subject']) ?> - Quiz
                                             <?php echo htmlspecialchars($quiz['quiz_number']) ?></span>
+                                        <button class="quiz-settings">
+                                            <i class="fa-solid fa-gear"></i>
+                                        </button>
                                     </div>
                                 <?php endif; ?>
                             <?php endforeach; ?>
