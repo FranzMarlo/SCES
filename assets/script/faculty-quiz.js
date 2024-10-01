@@ -208,68 +208,39 @@ document.addEventListener("DOMContentLoaded", function () {
         const questionText = questionTextElement.replace(/^\d+\.\s*/, "");
         document.getElementById("editQuestionText").value = questionText;
 
-        const editChoicesContainer = document.getElementById("editChoicesContainer");
-        editChoicesContainer.innerHTML = "";
-
         const choicesElements = this.closest(".quiz-item").querySelectorAll(".quiz-ans");
 
-        const correctAnswerSelect = document.createElement("select");
-        correctAnswerSelect.name = "correct_choice";
-        
-        const placeholderOption = document.createElement("option");
-        placeholderOption.value = "";
-        placeholderOption.textContent = "Select Correct Answer";
-        correctAnswerSelect.appendChild(placeholderOption);
-
+        // Set the values for the 4 choices and the hidden inputs for choice IDs
         choicesElements.forEach((choiceElement, index) => {
-            const choiceText = choiceElement.innerText.replace(/^[A-Z]\.\s*/, "");
+            const choiceText = choiceElement.innerText.replace(/^[A-Z]\.\s*/, ""); // Remove the letter
+            const choiceId = choiceElement.getAttribute("data-choice-id");
             const isCorrect = choiceElement.classList.contains("correct");
 
-            const choiceInput = document.createElement("input");
-            choiceInput.type = "text";
-            choiceInput.name = "choices[]";
-            choiceInput.value = choiceText;
-            
-            const choiceLabel = document.createElement("label");
-            choiceLabel.innerText = `Choice ${index + 1}:`;
-            choiceLabel.htmlFor = choiceInput.id = `choice-${index}`;
+            // Update choice text and id in the modal
+            document.getElementById(`choice${index + 1}_update`).value = choiceText;
+            document.getElementById(`choice${index + 1}_id`).value = choiceId;
 
-            const choiceOption = document.createElement("option");
-            choiceOption.value = choiceText;
-            choiceOption.textContent = choiceText;
+            // Set the correct choice in the select dropdown
             if (isCorrect) {
-                choiceOption.selected = true;
+              document.getElementById("correctChoice").value = `choice${index + 1}`;
             }
-            correctAnswerSelect.appendChild(choiceOption);
-
-            editChoicesContainer.appendChild(choiceLabel);
-            editChoicesContainer.appendChild(choiceInput);
-            editChoicesContainer.appendChild(document.createElement("br"));
         });
 
-        const correctAnswerLabel = document.createElement("label");
-        correctAnswerLabel.innerText = "Select Correct Answer:";
-        correctAnswerLabel.htmlFor = correctAnswerSelect.id = "correctAnswer";
-        editChoicesContainer.appendChild(correctAnswerLabel);
-        
-        editChoicesContainer.appendChild(correctAnswerSelect);
-
+        // Display the modal
         const editQuestionModal = document.getElementById("editQuestionModal");
         editQuestionModal.style.display = "flex";
     };
 });
 
-document.getElementById("closeEditQuestion").onclick = function () {
-    document.getElementById("editQuestionModal").style.display = "none";
-};
 
-window.onclick = function (event) {
+  document.getElementById("closeEditQuestion").onclick = function () {
+    document.getElementById("editQuestionModal").style.display = "none";
+  };
+
+  window.onclick = function (event) {
     const editQuestionModal = document.getElementById("editQuestionModal");
     if (event.target == editQuestionModal) {
-        editQuestionModal.style.display = "none";
+      editQuestionModal.style.display = "none";
     }
-};
-
-  
-  
+  };
 });

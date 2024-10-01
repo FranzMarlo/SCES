@@ -132,8 +132,8 @@ $page = '';
                                                 </div>
                                                 <?php $facultyGetChoices = $db->getChoices($question['question_id'], $question['quiz_id']); ?>
                                                 <?php foreach ($facultyGetChoices as $ansIndex => $answer): ?>
-                                                    <div
-                                                        class="quiz-ans <?php echo $answer['value'] == 1 ? 'correct' : ($answer['value'] == 0 ? 'wrong' : ''); ?>">
+                                                    <div class="quiz-ans <?php echo $answer['value'] == 1 ? 'correct' : ($answer['value'] == 0 ? 'wrong' : ''); ?>"
+                                                        data-choice-id="<?php echo $answer['choice_id']; ?>">
                                                         <p><?php echo chr(65 + $ansIndex) . '. ' . htmlspecialchars($answer['choice']); ?>
                                                         </p>
                                                     </div>

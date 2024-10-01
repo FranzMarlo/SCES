@@ -992,11 +992,11 @@ class globalClass extends db_connect
     }
     public function facultyAddQuestion($quizId, $question)
     {
-        $questionId = $quizId. sprintf('%02d', rand(0, 99));
+        $questionId = $quizId . sprintf('%02d', rand(0, 99));
         $checkIdResult = $this->checkQuestionId($questionId);
 
         while ($checkIdResult->num_rows > 0) {
-            $questionId = $quizId. sprintf('%02d', rand(0, 99));
+            $questionId = $quizId . sprintf('%02d', rand(0, 99));
             $checkIdResult = $this->checkQuestionId($questionId);
         }
         $query = $this->conn->prepare("INSERT INTO `question_tbl` (`question_id`, `quiz_id`, `question`) VALUES (?, ?, ?)");
@@ -1019,7 +1019,6 @@ class globalClass extends db_connect
     }
 
     public function addChoice($questionId, $quizId, $choice, $value)
-
     {
         $year = date("Y");
         $choiceId = 'C' . $year . sprintf('%05d', rand(0, 99999));
@@ -1047,5 +1046,55 @@ class globalClass extends db_connect
             return $result;
         }
     }
+
+    public function editQuestion($editQuestionId, $editQuestionText)
+    {
+        $query = $this->conn->prepare("UPDATE question_tbl SET question = ? WHERE question_id = ?");
+        $query->bind_param("ss", $editQuestionText, $editQuestionId);
+        if ($query->execute()) {
+            return $editQuestionId;
+        } else {
+            return false;
+        }
+    }
+
+    public function editChoice($choiceId, $choice, $value, $questionId)
+    {
+        $query = $this->conn->prepare("UPDATE choices_tbl SET choice = ?, value = ? WHERE choice_id = ? AND question_id = ?");
+        $query->bind_param("ssss", $choice, $value, $choiceId, $questionId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteChoice($choiceId, $questionId)
+    {
+        $query = $this->conn->prepare("DELETE FROM choices_tbl WHERE choice_id = ? AND question_id = ?");
+        $query->bind_param("ss", $choiceId, $questionId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getQuizId($questionId)
+    {
+        $query = $this->conn->prepare("SELECT `quiz_id` FROM question_tbl WHERE question_id = ?");
+        $query->bind_param("s", $questionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return $row['quiz_id'];
+            } else {
+                return null;
+            }
+        } else {
+            return false;
+        }
+    }
+
 }
 

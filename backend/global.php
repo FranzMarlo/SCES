@@ -1087,6 +1087,71 @@ if (isset($_POST['submitType'])) {
                 echo '400';
             }
         }
+    } else if ($_POST['submitType'] === 'editQuestion') {
+        session_start();
+        $editQuestionId = validate($_POST['editQuestionId']);
+        $editQuestionText = validate($_POST['editQuestionText']);
+        $choice1_update = validate($_POST['choice1_update']);
+        $choice1_id = validate($_POST['choice1_id']);
+        $choice2_update = validate($_POST['choice2_update']);
+        $choice2_id = validate($_POST['choice2_id']);
+        $choice3_update = validate($_POST['choice3_update']);
+        $choice3_id = validate($_POST['choice3_id']);
+        $choice4_update = validate($_POST['choice4_update']);
+        $choice4_id = validate($_POST['choice4_id']);
+        $correctChoice = validate($_POST['correctChoice']);
+        if (empty($editQuestionText)) {
+            echo '482';
+        } else if (empty($choice1_update)) {
+            echo '483';
+        } else if (empty($choice2_update)) {
+            echo '484';
+        } else if ((empty($choice3_update) || empty($choice4_update)) && (empty($choice1_update) || empty($choice2_update))) {
+            echo '485';
+        } else if (empty($correctChoice)) {
+            echo '486';
+        } else if ($correctChoice == 'choice1' && empty($choice1_update)) {
+            echo '487';
+        } else if ($correctChoice == 'choice2' && empty($choice2_update)) {
+            echo '487';
+        } else if ($correctChoice == 'choice3' && empty($choice3_update)) {
+            echo '487';
+        } else if ($correctChoice == 'choice4' && empty($choice4_update)) {
+            echo '487';
+        } else {
+            $editQuestion = $db->editQuestion($editQuestionId, $editQuestionText);
+            if ($editQuestion != false) {
+                $questionId = $editQuestion;
+                $quizId = $db->getQuizId($questionId);
+                $value1 = $correctChoice == 'choice1' ? 1 : 0;
+                $value2 = $correctChoice == 'choice2' ? 1 : 0;
+                $value3 = $correctChoice == 'choice3' ? 1 : 0;
+                $value4 = $correctChoice == 'choice4' ? 1 : 0;
+
+                $db->editChoice($choice1_id, $choice1_update, $value1, $questionId);
+                $db->editChoice($choice2_id, $choice2_update, $value2, $questionId);
+
+                if (!empty($choice3_update) && empty($choice3_id)) {
+                    $db->addChoice($questionId, $quizId, $choice3_update, $value3);
+                } else if (!empty($choice3_update) && !empty($choice3_id)) {
+                    $db->editChoice($choice3_id, $choice3_update, $value3, $questionId);
+                } else if (empty($choice3_update) && !empty($choice3_id)) {
+                    $db->deleteChoice($choice3_id, $questionId);
+                }
+
+                if (!empty($choice4_update) && empty($choice4_id)) {
+                    $db->addChoice($questionId, $quizId, $choice4_update, $value4);
+                } else if (!empty($choice4_update) && !empty($choice4_id)) {
+                    $db->editChoice($choice4_id, $choice4_update, $value4, $questionId);
+                } else if (empty($choice4_update) && !empty($choice4_id)) {
+                    $db->deleteChoice($choice4_id, $questionId);
+                }
+
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
     } else {
         echo '400';
     }

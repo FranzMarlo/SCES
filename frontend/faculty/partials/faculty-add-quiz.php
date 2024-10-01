@@ -69,18 +69,42 @@
     </div>
 </div>
 
-<div id="editQuestionModal" class="modal" style="display: none;">
+<div id="editQuestionModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeEditQuestion">&times;</span>
         <h2>Edit Question</h2>
 
-        <form id="editQuestionForm" method="POST" action="save-question.php">
+        <form id="editQuestion">
             <input type="hidden" id="editQuestionId" name="question_id" />
             <label for="editQuestionText">Question:</label>
             <textarea id="editQuestionText" name="question_text" class="long-input" rows="5"></textarea>
 
             <div id="editChoicesContainer">
-                <!-- Choices will be dynamically inserted here -->
+                <label for="choice1_update">Choice 1:</label>
+                <input type="hidden" id="choice1_id" name="choice_ids[]" />
+                <input type="text" id="choice1_update" name="choice1_update" placeholder="Enter Answer Choice"/>
+
+                <label for="choice2_update">Choice 2:</label>
+                <input type="hidden" id="choice2_id" name="choice_ids[]" />
+                <input type="text" id="choice2_update" name="choice2_update" placeholder="Enter Answer Choice" />
+
+                <label for="choice3_update">Choice 3:</label>
+                <input type="hidden" id="choice3_id" name="choice_ids[]" />
+                <input type="text" id="choice3_update" name="choice3_update" placeholder="Enter Answer Choice" />
+
+                <label for="choice4_update">Choice 4:</label>
+                <input type="hidden" id="choice4_id" name="choice_ids[]" />
+                <input type="text" id="choice4_update" name="choice4_update" placeholder="Enter Answer Choice" />
+
+                <!-- Correct answer select -->
+                <label for="correctChoice">Select Correct Answer:</label>
+                <select id="correctChoice" name="correctChoice">
+                    <option value="">Select Correct Answer</option>
+                    <option value="choice1">Choice 1</option>
+                    <option value="choice2">Choice 2</option>
+                    <option value="choice3">Choice 3</option>
+                    <option value="choice4">Choice 4</option>
+                </select>
             </div>
 
             <button type="submit" class="save-btn">Save Changes</button>
