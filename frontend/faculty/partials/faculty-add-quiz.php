@@ -120,7 +120,7 @@
     <div class="modal-content">
         <span id="closeEditQuiz" class="close-btn">&times;</span>
         <h2>Edit Quiz</h2>
-        <form id="editQuizForm">
+        <form id="editQuiz">
             <input type="hidden" id="editQuizId" value="">
 
             <label for="editQuizTitle">Title:</label>

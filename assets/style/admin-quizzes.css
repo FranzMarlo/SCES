@@ -202,7 +202,7 @@
 }
 .header-text h1 {
   font-size: 1.5rem;
-  max-width: 85%;
+  max-width: 450px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -630,6 +630,7 @@ textarea {
   }
   .header-text h1 {
     font-size: 1.3rem;
+    max-width: 350px;
   }
   .header-text img {
     height: 2rem;
@@ -684,6 +685,7 @@ textarea {
   }
   .header-text h1 {
     font-size: 1rem;
+    max-width: 250px;
   }
   .header-text img {
     height: 1.5rem;
@@ -708,5 +710,8 @@ textarea {
   }
   .question-box {
     max-width: 85%;
+  }
+  .header-text h1 {
+    max-width: 200px;
   }
 }

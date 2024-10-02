@@ -2963,7 +2963,22 @@ $("#editQuiz").on("submit", function (e) {
           function () {
             Swal.fire({
               icon: "success",
-              title: "Quiz Added Successfully",
+              title: "Quiz Updated Successfully",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.reload();
+              }
+            });
+          }
+        );
+      } else if (response == "481") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "info",
+              title: "No Change Has Been Made",
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
               if (result.value) {
@@ -2978,7 +2993,7 @@ $("#editQuiz").on("submit", function (e) {
           function () {
             Swal.fire({
               icon: "warning",
-              title: "Quiz Number Cannot Be Empty",
+              title: "Quiz Title Cannot Be Empty",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -2989,8 +3004,7 @@ $("#editQuiz").on("submit", function (e) {
           function () {
             Swal.fire({
               icon: "warning",
-              title: "Quiz Number Exists",
-              text: "Enter A Different Quiz Number",
+              title: "Quiz Number Cannot Be Empty",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -3001,7 +3015,8 @@ $("#editQuiz").on("submit", function (e) {
           function () {
             Swal.fire({
               icon: "warning",
-              title: "Quiz Title Cannot Be Empty",
+              title: "Quiz Number Exists",
+              text: "Enter A Different Quiz Number",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -3034,7 +3049,7 @@ $("#editQuiz").on("submit", function (e) {
           function () {
             Swal.fire({
               icon: "error",
-              title: "Quiz Upload Failed",
+              title: "Quiz Update Failed",
               text: "Please Try Again",
               confirmButtonColor: "#4CAF50",
             });

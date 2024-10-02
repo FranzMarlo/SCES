@@ -1098,5 +1098,16 @@ class globalClass extends db_connect
         }
     }
 
+    public function editQuiz($editQuizId, $editQuizTitle,  $editQuizNumber, $editSubject,  $editLesson)
+    {
+        $query = $this->conn->prepare("UPDATE quiz_tbl SET subject_id = ?, lesson_id = ?, quiz_number = ?, title = ? WHERE quiz_id = ?");
+        $query->bind_param("ssiss", $editSubject, $editLesson, $editQuizNumber, $editQuizTitle, $editQuizId);
+        if ($query->execute()) {
+            return $editQuizId;
+        } else {
+            return false;
+        }
+    }
+
 }
 
