@@ -765,7 +765,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $fileDestination)
+    public function addLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $fileDestination)
     {
         $year = date("Y");
         $lessonId = 'L' . $year . sprintf('%04d', rand(0, 9999));
@@ -930,7 +930,7 @@ class globalClass extends db_connect
 
         return [];
     }
-    public function facultyAddQuiz($subjectId, $lessonId, $quizNumber, $quizTitle, $itemNumber)
+    public function addQuiz($subjectId, $lessonId, $quizNumber, $quizTitle, $itemNumber)
     {
         $year = date("Y");
         $quizId = 'Q' . $year . sprintf('%05d', rand(0, 99999));
@@ -992,7 +992,7 @@ class globalClass extends db_connect
             return [];
         }
     }
-    public function facultyAddQuestion($quizId, $question)
+    public function addQuestion($quizId, $question)
     {
         $questionId = $quizId . sprintf('%02d', rand(0, 99));
         $checkIdResult = $this->checkQuestionId($questionId);

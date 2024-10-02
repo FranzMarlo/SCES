@@ -653,7 +653,7 @@ if (isset($_POST['submitType'])) {
                         $currentDate = date("Y-m-d");
                         $filePath = $gradeLevel . '/' . $quarter . ' Quarter/' . $subject . '/' . $newFileName;
 
-                        $result = $db->facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $filePath);
+                        $result = $db->addLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $filePath);
 
                         if ($result) {
                             echo '200';
@@ -952,7 +952,7 @@ if (isset($_POST['submitType'])) {
                 }
             }
         }
-    } else if ($_POST['submitType'] === 'facultyAddLesson') {
+    } else if ($_POST['submitType'] === 'addLesson') {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
         $levelId = $_SESSION['level_id'];
@@ -994,7 +994,7 @@ if (isset($_POST['submitType'])) {
                         $currentDate = date("Y-m-d");
                         $filePath = $gradeLevel . '/' . $quarter . ' Quarter/' . $subject . '/' . $newFileName;
 
-                        $result = $db->facultyAddLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $filePath);
+                        $result = $db->addLesson($teacherId, $levelId, $sectionId, $subjectId, $lessonNumber, $lessonTitle, $quarter, $filePath);
 
                         if ($result) {
                             echo '200';
@@ -1011,7 +1011,7 @@ if (isset($_POST['submitType'])) {
                 echo '489';
             }
         }
-    } else if ($_POST['submitType'] === 'facultyAddQuiz') {
+    } else if ($_POST['submitType'] === 'addQuiz') {
         header('Content-Type: application/json');
         session_start();
         $quizNumber = validate($_POST['quizNumber']);
@@ -1031,7 +1031,7 @@ if (isset($_POST['submitType'])) {
         } else if (empty($lessonId)) {
             echo json_encode(['status' => '486']);
         } else {
-            $addQuiz = $db->facultyAddQuiz($subjectId, $lessonId, $quizNumber, $quizTitle, 0);
+            $addQuiz = $db->addQuiz($subjectId, $lessonId, $quizNumber, $quizTitle, 0);
 
             if ($addQuiz != false) {
                 $quizId = $addQuiz;
@@ -1040,7 +1040,7 @@ if (isset($_POST['submitType'])) {
                 echo json_encode(['status' => '400']);
             }
         }
-    } else if ($_POST['submitType'] === 'facultyAddQuestion') {
+    } else if ($_POST['submitType'] === 'addQuestion') {
         session_start();
         $quizId = validate($_POST['quizId']);
         $question = validate($_POST['question']);
@@ -1068,7 +1068,7 @@ if (isset($_POST['submitType'])) {
         } else if ($correctAnswer == 'choice4' && empty($choice4)) {
             echo '487';
         } else {
-            $addQuestion = $db->facultyAddQuestion($quizId, $question);
+            $addQuestion = $db->addQuestion($quizId, $question);
             if ($addQuestion != false) {
                 $questionId = $addQuestion;
 
@@ -1109,6 +1109,72 @@ if (isset($_POST['submitType'])) {
         $choice3_value = validate($_POST['choice3_value']);
         $choice4_value = validate($_POST['choice4_value']);
         $correct_value = validate($_POST['correct_value']);
+        if ($choice1_update == $choice1_value && $choice2_update == $choice2_value && $choice3_update == $choice3_value && $choice4_update == $choice4_value && $correctChoice == $correct_value) {
+            echo '481';
+        } else if (empty($editQuestionText)) {
+            echo '482';
+        } else if (empty($choice1_update)) {
+            echo '483';
+        } else if (empty($choice2_update)) {
+            echo '484';
+        } else if ((empty($choice3_update) || empty($choice4_update)) && (empty($choice1_update) || empty($choice2_update))) {
+            echo '485';
+        } else if (empty($correctChoice)) {
+            echo '486';
+        } else if ($correctChoice == 'choice1' && empty($choice1_update)) {
+            echo '487';
+        } else if ($correctChoice == 'choice2' && empty($choice2_update)) {
+            echo '487';
+        } else if ($correctChoice == 'choice3' && empty($choice3_update)) {
+            echo '487';
+        } else if ($correctChoice == 'choice4' && empty($choice4_update)) {
+            echo '487';
+        } else {
+            $editQuestion = $db->editQuestion($editQuestionId, $editQuestionText);
+            if ($editQuestion != false) {
+                $questionId = $editQuestion;
+                $quizId = $db->getQuizId($questionId);
+                $value1 = $correctChoice == 'choice1' ? 1 : 0;
+                $value2 = $correctChoice == 'choice2' ? 1 : 0;
+                $value3 = $correctChoice == 'choice3' ? 1 : 0;
+                $value4 = $correctChoice == 'choice4' ? 1 : 0;
+
+                $db->editChoice($choice1_id, $choice1_update, $value1, $questionId);
+                $db->editChoice($choice2_id, $choice2_update, $value2, $questionId);
+
+                if (!empty($choice3_update) && empty($choice3_id)) {
+                    $db->addChoice($questionId, $quizId, $choice3_update, 3, $value3);
+                } else if (!empty($choice3_update) && !empty($choice3_id)) {
+                    $db->editChoice($choice3_id, $choice3_update, $value3, $questionId);
+                } else if (empty($choice3_update) && !empty($choice3_id)) {
+                    $db->deleteChoice($choice3_id, $questionId);
+                }
+
+                if (!empty($choice4_update) && empty($choice4_id)) {
+                    $db->addChoice($questionId, $quizId, $choice4_update, 4, $value4);
+                } else if (!empty($choice4_update) && !empty($choice4_id)) {
+                    $db->editChoice($choice4_id, $choice4_update, $value4, $questionId);
+                } else if (empty($choice4_update) && !empty($choice4_id)) {
+                    $db->deleteChoice($choice4_id, $questionId);
+                }
+
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'editQuiz') {
+        session_start();
+        $editQuizId = validate($_POST['editQuizId']);
+        $editQuizTitle = validate($_POST['editQuizTitle']);
+        $editQuizNumber = validate($_POST['editQuizNumber']);
+        $editSubject = validate($_POST['editSubject']);
+        $editLesson = validate($_POST['editLesson']);
+        $editQuizTitleHolder = validate($_POST['editQuizTitleHolder']);
+        $editQuizNumberHolder = validate($_POST['editQuizNumberHolder']);
+        $editSubjectHolder = validate($_POST['editSubjectHolder']);
+        $editLessonHolder = validate($_POST['editLessonHolder']);
+
         if ($choice1_update == $choice1_value && $choice2_update == $choice2_value && $choice3_update == $choice3_value && $choice4_update == $choice4_value && $correctChoice == $correct_value) {
             echo '481';
         } else if (empty($editQuestionText)) {

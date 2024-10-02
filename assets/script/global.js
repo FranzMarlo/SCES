@@ -2414,10 +2414,10 @@ $("#facultyUpdatePassword").on("submit", function (e) {
   });
 });
 
-$("#facultyAddLesson").on("submit", function (e) {
+$("#addLesson").on("submit", function (e) {
   e.preventDefault();
   var formData = new FormData(this);
-  formData.append("submitType", "facultyAddLesson");
+  formData.append("submitType", "addLesson");
 
   $.ajax({
     type: "POST",
@@ -2538,7 +2538,8 @@ $("#facultyAddLesson").on("submit", function (e) {
     },
   });
 });
-$("#facultyAddQuiz").on("submit", function (e) {
+
+$("#addQuiz").on("submit", function (e) {
   e.preventDefault();
   var quizNumber = $("#quizNumber").val();
   var quizTitle = $("#quizTitle").val();
@@ -2549,7 +2550,7 @@ $("#facultyAddQuiz").on("submit", function (e) {
     type: "POST",
     url: "/SCES/backend/global.php",
     data: {
-      submitType: "facultyAddQuiz",
+      submitType: "addQuiz",
       quizNumber: quizNumber,
       quizTitle: quizTitle,
       subject: subject,
@@ -2646,7 +2647,7 @@ $("#facultyAddQuiz").on("submit", function (e) {
   });
 });
 
-$("#facultyAddQuestion").on("submit", function (e) {
+$("#addQuestion").on("submit", function (e) {
   e.preventDefault();
   var quizId = $("#quizId").val();
   var question = $("#question").val();
@@ -2659,7 +2660,7 @@ $("#facultyAddQuestion").on("submit", function (e) {
     type: "POST",
     url: "/SCES/backend/global.php",
     data: {
-      submitType: "facultyAddQuestion",
+      submitType: "addQuestion",
       quizId: quizId,
       question: question,
       choice1: choice1,
@@ -2768,6 +2769,7 @@ $("#facultyAddQuestion").on("submit", function (e) {
     },
   });
 });
+
 $("#editQuestion").on("submit", function (e) {
   e.preventDefault();
   var editQuestionId = $("#editQuestionId").val();
@@ -2914,6 +2916,125 @@ $("#editQuestion").on("submit", function (e) {
             Swal.fire({
               icon: "error",
               title: "Question Upload Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+$("#editQuiz").on("submit", function (e) {
+  e.preventDefault();
+  var editQuizId = $("#editQuizId").val();
+  var editQuizTitle = $("#editQuizTitle").val();
+  var editQuizNumber = $("#editQuizNumber").val();
+  var editQuizTitle = $("#editQuizTitle").val();
+  var editSubject = $("#editSubject").val();
+  var editLesson = $("#editLesson").val();
+  var editQuizTitleHolder = $("#editQuizTitleHolder").val();
+  var editQuizNumberHolder = $("#editQuizNumberHolder").val();
+  var editQuizTitleHolder = $("#editQuizTitleHolder").val();
+  var editSubjectHolder = $("#editSubjectHolder").val();
+  var editLessonHolder = $("#editLessonHolder").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "editQuiz",
+      editQuizId: editQuizId,
+      editQuizNumber: editQuizNumber,
+      editQuizTitle: editQuizTitle,
+      editSubject: editSubject,
+      editLesson: editLesson,
+      editQuizNumberHolder: editQuizNumberHolder,
+      editQuizTitleHolder: editQuizTitleHolder,
+      editSubjectHolder: editSubjectHolder,
+      editLessonHolder: editLessonHolder,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Quiz Added Successfully",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.value) {
+                window.location.reload();
+              }
+            });
+          }
+        );
+      } else if (response == "482") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Quiz Number Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "483") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Quiz Number Exists",
+              text: "Enter A Different Quiz Number",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "484") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Quiz Title Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "485") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Subject Of Quiz",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "486") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Lesson Of Quiz",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Quiz Upload Failed",
               text: "Please Try Again",
               confirmButtonColor: "#4CAF50",
             });

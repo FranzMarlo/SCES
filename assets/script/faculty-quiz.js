@@ -357,10 +357,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.getElementById("editQuizId").value = quizData.quiz_id;
         document.getElementById("editQuizTitle").value = quizData.title;
+        document.getElementById("editQuizTitleHolder").value = quizData.title;
         document.getElementById("editQuizNumber").value = quizData.quiz_number;
+        document.getElementById("editQuizNumberHolder").value =
+          quizData.quiz_number;
 
         const subjectSelect = document.getElementById("editSubject");
         subjectSelect.value = quizData.subject_id;
+        document.getElementById("editSubjectHolder").value =
+          quizData.subject_id;
 
         // Trigger the lesson fetch based on the selected subject
         const levelId =
@@ -372,7 +377,8 @@ document.addEventListener("DOMContentLoaded", function () {
             "data-section-id"
           );
         fetchLessons(levelId, quizData.subject_id, sectionId);
-
+        document.getElementById("editLessonHolder").value =
+          quizData.lesson_id;
         document.getElementById("editQuizModal").style.display = "flex";
       }
     };

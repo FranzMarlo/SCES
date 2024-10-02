@@ -5,7 +5,7 @@
       <span class="close-btn">&times;</span>
     </div>
     <div class="modal-body">
-      <form id="facultyAddLesson">
+      <form id="addLesson">
         <div class="form-group">
           <label for="lessonNumber">Lesson Number:</label>
           <input type="number" id="lessonNumber" name="lessonNumber" placeholder="Enter Lesson Number">

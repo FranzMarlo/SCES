@@ -2,14 +2,14 @@
     <div class="modal-content">
         <span class="close-btn" id="closeAddQuiz">&times;</span>
         <h2>Add New Quiz</h2>
-        <form id="facultyAddQuiz">
-            <label for="quizNumber">Quiz Number</label>
+        <form id="addQuiz">
+            <label for="quizNumber">Quiz Number:</label>
             <input type="number" id="quizNumber" name="quizNumber" placeholder="Enter Quiz Number">
 
-            <label for="quizTitle">Quiz Title</label>
+            <label for="quizTitle">Quiz Title:</label>
             <input type="text" id="quizTitle" name="quizTitle" placeholder="Enter Quiz Title">
 
-            <label for="subject">Subject</label>
+            <label for="subject">Subject:</label>
             <?php $selectSubject = $db->getAdminSubjects($teacherId); ?>
             <select id="subject" name="subject">
                 <option value="" selected>Select Subject</option>
@@ -24,7 +24,7 @@
                 <?php endif; ?>
             </select>
 
-            <label for="lesson">Lesson</label>
+            <label for="lesson">Lesson:</label>
             <select id="lesson" name="lesson">
                 <option value="" selected>Select Subject First</option>
             </select>
@@ -37,7 +37,7 @@
     <div class="modal-content">
         <span class="close-btn" id="closeAddQuestion">&times;</span>
         <h2>Add Question</h2>
-        <form id="facultyAddQuestion">
+        <form id="addQuestion">
             <input type="hidden" id="quizId" name="quizId" value="" />
 
             <label for="question">Question:</label>
@@ -124,12 +124,14 @@
             <input type="hidden" id="editQuizId" value="">
 
             <label for="editQuizTitle">Title:</label>
-            <input type="text" id="editQuizTitle" name="title">
+            <input type="text" id="editQuizTitle" name="editQuizTitle">
+            <input type="hidden" id="editQuizTitleHolder" value="">
 
             <label for="editQuizNumber">Quiz Number:</label>
             <input type="number" id="editQuizNumber" name="quiz_number">
+            <input type="hidden" id="editQuizNumberHolder" value="">
 
-            <label for="editSubject">Subject</label>
+            <label for="editSubject">Subject:</label>
             <?php $selectSubject = $db->getAdminSubjects($teacherId); ?>
             <select id="editSubject" name="editSubject">
                 <option value="">Select Subject</option>
@@ -143,11 +145,13 @@
                     <?php endforeach; ?>
                 <?php endif; ?>
             </select>
+            <input type="hidden" id="editSubjectHolder" value="">
 
-            <label for="editLesson">Lesson</label>
+            <label for="editLesson">Lesson:</label>
             <select id="editLesson" name="editLesson">
                 <option value="">Select Subject First</option>
             </select>
+            <input type="hidden" id="editLessonHolder" value="">
 
             <button type="submit" class="save-btn">Save Changes</button>
         </form>
