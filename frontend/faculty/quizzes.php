@@ -77,9 +77,16 @@ $page = '';
                                         data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
                                         <span><?php echo htmlspecialchars($quiz['subject']) ?> - Quiz
                                             <?php echo htmlspecialchars($quiz['quiz_number']) ?></span>
-                                        <button class="quiz-settings">
-                                            <i class="fa-solid fa-gear"></i>
+                                        <button class="quiz-settings"
+                                            data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
                                         </button>
+                                        <div class="quiz-popup-menu">
+                                            <ul>
+                                                <li class="edit-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Edit</li>
+                                                <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Disable</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 <?php endif; ?>
                             <?php endforeach; ?>

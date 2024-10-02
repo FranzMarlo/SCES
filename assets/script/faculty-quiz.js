@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const noQuizHeader = document.querySelector(".no-quiz-header");
   const form = document.getElementById("facultyAddQuiz");
   const lessonDropdown = document.getElementById("lesson");
+  const editLessonDropdown = document.getElementById("editLesson");
   const closeModal = document.getElementById("closeAddQuiz");
   let quizDisplayState = [];
 
@@ -284,4 +285,137 @@ document.addEventListener("DOMContentLoaded", function () {
       editQuestionForm.reset();
     }
   };
+
+  document.querySelectorAll(".quiz-settings").forEach((menuButton) => {
+    menuButton.addEventListener("click", function (event) {
+      const pendingItem = event.target.closest(".pending-item");
+      const popupMenu = pendingItem.querySelector(".quiz-popup-menu");
+      const quizId = this.getAttribute("data-quiz-id");
+
+      const currentUrl = window.location.pathname;
+
+      const newUrl = `${currentUrl}?quiz_id=${quizId}`;
+      history.replaceState(null, "", newUrl);
+
+      document.querySelectorAll(".quiz-popup-menu").forEach((menu) => {
+        if (menu !== popupMenu) {
+          menu.style.display = "none";
+        }
+      });
+
+      popupMenu.style.display =
+        popupMenu.style.display === "block" ? "none" : "block";
+
+      const quizHeaders = document.querySelectorAll(".quiz-header");
+      const quizItems = document.querySelectorAll(".quiz-item");
+
+      quizHeaders.forEach((header) => (header.style.display = "none"));
+      quizItems.forEach((item) => (item.style.display = "none"));
+
+      displayQuizById(quizId);
+      event.stopPropagation();
+    });
+  });
+
+  document.addEventListener("click", function (event) {
+    const isClickInsideMenu = event.target.closest(".quiz-popup-menu");
+    const isClickOnMenuButton = event.target.closest(".quiz-menu");
+
+    if (!isClickInsideMenu && !isClickOnMenuButton) {
+      document.querySelectorAll(".quiz-popup-menu").forEach((menu) => {
+        menu.style.display = "none";
+      });
+    }
+  });
+
+  document.querySelectorAll(".edit-quiz").forEach((editBtn) => {
+    editBtn.addEventListener("click", function () {
+      const quizId = this.getAttribute("data-quiz-id");
+
+      // Update the URL without reloading the page
+      const currentUrl = window.location.pathname;
+      const newUrl = `${currentUrl}?quiz_id=${quizId}&edit=true`;
+      history.pushState(null, "", newUrl);
+
+      // Fetch quiz details via AJAX
+      fetchQuizDetails(quizId);
+    });
+  });
+
+  function fetchQuizDetails(quizId) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/SCES/backend/fetch-class.php`, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    const requestBody = `quiz_id=${encodeURIComponent(
+      quizId
+    )}&submitType=getQuiz`;
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        const quizData = JSON.parse(xhr.responseText);
+
+        document.getElementById("editQuizId").value = quizData.quiz_id;
+        document.getElementById("editQuizTitle").value = quizData.title;
+        document.getElementById("editQuizNumber").value = quizData.quiz_number;
+
+        const subjectSelect = document.getElementById("editSubject");
+        subjectSelect.value = quizData.subject_id;
+
+        // Trigger the lesson fetch based on the selected subject
+        const levelId =
+          subjectSelect.options[subjectSelect.selectedIndex].getAttribute(
+            "data-level-id"
+          );
+        const sectionId =
+          subjectSelect.options[subjectSelect.selectedIndex].getAttribute(
+            "data-section-id"
+          );
+        fetchLessons(levelId, quizData.subject_id, sectionId);
+
+        document.getElementById("editQuizModal").style.display = "flex";
+      }
+    };
+
+    xhr.send(requestBody);
+  }
+
+  document.getElementById("closeEditQuiz").onclick = function () {
+    const currentUrl = window.location.pathname;
+    const quizId = document.getElementById("editQuizId").value;
+
+    const newUrl = `${currentUrl}?quiz_id=${quizId}`;
+
+    history.replaceState(null, "", newUrl);
+
+    document.getElementById("editQuizModal").style.display = "none";
+  };
+
+  function fetchLessons(levelId, subjectId, sectionId) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/SCES/backend/faculty/fetch-lessons.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        const editLessonDropdown = document.getElementById("editLesson");
+        editLessonDropdown.innerHTML = xhr.responseText;
+      }
+    };
+
+    xhr.send(
+      `levelId=${levelId}&subjectId=${subjectId}&sectionId=${sectionId}`
+    );
+  }
+
+  document
+    .getElementById("editSubject")
+    .addEventListener("change", function () {
+      const selectedOption = this.options[this.selectedIndex];
+      const levelId = selectedOption.getAttribute("data-level-id");
+      const subjectId = selectedOption.value;
+      const sectionId = selectedOption.getAttribute("data-section-id");
+
+      fetchLessons(levelId, subjectId, sectionId);
+    });
 });

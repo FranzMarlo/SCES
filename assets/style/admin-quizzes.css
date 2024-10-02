@@ -87,6 +87,7 @@
   right: 20px;
   border: none;
   cursor: pointer;
+  width: 1.5rem;
 }
 .quiz-settings:hover{
   color: #f0f0f0;
@@ -257,6 +258,32 @@
   font-size: 0.9rem;
 }
 .question-popup-menu ul li:hover {
+  background-color: #f2f2f2;
+}
+.quiz-popup-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 110px;
+  z-index: 9;
+  right: 35px;
+  top: 20px;
+}
+.quiz-popup-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.quiz-popup-menu ul li {
+  padding: 10px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9rem;
+}
+.quiz-popup-menu ul li:hover {
   background-color: #f2f2f2;
 }
 .add-question {

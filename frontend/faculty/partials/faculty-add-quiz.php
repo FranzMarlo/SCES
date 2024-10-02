@@ -82,25 +82,25 @@
             <div id="editChoicesContainer">
                 <label for="choice1_update">Choice 1:</label>
                 <input type="hidden" id="choice1_id" name="choice_ids[]" />
-                <input type="text" id="choice1_update" name="choice1_update" placeholder="Enter Answer Choice"/>
-                <input type="hidden" id="choice1_value"/>
+                <input type="text" id="choice1_update" name="choice1_update" placeholder="Enter Answer Choice" />
+                <input type="hidden" id="choice1_value" />
 
                 <label for="choice2_update">Choice 2:</label>
                 <input type="hidden" id="choice2_id" name="choice_ids[]" />
                 <input type="text" id="choice2_update" name="choice2_update" placeholder="Enter Answer Choice" />
-                <input type="hidden" id="choice2_value"/>
+                <input type="hidden" id="choice2_value" />
 
                 <label for="choice3_update">Choice 3:</label>
                 <input type="hidden" id="choice3_id" name="choice_ids[]" />
                 <input type="text" id="choice3_update" name="choice3_update" placeholder="Enter Answer Choice" />
-                <input type="hidden" id="choice3_value"/>
+                <input type="hidden" id="choice3_value" />
 
                 <label for="choice4_update">Choice 4:</label>
                 <input type="hidden" id="choice4_id" name="choice_ids[]" />
                 <input type="text" id="choice4_update" name="choice4_update" placeholder="Enter Answer Choice" />
-                <input type="hidden" id="choice4_value"/>
+                <input type="hidden" id="choice4_value" />
 
-                <input type="hidden" id="correct_value"/>
+                <input type="hidden" id="correct_value" />
                 <label for="correctChoice">Select Correct Answer:</label>
                 <select id="correctChoice" name="correctChoice">
                     <option value="">Select Correct Answer</option>
@@ -110,6 +110,44 @@
                     <option value="choice4">Choice 4</option>
                 </select>
             </div>
+
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<div id="editQuizModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span id="closeEditQuiz" class="close-btn">&times;</span>
+        <h2>Edit Quiz</h2>
+        <form id="editQuizForm">
+            <input type="hidden" id="editQuizId" value="">
+
+            <label for="editQuizTitle">Title:</label>
+            <input type="text" id="editQuizTitle" name="title">
+
+            <label for="editQuizNumber">Quiz Number:</label>
+            <input type="number" id="editQuizNumber" name="quiz_number">
+
+            <label for="editSubject">Subject</label>
+            <?php $selectSubject = $db->getAdminSubjects($teacherId); ?>
+            <select id="editSubject" name="editSubject">
+                <option value="">Select Subject</option>
+                <?php if ($selectSubject): ?>
+                    <?php foreach ($selectSubject as $editSubject): ?>
+                        <option value="<?php echo $editSubject['subject_id']; ?>"
+                            data-level-id="<?php echo $editSubject['level_id']; ?>"
+                            data-section-id="<?php echo $editSubject['section_id']; ?>">
+                            <?php echo $editSubject['subject'] . ' - ' . $editSubject['section']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
+
+            <label for="editLesson">Lesson</label>
+            <select id="editLesson" name="editLesson">
+                <option value="">Select Subject First</option>
+            </select>
 
             <button type="submit" class="save-btn">Save Changes</button>
         </form>

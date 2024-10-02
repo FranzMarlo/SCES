@@ -3,21 +3,23 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/fetch-db.php';
 $fetchDb = new fetchClass();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_POST['submitType'] === 'getQuestion') {
-        $questionId = $_POST['questionId'];
+    if (isset($_POST['submitType']) && $_POST['submitType'] === 'getQuiz') {
+        if (isset($_POST['quiz_id'])) {
+            $quizId = $_POST['quiz_id'];
 
-        $question = $fetchDb->fetchQuestion($questionId);
-        $choices = $fetchDb->fetchChoices($questionId);
+            $quizData = $fetchDb->fetchQuizDetails($quizId);
 
-        print_r($question);
-        print_r($choices);
-
-        echo json_encode([
-            'question' => [
-                'question_id' => $question['question_id'],
-                'question' => $question['question']
-            ],
-            'choices' => $choices
-        ]);
+            
+            echo json_encode($quizData);
+        } else {
+            echo json_encode(['error' => 'Quiz ID not provided']);
+        }
+    } else {
+        // Handle invalid submit type
+        echo json_encode(['error' => 'Invalid submit type']);
     }
+} else {
+    // Handle non-POST requests
+    echo json_encode(['error' => 'Invalid request method']);
 }
+?>
