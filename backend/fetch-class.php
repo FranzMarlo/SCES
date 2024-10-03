@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['quiz_id'])) {
             $quizId = $_POST['quiz_id'];
 
-            $quizData = $fetchDb->fetchQuizDetails($quizId);
+            $quizData = $fetchDb->fetchFullQuizDetails($quizId);
 
             echo json_encode($quizData);
         } else {

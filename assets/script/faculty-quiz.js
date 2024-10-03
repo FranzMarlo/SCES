@@ -433,29 +433,23 @@ document.addEventListener("DOMContentLoaded", function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         const quizData = JSON.parse(xhr.responseText);
 
-        document.getElementById("editQuizId").value = quizData.quiz_id;
-        document.getElementById("editQuizTitle").value = quizData.title;
-        document.getElementById("editQuizTitleHolder").value = quizData.title;
-        document.getElementById("editQuizNumber").value = quizData.quiz_number;
-        document.getElementById("editQuizNumberHolder").value =
-          quizData.quiz_number;
+        document.getElementById("viewQuizTitle").textContent = `Quiz ${quizData.quiz_number}: ${quizData.title}`;
+        document.getElementById(
+          "viewQuizSubject"
+        ).textContent = `${quizData.subject} - ${quizData.section}`;
+        document.getElementById(
+          "viewQuizStudents"
+        ).textContent = `${quizData.student_count} Students`;
+        document.getElementById(
+          "viewQuizItem"
+        ).textContent = `${quizData.item_number} Items`;
+        document.getElementById("viewQuizStatus").textContent = quizData.status;
+        document.getElementById(
+          "viewQuizDue"
+        ).textContent = `Due at ${quizData.due_date}`;
 
-        const subjectSelect = document.getElementById("editSubject");
-        subjectSelect.value = quizData.subject_id;
-        document.getElementById("editSubjectHolder").value =
-          quizData.subject_id;
-
-        const levelId =
-          subjectSelect.options[subjectSelect.selectedIndex].getAttribute(
-            "data-level-id"
-          );
-        const sectionId =
-          subjectSelect.options[subjectSelect.selectedIndex].getAttribute(
-            "data-section-id"
-          );
-        fetchLessons(levelId, quizData.subject_id, sectionId);
-        document.getElementById("editLessonHolder").value = quizData.lesson_id;
-        document.getElementById("editQuizModal").style.display = "flex";
+        // Display the modal
+        document.getElementById("viewQuizModal").style.display = "flex";
       }
     };
 
@@ -465,9 +459,8 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".view-quiz").forEach((viewBtn) => {
     viewBtn.addEventListener("click", function () {
       const quizId = this.getAttribute("data-quiz-id");
-      document.getElementById("viewQuizModal").style.display = "flex";
-
       createDonutCharts();
+      viewQuizDetails(quizId);
     });
   });
 
@@ -484,14 +477,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function createDonutCharts() {
     const ctx1 = document.getElementById("donutChart1").getContext("2d");
     const ctx2 = document.getElementById("donutChart2").getContext("2d");
-  
+
     // Destroy previous charts if they exist
     if (ctx1.chart) ctx1.chart.destroy();
     if (ctx2.chart) ctx2.chart.destroy();
-  
+
     const completedCount = 60; // Example number of completed students
     const passedCount = 80; // Example number of passed students
-  
+
     // Define a custom plugin to add center labels
     const centerLabelPlugin = {
       id: "centerLabel",
@@ -500,27 +493,27 @@ document.addEventListener("DOMContentLoaded", function () {
         const chartArea = chart.chartArea; // Get the chart area
         const width = chartArea.right - chartArea.left;
         const height = chartArea.bottom - chartArea.top;
-        
+
         ctx.save(); // Save the current context state
-    
+
         ctx.font = "3rem sans-serif"; // Adjust font size based on chart size if needed
         ctx.textAlign = "center"; // Center text horizontally
         ctx.textBaseline = "middle"; // Center text vertically
         ctx.fillStyle = "#000"; // Text color
-    
+
         // Calculate the value from the dataset and position
         const number = chart.data.datasets[0].data[0]; // Value to be displayed
         const xCenter = chartArea.left + width / 2; // Horizontal center
         const yCenter = chartArea.top + height / 2; // Vertical center
-    
+
         ctx.fillText(number, xCenter, yCenter); // Draw the number in the center
         ctx.restore(); // Restore the context state
       },
     };
-  
+
     // Register the custom plugin
     Chart.register(centerLabelPlugin);
-  
+
     // Chart 1: Completion Rate
     ctx1.chart = new Chart(ctx1, {
       type: "doughnut",
@@ -548,7 +541,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
     });
-  
+
     // Chart 2: Passing Rate
     ctx2.chart = new Chart(ctx2, {
       type: "doughnut",
@@ -577,5 +570,4 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
   }
-  
 });
