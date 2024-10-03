@@ -1098,7 +1098,34 @@ class globalClass extends db_connect
         }
     }
 
-    public function editQuiz($editQuizId, $editQuizTitle,  $editQuizNumber, $editSubject,  $editLesson)
+    public function getItemCount($quizId)
+    {
+        $query = $this->conn->prepare("SELECT `item_number` FROM quiz_tbl WHERE quiz_id = ?");
+        $query->bind_param("s", $quizId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return $row['item_number'];
+            } else {
+                return null;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function updateQuizItemCount($quizId , $itemCount)
+    {
+        $query = $this->conn->prepare("UPDATE quiz_tbl SET item_number = ? WHERE quiz_id = ?");
+        $query->bind_param("is", $itemCount, $quizId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function editQuiz($editQuizId, $editQuizTitle, $editQuizNumber, $editSubject, $editLesson)
     {
         $query = $this->conn->prepare("UPDATE quiz_tbl SET subject_id = ?, lesson_id = ?, quiz_number = ?, title = ? WHERE quiz_id = ?");
         $query->bind_param("ssiss", $editSubject, $editLesson, $editQuizNumber, $editQuizTitle, $editQuizId);

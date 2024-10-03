@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const addQuizBtn = document.getElementById("addQuizBtn");
   const addQuizItem = document.getElementById("addQuizItem");
   const noQuizHeader = document.querySelector(".no-quiz-header");
-  const form = document.getElementById("facultyAddQuiz");
+  const form = document.getElementById("addQuiz");
   const lessonDropdown = document.getElementById("lesson");
   const editLessonDropdown = document.getElementById("editLesson");
   const closeModal = document.getElementById("closeAddQuiz");
@@ -147,18 +147,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Display the first pending item or quiz by URL on page load
   const initialQuizId =
     getQuizIdFromURL() || pendingItems[0]?.getAttribute("data-quiz-id");
   if (initialQuizId) {
     displayQuizById(initialQuizId);
   } else if (pendingItems.length > 0) {
-    // If there's no initial quizId, display the first pending item's quiz
     displayQuizById(pendingItems[0].getAttribute("data-quiz-id"));
   }
 
   const addQuestionModal = document.getElementById("addQuestionModal");
-  const addQuestionForm = document.getElementById("facultyAddQuestion");
+  const addQuestionForm = document.getElementById("addQuestion");
   const quizIdInput = document.getElementById("quizId");
   const closeAddQuestion = document.getElementById("closeAddQuestion");
 

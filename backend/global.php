@@ -1072,6 +1072,7 @@ if (isset($_POST['submitType'])) {
             if ($addQuestion != false) {
                 $questionId = $addQuestion;
 
+
                 $value1 = $correctAnswer == 'choice1' ? 1 : 0;
                 $value2 = $correctAnswer == 'choice2' ? 1 : 0;
                 $value3 = $correctAnswer == 'choice3' ? 1 : 0;
@@ -1086,6 +1087,8 @@ if (isset($_POST['submitType'])) {
                 if (!empty($choice4)) {
                     $db->addChoice($questionId, $quizId, $choice4, 4, $value4);
                 }
+                $itemCount = $db->getItemCount($quizId);
+                $updateQuizItemCount = $db->updateQuizItemCount($quizId, $itemCount + 1);
                 echo '200';
             } else {
                 echo '400';
@@ -1189,7 +1192,7 @@ if (isset($_POST['submitType'])) {
         } else if (empty($editLesson)) {
             echo '486';
         } else {
-            $editQuiz = $db->editQuiz($editQuizId, $editQuizTitle,  $editQuizNumber, $editSubject,  $editLesson);
+            $editQuiz = $db->editQuiz($editQuizId, $editQuizTitle, $editQuizNumber, $editSubject, $editLesson);
             if ($editQuiz != false) {
                 echo '200';
             } else {
