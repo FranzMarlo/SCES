@@ -9,7 +9,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $quizData = $fetchDb->fetchQuizDetails($quizId);
 
-            
+
+            echo json_encode($quizData);
+        } else {
+            echo json_encode(['error' => 'Quiz ID not provided']);
+        }
+    }
+    else if (isset($_POST['submitType']) && $_POST['submitType'] === 'viewQuiz') {
+        if (isset($_POST['quiz_id'])) {
+            $quizId = $_POST['quiz_id'];
+
+            $quizData = $fetchDb->fetchQuizDetails($quizId);
+
             echo json_encode($quizData);
         } else {
             echo json_encode(['error' => 'Quiz ID not provided']);

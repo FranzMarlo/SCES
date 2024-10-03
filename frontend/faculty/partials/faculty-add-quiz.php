@@ -157,3 +157,50 @@
         </form>
     </div>
 </div>
+
+<div id="viewQuizModal" class="modal">
+    <div class="modal-content">
+        <div class="view-controller">
+            <button class="controller active">Quiz Details</button>
+            <button class="controller">Student List</button>
+            <span id="closeViewQuiz" class="close-btn">&times;</span>
+        </div>
+        <div class="view-container">
+            <div class="view-modal-row">
+                <h3 id="viewQuizTitle">Quiz 1: Test Quiz</h3>
+            </div>
+            <div class="view-modal-row">
+                <i class="fa-solid fa-book"></i>
+                <span id="viewQuizSubject">AP 1 - Banana</span>
+            </div>
+            <div class="view-modal-row">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span id="viewQuizStudents">10 Students</span>
+            </div>
+            <div class="view-modal-row">
+                <i class="fa-solid fa-list-ol"></i>
+                <span id="viewQuizItem">10 Items</span>
+            </div>
+            <div class="view-modal-row">
+                <i class="fa-solid fa-square-check"></i>
+                <span id="viewQuizStatus">Published</span>
+            </div>
+            <div class="view-modal-row">
+                <i class="fa-solid fa-clock"></i>
+                <span id="viewQuizDue">Due at 10/1/2024 1:30pm</span>
+            </div>
+            <div class="graph-container">
+                <div class="graph">
+                    <p>Students Completed</p>
+                    <canvas id="donutChart1"></canvas>
+                </div>
+                <div class="graph">
+                    <p>Students Passed</p>
+                    <canvas id="donutChart2"></canvas>
+                </div>
+            </div>
+            <br>
+            <button class="save-btn">Activate Quiz</button>
+        </div>
+    </div>
+</div>

@@ -84,6 +84,7 @@ $page = '';
                                         <div class="quiz-popup-menu">
                                             <ul>
                                                 <li class="edit-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Edit</li>
+                                                <li class="view-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">View Info</li>
                                                 <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Disable</li>
                                             </ul>
                                         </div>
@@ -172,6 +173,7 @@ $page = '';
             </div>
         </div>
     </div>
+    
     <?php
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-add-quiz.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';

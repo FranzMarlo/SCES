@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeModal = document.getElementById("closeAddQuiz");
   let quizDisplayState = [];
 
-  // Extract quiz_id from URL or set to first pending_item by default
   function getQuizIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get("quiz_id");
@@ -17,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function setQuizIdInURL(quizId) {
     const newUrl = `${window.location.pathname}?quiz_id=${quizId}`;
-    history.replaceState(null, "", newUrl); // Replace URL without reloading
+    history.replaceState(null, "", newUrl);
   }
 
   function openModal() {
@@ -365,7 +364,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("editSubjectHolder").value =
           quizData.subject_id;
 
-        // Trigger the lesson fetch based on the selected subject
         const levelId =
           subjectSelect.options[subjectSelect.selectedIndex].getAttribute(
             "data-level-id"
@@ -375,8 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "data-section-id"
           );
         fetchLessons(levelId, quizData.subject_id, sectionId);
-        document.getElementById("editLessonHolder").value =
-          quizData.lesson_id;
+        document.getElementById("editLessonHolder").value = quizData.lesson_id;
         document.getElementById("editQuizModal").style.display = "flex";
       }
     };
@@ -422,4 +419,163 @@ document.addEventListener("DOMContentLoaded", function () {
 
       fetchLessons(levelId, subjectId, sectionId);
     });
+
+  function viewQuizDetails(quizId) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/SCES/backend/fetch-class.php`, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    const requestBody = `quiz_id=${encodeURIComponent(
+      quizId
+    )}&submitType=viewQuiz`;
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        const quizData = JSON.parse(xhr.responseText);
+
+        document.getElementById("editQuizId").value = quizData.quiz_id;
+        document.getElementById("editQuizTitle").value = quizData.title;
+        document.getElementById("editQuizTitleHolder").value = quizData.title;
+        document.getElementById("editQuizNumber").value = quizData.quiz_number;
+        document.getElementById("editQuizNumberHolder").value =
+          quizData.quiz_number;
+
+        const subjectSelect = document.getElementById("editSubject");
+        subjectSelect.value = quizData.subject_id;
+        document.getElementById("editSubjectHolder").value =
+          quizData.subject_id;
+
+        const levelId =
+          subjectSelect.options[subjectSelect.selectedIndex].getAttribute(
+            "data-level-id"
+          );
+        const sectionId =
+          subjectSelect.options[subjectSelect.selectedIndex].getAttribute(
+            "data-section-id"
+          );
+        fetchLessons(levelId, quizData.subject_id, sectionId);
+        document.getElementById("editLessonHolder").value = quizData.lesson_id;
+        document.getElementById("editQuizModal").style.display = "flex";
+      }
+    };
+
+    xhr.send(requestBody);
+  }
+
+  document.querySelectorAll(".view-quiz").forEach((viewBtn) => {
+    viewBtn.addEventListener("click", function () {
+      const quizId = this.getAttribute("data-quiz-id");
+      document.getElementById("viewQuizModal").style.display = "flex";
+
+      createDonutCharts();
+    });
+  });
+
+  document.getElementById("closeViewQuiz").onclick = function () {
+    const currentUrl = window.location.pathname;
+    const quizId = document.getElementById("editQuizId").value;
+
+    const newUrl = `${currentUrl}?quiz_id=${quizId}`;
+    history.replaceState(null, "", newUrl);
+
+    document.getElementById("viewQuizModal").style.display = "none";
+  };
+
+  function createDonutCharts() {
+    const ctx1 = document.getElementById("donutChart1").getContext("2d");
+    const ctx2 = document.getElementById("donutChart2").getContext("2d");
+  
+    // Destroy previous charts if they exist
+    if (ctx1.chart) ctx1.chart.destroy();
+    if (ctx2.chart) ctx2.chart.destroy();
+  
+    const completedCount = 60; // Example number of completed students
+    const passedCount = 80; // Example number of passed students
+  
+    // Define a custom plugin to add center labels
+    const centerLabelPlugin = {
+      id: "centerLabel",
+      beforeDraw: function (chart) {
+        const ctx = chart.ctx;
+        const chartArea = chart.chartArea; // Get the chart area
+        const width = chartArea.right - chartArea.left;
+        const height = chartArea.bottom - chartArea.top;
+        
+        ctx.save(); // Save the current context state
+    
+        ctx.font = "3rem sans-serif"; // Adjust font size based on chart size if needed
+        ctx.textAlign = "center"; // Center text horizontally
+        ctx.textBaseline = "middle"; // Center text vertically
+        ctx.fillStyle = "#000"; // Text color
+    
+        // Calculate the value from the dataset and position
+        const number = chart.data.datasets[0].data[0]; // Value to be displayed
+        const xCenter = chartArea.left + width / 2; // Horizontal center
+        const yCenter = chartArea.top + height / 2; // Vertical center
+    
+        ctx.fillText(number, xCenter, yCenter); // Draw the number in the center
+        ctx.restore(); // Restore the context state
+      },
+    };
+  
+    // Register the custom plugin
+    Chart.register(centerLabelPlugin);
+  
+    // Chart 1: Completion Rate
+    ctx1.chart = new Chart(ctx1, {
+      type: "doughnut",
+      data: {
+        labels: ["Completed", "Not Completed"],
+        datasets: [
+          {
+            label: "Completion Rate",
+            data: [completedCount, 100 - completedCount],
+            backgroundColor: ["#59adf6", "#ffffff"],
+            borderColor: ["#5694ca", "#BBBBBBFF"],
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom", // Position the legend below the chart
+          },
+          centerLabel: true, // Enable the center label plugin
+        },
+      },
+    });
+  
+    // Chart 2: Passing Rate
+    ctx2.chart = new Chart(ctx2, {
+      type: "doughnut",
+      data: {
+        labels: ["Passed", "Failed"],
+        datasets: [
+          {
+            label: "Passing Rate",
+            data: [passedCount, 100 - passedCount], // Sample data
+            backgroundColor: ["#42d6a4", "#ff8080"],
+            borderColor: ["#3baf88", "#ea7474"],
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom", // Position the legend below the chart
+          },
+          centerLabel: true, // Enable the center label plugin
+        },
+      },
+    });
+  }
+  
 });

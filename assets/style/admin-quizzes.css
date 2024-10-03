@@ -81,7 +81,7 @@
 .pending-item:hover {
   background-color: #f0f0f0;
 }
-.quiz-settings{
+.quiz-settings {
   background-color: transparent;
   position: absolute;
   right: 20px;
@@ -89,10 +89,10 @@
   cursor: pointer;
   width: 1.5rem;
 }
-.quiz-settings:hover{
+.quiz-settings:hover {
   color: #f0f0f0;
 }
-.quiz-settings i{
+.quiz-settings i {
   font-size: 1.2rem;
 }
 .no-data-item {
@@ -246,6 +246,14 @@
   z-index: 9;
   right: 40px;
 }
+.edit-question {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.remove-question {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
 .question-popup-menu ul {
   list-style: none;
   padding: 0;
@@ -285,6 +293,14 @@
 }
 .quiz-popup-menu ul li:hover {
   background-color: #f2f2f2;
+}
+.edit-quiz {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.disable-quiz {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 .add-question {
   cursor: pointer;
@@ -472,7 +488,7 @@
   height: 20px;
   margin-right: 10px;
 }
-.quiz-dropdown button span{
+.quiz-dropdown button span {
   font-weight: bold;
   font-size: 1rem;
   max-width: 85%;
@@ -605,6 +621,73 @@ select option {
 }
 textarea {
   resize: none;
+}
+.view-controller{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  position: relative;
+  margin-bottom: 10px;
+}
+#closeViewQuiz{
+  position: absolute;
+  right: 5px;
+}
+button.controller{
+  border: 2px solid #000;
+  background-color: #fff;
+  cursor: pointer;
+  height: 25px;
+  width: 100px;
+  font-size: 0.9rem;
+  border-radius: 30px;
+  margin-right: 10px;
+  padding: 3px;
+}
+button.controller:hover, button.controller.active{
+  background-color: #1c74c2;
+  color: #fff;
+}
+.view-modal-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.view-modal-row i {
+  font-size: 1.2rem;
+  color: #c1bcbc;
+  width: 20px;
+  margin-right: 10px;
+}
+.view-modal-row span {
+  font-size: 1.2rem;
+}
+.view-modal-row h3 {
+  font-size: 1.4rem;
+}
+.graph-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
+}
+.graph{
+  width: 50%;
+  height: 250px;
+}
+.graph p{
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.2rem;
+}
+canvas {
+  padding: 5px;
+  background-color: transparent;
+  border: none;
+  height: 100%;
 }
 @media (width < 1199px) {
   .pending-title img {
