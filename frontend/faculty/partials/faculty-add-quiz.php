@@ -34,7 +34,7 @@
 </div>
 
 <div id="addQuestionModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content padded">
         <span class="close-btn" id="closeAddQuestion">&times;</span>
         <h2>Add Question</h2>
         <form id="addQuestion">
@@ -70,7 +70,7 @@
 </div>
 
 <div id="editQuestionModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content padded">
         <span class="close-btn" id="closeEditQuestion">&times;</span>
         <h2>Edit Question</h2>
 
@@ -116,7 +116,7 @@
     </div>
 </div>
 
-<div id="editQuizModal" class="modal" style="display: none;">
+<div id="editQuizModal" class="modal">
     <div class="modal-content">
         <span id="closeEditQuiz" class="close-btn">&times;</span>
         <h2>Edit Quiz</h2>
@@ -159,35 +159,35 @@
 </div>
 
 <div id="viewQuizModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content stretched">
         <div class="view-controller">
-            <button class="controller active">Quiz Details</button>
-            <button class="controller">Student List</button>
+            <button class="controller active" id="quiz-toggle" >Quiz Details</button>
+            <button class="controller" id="student-toggle">Student List</button>
             <span id="closeViewQuiz" class="close-btn">&times;</span>
         </div>
-        <div class="view-container">
+        <div class="view-container" id="view-quiz">
             <div class="view-modal-row">
-                <h3 id="viewQuizTitle">Quiz 1: Test Quiz</h3>
+                <h3 id="viewQuizTitle"></h3>
             </div>
             <div class="view-modal-row">
                 <i class="fa-solid fa-book"></i>
-                <span id="viewQuizSubject">AP 1 - Banana</span>
+                <span id="viewQuizSubject"></span>
             </div>
             <div class="view-modal-row">
                 <i class="fa-solid fa-graduation-cap"></i>
-                <span id="viewQuizStudents">10 Students</span>
+                <span id="viewQuizStudents"></span>
             </div>
             <div class="view-modal-row">
                 <i class="fa-solid fa-list-ol"></i>
-                <span id="viewQuizItem">10 Items</span>
+                <span id="viewQuizItem"></span>
             </div>
             <div class="view-modal-row">
                 <i class="fa-solid fa-square-check"></i>
-                <span id="viewQuizStatus">Published</span>
+                <span id="viewQuizStatus"></span>
             </div>
             <div class="view-modal-row">
                 <i class="fa-solid fa-clock"></i>
-                <span id="viewQuizDue">Due at 10/1/2024 1:30pm</span>
+                <span id="viewQuizDue"></span>
             </div>
             <div class="graph-container">
                 <div class="graph">
@@ -202,5 +202,6 @@
             <br>
             <button class="save-btn">Activate Quiz</button>
         </div>
+        <div class="view-container" id="view-student"></div>
     </div>
 </div>

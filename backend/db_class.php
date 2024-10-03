@@ -1046,6 +1046,8 @@ class globalClass extends db_connect
         if ($query->execute()) {
             $result = $query->get_result();
             return $result;
+        }else{
+            return false;
         }
     }
 

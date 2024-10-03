@@ -41,12 +41,25 @@ $page = '';
                             </button>
                             <?php if ($quizzes): ?>
                                 <?php foreach ($quizzes as $index => $quiz): ?>
-                                    <button class="pending <?php echo strtolower($quiz['subject_code']); ?>"
+                                    <div class="pending <?php echo strtolower($quiz['subject_code']); ?>"
                                         data-quiz-index="<?php echo $index; ?>"
                                         data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
                                         <span>Quiz
                                             <?php echo htmlspecialchars($quiz['quiz_number']) . ' - ' . htmlspecialchars($quiz['title']); ?></span>
-                                    </button>
+                                        <button class="quiz-option"
+                                            data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <div class="quiz-dropdown-popup-menu">
+                                            <ul>
+                                                <li class="edit-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Edit</li>
+                                                <li class="view-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">View Info
+                                                </li>
+                                                <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Disable
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <div class="no-data-item">
@@ -173,7 +186,7 @@ $page = '';
             </div>
         </div>
     </div>
-    
+
     <?php
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-add-quiz.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';

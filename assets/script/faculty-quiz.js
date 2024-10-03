@@ -184,10 +184,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const levelId = selectedOption.getAttribute("data-level-id");
     const subjectId = selectedOption.value;
     const sectionId = selectedOption.getAttribute("data-section-id");
-
     if (subjectId) {
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", "/SCES/backend/faculty/fetch-lessons.php", true);
+      xhr.open("POST", "/SCES/backend/fetch-class.php", true);
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
       xhr.onreadystatechange = function () {
@@ -202,7 +201,9 @@ document.addEventListener("DOMContentLoaded", function () {
           "&subjectId=" +
           subjectId +
           "&sectionId=" +
-          sectionId
+          sectionId +
+          "&lessonId=?"+
+          "&submitType=getLessons"
       );
     }
   });
@@ -325,16 +326,58 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  document.querySelectorAll(".quiz-option").forEach((menuButton) => {
+    menuButton.addEventListener("click", function (event) {
+      const pendingButton = event.target.closest(".pending");
+      const popupMenu = pendingButton.querySelector(
+        ".quiz-dropdown-popup-menu"
+      );
+      const quizId = this.getAttribute("data-quiz-id");
+
+      const currentUrl = window.location.pathname;
+
+      const newUrl = `${currentUrl}?quiz_id=${quizId}`;
+      history.replaceState(null, "", newUrl);
+
+      document.querySelectorAll(".quiz-dropdown-popup-menu").forEach((menu) => {
+        if (menu !== popupMenu) {
+          menu.style.display = "none";
+        }
+      });
+
+      popupMenu.style.display =
+        popupMenu.style.display === "block" ? "none" : "block";
+
+      const quizHeaders = document.querySelectorAll(".quiz-header");
+      const quizItems = document.querySelectorAll(".quiz-item");
+
+      quizHeaders.forEach((header) => (header.style.display = "none"));
+      quizItems.forEach((item) => (item.style.display = "none"));
+
+      displayQuizById(quizId);
+      event.stopPropagation();
+    });
+  });
+
+  document.addEventListener("click", function (event) {
+    const isClickInsideMenu = event.target.closest(".quiz-dropdown-popup-menu");
+    const isClickOnMenuButton = event.target.closest(".quiz-menu");
+
+    if (!isClickInsideMenu && !isClickOnMenuButton) {
+      document.querySelectorAll(".quiz-dropdown-popup-menu").forEach((menu) => {
+        menu.style.display = "none";
+      });
+    }
+  });
+
   document.querySelectorAll(".edit-quiz").forEach((editBtn) => {
     editBtn.addEventListener("click", function () {
       const quizId = this.getAttribute("data-quiz-id");
 
-      // Update the URL without reloading the page
       const currentUrl = window.location.pathname;
       const newUrl = `${currentUrl}?quiz_id=${quizId}&edit=true`;
       history.pushState(null, "", newUrl);
 
-      // Fetch quiz details via AJAX
       fetchQuizDetails(quizId);
     });
   });
@@ -372,7 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
           subjectSelect.options[subjectSelect.selectedIndex].getAttribute(
             "data-section-id"
           );
-        fetchLessons(levelId, quizData.subject_id, sectionId);
+        fetchLessons(levelId, quizData.subject_id, sectionId, quizData.lesson_id, "getLessons");
         document.getElementById("editLessonHolder").value = quizData.lesson_id;
         document.getElementById("editQuizModal").style.display = "flex";
       }
@@ -384,17 +427,15 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("closeEditQuiz").onclick = function () {
     const currentUrl = window.location.pathname;
     const quizId = document.getElementById("editQuizId").value;
-
     const newUrl = `${currentUrl}?quiz_id=${quizId}`;
 
     history.replaceState(null, "", newUrl);
-
     document.getElementById("editQuizModal").style.display = "none";
   };
 
-  function fetchLessons(levelId, subjectId, sectionId) {
+  function fetchLessons(levelId, subjectId, sectionId, lessonId, submitType) {
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/SCES/backend/faculty/fetch-lessons.php", true);
+    xhr.open("POST", "/SCES/backend/fetch-class.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
     xhr.onreadystatechange = function () {
@@ -405,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     xhr.send(
-      `levelId=${levelId}&subjectId=${subjectId}&sectionId=${sectionId}`
+      `levelId=${levelId}&subjectId=${subjectId}&sectionId=${sectionId}&lessonId=${lessonId}&submitType=${submitType}`
     );
   }
 
@@ -416,8 +457,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const levelId = selectedOption.getAttribute("data-level-id");
       const subjectId = selectedOption.value;
       const sectionId = selectedOption.getAttribute("data-section-id");
+      const lessonId = document.getElementById("editLessonHolder").value;
 
-      fetchLessons(levelId, subjectId, sectionId);
+      fetchLessons(levelId, subjectId, sectionId, lessonId, "getLessons");
     });
 
   function viewQuizDetails(quizId) {
@@ -433,7 +475,9 @@ document.addEventListener("DOMContentLoaded", function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         const quizData = JSON.parse(xhr.responseText);
 
-        document.getElementById("viewQuizTitle").textContent = `Quiz ${quizData.quiz_number}: ${quizData.title}`;
+        document.getElementById(
+          "viewQuizTitle"
+        ).textContent = `Quiz ${quizData.quiz_number}: ${quizData.title}`;
         document.getElementById(
           "viewQuizSubject"
         ).textContent = `${quizData.subject} - ${quizData.section}`;
@@ -448,7 +492,6 @@ document.addEventListener("DOMContentLoaded", function () {
           "viewQuizDue"
         ).textContent = `Due at ${quizData.due_date}`;
 
-        // Display the modal
         document.getElementById("viewQuizModal").style.display = "flex";
       }
     };
@@ -482,21 +525,20 @@ document.addEventListener("DOMContentLoaded", function () {
     if (ctx1.chart) ctx1.chart.destroy();
     if (ctx2.chart) ctx2.chart.destroy();
 
-    const completedCount = 60; // Example number of completed students
-    const passedCount = 80; // Example number of passed students
+    const completedCount = 60;
+    const passedCount = 80;
 
-    // Define a custom plugin to add center labels
     const centerLabelPlugin = {
       id: "centerLabel",
       beforeDraw: function (chart) {
         const ctx = chart.ctx;
-        const chartArea = chart.chartArea; // Get the chart area
+        const chartArea = chart.chartArea;
         const width = chartArea.right - chartArea.left;
         const height = chartArea.bottom - chartArea.top;
 
-        ctx.save(); // Save the current context state
+        ctx.save();
 
-        ctx.font = "3rem sans-serif"; // Adjust font size based on chart size if needed
+        ctx.font = "2.5rem sans-serif"; // Adjust font size based on chart size if needed
         ctx.textAlign = "center"; // Center text horizontally
         ctx.textBaseline = "middle"; // Center text vertically
         ctx.fillStyle = "#000"; // Text color
@@ -542,7 +584,6 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
 
-    // Chart 2: Passing Rate
     ctx2.chart = new Chart(ctx2, {
       type: "doughnut",
       data: {
@@ -563,11 +604,32 @@ document.addEventListener("DOMContentLoaded", function () {
         plugins: {
           legend: {
             display: true,
-            position: "bottom", // Position the legend below the chart
+            position: "bottom",
           },
-          centerLabel: true, // Enable the center label plugin
+          centerLabel: true,
         },
       },
     });
   }
+  const quizToggle = document.getElementById("quiz-toggle");
+  const studentToggle = document.getElementById("student-toggle");
+  const viewQuiz = document.getElementById("view-quiz");
+  const viewStudent = document.getElementById("view-student");
+
+  viewQuiz.style.display = "block";
+  viewStudent.style.display = "none";
+
+  quizToggle.addEventListener("click", function () {
+    viewQuiz.style.display = "block";
+    viewStudent.style.display = "none";
+    quizToggle.classList.add("active");
+    studentToggle.classList.remove("active");
+  });
+
+  studentToggle.addEventListener("click", function () {
+    viewQuiz.style.display = "none";
+    viewStudent.style.display = "block";
+    studentToggle.classList.add("active");
+    quizToggle.classList.remove("active");
+  });
 });

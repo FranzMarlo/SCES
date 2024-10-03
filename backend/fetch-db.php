@@ -147,7 +147,7 @@ class fetchClass extends db_connect
             quiz.status,
             quiz.item_number,
             lesson.lesson_id,
-            lesson.lesson_title,
+            lesson.lesson_title
         FROM quiz_tbl quiz
         INNER JOIN
             subject_tbl subject

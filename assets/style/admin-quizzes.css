@@ -470,7 +470,40 @@
   height: 1.5rem;
   margin-right: 5px;
 }
-.quiz-dropdown button {
+.quiz-dropdown-content .pending {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  border-radius: 30px;
+  padding: 5px 15px;
+  margin-bottom: 5px;
+  width: 90%;
+  font-weight: 500;
+  max-height: 100px;
+  border: 2px solid #000;
+  position: relative;
+}
+.quiz-dropdown-content .pending:hover {
+  background-color: #ddd;
+}
+.quiz-dropdown-content .pending span {
+  font-weight: bold;
+  font-size: 1rem;
+  max-width: 85%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.quiz-dropdown-content .pending .quiz-option {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  font-size: 1rem;
+  width: 20px;
+  background-color: transparent;
+  border: none;
+}
+.quiz-dropdown-content button {
   display: flex;
   align-items: center;
   justify-content: start;
@@ -481,20 +514,46 @@
   font-weight: 500;
   max-height: 100px;
 }
-.quiz-dropdown button:hover {
+.quiz-dropdown-content button:hover {
   background-color: #ddd;
 }
-.quiz-dropdown button img {
+.quiz-dropdown-content button img {
   height: 20px;
   margin-right: 10px;
 }
-.quiz-dropdown button span {
+.quiz-dropdown-content button span {
   font-weight: bold;
   font-size: 1rem;
   max-width: 85%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.quiz-dropdown-popup-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 110px;
+  z-index: 9;
+  right: 20px;
+  top: 1px;
+}
+.quiz-dropdown-popup-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.quiz-dropdown-popup-menu ul li {
+  padding: 10px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9rem;
+}
+.quiz-dropdown-popup-menu ul li:hover {
+  background-color: #f2f2f2;
 }
 .show-quizzes {
   display: flex;
@@ -526,6 +585,12 @@
   max-height: 80vh;
   overflow-y: auto;
   box-sizing: border-box;
+}
+.stretched{
+  height: 80vh;
+}
+.padded{
+  padding-bottom: 50px;
 }
 .modal-content::-webkit-scrollbar {
   display: none;
@@ -622,18 +687,18 @@ select option {
 textarea {
   resize: none;
 }
-.view-controller{
+.view-controller {
   display: flex;
   flex-direction: row;
   width: 100%;
   position: relative;
   margin-bottom: 10px;
 }
-#closeViewQuiz{
+#closeViewQuiz {
   position: absolute;
   right: 5px;
 }
-button.controller{
+button.controller {
   border: 2px solid #000;
   background-color: #fff;
   cursor: pointer;
@@ -644,7 +709,8 @@ button.controller{
   margin-right: 10px;
   padding: 3px;
 }
-button.controller:hover, button.controller.active{
+button.controller:hover,
+button.controller.active {
   background-color: #1c74c2;
   color: #fff;
 }
@@ -674,11 +740,11 @@ button.controller:hover, button.controller.active{
   width: 100%;
   gap: 20px;
 }
-.graph{
+.graph {
   width: 50%;
-  height: 250px;
+  height: 220px;
 }
-.graph p{
+.graph p {
   font-weight: bold;
   text-align: center;
   font-size: 1.2rem;
@@ -776,6 +842,22 @@ canvas {
   .question-box {
     max-width: 90%;
   }
+  .graph-container {
+    flex-direction: column;
+  }
+  .graph {
+    width: 100%;
+    height: 200px;
+  }
+  .view-modal-row i {
+    font-size: 1.1rem;
+  }
+  .view-modal-row span {
+    font-size: 1.1rem;
+  }
+  .view-modal-row h3 {
+    font-size: 1.2rem;
+  }
 }
 @media (width < 375px) {
   .quiz-container {
@@ -796,5 +878,11 @@ canvas {
   }
   .header-text h1 {
     max-width: 200px;
+  }
+  .view-modal-row h3 {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
