@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
           subjectId +
           "&sectionId=" +
           sectionId +
-          "&lessonId=?"+
+          "&lessonId=?" +
           "&submitType=getLessons"
       );
     }
@@ -415,7 +415,13 @@ document.addEventListener("DOMContentLoaded", function () {
           subjectSelect.options[subjectSelect.selectedIndex].getAttribute(
             "data-section-id"
           );
-        fetchLessons(levelId, quizData.subject_id, sectionId, quizData.lesson_id, "getLessons");
+        fetchLessons(
+          levelId,
+          quizData.subject_id,
+          sectionId,
+          quizData.lesson_id,
+          "getLessons"
+        );
         document.getElementById("editLessonHolder").value = quizData.lesson_id;
         document.getElementById("editQuizModal").style.display = "flex";
       }
@@ -474,7 +480,8 @@ document.addEventListener("DOMContentLoaded", function () {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         const quizData = JSON.parse(xhr.responseText);
-
+        const quizId = quizData.quiz_id;
+        document.getElementById("viewQuizId").value = quizId;
         document.getElementById(
           "viewQuizTitle"
         ).textContent = `Quiz ${quizData.quiz_number}: ${quizData.title}`;
@@ -508,14 +515,127 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("closeViewQuiz").onclick = function () {
+    if ((viewStudent.style.display = "flex")) {
+      viewStudent.style.display = "none";
+      quizToggle.classList.add("active");
+      studentToggle.classList.remove("active");
+    }
+    viewQuiz.style.display = "flex";
     const currentUrl = window.location.pathname;
-    const quizId = document.getElementById("editQuizId").value;
+    const quizId = document.getElementById("viewQuizId").value;
 
     const newUrl = `${currentUrl}?quiz_id=${quizId}`;
     history.replaceState(null, "", newUrl);
 
     document.getElementById("viewQuizModal").style.display = "none";
   };
+  const quizToggle = document.getElementById("quiz-toggle");
+  const studentToggle = document.getElementById("student-toggle");
+  const viewQuiz = document.getElementById("view-quiz");
+  const viewStudent = document.getElementById("view-student");
+
+  viewQuiz.style.display = "flex";
+  viewStudent.style.display = "none";
+
+  quizToggle.addEventListener("click", function () {
+    viewQuiz.style.display = "flex";
+    viewStudent.style.display = "none";
+    quizToggle.classList.add("active");
+    studentToggle.classList.remove("active");
+  });
+
+  studentToggle.addEventListener("click", function () {
+    viewQuiz.style.display = "none";
+    viewStudent.style.display = "flex";
+    studentToggle.classList.add("active");
+    quizToggle.classList.remove("active");
+    const quizId = document.getElementById("viewQuizId").value;
+    viewStudentDetails(quizId);
+  });
+
+  function viewStudentDetails(quizId) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/SCES/backend/fetch-class.php`, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    const requestBody = `quiz_id=${encodeURIComponent(
+      quizId
+    )}&submitType=getStudentScores`;
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        const studentData = JSON.parse(xhr.responseText);
+        const studentContainer = document.querySelector(
+          ".student-score-container"
+        );
+        studentContainer.innerHTML = "";
+
+        if (studentData.length > 0) {
+          studentData.forEach((student) => {
+            const studentScoreBox = document.createElement("div");
+            studentScoreBox.classList.add("student-score-box");
+
+            // Check if student data is null or student hasn't taken the assessment
+            if (
+              student.student_lname === null ||
+              student.student_fname === null ||
+              student.student_mname === null ||
+              student.score === null
+            ) {
+              studentScoreBox.innerHTML = `
+                <div class="box-part full-name">${
+                  student.student_lname || "N/A"
+                }, ${student.student_fname || "N/A"} ${
+                student.student_mname
+                  ? student.student_mname.charAt(0) + "."
+                  : ""
+              }</div>
+                <div class="box-part empty">Assessment Pending for Student</div>
+              `;
+            } else {
+              studentScoreBox.innerHTML = `
+                <div class="box-part full-name">${student.student_lname}, ${
+                student.student_fname
+              } ${student.student_mname.charAt(0)}.</div>
+                <div class="box-part score ${
+                  student.remarks !== null
+                    ? student.remarks
+                      ? "good"
+                      : "bad"
+                    : ""
+                }">${student.score !== null ? student.score : "N/A"}</div>
+                <div class="box-part remarks ${
+                  student.remarks !== null
+                    ? student.remarks
+                      ? "passed"
+                      : "failed"
+                    : ""
+                }">
+                    ${
+                      student.remarks !== null
+                        ? student.remarks
+                          ? "Passed"
+                          : "Failed"
+                        : "N/A"
+                    }
+                </div>
+                <div class="box-part time">${
+                  student.time ? student.time : "N/A"
+                }</div>
+              `;
+            }
+
+            studentContainer.appendChild(studentScoreBox);
+          });
+        } else {
+          studentContainer.innerHTML =
+            "<p>No students have completed the quiz yet.</p>";
+        }
+      }
+    };
+
+    xhr.send(requestBody);
+  }
 
   function createDonutCharts() {
     const ctx1 = document.getElementById("donutChart1").getContext("2d");
@@ -611,25 +731,4 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
   }
-  const quizToggle = document.getElementById("quiz-toggle");
-  const studentToggle = document.getElementById("student-toggle");
-  const viewQuiz = document.getElementById("view-quiz");
-  const viewStudent = document.getElementById("view-student");
-
-  viewQuiz.style.display = "block";
-  viewStudent.style.display = "none";
-
-  quizToggle.addEventListener("click", function () {
-    viewQuiz.style.display = "block";
-    viewStudent.style.display = "none";
-    quizToggle.classList.add("active");
-    studentToggle.classList.remove("active");
-  });
-
-  studentToggle.addEventListener("click", function () {
-    viewQuiz.style.display = "none";
-    viewStudent.style.display = "block";
-    studentToggle.classList.add("active");
-    quizToggle.classList.remove("active");
-  });
 });

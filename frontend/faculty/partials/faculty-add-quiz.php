@@ -161,11 +161,12 @@
 <div id="viewQuizModal" class="modal">
     <div class="modal-content stretched">
         <div class="view-controller">
-            <button class="controller active" id="quiz-toggle" >Quiz Details</button>
+            <button class="controller active" id="quiz-toggle">Quiz Details</button>
             <button class="controller" id="student-toggle">Student List</button>
             <span id="closeViewQuiz" class="close-btn">&times;</span>
         </div>
         <div class="view-container" id="view-quiz">
+            <input type="hidden" id="viewQuizId">
             <div class="view-modal-row">
                 <h3 id="viewQuizTitle"></h3>
             </div>
@@ -200,8 +201,15 @@
                 </div>
             </div>
             <br>
-            <button class="save-btn">Activate Quiz</button>
+            <button class="save-btn" style="margin-top: 15px;">Activate Quiz</button>
         </div>
-        <div class="view-container" id="view-student"></div>
+        <div class="view-container" id="view-student">
+            <div class="view-modal-row">
+                <h3 id="studentViewSection">Grade 1 - Banana:</h3>
+            </div>
+            <div class="student-score-container">
+                
+            </div>
+        </div>
     </div>
 </div>

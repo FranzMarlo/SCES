@@ -587,7 +587,13 @@
   box-sizing: border-box;
 }
 .stretched{
-  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+}
+.view-container{
+  display: flex;
+  flex-direction: column;
 }
 .padded{
   padding-bottom: 50px;
@@ -754,6 +760,62 @@ canvas {
   background-color: transparent;
   border: none;
   height: 100%;
+}
+.student-score-container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.student-score-box{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 2px solid #c4c4c4;
+  height: 40px;
+  align-items: center;
+  padding: 10px;
+  font-size: 1rem;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  text-align: center;
+}
+.box-part{
+  padding: 5px;
+}
+.passed{
+  border-radius: 15px;
+  background-color: #64d468;
+  color: #fff;
+}
+.failed{
+  background-color: #c85650;
+  color: #fff;
+}
+.full-name{
+  text-align: justify;
+  width: 40%;
+}
+.score{
+  width: 10%;
+}
+.time{
+  width: 40%;
+}
+.remarks{
+  width: 20%;
+}
+.good{
+  color: #4caf50;
+  font-weight: bold;
+}
+.warning{
+  color: #b32c2c;
+  font-weight: bold;
+}
+.empty{
+  width: 60%;
+  font-weight: bold;
 }
 @media (width < 1199px) {
   .pending-title img {

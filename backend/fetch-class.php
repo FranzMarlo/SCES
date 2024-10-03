@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo '<option value="">No lessons available</option>';
         }
 
-
     } else if ($submitType === 'getQuiz') {
         if (isset($_POST['quiz_id'])) {
             $quizId = $_POST['quiz_id'];
@@ -44,6 +43,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $quizData = $fetchDb->fetchFullQuizDetails($quizId);
 
             echo json_encode($quizData);
+        } else {
+            echo json_encode(['error' => 'Quiz ID not provided']);
+        }
+    } else if ($submitType === 'getStudentScores') {
+        if (isset($_POST['quiz_id'])) {
+            $quizId = $_POST['quiz_id'];
+
+            $quizData = $fetchDb->fetchStudentScore($quizId);
+
+            echo json_encode($quizData);
+        } else {
+            echo json_encode(['error' => 'Quiz ID not provided']);
+        }
+    } else if ($submitType === 'getPassedStudents') {
+        if (isset($_POST['quiz_id'])) {
+            $quizId = $_POST['quiz_id'];
+
+            $studentCount = $fetchDb->fetchPassedStudents($quizId);
+
+            echo json_encode($studentCount);
         } else {
             echo json_encode(['error' => 'Quiz ID not provided']);
         }

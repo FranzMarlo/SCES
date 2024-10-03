@@ -238,5 +238,77 @@ class fetchClass extends db_connect
         return null;
 
     }
+    public function fetchStudentScore($quizId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            subject.subject_id,
+            level.level_id,
+            level.grade_level,
+            section.section,
+            section.section_id,
+            quiz.quiz_id,
+            score.score,
+            student.student_lname,
+            student.student_fname,
+            student.student_mname,
+            score.item_number,
+            score.remarks,
+            score.time
+        FROM
+            quiz_tbl quiz
+        INNER JOIN
+            subject_tbl subject ON subject.subject_id = quiz.subject_id
+        INNER JOIN 
+            section_tbl section ON section.section_id = subject.section_id
+        INNER JOIN 
+            level_tbl level ON level.level_id = section.level_id
+        LEFT JOIN 
+            student_tbl student ON student.section_id = section.section_id
+        LEFT JOIN 
+            score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
+        WHERE 
+            quiz.quiz_id = ?
+        ORDER BY
+            score.time DESC
+            ");
+
+        $query->bind_param("s", $quizId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $allResults = $result->fetch_all(MYSQLI_ASSOC);
+            return $allResults;
+        }
+
+        return null;
+
+    }
+    public function fetchPassedStudents($quizId)
+    {
+        $query = $this->conn->prepare("
+        SELECT
+            COUNT(student.student_id) AS student_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson ON quiz.lesson_id = lesson.lesson_id
+        LEFT JOIN student_tbl student ON student.section_id = section.section_id
+        LEFT JOIN score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
+        WHERE quiz.quiz_id = 'Q202415191' AND score.remarks = 'Passed';
+        ");
+
+        $query->bind_param("s", $quizId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $studentCount = $result->fetch_assoc();
+            return $studentCount;
+        }
+
+        return null;
+
+    }
 
 }

@@ -55,7 +55,7 @@ $page = '';
                                                 <li class="edit-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Edit</li>
                                                 <li class="view-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">View Info
                                                 </li>
-                                                <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Disable
+                                                <li class="enable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Enable
                                                 </li>
                                             </ul>
                                         </div>
@@ -98,7 +98,7 @@ $page = '';
                                             <ul>
                                                 <li class="edit-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Edit</li>
                                                 <li class="view-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">View Info</li>
-                                                <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Disable</li>
+                                                <li class="enable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Enable</li>
                                             </ul>
                                         </div>
                                     </div>
