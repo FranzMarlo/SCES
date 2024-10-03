@@ -296,7 +296,7 @@ class fetchClass extends db_connect
         INNER JOIN lesson_tbl lesson ON quiz.lesson_id = lesson.lesson_id
         LEFT JOIN student_tbl student ON student.section_id = section.section_id
         LEFT JOIN score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
-        WHERE quiz.quiz_id = 'Q202415191' AND score.remarks = 'Passed';
+        WHERE quiz.quiz_id = ? AND score.remarks = 'Passed';
         ");
 
         $query->bind_param("s", $quizId);
@@ -304,11 +304,59 @@ class fetchClass extends db_connect
         if ($query->execute()) {
             $result = $query->get_result();
             $studentCount = $result->fetch_assoc();
-            return $studentCount;
+            return $studentCount['student_count'];
         }
+        return 0;
+    }
 
-        return null;
+    public function fetchFailedStudents($quizId)
+    {
+        $query = $this->conn->prepare("
+        SELECT
+            COUNT(student.student_id) AS student_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson ON quiz.lesson_id = lesson.lesson_id
+        LEFT JOIN student_tbl student ON student.section_id = section.section_id
+        LEFT JOIN score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
+        WHERE quiz.quiz_id = ? AND score.remarks = 'Failed';
+        ");
 
+        $query->bind_param("s", $quizId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $studentCount = $result->fetch_assoc();
+            return $studentCount['student_count'];
+        }
+        return 0;
+    }
+
+    public function fetchTotalStudents($quizId)
+    {
+        $query = $this->conn->prepare("
+        SELECT
+            COUNT(student.student_id) AS student_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson ON quiz.lesson_id = lesson.lesson_id
+        LEFT JOIN student_tbl student ON student.section_id = section.section_id
+        LEFT JOIN score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
+        WHERE quiz.quiz_id = ?;
+        ");
+
+        $query->bind_param("s", $quizId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $studentCount = $result->fetch_assoc();
+            return $studentCount['student_count'];
+        }
+        return 0;
     }
 
 }

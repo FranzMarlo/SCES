@@ -509,7 +509,18 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".view-quiz").forEach((viewBtn) => {
     viewBtn.addEventListener("click", function () {
       const quizId = this.getAttribute("data-quiz-id");
-      createDonutCharts();
+      Promise.all([
+        fetchPassedStudents(quizId),
+        fetchFailedStudents(quizId),
+        fetchTotalStudents(quizId)
+      ]).then(([passedStudentCount, failedStudentCount, totalStudentCount]) => {
+        createDonutCharts(
+          totalStudentCount,
+          passedStudentCount,
+          failedStudentCount
+        );
+      });
+
       viewQuizDetails(quizId);
     });
   });
@@ -636,8 +647,79 @@ document.addEventListener("DOMContentLoaded", function () {
 
     xhr.send(requestBody);
   }
+  function fetchPassedStudents(quizId) {
+    return new Promise((resolve) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `/SCES/backend/fetch-class.php`, true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-  function createDonutCharts() {
+      const requestBody = `quiz_id=${encodeURIComponent(
+        quizId
+      )}&submitType=getPassedStudents`;
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          const quizData = JSON.parse(xhr.responseText);
+          // Access the student count returned by PHP
+          const passedStudentCount = quizData.student_count || 0;
+          resolve(passedStudentCount); // Resolve the promise with the count
+        }
+      };
+
+      xhr.send(requestBody);
+    });
+  }
+
+  function fetchFailedStudents(quizId) {
+    return new Promise((resolve) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `/SCES/backend/fetch-class.php`, true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      const requestBody = `quiz_id=${encodeURIComponent(
+        quizId
+      )}&submitType=getFailedStudents`;
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          const quizData = JSON.parse(xhr.responseText);
+          // Access the student count returned by PHP
+          const failedStudentCount = quizData.student_count || 0;
+          resolve(failedStudentCount); // Resolve the promise with the count
+        }
+      };
+
+      xhr.send(requestBody);
+    });
+  }
+  function fetchTotalStudents(quizId) {
+    return new Promise((resolve) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `/SCES/backend/fetch-class.php`, true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      const requestBody = `quiz_id=${encodeURIComponent(
+        quizId
+      )}&submitType=getTotalStudents`;
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          const quizData = JSON.parse(xhr.responseText);
+          // Access the student count returned by PHP
+          const totalStudentCount = quizData.student_count || 0;
+          resolve(totalStudentCount); // Resolve the promise with the count
+        }
+      };
+
+      xhr.send(requestBody);
+    });
+  }
+
+  function createDonutCharts(
+    totalStudentCount,
+    totalPassedCount,
+    totalFailedCount
+  ) {
     const ctx1 = document.getElementById("donutChart1").getContext("2d");
     const ctx2 = document.getElementById("donutChart2").getContext("2d");
 
@@ -645,8 +727,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (ctx1.chart) ctx1.chart.destroy();
     if (ctx2.chart) ctx2.chart.destroy();
 
-    const completedCount = 60;
-    const passedCount = 80;
+    const completedCount = totalFailedCount + totalPassedCount;
+    const passedCount = totalPassedCount;
+    const failedCount = totalFailedCount;
+    const totalCount = totalStudentCount;
 
     const centerLabelPlugin = {
       id: "centerLabel",
@@ -683,8 +767,8 @@ document.addEventListener("DOMContentLoaded", function () {
         labels: ["Completed", "Not Completed"],
         datasets: [
           {
-            label: "Completion Rate",
-            data: [completedCount, 100 - completedCount],
+            label: "Number Of Students",
+            data: [completedCount, totalCount - completedCount],
             backgroundColor: ["#59adf6", "#ffffff"],
             borderColor: ["#5694ca", "#BBBBBBFF"],
             borderWidth: 2,
@@ -710,8 +794,8 @@ document.addEventListener("DOMContentLoaded", function () {
         labels: ["Passed", "Failed"],
         datasets: [
           {
-            label: "Passing Rate",
-            data: [passedCount, 100 - passedCount], // Sample data
+            label: "Number Of Students",
+            data: [passedCount, failedCount], // Sample data
             backgroundColor: ["#42d6a4", "#ff8080"],
             borderColor: ["#3baf88", "#ea7474"],
             borderWidth: 2,
