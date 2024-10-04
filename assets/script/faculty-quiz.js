@@ -5,8 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const noQuizHeader = document.querySelector(".no-quiz-header");
   const form = document.getElementById("addQuiz");
   const lessonDropdown = document.getElementById("lesson");
-  const editLessonDropdown = document.getElementById("editLesson");
   const closeModal = document.getElementById("closeAddQuiz");
+  const activeContainer = document.getElementById("activeContainer");
+  const inactiveContainer = document.getElementById("inactiveContainer");
   let quizDisplayState = [];
 
   function getQuizIdFromURL() {
@@ -14,8 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
     return urlParams.get("quiz_id");
   }
 
-  function setQuizIdInURL(quizId) {
-    const newUrl = `${window.location.pathname}?quiz_id=${quizId}`;
+  function isActiveFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get("active") === "true"; // Check if active=true
+  }
+
+  function setQuizIdInURL(quizId, isActive) {
+    const newUrl = `${window.location.pathname}?active=${isActive}&quiz_id=${quizId}`;
     history.replaceState(null, "", newUrl);
   }
 
@@ -27,10 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (modal && addQuizBtn && addQuizItem && closeModal) {
     addQuizBtn.onclick = openModal;
     addQuizItem.onclick = openModal;
-
-    document.querySelectorAll(".no-data-item").forEach((item) => {
-      item.onclick = openModal;
-    });
 
     if (noQuizHeader) {
       noQuizHeader.onclick = openModal;
@@ -101,7 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     item.addEventListener("click", function (event) {
       event.preventDefault();
-      setQuizIdInURL(quizId); // Update URL with quiz_id
+      const isActive = quizSwitch.checked; // Get current state of the switch
+      setQuizIdInURL(quizId, isActive); // Update URL with quiz_id and active status
 
       // Hide all quiz headers and items
       quizHeaders.forEach((header) => (header.style.display = "none"));
@@ -118,7 +121,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     item.addEventListener("click", function (event) {
       event.preventDefault();
-      setQuizIdInURL(quizId); // Update URL with quiz_id
+      const isActive = quizSwitch.checked; // Get current state of the switch
+      setQuizIdInURL(quizId, isActive); // Update URL with quiz_id and active status
 
       // Hide all quiz headers and items
       quizHeaders.forEach((header) => (header.style.display = "none"));
@@ -146,8 +150,35 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Handle the display of active or inactive quizzes based on the URL or switch state
+  const quizSwitch = document.getElementById("quizSwitch");
+  quizSwitch.addEventListener("change", function () {
+    const isActive = quizSwitch.checked;
+    if (isActive) {
+      activeContainer.style.display = "flex";
+      inactiveContainer.style.display = "none";
+      setQuizIdInURL(getQuizIdFromURL(), true); // Append active=true
+    } else {
+      inactiveContainer.style.display = "flex";
+      activeContainer.style.display = "none";
+      setQuizIdInURL(getQuizIdFromURL(), false); // Append active=false
+    }
+  });
+
+  // Initially show active or inactive quizzes based on the URL or switch state
   const initialQuizId =
     getQuizIdFromURL() || pendingItems[0]?.getAttribute("data-quiz-id");
+  const isActive = isActiveFromURL();
+  quizSwitch.checked = isActive; // Set switch based on URL
+
+  if (isActive) {
+    activeContainer.style.display = "flex";
+    inactiveContainer.style.display = "none";
+  } else {
+    inactiveContainer.style.display = "flex";
+    activeContainer.style.display = "none";
+  }
+
   if (initialQuizId) {
     displayQuizById(initialQuizId);
   } else if (pendingItems.length > 0) {
@@ -730,19 +761,19 @@ document.addEventListener("DOMContentLoaded", function () {
   ) {
     const ctx1 = document.getElementById("donutChart1").getContext("2d");
     const ctx2 = document.getElementById("donutChart2").getContext("2d");
-  
+
     // Destroy previous charts if they exist
     if (ctx1.chart) ctx1.chart.destroy();
     if (ctx2.chart) ctx2.chart.destroy();
-  
+
     var completedCount = totalFailedCount + totalPassedCount;
     var passedCount = totalPassedCount;
     var failedCount = totalFailedCount;
     var totalCount = totalStudentCount;
-  
+
     // Use totalCount in chart 2 if passedCount and failedCount are zero
     var chart2Data, chart2BackgroundColor, chart2BorderColor;
-  
+
     if (passedCount === 0 && failedCount === 0) {
       // Use total count for chart 2
       chart2Data = [passedCount, totalCount];
@@ -754,7 +785,7 @@ document.addEventListener("DOMContentLoaded", function () {
       chart2BackgroundColor = ["#42d6a4", "#ff8080"]; // Green for passed, red for failed
       chart2BorderColor = ["#3baf88", "#ea7474"];
     }
-  
+
     const centerLabelPlugin = {
       id: "centerLabel",
       beforeDraw: function (chart) {
@@ -762,27 +793,27 @@ document.addEventListener("DOMContentLoaded", function () {
         const chartArea = chart.chartArea;
         const width = chartArea.right - chartArea.left;
         const height = chartArea.bottom - chartArea.top;
-  
+
         ctx.save();
-  
+
         ctx.font = "2.5rem sans-serif"; // Adjust font size based on chart size if needed
         ctx.textAlign = "center"; // Center text horizontally
         ctx.textBaseline = "middle"; // Center text vertically
         ctx.fillStyle = "#000"; // Text color
-  
+
         // Calculate the value from the dataset and position
         const number = chart.data.datasets[0].data[0]; // Value to be displayed
         const xCenter = chartArea.left + width / 2; // Horizontal center
         const yCenter = chartArea.top + height / 2; // Vertical center
-  
+
         ctx.fillText(number, xCenter, yCenter); // Draw the number in the center
         ctx.restore(); // Restore the context state
       },
     };
-  
+
     // Register the custom plugin
     Chart.register(centerLabelPlugin);
-  
+
     // Chart 1: Completion Rate
     ctx1.chart = new Chart(ctx1, {
       type: "doughnut",
@@ -810,12 +841,15 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
     });
-  
+
     // Chart 2: Passed and Failed
     ctx2.chart = new Chart(ctx2, {
       type: "doughnut",
       data: {
-        labels: passedCount === 0 && failedCount === 0 ? ["Total Students"] : ["Passed", "Failed"],
+        labels:
+          passedCount === 0 && failedCount === 0
+            ? ["Total Students"]
+            : ["Passed", "Failed"],
         datasets: [
           {
             label: "Students",

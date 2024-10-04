@@ -880,7 +880,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function facultyGetQuizzes($teacherId)
+    public function getActiveQuizzes($teacherId, $status)
     {
         $query = $this->conn->prepare("
         SELECT 
@@ -918,10 +918,12 @@ class globalClass extends db_connect
             quiz.lesson_id = lesson.lesson_id
         WHERE 
             subject.teacher_id = ?
+        AND
+            quiz.status = ?
         ORDER BY
             quiz.add_time DESC
         ");
-        $query->bind_param("s", $teacherId);
+        $query->bind_param("ss", $teacherId, $status);
         if ($query->execute()) {
             $result = $query->get_result();
             $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
