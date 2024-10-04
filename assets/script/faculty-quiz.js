@@ -512,7 +512,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Promise.all([
         fetchPassedStudents(quizId),
         fetchFailedStudents(quizId),
-        fetchTotalStudents(quizId)
+        fetchTotalStudents(quizId),
       ]).then(([passedStudentCount, failedStudentCount, totalStudentCount]) => {
         createDonutCharts(
           totalStudentCount,
@@ -594,6 +594,7 @@ document.addEventListener("DOMContentLoaded", function () {
               student.score === null
             ) {
               studentScoreBox.innerHTML = `
+              <div class="box-data">
                 <div class="box-part full-name">${
                   student.student_lname || "N/A"
                 }, ${student.student_fname || "N/A"} ${
@@ -601,10 +602,14 @@ document.addEventListener("DOMContentLoaded", function () {
                   ? student.student_mname.charAt(0) + "."
                   : ""
               }</div>
+              </div>
+              <div class="box-data">
                 <div class="box-part empty">Assessment Pending for Student</div>
+              </div>
               `;
             } else {
               studentScoreBox.innerHTML = `
+                <div class="box-data">
                 <div class="box-part full-name">${student.student_lname}, ${
                 student.student_fname
               } ${student.student_mname.charAt(0)}.</div>
@@ -614,7 +619,9 @@ document.addEventListener("DOMContentLoaded", function () {
                       ? "good"
                       : "bad"
                     : ""
-                }">${student.score !== null ? student.score : "N/A"}</div>
+                }">${student.score}/${student.item_number}</div>
+                </div>
+                <div class="box-data">
                 <div class="box-part remarks ${
                   student.remarks !== null
                     ? student.remarks
@@ -633,6 +640,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="box-part time">${
                   student.time ? student.time : "N/A"
                 }</div>
+                </div>
               `;
             }
 
@@ -722,16 +730,31 @@ document.addEventListener("DOMContentLoaded", function () {
   ) {
     const ctx1 = document.getElementById("donutChart1").getContext("2d");
     const ctx2 = document.getElementById("donutChart2").getContext("2d");
-
+  
     // Destroy previous charts if they exist
     if (ctx1.chart) ctx1.chart.destroy();
     if (ctx2.chart) ctx2.chart.destroy();
-
-    const completedCount = totalFailedCount + totalPassedCount;
-    const passedCount = totalPassedCount;
-    const failedCount = totalFailedCount;
-    const totalCount = totalStudentCount;
-
+  
+    var completedCount = totalFailedCount + totalPassedCount;
+    var passedCount = totalPassedCount;
+    var failedCount = totalFailedCount;
+    var totalCount = totalStudentCount;
+  
+    // Use totalCount in chart 2 if passedCount and failedCount are zero
+    var chart2Data, chart2BackgroundColor, chart2BorderColor;
+  
+    if (passedCount === 0 && failedCount === 0) {
+      // Use total count for chart 2
+      chart2Data = [passedCount, totalCount];
+      chart2BackgroundColor = ["#ffffff", "#ffffff"];
+      chart2BorderColor = ["#BBBBBBFF", "#BBBBBBFF"];
+    } else {
+      // Use passed and failed counts normally
+      chart2Data = [passedCount, failedCount];
+      chart2BackgroundColor = ["#42d6a4", "#ff8080"]; // Green for passed, red for failed
+      chart2BorderColor = ["#3baf88", "#ea7474"];
+    }
+  
     const centerLabelPlugin = {
       id: "centerLabel",
       beforeDraw: function (chart) {
@@ -739,27 +762,27 @@ document.addEventListener("DOMContentLoaded", function () {
         const chartArea = chart.chartArea;
         const width = chartArea.right - chartArea.left;
         const height = chartArea.bottom - chartArea.top;
-
+  
         ctx.save();
-
+  
         ctx.font = "2.5rem sans-serif"; // Adjust font size based on chart size if needed
         ctx.textAlign = "center"; // Center text horizontally
         ctx.textBaseline = "middle"; // Center text vertically
         ctx.fillStyle = "#000"; // Text color
-
+  
         // Calculate the value from the dataset and position
         const number = chart.data.datasets[0].data[0]; // Value to be displayed
         const xCenter = chartArea.left + width / 2; // Horizontal center
         const yCenter = chartArea.top + height / 2; // Vertical center
-
+  
         ctx.fillText(number, xCenter, yCenter); // Draw the number in the center
         ctx.restore(); // Restore the context state
       },
     };
-
+  
     // Register the custom plugin
     Chart.register(centerLabelPlugin);
-
+  
     // Chart 1: Completion Rate
     ctx1.chart = new Chart(ctx1, {
       type: "doughnut",
@@ -767,7 +790,7 @@ document.addEventListener("DOMContentLoaded", function () {
         labels: ["Completed", "Not Completed"],
         datasets: [
           {
-            label: "Number Of Students",
+            label: "Students",
             data: [completedCount, totalCount - completedCount],
             backgroundColor: ["#59adf6", "#ffffff"],
             borderColor: ["#5694ca", "#BBBBBBFF"],
@@ -787,17 +810,18 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
     });
-
+  
+    // Chart 2: Passed and Failed
     ctx2.chart = new Chart(ctx2, {
       type: "doughnut",
       data: {
-        labels: ["Passed", "Failed"],
+        labels: passedCount === 0 && failedCount === 0 ? ["Total Students"] : ["Passed", "Failed"],
         datasets: [
           {
-            label: "Number Of Students",
-            data: [passedCount, failedCount], // Sample data
-            backgroundColor: ["#42d6a4", "#ff8080"],
-            borderColor: ["#3baf88", "#ea7474"],
+            label: "Students",
+            data: chart2Data, // Use total count if passed and failed are zero
+            backgroundColor: chart2BackgroundColor,
+            borderColor: chart2BorderColor,
             borderWidth: 2,
           },
         ],
@@ -815,4 +839,5 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
   }
+  
 });

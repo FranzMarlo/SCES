@@ -1185,7 +1185,7 @@ if (isset($_POST['submitType'])) {
             echo '482';
         } else if (empty($editQuizNumber)) {
             echo '483';
-        } else if ($checkNumber->num_rows > 0) {
+        } else if ($checkNumber->num_rows > 1) {
             echo '484';
         } else if (empty($editSubject)) {
             echo '485';

@@ -208,7 +208,7 @@
                 <h3 id="studentViewSection">Grade 1 - Banana:</h3>
             </div>
             <div class="student-score-container">
-                
+
             </div>
         </div>
     </div>
