@@ -442,6 +442,9 @@
 }
 .quiz-dropdown {
   position: relative;
+  display: none;
+}
+#activeDropdown{
   display: inline-block;
 }
 .quiz-dropdown-content {
@@ -853,22 +856,22 @@ canvas {
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px; /* Circle's height adjusted for new slider size */
-  width: 18px; /* Same as height to maintain a circle shape */
-  left: 3.5px; /* Adjusted for new size */
-  bottom: 3.5px; /* Adjusted for new size */
+  height: 18px;
+  width: 18px;
+  left: 3.5px;
+  bottom: 3.5px;
   background-color: white;
   transition: .4s;
-  border-radius: 50%; /* Keeps the circle shape */
+  border-radius: 50%;
 }
 input:checked + .slider {
-  background-color: #4caf50; /* Green when active */
+  background-color: #4caf50;
 }
 input:not(:checked) + .slider {
-  background-color: #f44336; /* Red when inactive */
+  background-color: #f44336;
 }
 input:checked + .slider:before {
-  transform: translateX(25px); /* Adjust the transform to move the circle across the new width */
+  transform: translateX(25px);
 }
 
 @media (width < 1199px) {
@@ -910,6 +913,9 @@ input:checked + .slider:before {
 @media (width < 992px) {
   .content {
     padding: 5px;
+  }
+  .pending-title h1 {
+    font-size: 1.2rem;
   }
 }
 @media (width < 768px) {

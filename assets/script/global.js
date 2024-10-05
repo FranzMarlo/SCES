@@ -2569,7 +2569,7 @@ $("#addQuiz").on("submit", function (e) {
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
               if (result.value) {
-                window.location.href = `?quiz_id=${response.quizId}`;
+                window.location.href = `?active=false&quiz_id=${response.quizId}`;
               }
             });
           }

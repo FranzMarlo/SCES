@@ -32,16 +32,16 @@ $page = '';
                             <span class="slider round"></span>
                         </label>
                     </div>
-                    <div class="quiz-dropdown">
+                    <div class="quiz-dropdown" id="activeDropdown">
                         <div class="quiz-btn">
                             <i class="fa-solid fa-ellipsis-vertical icon"></i>
                         </div>
                         <div class="quiz-dropdown-content">
                             <div class="quiz-dropdown-title">
-                                <img src="/SCES/assets/images/pending-quiz.png" alt="pending-quiz.png">
+                                <img src="/SCES/assets/images/status-active.png" alt="status-active.png">
                                 <h1>Active Quizzes</h1>
                             </div>
-                            <button id="addQuizBtn">
+                            <button id="activeAddQuizBtn">
                                 <img src="/SCES/assets/images/add-quiz-icon.png" alt="add-quiz-icon.png">
                                 <span>Add Quiz</span>
                             </button>
@@ -50,8 +50,53 @@ $page = '';
                                     <div class="pending <?php echo strtolower($quiz['subject_code']); ?>"
                                         data-quiz-index="<?php echo $index; ?>"
                                         data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
-                                        <span>Quiz
-                                            <?php echo htmlspecialchars($quiz['quiz_number']) . ' - ' . htmlspecialchars($quiz['title']); ?></span>
+                                        <span><?php echo htmlspecialchars($quiz['subject']) ?> - Quiz
+                                            <?php echo htmlspecialchars($quiz['quiz_number']) ?></span>
+                                        <button class="quiz-option"
+                                            data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <div class="quiz-dropdown-popup-menu">
+                                            <ul>
+                                                <li class="edit-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Edit</li>
+                                                <li class="view-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">View Info
+                                                </li>
+                                                <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Disable
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="no-data-item">
+                                    <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                                    <h1>No Quiz Added.</h1>
+                                    <h1>Add A Quiz By Clicking The Button Above.</h1>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="quiz-dropdown" id="inactiveDropdown">
+                        <div class="quiz-btn">
+                            <i class="fa-solid fa-ellipsis-vertical icon"></i>
+                        </div>
+                        <div class="quiz-dropdown-content">
+                            <div class="quiz-dropdown-title">
+                                <img src="/SCES/assets/images/status-inactive.png" alt="status-inactive.png">
+                                <h1>Inactive Quizzes</h1>
+                            </div>
+                            <button id="addQuizBtn">
+                                <img src="/SCES/assets/images/add-quiz-icon.png" alt="add-quiz-icon.png">
+                                <span>Add Quiz</span>
+                            </button>
+                            <?php if ($inactiveQuizzes): ?>
+                                <?php foreach ($inactiveQuizzes as $index => $quiz): ?>
+                                    <div class="pending <?php echo strtolower($quiz['subject_code']); ?>"
+                                        data-quiz-index="<?php echo $index; ?>"
+                                        data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
+                                        <span><?php echo htmlspecialchars($quiz['subject']) ?> - Quiz
+                                            <?php echo htmlspecialchars($quiz['quiz_number']) ?></span>
                                         <button class="quiz-option"
                                             data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
                                             <i class="fa-solid fa-ellipsis-vertical"></i>
@@ -77,6 +122,7 @@ $page = '';
                         </div>
                     </div>
                 </div>
+
                 <div class="quiz-container" id="activeContainer">
                     <div class="pending-container">
                         <div class="pending-title">
@@ -103,7 +149,7 @@ $page = '';
                                         <ul>
                                             <li class="edit-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Edit</li>
                                             <li class="view-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">View Info</li>
-                                            <li class="enable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Enable</li>
+                                            <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">disable</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -156,8 +202,6 @@ $page = '';
                                                     <ul>
                                                         <li class="edit-question"
                                                             data-question-id="<?php echo $question['question_id']; ?>">Edit</li>
-                                                        <li class="remove-question"
-                                                            data-question-id="<?php echo $question['question_id']; ?>">Remove</li>
                                                     </ul>
                                                 </div>
                                                 <div class="question-box">

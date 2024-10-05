@@ -1,15 +1,24 @@
 document.addEventListener("DOMContentLoaded", function () {
   const modal = document.getElementById("addQuizModal");
   const addQuizBtn = document.getElementById("addQuizBtn");
+  const activeAddQuizBtn = document.getElementById("activeAddQuizBtn");
   const addQuizItem = document.getElementById("addQuizItem");
+  const activeAddQuizItem = document.getElementById("activeAddQuizItem");
   const noQuizHeader = document.querySelector(".no-quiz-header");
   const form = document.getElementById("addQuiz");
   const lessonDropdown = document.getElementById("lesson");
   const closeModal = document.getElementById("closeAddQuiz");
+  const activeDropdown = document.getElementById("activeDropdown");
   const activeContainer = document.getElementById("activeContainer");
+  const inactiveDropdown = document.getElementById("inactiveDropdown");
   const inactiveContainer = document.getElementById("inactiveContainer");
   let quizDisplayState = [];
 
+  // Declare these earlier, so they can be used in ensureActiveInURL function
+  const pendingItems = document.querySelectorAll(".pending-item");
+  const pendingButton = document.querySelectorAll(".pending");
+
+  // Helper functions for working with URL parameters
   function getQuizIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get("quiz_id");
@@ -25,14 +34,39 @@ document.addEventListener("DOMContentLoaded", function () {
     history.replaceState(null, "", newUrl);
   }
 
+  // Function to ensure the URL always contains active=true on page load
+  function ensureActiveInURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.has("active")) {
+      urlParams.set("active", "true"); // Default to active=true
+      const quizId =
+        getQuizIdFromURL() || pendingItems[0]?.getAttribute("data-quiz-id");
+      urlParams.set("quiz_id", quizId); // Ensure quiz_id is also set
+      const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+      history.replaceState(null, "", newUrl);
+    }
+  }
+
+  // On page load, ensure the URL has active=true
+  ensureActiveInURL();
+
   function openModal() {
     modal.style.display = "flex";
     storeQuizDisplayState();
   }
 
-  if (modal && addQuizBtn && addQuizItem && closeModal) {
+  if (
+    modal &&
+    addQuizBtn &&
+    addQuizItem &&
+    activeAddQuizItem &&
+    activeAddQuizBtn &&
+    closeModal
+  ) {
     addQuizBtn.onclick = openModal;
     addQuizItem.onclick = openModal;
+    activeAddQuizItem.onclick = openModal;
+    activeAddQuizBtn.onclick = openModal;
 
     if (noQuizHeader) {
       noQuizHeader.onclick = openModal;
@@ -88,12 +122,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  const pendingItems = document.querySelectorAll(".pending-item");
-  const pendingButton = document.querySelectorAll(".pending");
   const quizHeaders = document.querySelectorAll(".quiz-header");
   const quizItems = document.querySelectorAll(".quiz-item");
 
-  // Initially hide all quiz headers and items
   quizHeaders.forEach((header) => (header.style.display = "none"));
   quizItems.forEach((item) => (item.style.display = "none"));
 
@@ -103,14 +134,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     item.addEventListener("click", function (event) {
       event.preventDefault();
-      const isActive = quizSwitch.checked; // Get current state of the switch
-      setQuizIdInURL(quizId, isActive); // Update URL with quiz_id and active status
+      const isActive = quizSwitch.checked;
+      setQuizIdInURL(quizId, isActive);
 
-      // Hide all quiz headers and items
       quizHeaders.forEach((header) => (header.style.display = "none"));
       quizItems.forEach((item) => (item.style.display = "none"));
 
-      // Display the selected quiz by quiz_id
       displayQuizById(quizId);
     });
   });
@@ -121,14 +150,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     item.addEventListener("click", function (event) {
       event.preventDefault();
-      const isActive = quizSwitch.checked; // Get current state of the switch
-      setQuizIdInURL(quizId, isActive); // Update URL with quiz_id and active status
+      const isActive = quizSwitch.checked;
+      setQuizIdInURL(quizId, isActive);
 
-      // Hide all quiz headers and items
       quizHeaders.forEach((header) => (header.style.display = "none"));
       quizItems.forEach((item) => (item.style.display = "none"));
 
-      // Display the selected quiz by quiz_id
       displayQuizById(quizId);
     });
   });
@@ -150,17 +177,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Handle the display of active or inactive quizzes based on the URL or switch state
   const quizSwitch = document.getElementById("quizSwitch");
   quizSwitch.addEventListener("change", function () {
     const isActive = quizSwitch.checked;
     if (isActive) {
       activeContainer.style.display = "flex";
       inactiveContainer.style.display = "none";
+      activeDropdown.style.display = "inline-block";
+      inactiveDropdown.style.display = "none";
       setQuizIdInURL(getQuizIdFromURL(), true); // Append active=true
     } else {
       inactiveContainer.style.display = "flex";
       activeContainer.style.display = "none";
+      activeDropdown.style.display = "none";
+      inactiveDropdown.style.display = "inline-block";
       setQuizIdInURL(getQuizIdFromURL(), false); // Append active=false
     }
   });
@@ -321,9 +351,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const popupMenu = pendingItem.querySelector(".quiz-popup-menu");
       const quizId = this.getAttribute("data-quiz-id");
 
-      const currentUrl = window.location.pathname;
+      const currentUrl = new URL(window.location.href);
+      const searchParams = new URLSearchParams(currentUrl.search);
 
-      const newUrl = `${currentUrl}?quiz_id=${quizId}`;
+      searchParams.set("quiz_id", quizId);
+
+      const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
       history.replaceState(null, "", newUrl);
 
       document.querySelectorAll(".quiz-popup-menu").forEach((menu) => {
@@ -365,9 +398,12 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       const quizId = this.getAttribute("data-quiz-id");
 
-      const currentUrl = window.location.pathname;
+      const currentUrl = new URL(window.location.href);
+      const searchParams = new URLSearchParams(currentUrl.search);
 
-      const newUrl = `${currentUrl}?quiz_id=${quizId}`;
+      searchParams.set("quiz_id", quizId);
+
+      const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
       history.replaceState(null, "", newUrl);
 
       document.querySelectorAll(".quiz-dropdown-popup-menu").forEach((menu) => {
@@ -462,10 +498,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   document.getElementById("closeEditQuiz").onclick = function () {
-    const currentUrl = window.location.pathname;
     const quizId = document.getElementById("editQuizId").value;
-    const newUrl = `${currentUrl}?quiz_id=${quizId}`;
+    const currentUrl = new URL(window.location.href);
+    const searchParams = new URLSearchParams(currentUrl.search);
 
+    searchParams.set("quiz_id", quizId);
+
+    const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
     history.replaceState(null, "", newUrl);
     document.getElementById("editQuizModal").style.display = "none";
   };
@@ -571,6 +610,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("viewQuizModal").style.display = "none";
   };
+  
   const quizToggle = document.getElementById("quiz-toggle");
   const studentToggle = document.getElementById("student-toggle");
   const viewQuiz = document.getElementById("view-quiz");
@@ -762,7 +802,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const ctx1 = document.getElementById("donutChart1").getContext("2d");
     const ctx2 = document.getElementById("donutChart2").getContext("2d");
 
-    // Destroy previous charts if they exist
     if (ctx1.chart) ctx1.chart.destroy();
     if (ctx2.chart) ctx2.chart.destroy();
 
@@ -771,18 +810,15 @@ document.addEventListener("DOMContentLoaded", function () {
     var failedCount = totalFailedCount;
     var totalCount = totalStudentCount;
 
-    // Use totalCount in chart 2 if passedCount and failedCount are zero
     var chart2Data, chart2BackgroundColor, chart2BorderColor;
 
     if (passedCount === 0 && failedCount === 0) {
-      // Use total count for chart 2
       chart2Data = [passedCount, totalCount];
       chart2BackgroundColor = ["#ffffff", "#ffffff"];
       chart2BorderColor = ["#BBBBBBFF", "#BBBBBBFF"];
     } else {
-      // Use passed and failed counts normally
       chart2Data = [passedCount, failedCount];
-      chart2BackgroundColor = ["#42d6a4", "#ff8080"]; // Green for passed, red for failed
+      chart2BackgroundColor = ["#42d6a4", "#ff8080"];
       chart2BorderColor = ["#3baf88", "#ea7474"];
     }
 
@@ -796,25 +832,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
         ctx.save();
 
-        ctx.font = "2.5rem sans-serif"; // Adjust font size based on chart size if needed
-        ctx.textAlign = "center"; // Center text horizontally
-        ctx.textBaseline = "middle"; // Center text vertically
-        ctx.fillStyle = "#000"; // Text color
+        ctx.font = "2.5rem sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#000";
 
-        // Calculate the value from the dataset and position
-        const number = chart.data.datasets[0].data[0]; // Value to be displayed
-        const xCenter = chartArea.left + width / 2; // Horizontal center
-        const yCenter = chartArea.top + height / 2; // Vertical center
+        const number = chart.data.datasets[0].data[0];
+        const xCenter = chartArea.left + width / 2;
+        const yCenter = chartArea.top + height / 2;
 
-        ctx.fillText(number, xCenter, yCenter); // Draw the number in the center
-        ctx.restore(); // Restore the context state
+        ctx.fillText(number, xCenter, yCenter);
+        ctx.restore();
       },
     };
 
-    // Register the custom plugin
     Chart.register(centerLabelPlugin);
 
-    // Chart 1: Completion Rate
     ctx1.chart = new Chart(ctx1, {
       type: "doughnut",
       data: {
@@ -835,14 +868,13 @@ document.addEventListener("DOMContentLoaded", function () {
         plugins: {
           legend: {
             display: true,
-            position: "bottom", // Position the legend below the chart
+            position: "bottom",
           },
-          centerLabel: true, // Enable the center label plugin
+          centerLabel: true,
         },
       },
     });
 
-    // Chart 2: Passed and Failed
     ctx2.chart = new Chart(ctx2, {
       type: "doughnut",
       data: {
@@ -853,7 +885,7 @@ document.addEventListener("DOMContentLoaded", function () {
         datasets: [
           {
             label: "Students",
-            data: chart2Data, // Use total count if passed and failed are zero
+            data: chart2Data,
             backgroundColor: chart2BackgroundColor,
             borderColor: chart2BorderColor,
             borderWidth: 2,
@@ -873,5 +905,4 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
   }
-  
 });

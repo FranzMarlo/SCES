@@ -1020,6 +1020,9 @@ class globalClass extends db_connect
             $result = $query->get_result();
             return $result;
         }
+        else{
+            return false;
+        }
     }
 
     public function addChoice($questionId, $quizId, $choice, $order, $value)
