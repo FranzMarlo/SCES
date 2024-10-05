@@ -268,6 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
     displayQuizById(initialQuizId);
     lastInactiveQuizId = initialQuizId;
   }
+  
 
   const addQuestionModal = document.getElementById("addQuestionModal");
   const addQuestionForm = document.getElementById("addQuestion");
@@ -605,7 +606,12 @@ document.addEventListener("DOMContentLoaded", function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         const quizData = JSON.parse(xhr.responseText);
         const quizId = quizData.quiz_id;
-
+        var dueDate;
+        if (quizData.due_date == null) {
+          var dueDate = "Quiz hasn't been activated";
+        } else {
+          dueDate = `Due at ${quizData.due_date}`;
+        }
         // Set quiz details in the modal
         document.getElementById("viewQuizId").value = quizId;
         document.getElementById(
@@ -621,13 +627,25 @@ document.addEventListener("DOMContentLoaded", function () {
           "viewQuizItem"
         ).textContent = `${quizData.item_number} Items`;
         document.getElementById("viewQuizStatus").textContent = quizData.status;
+        document.getElementById("viewQuizDue").textContent = dueDate;
         document.getElementById(
-          "viewQuizDue"
-        ).textContent = `Due at ${quizData.due_date}`;
+          "studentViewSection"
+        ).textContent = `${quizData.grade_level} - ${quizData.section}`;
 
-        const activateQuizButton = document.querySelector(".activate-btn");
-        activateQuizButton.setAttribute("data-quiz-id", quizId);
+        const optionButton = document.querySelector(".option-btn");
+        optionButton.setAttribute("data-quiz-id", quizId);
 
+        if (quizData.status === "Active") {
+          optionButton.classList.remove("activate-btn");
+          optionButton.classList.add("deactivate-btn");
+          optionButton.textContent = "Deactivate Quiz";
+        } else if (quizData.status === "Inactive") {
+          optionButton.classList.remove("deactivate-btn");
+          optionButton.classList.add("activate-btn");
+          optionButton.textContent = "Activate Quiz";
+        }
+
+        // Show the modal
         document.getElementById("viewQuizModal").style.display = "flex";
       }
     };
@@ -970,12 +988,57 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const enableQuizButtons = document.querySelectorAll(".enable-quiz");
+  const dueDateModal = document.getElementById("dueDateModal");
+  const dueDateForm = document.getElementById("dueDateForm");
+  const closeDueDate = document.getElementById("closeDueDateModal");
+  let selectedQuizId = null;
+
+  dueDateForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const dueDate = document.getElementById("dueDate").value;
+    const selectedDueDate = new Date(dueDate);
+    const currentDateTime = new Date();
+
+    if (!dueDate) {
+      Swal.fire({
+        icon: "warning",
+        title: "Please Select a Due Date",
+        confirmButtonColor: "#4CAF50",
+      });
+      return;
+    }
+
+    if (selectedDueDate < currentDateTime) {
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid Due Date",
+        text: "Due date cannot be in the past. Please select a future date and time.",
+        confirmButtonColor: "#4CAF50",
+      });
+      return;
+    }
+
+    dueDateModal.style.display = "none";
+
+    enableQuiz(selectedQuizId, dueDate);
+  });
+
+  closeDueDate.addEventListener("click", function () {
+    dueDateForm.reset();
+    dueDateModal.style.display = "none";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target == dueDateModal) {
+      dueDateForm.reset();
+      dueDateModal.style.display = "none";
+    }
+  });
 
   enableQuizButtons.forEach((button) => {
     button.addEventListener("click", function () {
       const quizId = this.getAttribute("data-quiz-id");
 
-      // Display SweetAlert2 confirmation
       Swal.fire({
         title: "Do You Want To Enable This Quiz?",
         icon: "question",
@@ -988,7 +1051,8 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       }).then((result) => {
         if (result.isConfirmed) {
-          enableQuiz(quizId);
+          selectedQuizId = quizId;
+          dueDateModal.style.display = "flex";
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           Swal.fire({
             title: "Quiz Remains Inactive",
@@ -1071,46 +1135,74 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  const activateQuizButton = document.querySelectorAll(".activate-btn");
+  const quizOptionButton = document.querySelectorAll(".option-btn");
 
-  activateQuizButton.forEach((button) => {
+  quizOptionButton.forEach((button) => {
     button.addEventListener("click", function () {
       const quizId = this.getAttribute("data-quiz-id");
 
-      Swal.fire({
-        title: "Do You Want To Enable This Quiz?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-        customClass: {
-          confirmButton: "swal2-yes-button",
-          cancelButton: "swal2-cancel-button",
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          enableQuiz(quizId);
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire({
-            title: "Quiz Remains Inactive",
-            icon: "info",
-            confirmButtonText: "Ok",
-            customClass: {
-              confirmButton: "swal2-confirm-button-cancelled",
-            },
-          });
-        }
-      });
+      if (button.classList.contains("activate-btn")) {
+        Swal.fire({
+          title: "Do You Want To Enable This Quiz?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          customClass: {
+            confirmButton: "swal2-yes-button",
+            cancelButton: "swal2-cancel-button",
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            selectedQuizId = quizId;
+            dueDateModal.style.display = "flex";
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire({
+              title: "Quiz Remains Inactive",
+              icon: "info",
+              confirmButtonText: "Ok",
+              customClass: {
+                confirmButton: "swal2-confirm-button-cancelled",
+              },
+            });
+          }
+        });
+      } else if (button.classList.contains("deactivate-btn")) {
+        Swal.fire({
+          title: "Do You Want To Disable This Quiz?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          customClass: {
+            confirmButton: "swal2-yes-button",
+            cancelButton: "swal2-cancel-button",
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            disableQuiz(quizId);
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire({
+              title: "Quiz Remains Active",
+              icon: "info",
+              confirmButtonText: "Ok",
+              customClass: {
+                confirmButton: "swal2-confirm-button-cancelled",
+              },
+            });
+          }
+        });
+      }
     });
   });
 
-  function enableQuiz(quizId) {
+  function enableQuiz(quizId, dueDate) {
     fetch(`/SCES/backend/global.php`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `submitType=enableQuiz&quiz_id=${quizId}`,
+      body: `submitType=enableQuiz&quiz_id=${quizId}&due_date=${dueDate}`,
     })
       .then((response) => response.text())
       .then((data) => {

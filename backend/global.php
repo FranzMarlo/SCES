@@ -1202,7 +1202,7 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'enableQuiz') {
         session_start();
         $quizId = validate($_POST['quiz_id']);
-
+        $dueDate = validate($_POST['due_date']);
         $quiz = $db->checkQuizInfo($quizId);
         $quizItemCount = $quiz['item_number'];
         $quizStatus = $quiz['status'];
@@ -1211,7 +1211,7 @@ if (isset($_POST['submitType'])) {
         } else if ($quizStatus == 'Active') {
             echo '482';
         } else {
-            $enableQuiz = $db->toggleQuizStatus($quizId, 'Active');
+            $enableQuiz = $db->toggleQuizStatus($quizId, 'Active', $dueDate);
             if ($enableQuiz != false) {
                 echo '200';
             } else {
@@ -1227,7 +1227,7 @@ if (isset($_POST['submitType'])) {
         if ($quizStatus == 'Inactive') {
             echo '482';
         } else {
-            $enableQuiz = $db->toggleQuizStatus($quizId, 'Inactive');
+            $enableQuiz = $db->toggleQuizStatus($quizId, 'Inactive', null);
             if ($enableQuiz != false) {
                 echo '200';
             } else {

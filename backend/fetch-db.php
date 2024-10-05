@@ -146,6 +146,7 @@ class fetchClass extends db_connect
             quiz.quiz_number,
             quiz.status,
             quiz.item_number,
+            quiz.due_date,
             lesson.lesson_id,
             lesson.lesson_title
         FROM quiz_tbl quiz
@@ -198,6 +199,7 @@ class fetchClass extends db_connect
             quiz.quiz_number,
             quiz.status,
             quiz.item_number,
+            quiz.due_date,
             lesson.lesson_id,
             lesson.lesson_title,
             COUNT(student.student_id) AS student_count
@@ -233,9 +235,9 @@ class fetchClass extends db_connect
             $result = $query->get_result();
             $subjectDetails = $result->fetch_assoc();
             return $subjectDetails;
+        } else {
+            return null;
         }
-
-        return null;
 
     }
     public function fetchStudentScore($quizId)
@@ -279,9 +281,9 @@ class fetchClass extends db_connect
             $result = $query->get_result();
             $allResults = $result->fetch_all(MYSQLI_ASSOC);
             return $allResults;
+        } else {
+            return null;
         }
-
-        return null;
 
     }
     public function fetchPassedStudents($quizId)
@@ -305,8 +307,9 @@ class fetchClass extends db_connect
             $result = $query->get_result();
             $studentCount = $result->fetch_assoc();
             return $studentCount['student_count'];
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     public function fetchFailedStudents($quizId)
@@ -330,8 +333,9 @@ class fetchClass extends db_connect
             $result = $query->get_result();
             $studentCount = $result->fetch_assoc();
             return $studentCount['student_count'];
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     public function fetchTotalStudents($quizId)
@@ -355,8 +359,15 @@ class fetchClass extends db_connect
             $result = $query->get_result();
             $studentCount = $result->fetch_assoc();
             return $studentCount['student_count'];
+        } else {
+            return 0;
         }
-        return 0;
     }
 
+    public function updateQuizzes($currentDateTime)
+    {
+        $query = $this->conn->prepare("UPDATE quiz_tbl SET status = 'Inactive', due_date = null WHERE due_date <= ? AND status = 'Active'");
+        $query->bind_param("s", $currentDateTime);
+        $query->execute();
+    }
 }

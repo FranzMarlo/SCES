@@ -1144,10 +1144,10 @@ class globalClass extends db_connect
         }
     }
 
-    public function toggleQuizStatus($quizId, $status)
+    public function toggleQuizStatus($quizId, $status, $dueDate)
     {
-        $query = $this->conn->prepare("UPDATE quiz_tbl SET status = ? WHERE quiz_id = ?");
-        $query->bind_param("ss", $status, $quizId);
+        $query = $this->conn->prepare("UPDATE quiz_tbl SET status = ?, due_date = ? WHERE quiz_id = ?");
+        $query->bind_param("sss", $status, $dueDate, $quizId);
         if ($query->execute()) {
             return true;
         } else {

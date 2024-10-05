@@ -201,15 +201,27 @@
                 </div>
             </div>
             <br>
-            <button class="activate-btn" style="margin-top: 15px;">Activate Quiz</button>
+            <button class="option-btn" style="margin-top: 15px;"></button>
         </div>
         <div class="view-container" id="view-student">
             <div class="view-modal-row">
-                <h3 id="studentViewSection">Grade 1 - Banana:</h3>
+                <h3 id="studentViewSection"></h3>
             </div>
             <div class="student-score-container">
 
             </div>
         </div>
+    </div>
+</div>
+
+<div id="dueDateModal" class="modal">
+    <div class="modal-content">
+        <span id="closeDueDateModal" class="close-btn">&times;</span>
+        <h2>Set Due Date for Quiz</h2>
+        <form id="dueDateForm">
+            <label for="dueDate">Due Date:</label>
+            <input type="datetime-local" id="dueDate" name="dueDate">
+            <button type="submit" class="save-btn">Set Due Date</button>
+        </form>
     </div>
 </div>

@@ -590,6 +590,35 @@
   max-height: 80vh;
   overflow-y: auto;
   box-sizing: border-box;
+  min-height: 200px;
+  animation: slideIn 0.3s ease-out;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+#dueDate {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+  margin-bottom: 10px;
+}
+#dueDate:focus {
+  outline: none;
+  border-color: #4caf50;
+  background-color: #fff;
 }
 .stretched {
   display: flex;
@@ -689,6 +718,19 @@ select option {
 }
 .activate-btn:hover {
   background-color: #45a049;
+}
+.deactivate-btn {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 10px;
+  border: 2px solid #000;
+}
+.deactivate-btn:hover {
+  background-color: #e53935;
 }
 .add-btn {
   background-color: #2b90e8;

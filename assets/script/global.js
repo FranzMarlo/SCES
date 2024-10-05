@@ -3110,3 +3110,9 @@ function facultyLogoutFunc() {
     }
   });
 }
+
+setInterval(function () {
+  fetch("/SCES/backend/update-quiz.php").catch((error) =>
+    console.error("Error in updating quiz status:", error)
+  );
+}, 10000); 
