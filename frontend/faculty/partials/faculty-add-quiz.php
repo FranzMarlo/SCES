@@ -201,7 +201,7 @@
                 </div>
             </div>
             <br>
-            <button class="save-btn" style="margin-top: 15px;">Activate Quiz</button>
+            <button class="activate-btn" style="margin-top: 15px;">Activate Quiz</button>
         </div>
         <div class="view-container" id="view-student">
             <div class="view-modal-row">

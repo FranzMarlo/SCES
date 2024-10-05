@@ -186,15 +186,6 @@ $page = '';
                                         <?php foreach ($facultyGetQuestions as $qIndex => $question): ?>
                                             <div class="quiz-item" data-quiz-index="<?php echo $index; ?>"
                                                 data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
-                                                <button class="question-menu">
-                                                    <i class="fa-solid fa-ellipsis"></i>
-                                                </button>
-                                                <div class="question-popup-menu">
-                                                    <ul>
-                                                        <li class="edit-question"
-                                                            data-question-id="<?php echo $question['question_id']; ?>">Edit</li>
-                                                    </ul>
-                                                </div>
                                                 <div class="question-box">
                                                     <span><?php echo ($qIndex + 1) . '. ' . htmlspecialchars($question['question']); ?></span>
                                                 </div>

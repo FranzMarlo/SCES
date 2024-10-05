@@ -605,6 +605,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         const quizData = JSON.parse(xhr.responseText);
         const quizId = quizData.quiz_id;
+
+        // Set quiz details in the modal
         document.getElementById("viewQuizId").value = quizId;
         document.getElementById(
           "viewQuizTitle"
@@ -622,6 +624,9 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById(
           "viewQuizDue"
         ).textContent = `Due at ${quizData.due_date}`;
+
+        const activateQuizButton = document.querySelector(".activate-btn");
+        activateQuizButton.setAttribute("data-quiz-id", quizId);
 
         document.getElementById("viewQuizModal").style.display = "flex";
       }
@@ -657,19 +662,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     viewQuiz.style.display = "flex";
 
-    // Get the current URL and search params
     const currentUrl = new URL(window.location.href);
     const searchParams = new URLSearchParams(currentUrl.search);
 
-    // Get the quizId and update the 'quiz_id' parameter
     const quizId = document.getElementById("viewQuizId").value;
     searchParams.set("quiz_id", quizId);
 
-    // Create the new URL with the updated search params
     const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
     history.replaceState(null, "", newUrl);
 
-    // Close the viewQuizModal
     document.getElementById("viewQuizModal").style.display = "none";
   };
 
@@ -1070,6 +1071,39 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  const activateQuizButton = document.querySelectorAll(".activate-btn");
+
+  activateQuizButton.forEach((button) => {
+    button.addEventListener("click", function () {
+      const quizId = this.getAttribute("data-quiz-id");
+
+      Swal.fire({
+        title: "Do You Want To Enable This Quiz?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        customClass: {
+          confirmButton: "swal2-yes-button",
+          cancelButton: "swal2-cancel-button",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          enableQuiz(quizId);
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire({
+            title: "Quiz Remains Inactive",
+            icon: "info",
+            confirmButtonText: "Ok",
+            customClass: {
+              confirmButton: "swal2-confirm-button-cancelled",
+            },
+          });
+        }
+      });
+    });
+  });
+
   function enableQuiz(quizId) {
     fetch(`/SCES/backend/global.php`, {
       method: "POST",
@@ -1164,13 +1198,13 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  function disableQuiz(questionId) {
+  function removeQuestion(questionId) {
     fetch(`/SCES/backend/global.php`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `submitType=removeQuestion&quiz_id=${questionId}`,
+      body: `submitType=removeQuestion&question_id=${questionId}`,
     })
       .then((response) => response.text())
       .then((data) => {
@@ -1187,18 +1221,18 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             });
             break;
-          case "482":
+          case "481":
             Swal.fire({
               icon: "warning",
               title: "Invalid Request",
-              text: "Quiz is already deactivated",
+              text: "Choices for question is already deleted",
               confirmButtonColor: "#4CAF50",
             });
             break;
           default:
             Swal.fire({
               icon: "error",
-              title: "Quiz Deactivation Failed",
+              title: "Question Removal Failed",
               text: "Please try again",
               confirmButtonColor: "#4CAF50",
             });

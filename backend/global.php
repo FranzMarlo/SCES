@@ -1236,19 +1236,21 @@ if (isset($_POST['submitType'])) {
         }
     } else if ($_POST['submitType'] === 'removeQuestion') {
         session_start();
-        $quizId = validate($_POST['quiz_id']);
+        $questionId = validate($_POST['question_id']);
 
-        $quiz = $db->checkQuizInfo($quizId);
-        $quizStatus = $quiz['status'];
-        if ($quizStatus == 'Inactive') {
-            echo '482';
-        } else {
-            $enableQuiz = $db->toggleQuizStatus($quizId, 'Inactive');
-            if ($enableQuiz != false) {
+        $choices = $db->deleteChoices($questionId);
+        $quizId = $db->getQuizId($questionId);
+        if ($choices != false) {
+            $removeQuestion = $db->deleteQuestion($questionId);
+            if ($removeQuestion != false) {
+                $itemCount = $db->getItemCount($quizId);
+                $updateQuizItemCount = $db->updateQuizItemCount($quizId, $itemCount - 1);
                 echo '200';
             } else {
                 echo '400';
             }
+        } else {
+            echo '481';
         }
     } else {
         echo '400';

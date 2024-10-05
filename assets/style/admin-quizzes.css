@@ -677,6 +677,19 @@ select option {
 .save-btn:hover {
   background-color: #45a049;
 }
+.activate-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 10px;
+  border: 2px solid #000;
+}
+.activate-btn:hover {
+  background-color: #45a049;
+}
 .add-btn {
   background-color: #2b90e8;
   color: white;

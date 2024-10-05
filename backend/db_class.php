@@ -1167,5 +1167,27 @@ class globalClass extends db_connect
         }
     }
 
+    public function deleteQuestion($questionId)
+    {
+        $query = $this->conn->prepare("DELETE FROM question_tbl WHERE question_id = ?");
+        $query->bind_param("s", $questionId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteChoices($questionId)
+    {
+        $query = $this->conn->prepare("DELETE FROM choices_tbl WHERE question_id = ?");
+        $query->bind_param("s", $questionId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
 
