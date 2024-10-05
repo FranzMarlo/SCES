@@ -12,13 +12,20 @@ document.addEventListener("DOMContentLoaded", function () {
   const activeContainer = document.getElementById("activeContainer");
   const inactiveDropdown = document.getElementById("inactiveDropdown");
   const inactiveContainer = document.getElementById("inactiveContainer");
+  let lastActiveQuizId = null;
+  let lastInactiveQuizId = null;
   let quizDisplayState = [];
 
-  // Declare these earlier, so they can be used in ensureActiveInURL function
   const pendingItems = document.querySelectorAll(".pending-item");
   const pendingButton = document.querySelectorAll(".pending");
 
-  // Helper functions for working with URL parameters
+  function getFirstQuizId(container) {
+    const firstPendingItem = container.querySelector(".pending-item");
+    return firstPendingItem
+      ? firstPendingItem.getAttribute("data-quiz-id")
+      : null;
+  }
+
   function getQuizIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get("quiz_id");
@@ -26,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function isActiveFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get("active") === "true"; // Check if active=true
+    return urlParams.get("active") === "true";
   }
 
   function setQuizIdInURL(quizId, isActive) {
@@ -34,20 +41,42 @@ document.addEventListener("DOMContentLoaded", function () {
     history.replaceState(null, "", newUrl);
   }
 
-  // Function to ensure the URL always contains active=true on page load
+  function displayQuizById(quizId) {
+    const quizHeader = document.querySelector(
+      `.quiz-header[data-quiz-id="${quizId}"]`
+    );
+    const quizItemsToShow = document.querySelectorAll(
+      `.quiz-item[data-quiz-id="${quizId}"]`
+    );
+
+    document
+      .querySelectorAll(".quiz-header")
+      .forEach((header) => (header.style.display = "none"));
+    document
+      .querySelectorAll(".quiz-item")
+      .forEach((item) => (item.style.display = "none"));
+
+    if (quizHeader) {
+      quizHeader.style.display = "block";
+    }
+
+    quizItemsToShow.forEach((quizItem) => {
+      quizItem.style.display = "block";
+    });
+  }
+
   function ensureActiveInURL() {
     const urlParams = new URLSearchParams(window.location.search);
     if (!urlParams.has("active")) {
-      urlParams.set("active", "true"); // Default to active=true
+      urlParams.set("active", "true");
       const quizId =
         getQuizIdFromURL() || pendingItems[0]?.getAttribute("data-quiz-id");
-      urlParams.set("quiz_id", quizId); // Ensure quiz_id is also set
+      urlParams.set("quiz_id", quizId);
       const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
       history.replaceState(null, "", newUrl);
     }
   }
 
-  // On page load, ensure the URL has active=true
   ensureActiveInURL();
 
   function openModal() {
@@ -180,39 +209,64 @@ document.addEventListener("DOMContentLoaded", function () {
   const quizSwitch = document.getElementById("quizSwitch");
   quizSwitch.addEventListener("change", function () {
     const isActive = quizSwitch.checked;
+
     if (isActive) {
+      // Store the last inactive quiz ID
+      lastInactiveQuizId = getQuizIdFromURL();
+
+      // Switch to active quizzes
       activeContainer.style.display = "flex";
       inactiveContainer.style.display = "none";
       activeDropdown.style.display = "inline-block";
       inactiveDropdown.style.display = "none";
-      setQuizIdInURL(getQuizIdFromURL(), true); // Append active=true
+
+      // Show the last active quiz or the first one if not available
+      const quizIdToShow = lastActiveQuizId || getFirstQuizId(activeContainer);
+      if (quizIdToShow) {
+        setQuizIdInURL(quizIdToShow, true); // Append active=true
+        displayQuizById(quizIdToShow);
+        lastActiveQuizId = quizIdToShow;
+      }
     } else {
+      // Store the last active quiz ID
+      lastActiveQuizId = getQuizIdFromURL();
+
+      // Switch to inactive quizzes
       inactiveContainer.style.display = "flex";
       activeContainer.style.display = "none";
       activeDropdown.style.display = "none";
       inactiveDropdown.style.display = "inline-block";
-      setQuizIdInURL(getQuizIdFromURL(), false); // Append active=false
+
+      // Show the first inactive quiz or the last inactive quiz
+      const quizIdToShow =
+        lastInactiveQuizId || getFirstQuizId(inactiveContainer);
+      if (quizIdToShow) {
+        setQuizIdInURL(quizIdToShow, false); // Append active=false
+        displayQuizById(quizIdToShow);
+        lastInactiveQuizId = quizIdToShow;
+      }
     }
   });
 
   // Initially show active or inactive quizzes based on the URL or switch state
   const initialQuizId =
-    getQuizIdFromURL() || pendingItems[0]?.getAttribute("data-quiz-id");
+    getQuizIdFromURL() ||
+    (quizSwitch.checked
+      ? getFirstQuizId(activeContainer)
+      : getFirstQuizId(inactiveContainer));
   const isActive = isActiveFromURL();
   quizSwitch.checked = isActive; // Set switch based on URL
 
   if (isActive) {
     activeContainer.style.display = "flex";
     inactiveContainer.style.display = "none";
+    displayQuizById(initialQuizId);
+    lastActiveQuizId = initialQuizId;
   } else {
     inactiveContainer.style.display = "flex";
     activeContainer.style.display = "none";
-  }
-
-  if (initialQuizId) {
     displayQuizById(initialQuizId);
-  } else if (pendingItems.length > 0) {
-    displayQuizById(pendingItems[0].getAttribute("data-quiz-id"));
+    lastInactiveQuizId = initialQuizId;
   }
 
   const addQuestionModal = document.getElementById("addQuestionModal");
@@ -602,15 +656,23 @@ document.addEventListener("DOMContentLoaded", function () {
       studentToggle.classList.remove("active");
     }
     viewQuiz.style.display = "flex";
-    const currentUrl = window.location.pathname;
-    const quizId = document.getElementById("viewQuizId").value;
 
-    const newUrl = `${currentUrl}?quiz_id=${quizId}`;
+    // Get the current URL and search params
+    const currentUrl = new URL(window.location.href);
+    const searchParams = new URLSearchParams(currentUrl.search);
+
+    // Get the quizId and update the 'quiz_id' parameter
+    const quizId = document.getElementById("viewQuizId").value;
+    searchParams.set("quiz_id", quizId);
+
+    // Create the new URL with the updated search params
+    const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
     history.replaceState(null, "", newUrl);
 
+    // Close the viewQuizModal
     document.getElementById("viewQuizModal").style.display = "none";
   };
-  
+
   const quizToggle = document.getElementById("quiz-toggle");
   const studentToggle = document.getElementById("student-toggle");
   const viewQuiz = document.getElementById("view-quiz");
@@ -904,5 +966,244 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
     });
+  }
+
+  const enableQuizButtons = document.querySelectorAll(".enable-quiz");
+
+  enableQuizButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const quizId = this.getAttribute("data-quiz-id");
+
+      // Display SweetAlert2 confirmation
+      Swal.fire({
+        title: "Do You Want To Enable This Quiz?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        customClass: {
+          confirmButton: "swal2-yes-button",
+          cancelButton: "swal2-cancel-button",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          enableQuiz(quizId);
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire({
+            title: "Quiz Remains Inactive",
+            icon: "info",
+            confirmButtonText: "Ok",
+            customClass: {
+              confirmButton: "swal2-confirm-button-cancelled",
+            },
+          });
+        }
+      });
+    });
+  });
+
+  const disableQuizButtons = document.querySelectorAll(".disable-quiz");
+
+  disableQuizButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const quizId = this.getAttribute("data-quiz-id");
+
+      Swal.fire({
+        title: "Do You Want To Disable This Quiz?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        customClass: {
+          confirmButton: "swal2-yes-button",
+          cancelButton: "swal2-cancel-button",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          disableQuiz(quizId);
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire({
+            title: "Quiz Remains Active",
+            text: "Students will still be able to take the assessment",
+            icon: "info",
+            confirmButtonText: "Ok",
+            customClass: {
+              confirmButton: "swal2-confirm-button-cancelled",
+            },
+          });
+        }
+      });
+    });
+  });
+
+  const removeQuestionButtons = document.querySelectorAll(".remove-question");
+
+  removeQuestionButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const questionId = this.getAttribute("data-question-id");
+
+      Swal.fire({
+        title: "Do you want to remove this question from quiz?",
+        text: "This operation is irreversible",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        customClass: {
+          confirmButton: "swal2-yes-button",
+          cancelButton: "swal2-cancel-button",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          removeQuestion(questionId);
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire({
+            title: "Question Remains On Quiz",
+            icon: "info",
+            confirmButtonText: "Ok",
+            customClass: {
+              confirmButton: "swal2-confirm-button-cancelled",
+            },
+          });
+        }
+      });
+    });
+  });
+
+  function enableQuiz(quizId) {
+    fetch(`/SCES/backend/global.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `submitType=enableQuiz&quiz_id=${quizId}`,
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        switch (data) {
+          case "200":
+            Swal.fire({
+              icon: "success",
+              title: "Quiz Activated Successfully",
+              text: "Students can now take this assessment",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = `?active=true&quiz_id=${quizId}`;
+              }
+            });
+            break;
+          case "481":
+            Swal.fire({
+              icon: "warning",
+              title: "Invalid Number Of Questions",
+              text: "Number of questions for the quiz must be at least 10",
+              confirmButtonColor: "#4CAF50",
+            });
+            break;
+          case "482":
+            Swal.fire({
+              icon: "warning",
+              title: "Invalid Request",
+              text: "Quiz is already activated",
+              confirmButtonColor: "#4CAF50",
+            });
+            break;
+          default:
+            Swal.fire({
+              icon: "error",
+              title: "Quiz Activation Failed",
+              text: "Please try again",
+              confirmButtonColor: "#4CAF50",
+            });
+            break;
+        }
+      });
+  }
+
+  function disableQuiz(quizId) {
+    fetch(`/SCES/backend/global.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `submitType=disableQuiz&quiz_id=${quizId}`,
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        switch (data) {
+          case "200":
+            Swal.fire({
+              icon: "info",
+              title: "Quiz Deactivated",
+              text: "Students will now be unable to take the assessment",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = `?active=false&quiz_id=${quizId}`;
+              }
+            });
+            break;
+          case "482":
+            Swal.fire({
+              icon: "warning",
+              title: "Invalid Request",
+              text: "Quiz is already deactivated",
+              confirmButtonColor: "#4CAF50",
+            });
+            break;
+          default:
+            Swal.fire({
+              icon: "error",
+              title: "Quiz Deactivation Failed",
+              text: "Please try again",
+              confirmButtonColor: "#4CAF50",
+            });
+            break;
+        }
+      });
+  }
+
+  function disableQuiz(questionId) {
+    fetch(`/SCES/backend/global.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `submitType=removeQuestion&quiz_id=${questionId}`,
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        switch (data) {
+          case "200":
+            Swal.fire({
+              icon: "info",
+              title: "Question Removed",
+              text: "Tip: Quizzes should have at least 10 question to be activated",
+              confirmButtonColor: "#4CAF50",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
+            break;
+          case "482":
+            Swal.fire({
+              icon: "warning",
+              title: "Invalid Request",
+              text: "Quiz is already deactivated",
+              confirmButtonColor: "#4CAF50",
+            });
+            break;
+          default:
+            Swal.fire({
+              icon: "error",
+              title: "Quiz Deactivation Failed",
+              text: "Please try again",
+              confirmButtonColor: "#4CAF50",
+            });
+            break;
+        }
+      });
   }
 });

@@ -444,7 +444,7 @@
   position: relative;
   display: none;
 }
-#activeDropdown{
+#activeDropdown {
   display: inline-block;
 }
 .quiz-dropdown-content {
@@ -850,7 +850,7 @@ canvas {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 25px; /* Make the border-radius match the height for a circular edge */
 }
 .slider:before {
@@ -861,7 +861,7 @@ canvas {
   left: 3.5px;
   bottom: 3.5px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 50%;
 }
 input:checked + .slider {
@@ -873,7 +873,27 @@ input:not(:checked) + .slider {
 input:checked + .slider:before {
   transform: translateX(25px);
 }
-
+.swal2-yes-button {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+.swal2-cancel-button {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+.swal2-confirm-button-cancelled {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+.swal2-yes-button:hover {
+  background-color: #45a049 !important;
+}
+.swal2-cancel-button:hover {
+  background-color: #e53935 !important;
+}
+.swal2-confirm-button-cancelled:hover {
+  background-color: #45a049 !important;
+}
 @media (width < 1199px) {
   .pending-title img {
     height: 1.9rem;

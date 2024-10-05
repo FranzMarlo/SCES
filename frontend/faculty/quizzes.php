@@ -58,7 +58,6 @@ $page = '';
                                         </button>
                                         <div class="quiz-dropdown-popup-menu">
                                             <ul>
-                                                <li class="edit-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Edit</li>
                                                 <li class="view-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">View Info
                                                 </li>
                                                 <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Disable
@@ -147,9 +146,8 @@ $page = '';
                                     </button>
                                     <div class="quiz-popup-menu">
                                         <ul>
-                                            <li class="edit-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Edit</li>
                                             <li class="view-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">View Info</li>
-                                            <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">disable</li>
+                                            <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Disable</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -184,13 +182,6 @@ $page = '';
 
                                 <?php $facultyGetQuestions = $db->getQuestions($quiz['quiz_id']); ?>
                                 <div class="quiz-questions">
-                                    <div class="quiz-item add-question" data-quiz-index="<?php echo $index; ?>"
-                                        data-quiz-id="<?php echo $quiz['quiz_id']; ?>">
-                                        <div class="no-data-box">
-                                            <i class="fa-solid fa-circle-plus"></i>
-                                            <span>Add Question Here</span>
-                                        </div>
-                                    </div>
                                     <?php if (!empty($facultyGetQuestions)): ?>
                                         <?php foreach ($facultyGetQuestions as $qIndex => $question): ?>
                                             <div class="quiz-item" data-quiz-index="<?php echo $index; ?>"

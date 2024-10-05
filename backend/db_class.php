@@ -250,6 +250,8 @@ class globalClass extends db_connect
         if ($query->execute()) {
             $result = $query->get_result();
             return $result;
+        } else {
+            return false;
         }
     }
 
@@ -1019,8 +1021,7 @@ class globalClass extends db_connect
         if ($query->execute()) {
             $result = $query->get_result();
             return $result;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -1051,7 +1052,7 @@ class globalClass extends db_connect
         if ($query->execute()) {
             $result = $query->get_result();
             return $result;
-        }else{
+        } else {
             return false;
         }
     }
@@ -1121,7 +1122,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function updateQuizItemCount($quizId , $itemCount)
+    public function updateQuizItemCount($quizId, $itemCount)
     {
         $query = $this->conn->prepare("UPDATE quiz_tbl SET item_number = ? WHERE quiz_id = ?");
         $query->bind_param("is", $itemCount, $quizId);
@@ -1140,6 +1141,29 @@ class globalClass extends db_connect
             return $editQuizId;
         } else {
             return false;
+        }
+    }
+
+    public function toggleQuizStatus($quizId, $status)
+    {
+        $query = $this->conn->prepare("UPDATE quiz_tbl SET status = ? WHERE quiz_id = ?");
+        $query->bind_param("ss", $status, $quizId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkQuizInfo($quizId)
+    {
+        $query = $this->conn->prepare("SELECT item_number, status FROM quiz_tbl WHERE quiz_id = ?");
+        $query->bind_param("s", $quizId);
+        if ($query->execute()) {
+            $quiz = $query->get_result()->fetch_assoc();
+            return $quiz;
+        } else {
+            return 0;
         }
     }
 

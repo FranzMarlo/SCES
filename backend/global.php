@@ -1199,6 +1199,57 @@ if (isset($_POST['submitType'])) {
                 echo '400';
             }
         }
+    } else if ($_POST['submitType'] === 'enableQuiz') {
+        session_start();
+        $quizId = validate($_POST['quiz_id']);
+
+        $quiz = $db->checkQuizInfo($quizId);
+        $quizItemCount = $quiz['item_number'];
+        $quizStatus = $quiz['status'];
+        if ($quizItemCount < 10) {
+            echo '481';
+        } else if ($quizStatus == 'Active') {
+            echo '482';
+        } else {
+            $enableQuiz = $db->toggleQuizStatus($quizId, 'Active');
+            if ($enableQuiz != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'disableQuiz') {
+        session_start();
+        $quizId = validate($_POST['quiz_id']);
+
+        $quiz = $db->checkQuizInfo($quizId);
+        $quizStatus = $quiz['status'];
+        if ($quizStatus == 'Inactive') {
+            echo '482';
+        } else {
+            $enableQuiz = $db->toggleQuizStatus($quizId, 'Inactive');
+            if ($enableQuiz != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'removeQuestion') {
+        session_start();
+        $quizId = validate($_POST['quiz_id']);
+
+        $quiz = $db->checkQuizInfo($quizId);
+        $quizStatus = $quiz['status'];
+        if ($quizStatus == 'Inactive') {
+            echo '482';
+        } else {
+            $enableQuiz = $db->toggleQuizStatus($quizId, 'Inactive');
+            if ($enableQuiz != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
     } else {
         echo '400';
     }
