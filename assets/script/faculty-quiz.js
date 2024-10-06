@@ -207,14 +207,19 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const quizSwitch = document.getElementById("quizSwitch");
+  function resetDisplayedQuizzes() {
+    quizHeaders.forEach((header) => (header.style.display = "none"));
+    quizItems.forEach((item) => (item.style.display = "none"));
+  }
+
   quizSwitch.addEventListener("change", function () {
     const isActive = quizSwitch.checked;
 
+    resetDisplayedQuizzes();
+
     if (isActive) {
-      // Store the last inactive quiz ID
       lastInactiveQuizId = getQuizIdFromURL();
 
-      // Switch to active quizzes
       activeContainer.style.display = "flex";
       inactiveContainer.style.display = "none";
       activeDropdown.style.display = "inline-block";
