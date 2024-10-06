@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
       `.quiz-header[data-quiz-id="${quizId}"]`
     );
     const quizItemsToShow = document.querySelectorAll(
-      `.quiz-item[data-quiz-id="${quizId}"]`
+      ` .quiz-item[data-quiz-id="${quizId}"]`
     );
 
     if (quizHeader) {
@@ -268,7 +268,6 @@ document.addEventListener("DOMContentLoaded", function () {
     displayQuizById(initialQuizId);
     lastInactiveQuizId = initialQuizId;
   }
-  
 
   const addQuestionModal = document.getElementById("addQuestionModal");
   const addQuestionForm = document.getElementById("addQuestion");
