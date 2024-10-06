@@ -86,6 +86,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode(['error' => 'Quiz ID not provided']);
         }
+    } else if ($submitType === 'checkQuestionCount') {
+        if (isset($_POST['quiz_id'])) {
+            $quizId = $_POST['quiz_id'];
+
+            $itemCount = $fetchDb->fetchItemCount($quizId);
+
+            echo $itemCount;
+        } else {
+            echo json_encode(['error' => 'Quiz ID not provided']);
+        }
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

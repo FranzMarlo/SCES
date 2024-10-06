@@ -10,11 +10,6 @@
     </div>
     <div class="user-info">
         <a href="#">
-            <div class="message-btn">
-                <i class="fa-solid fa-envelope icon"></i>
-            </div>
-        </a>
-        <a href="#">
             <div class="notif-btn">
                 <i class="fa-solid fa-bell icon"></i>
             </div>

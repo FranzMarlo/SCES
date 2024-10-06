@@ -1204,11 +1204,8 @@ if (isset($_POST['submitType'])) {
         $quizId = validate($_POST['quiz_id']);
         $dueDate = validate($_POST['due_date']);
         $quiz = $db->checkQuizInfo($quizId);
-        $quizItemCount = $quiz['item_number'];
         $quizStatus = $quiz['status'];
-        if ($quizItemCount < 10) {
-            echo '481';
-        } else if ($quizStatus == 'Active') {
+        if ($quizStatus == 'Active') {
             echo '482';
         } else {
             $enableQuiz = $db->toggleQuizStatus($quizId, 'Active', $dueDate);

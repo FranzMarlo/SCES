@@ -949,6 +949,12 @@ input:checked + .slider:before {
 .swal2-confirm-button-cancelled:hover {
   background-color: #45a049 !important;
 }
+.student-score-container p{
+  font-size: 1.2rem;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+}
 @media (width < 1199px) {
   .pending-title img {
     height: 1.9rem;
@@ -1092,6 +1098,9 @@ input:checked + .slider:before {
   }
   .empty {
     text-align: left;
+  }
+  .student-score-container p{
+    font-size: 1.1rem;
   }
 }
 @media (width < 375px) {

@@ -610,12 +610,61 @@ document.addEventListener("DOMContentLoaded", function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         const quizData = JSON.parse(xhr.responseText);
         const quizId = quizData.quiz_id;
-        var dueDate;
+        let dueDate;
+
         if (quizData.due_date == null) {
-          var dueDate = "Quiz hasn't been activated";
+          dueDate = "Quiz hasn't been activated";
         } else {
-          dueDate = `Due at ${quizData.due_date}`;
+          // Parse the returned due_date into a JavaScript Date object
+          const dueDateObj = new Date(quizData.due_date);
+          const currentDate = new Date();
+
+          // Helper variables
+          const daysInWeek = 7;
+          const msInDay = 24 * 60 * 60 * 1000;
+
+          // Calculate time difference
+          const timeDiff = dueDateObj - currentDate;
+          const isToday =
+            currentDate.toDateString() === dueDateObj.toDateString();
+          const isThisWeek =
+            timeDiff < daysInWeek * msInDay && dueDateObj > currentDate;
+
+          // Date formatting options
+          const timeOptions = {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+          };
+
+          if (isToday) {
+            // If the due date is today, display "Today" and the time
+            const timeStr = dueDateObj.toLocaleString("en-US", timeOptions);
+            dueDate = `Today at ${timeStr}`;
+          } else if (isThisWeek) {
+            // If the due date is within this week, show the day of the week and time
+            const weekdayOptions = {
+              weekday: "long",
+              ...timeOptions,
+            };
+            const dayStr = dueDateObj.toLocaleString("en-US", weekdayOptions);
+            dueDate = `Due ${dayStr}`;
+          } else {
+            // If the due date is more than a week away, display the full date and time
+            const fullDateOptions = {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              ...timeOptions,
+            };
+            const fullDateStr = dueDateObj.toLocaleString(
+              "en-US",
+              fullDateOptions
+            );
+            dueDate = `Due on ${fullDateStr}`;
+          }
         }
+
         // Set quiz details in the modal
         document.getElementById("viewQuizId").value = quizId;
         document.getElementById(
@@ -737,12 +786,11 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         studentContainer.innerHTML = "";
 
-        if (studentData.length > 0) {
+        if (studentData.length > 1) {
           studentData.forEach((student) => {
             const studentScoreBox = document.createElement("div");
             studentScoreBox.classList.add("student-score-box");
 
-            // Check if student data is null or student hasn't taken the assessment
             if (
               student.student_lname === null ||
               student.student_fname === null ||
@@ -804,7 +852,7 @@ document.addEventListener("DOMContentLoaded", function () {
           });
         } else {
           studentContainer.innerHTML =
-            "<p>No students have completed the quiz yet.</p>";
+            "<p>No students enrolled in subject.</p>";
         }
       }
     };
@@ -1012,7 +1060,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    if (selectedDueDate < currentDateTime) {
+    if (selectedDueDate <= currentDateTime) {
       Swal.fire({
         icon: "warning",
         title: "Invalid Due Date",
@@ -1043,31 +1091,50 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
       const quizId = this.getAttribute("data-quiz-id");
 
-      Swal.fire({
-        title: "Do You Want To Enable This Quiz?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-        customClass: {
-          confirmButton: "swal2-yes-button",
-          cancelButton: "swal2-cancel-button",
+      fetch(`/SCES/backend/fetch-class.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          selectedQuizId = quizId;
-          dueDateModal.style.display = "flex";
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire({
-            title: "Quiz Remains Inactive",
-            icon: "info",
-            confirmButtonText: "Ok",
-            customClass: {
-              confirmButton: "swal2-confirm-button-cancelled",
-            },
-          });
-        }
-      });
+        body: `submitType=checkQuestionCount&quiz_id=${quizId}`,
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          if (data >= 10) {
+            Swal.fire({
+              title: "Do You Want To Enable This Quiz?",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonText: "Yes",
+              cancelButtonText: "No",
+              customClass: {
+                confirmButton: "swal2-yes-button",
+                cancelButton: "swal2-cancel-button",
+              },
+            }).then((result) => {
+              if (result.isConfirmed) {
+                selectedQuizId = quizId;
+                dueDateModal.style.display = "flex";
+              } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire({
+                  title: "Quiz Remains Inactive",
+                  icon: "info",
+                  confirmButtonText: "Ok",
+                  customClass: {
+                    confirmButton: "swal2-yes-button",
+                  },
+                });
+              }
+            });
+          } else {
+            Swal.fire({
+              icon: "warning",
+              title: "Invalid Number Of Questions",
+              text: "Number of questions for the quiz must be at least 10",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        });
     });
   });
 
@@ -1146,31 +1213,50 @@ document.addEventListener("DOMContentLoaded", function () {
       const quizId = this.getAttribute("data-quiz-id");
 
       if (button.classList.contains("activate-btn")) {
-        Swal.fire({
-          title: "Do You Want To Enable This Quiz?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonText: "Yes",
-          cancelButtonText: "No",
-          customClass: {
-            confirmButton: "swal2-yes-button",
-            cancelButton: "swal2-cancel-button",
+        fetch(`/SCES/backend/fetch-class.php`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
           },
-        }).then((result) => {
-          if (result.isConfirmed) {
-            selectedQuizId = quizId;
-            dueDateModal.style.display = "flex";
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire({
-              title: "Quiz Remains Inactive",
-              icon: "info",
-              confirmButtonText: "Ok",
-              customClass: {
-                confirmButton: "swal2-confirm-button-cancelled",
-              },
-            });
-          }
-        });
+          body: `submitType=checkQuestionCount&quiz_id=${quizId}`,
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            if (data >= 10) {
+              Swal.fire({
+                title: "Do You Want To Enable This Quiz?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                customClass: {
+                  confirmButton: "swal2-yes-button",
+                  cancelButton: "swal2-cancel-button",
+                },
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  selectedQuizId = quizId;
+                  dueDateModal.style.display = "flex";
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                  Swal.fire({
+                    title: "Quiz Remains Inactive",
+                    icon: "info",
+                    confirmButtonText: "Ok",
+                    customClass: {
+                      confirmButton: "swal2-yes-button",
+                    },
+                  });
+                }
+              });
+            } else {
+              Swal.fire({
+                icon: "warning",
+                title: "Invalid Number Of Questions",
+                text: "Number of questions for the quiz must be at least 10",
+                confirmButtonColor: "#4CAF50",
+              });
+            }
+          });
       } else if (button.classList.contains("deactivate-btn")) {
         Swal.fire({
           title: "Do You Want To Disable This Quiz?",
@@ -1221,14 +1307,6 @@ document.addEventListener("DOMContentLoaded", function () {
               if (result.isConfirmed) {
                 window.location.href = `?active=true&quiz_id=${quizId}`;
               }
-            });
-            break;
-          case "481":
-            Swal.fire({
-              icon: "warning",
-              title: "Invalid Number Of Questions",
-              text: "Number of questions for the quiz must be at least 10",
-              confirmButtonColor: "#4CAF50",
             });
             break;
           case "482":

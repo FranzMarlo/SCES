@@ -272,7 +272,8 @@ class fetchClass extends db_connect
         WHERE 
             quiz.quiz_id = ?
         ORDER BY
-            score.time DESC
+            score.time DESC,
+            student.student_lname ASC
             ");
 
         $query->bind_param("s", $quizId);
@@ -369,5 +370,21 @@ class fetchClass extends db_connect
         $query = $this->conn->prepare("UPDATE quiz_tbl SET status = 'Inactive', due_date = null WHERE due_date <= ? AND status = 'Active'");
         $query->bind_param("s", $currentDateTime);
         $query->execute();
+    }
+
+    public function fetchItemCount($quizId)
+    {
+        $query = $this->conn->prepare("SELECT `item_number` FROM quiz_tbl WHERE quiz_id = ?");
+        $query->bind_param("s", $quizId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return $row['item_number'];
+            } else {
+                return null;
+            }
+        } else {
+            return false;
+        }
     }
 }
