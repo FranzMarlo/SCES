@@ -145,15 +145,15 @@
   border: 2px solid #000;
 }
 .module-box h1 {
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 .module-item span {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 .module-box .module-item {
   height: 60px;
-  width: 180px;
+  width: 80%;
   border-radius: 30px;
   display: flex;
   justify-content: center;
@@ -340,6 +340,7 @@
   max-height: 80vh;
   overflow-y: auto;
   box-sizing: border-box;
+  animation: slideIn 0.3s ease-out;
 }
 @keyframes slide-down {
   from {
@@ -349,6 +350,16 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 .modal-header {
@@ -468,6 +479,9 @@ select option {
 @media (width < 1199px) {
   .module-box .module-item {
     width: 150px;
+  }
+  .module-box h1 {
+    font-size: 1rem;
   }
 }
 @media (width < 992px) {

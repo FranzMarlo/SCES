@@ -2414,7 +2414,7 @@ $("#facultyUpdatePassword").on("submit", function (e) {
   });
 });
 
-$("#addLesson").on("submit", function (e) {
+$("#facultyAddLesson").on("submit", function (e) {
   e.preventDefault();
   var formData = new FormData(this);
   formData.append("submitType", "addLesson");

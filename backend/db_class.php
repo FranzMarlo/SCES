@@ -882,7 +882,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function getActiveQuizzes($teacherId, $status)
+    public function facultyGetQuizzes($teacherId, $status)
     {
         $query = $this->conn->prepare("
         SELECT 
@@ -922,8 +922,10 @@ class globalClass extends db_connect
             subject.teacher_id = ?
         AND
             quiz.status = ?
+        GROUP BY
+            quiz.quiz_id
         ORDER BY
-            quiz.add_time DESC
+            quiz.add_time DESC;
         ");
         $query->bind_param("ss", $teacherId, $status);
         if ($query->execute()) {
@@ -1189,5 +1191,71 @@ class globalClass extends db_connect
         }
     }
 
+    public function studentGetQuizzes($sectionId, $status)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            subject.subject_id,
+            subject.subject,
+            subject.level_id,
+            subject.icon,
+            subject.subject_title,
+            subject.subject_code,
+            level.level_id,
+            level.grade_level,
+            section.section,
+            quiz.quiz_id,
+            quiz.title,
+            quiz.quiz_number,
+            quiz.status,
+            lesson.lesson_id,
+            student.section_id,
+            teacher.teacher_id,
+            teacher.teacher_lname,
+            teacher.teacher_fname,
+            teacher.teacher_mname
+        FROM quiz_tbl quiz
+        INNER JOIN
+            subject_tbl subject
+        ON
+            subject.subject_id = quiz.subject_id
+        INNER JOIN
+            student_tbl student
+        ON
+            student.section_id = subject.section_id
+        INNER JOIN
+            section_tbl section
+        ON
+            subject.section_id = section.section_id
+        INNER JOIN
+            level_tbl level
+        ON
+            subject.level_id = level.level_id
+        INNER JOIN
+            lesson_tbl lesson
+        ON
+            quiz.lesson_id = lesson.lesson_id
+        INNER JOIN
+            teacher_tbl teacher
+        ON
+            teacher.teacher_id = subject.teacher_id
+        WHERE 
+            student.section_id = ?
+        AND
+            quiz.status = ?
+       GROUP BY
+            quiz.quiz_id
+        ORDER BY
+            quiz.add_time DESC;
+        ");
+        $query->bind_param("ss", $sectionId, $status);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjectDetails;
+        }
+
+        return [];
+    }
 }
 
