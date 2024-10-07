@@ -30,7 +30,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.
               <i class="fa-solid fa-ellipsis-vertical icon"></i>
             </div>
             <div class="module-dropdown-content">
-              <h1>Learning Materials</h1>
+              <h1>Select Quarter:</h1>
               <button class="quarter-1">
                 Quarter 1
               </button>
@@ -61,7 +61,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.
           <div class="lesson-content">
             <div class="module-container">
               <div class="module-box">
-                <h1>Learning Materials</h1>
+                <h1>Select Quarter:</h1>
                 <div class="module-item quarter-1">
                   <span>Quarter 1</span>
                 </div>

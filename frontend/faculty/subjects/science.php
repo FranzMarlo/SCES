@@ -23,7 +23,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/subject-hea
         <div class="title-box">
           <div class="text-box">
             <img src="/SCES/assets/images/graduation-cap.png" alt="graduation-cap.png">
-            <h1>Academic Lessons</h1>
+            <h1>Select Quarter:</h1>
           </div>
           <div class="module-dropdown">
             <div class="module-btn">
