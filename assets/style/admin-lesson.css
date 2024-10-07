@@ -95,7 +95,7 @@
 .icon-container {
   position: absolute;
   z-index: 4;
-  left: 80%;
+  left: 85%;
   top: 40%;
 }
 .icon-container img {
@@ -529,7 +529,7 @@ select option {
     font-size: 0.9rem;
   }
   .icon-container {
-    left: 75%;
+    left: 80%;
   }
   .icon-container img {
     height: 6.5rem;
@@ -563,7 +563,7 @@ select option {
     gap: 10px;
   }
   .icon-container {
-    left: 75%;
+    left: 80%;
     top: 50%;
   }
   .icon-container img {
@@ -609,7 +609,7 @@ select option {
     padding: 10px;
   }
   .icon-container {
-    left: 70%;
+    left: 75%;
     top: 50%;
   }
   .icon-container img {

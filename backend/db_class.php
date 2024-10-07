@@ -1191,7 +1191,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function studentGetQuizzes($sectionId, $status)
+    public function studentGetQuizzes($sectionId, $studentId, $status)
     {
         $query = $this->conn->prepare("
         SELECT 
@@ -1208,12 +1208,18 @@ class globalClass extends db_connect
             quiz.title,
             quiz.quiz_number,
             quiz.status,
+            quiz.due_date,
+            quiz.item_number,
             lesson.lesson_id,
             student.section_id,
             teacher.teacher_id,
             teacher.teacher_lname,
             teacher.teacher_fname,
-            teacher.teacher_mname
+            teacher.teacher_mname,
+            teacher.gender,
+            lesson.lesson_title,
+            score.score,
+            score.remarks
         FROM quiz_tbl quiz
         INNER JOIN
             subject_tbl subject
@@ -1235,6 +1241,10 @@ class globalClass extends db_connect
             lesson_tbl lesson
         ON
             quiz.lesson_id = lesson.lesson_id
+        LEFT JOIN
+            score_tbl score
+        ON
+            quiz.quiz_id = score.quiz_id
         INNER JOIN
             teacher_tbl teacher
         ON
@@ -1242,13 +1252,15 @@ class globalClass extends db_connect
         WHERE 
             student.section_id = ?
         AND
+            student.student_id = ?
+        AND
             quiz.status = ?
        GROUP BY
             quiz.quiz_id
         ORDER BY
             quiz.add_time DESC;
         ");
-        $query->bind_param("ss", $sectionId, $status);
+        $query->bind_param("sss", $sectionId, $studentId, $status);
         if ($query->execute()) {
             $result = $query->get_result();
             $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);

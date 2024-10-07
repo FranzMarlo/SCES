@@ -1,5 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/quizzes.css" />
 <title>Filipino | SCES Online Learning Platform</title>
@@ -18,7 +19,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
       include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-header.php';
       ?>
       <div class="quiz-panel">
-        <?php $activeQuizzes = $db->studentGetQuizzes($sectionId, 'Active'); ?>
+        <?php $activeQuizzes = $db->studentGetQuizzes($sectionId, $studentId, 'Active'); ?>
         <div class="title-box">
           <div class="text-box">
             <img src="/SCES/assets/images/graduation-cap.png" alt="graduation-cap.png">
@@ -91,7 +92,76 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
                     </h1>
                   </div>
                 </div>
-                
+                <div class="info-container">
+                  <div class="info-part">
+                    <div class="info-data">
+                      <img src="/SCES/assets/images/quiz-subject.png" alt="quiz-subject.png">
+                      <div class="quiz-info">
+                        <h1>Subject</h1>
+                        <span><?php echo htmlspecialchars($quiz['subject_title']); ?></span>
+                      </div>
+                    </div>
+                    <div class="info-data">
+                      <img src="/SCES/assets/images/quiz-lesson.png" alt="quiz-lesson.png">
+                      <div class="quiz-info">
+                        <h1>Lesson</h1>
+                        <span><?php echo htmlspecialchars($quiz['lesson_title']); ?></span>
+                      </div>
+                    </div>
+                    <div class="info-data">
+                      <img src="/SCES/assets/images/quiz-grade-section.png" alt="quiz-grade-section.png">
+                      <div class="quiz-info">
+                        <h1>Grade & Section</h1>
+                        <span><?php echo htmlspecialchars($quiz['grade_level']) . ' - ' . htmlspecialchars($quiz['section']); ?></span>
+                      </div>
+                    </div>
+                    <div class="info-data">
+                      <img
+                        src="/SCES/assets/images/<?php echo ($quiz['gender'] == 'Female') ? 'quiz-female-teacher.png' : 'quiz-male-teacher.png'; ?>"
+                        alt="quiz-teacher.png">
+                      <div class="quiz-info">
+                        <h1>Teacher</h1>
+                        <span><?php echo ($quiz['gender'] == 'Female' ? 'Ms. ' : 'Mr. ') . htmlspecialchars($quiz['teacher_fname']) . ' ' . htmlspecialchars($quiz['teacher_lname']); ?></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="info-part">
+                    <div class="info-data">
+                      <img src="/SCES/assets/images/quiz-question.png" alt="quiz-question.png">
+                      <div class="quiz-info">
+                        <h1>Number of Items</h1>
+                        <span><?php echo htmlspecialchars($quiz['item_number']); ?></span>
+                      </div>
+                    </div>
+                    <?php
+                    $formattedDate = formatDueDate($quiz['due_date']); ?>
+                    <div class="info-data">
+                      <img src="/SCES/assets/images/quiz-due-date.png" alt="quiz-due-date.png">
+                      <div class="quiz-info">
+                        <h1>Due Date</h1>
+                        <span><?php echo htmlspecialchars($formattedDate); ?></span>
+                      </div>
+                    </div>
+                    <div class="info-data">
+                      <img src="/SCES/assets/images/quiz-score.png" alt="quiz-score.png">
+                      <div class="quiz-info">
+                        <h1>Score</h1>
+                        <?php echo formatQuizScore($quiz['score'], $quiz['item_number']); ?>
+                      </div>
+                    </div>
+                    <?php $remarks = formatQuizRemarks($quiz['remarks']); ?>
+                    <div class="info-data">
+                      <img src="<?php echo htmlspecialchars($remarks['image']); ?>" alt="quiz-remarks.png">
+                      <div class="quiz-info">
+                        <h1>Remarks</h1>
+                        <span><?php echo htmlspecialchars($remarks['text']); ?></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="button-container">
+                  <button class="take-quiz">Take Quiz</button>
+                </div>
               <?php endforeach; ?>
             <?php else: ?>
               <div class="no-quiz-header">
