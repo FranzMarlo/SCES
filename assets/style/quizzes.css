@@ -389,7 +389,6 @@
   border-radius: 30px;
   padding: 20px;
   align-items: center;
-  cursor: pointer;
 }
 .no-quiz-header img {
   height: 40px;
@@ -398,8 +397,124 @@
 .no-quiz-header h1 {
   font-size: 1.2rem;
 }
-.no-quiz-header:hover {
-  background-color: #f0f0f0;
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal::-webkit-scrollbar {
+  display: none;
+}
+.modal {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #fefefe;
+  margin: 10px auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 75%;
+  border-radius: 30px;
+  gap: 15px;
+  max-width: 1200px;
+}
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+.modal-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close-btn:hover,
+.close-btn:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.save-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 30px;
+  border: 2px solid #000;
+}
+.save-btn:hover {
+  background-color: #45a049;
+}
+.modal-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.modal-head {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.modal-quiz-header {
+  width: 100%;
+  box-shadow: 0 0 2px 0 #9c9c9c;
+  border-radius: 30px;
+  border: 2px solid #000;
+}
+.modal-header-bg {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  z-index: 2;
+}
+.modal-icon-container {
+  position: absolute;
+  z-index: 4;
+  left: 85%;
+  top: 50%;
+}
+.modal-icon-container img {
+  height: 6rem;
+}
+.modal-header-text {
+  position: relative;
+  height: 80px;
+  z-index: 1;
+  background-color: #fff;
+  width: 100%;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
+}
+.modal-header-text h1 {
+  font-size: 1.5rem;
+}
+.modal-header-text img {
+  height: 2.3rem;
+  margin-right: 10px;
 }
 @media (width < 1199px) {
   .pending-title img {
@@ -426,7 +541,13 @@
   .header-text h1 {
     font-size: 1.3rem;
   }
+  .modal-header-text h1 {
+    font-size: 1.3rem;
+  }
   .header-text img {
+    height: 2rem;
+  }
+  .modal-header-text img {
     height: 2rem;
   }
   .question-box span {
@@ -435,6 +556,9 @@
   .quiz-ans p {
     font-size: 1rem;
   }
+  .modal-icon-container {
+    left: 80%;
+  }
 }
 @media (width < 992px) {
   .content {
@@ -442,6 +566,9 @@
   }
   .pending-title h1 {
     font-size: 1.2rem;
+  }
+  .modal-content {
+    width: 80%;
   }
 }
 @media (width < 768px) {
@@ -463,6 +590,21 @@
   .no-quiz-header h1 {
     font-size: 1rem;
   }
+  .modal-content {
+    width: 85%;
+  }
+  .icon-container img {
+    height: 4.8rem;
+  }
+  .modal-icon-container img {
+    height: 4.8rem;
+  }
+  .modal-icon-container {
+    top: 60%;
+  }
+  .icon-container {
+    top: 60%;
+  }
 }
 @media (width < 600px) {
   .quiz-panel .title-box .text-box img {
@@ -483,6 +625,18 @@
   .header-text img {
     height: 1.5rem;
   }
+  .modal-icon-container {
+    left: 80%;
+  }
+  .modal-header-text {
+    padding: 10px;
+  }
+  .modal-header-text h1 {
+    font-size: 1.1rem;
+  }
+  .modal-header-text img {
+    height: 1.5rem;
+  }
   .info-container {
     flex-direction: column;
   }
@@ -498,6 +652,12 @@
   .quiz-info span {
     font-size: 0.9rem;
   }
+  .modal-content {
+    width: 90%;
+  }
+  .modal-icon-container {
+    left: 70%;
+  }
 }
 @media (width < 375px) {
   .quiz-container {
@@ -505,9 +665,12 @@
   }
   .icon-container {
     top: 55%;
-    left: 65%;
+    left: 70%;
   }
   .icon-container img {
+    height: 4.5rem;
+  }
+  .modal-icon-container img {
     height: 4.5rem;
   }
   .no-quiz-header h1 {
@@ -521,5 +684,12 @@
   }
   .quiz-info span {
     font-size: 0.8rem;
+  }
+  .modal-content {
+    width: 95%;
+  }
+  .modal-icon-container {
+    left: 65%;
+    top: 55%;
   }
 }

@@ -387,4 +387,17 @@ class fetchClass extends db_connect
             return false;
         }
     }
+
+    public function fetchQuizTitle($quizId): array
+    {
+        $query = $this->conn->prepare("SELECT * FROM quiz_tbl WHERE quiz_id = ?");
+        $query->bind_param("s", $quizId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_assoc();
+        } else {
+            return [];
+        }
+    }
 }

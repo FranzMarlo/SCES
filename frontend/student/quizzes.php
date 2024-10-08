@@ -3,6 +3,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/quizzes.css" />
+<script src="/SCES/assets/script/student-quiz.js"></script>
 <title>Filipino | SCES Online Learning Platform</title>
 </head>
 
@@ -69,16 +70,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
             <?php else: ?>
               <div class="no-data-item">
                 <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
-                <h1>No Pending Quiz Found</h1>
-                <h1>Your Teacher Hasn't Published Your Quiz Yet</h1>
+                <h1>No pending quiz found</h1>
+                <h1>Quiz hasn't been published yet</h1>
               </div>
             <?php endif; ?>
           </div>
           <div class="header-container">
             <?php if ($activeQuizzes): ?>
               <?php foreach ($activeQuizzes as $index => $quiz): ?>
-                <div class="quiz-header" data-quiz-index="<?php echo $index; ?>"
-                  data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
+                <div class="quiz-header" id="header-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>"
+                  data-quiz-index="<?php echo $index; ?>" data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']); ?>"
+                  style="display: <?php echo ($index === 0) ? 'block' : 'none'; ?>;">
                   <div class="header-bg <?php echo strtolower($quiz['subject_code']); ?>">
                     <div class="icon-container">
                       <img src="/SCES/assets/images/<?php echo htmlspecialchars($quiz['icon']); ?>"
@@ -92,7 +94,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                     </h1>
                   </div>
                 </div>
-                <div class="info-container">
+                <div class="info-container quiz-info-container" id="quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>"
+                  style="display: <?php echo ($index === 0) ? 'flex' : 'none'; ?>;">
                   <div class="info-part">
                     <div class="info-data">
                       <img src="/SCES/assets/images/quiz-subject.png" alt="quiz-subject.png">
@@ -159,14 +162,15 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                     </div>
                   </div>
                 </div>
-                <div class="button-container">
-                  <button class="take-quiz">Take Quiz</button>
+                <div class="button-container" id="button-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>"
+                  style="display: <?php echo ($index === 0) ? 'flex' : 'none'; ?>;">
+                  <button class="take-quiz" id="take-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>">Take Quiz</button>
                 </div>
               <?php endforeach; ?>
             <?php else: ?>
               <div class="no-quiz-header">
                 <img src="/SCES/assets/images/info-icon.png" alt="info-icon.png">
-                <h1>Please Add A Quiz First</h1>
+                <h1>Uploaded quiz info will be displayed here</h1>
               </div>
             <?php endif; ?>
 
@@ -177,5 +181,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
   </div>
 
   <?php
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/take-quiz.php';
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
   ?>
