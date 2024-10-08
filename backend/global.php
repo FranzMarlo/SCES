@@ -1249,6 +1249,54 @@ if (isset($_POST['submitType'])) {
         } else {
             echo '481';
         }
+    } else if ($_POST['submitType'] === 'submitQuiz') {
+        session_start();
+        var_dump($_POST);
+        $quizId = validate($_POST['quiz_id']);
+        $studentId = $_SESSION['student_id'];
+        $answers = $_POST['answers'];
+
+        $totalQuestions = $db->getItemCount($quizId);
+        $correctAnswers = 0;
+
+        foreach ($answers as $answer) {
+            $questionId = $answer['question_id'];
+            $selectedChoiceId = $answer['choice_id'];
+
+            error_log("Answering Question $index: Question ID: $questionId, Selected Choice ID: $selectedChoiceId");
+            
+            if (!empty($selectedChoiceId)) {
+                $answerValue = $db->checkQuizAnswer($selectedChoiceId);
+
+                if ($answerValue && $answerValue == 1) {
+                    $correctAnswers++;
+                }
+
+                $db->recordAnswer($studentId, $quizId, $questionId, $selectedChoiceId, $answerValue);
+            } else {
+                // Handle unanswered questions (null choice_id)
+                $insertQuery = "INSERT INTO student_quiz_tbl (student_id, quiz_id, question_id, selected_choice_id) 
+                                VALUES (?, ?, ?, NULL)";
+                $insertStmt = $conn->prepare($insertQuery);
+                $insertStmt->bind_param('iii', $studentId, $quizId, $questionId);
+                $insertStmt->execute();
+            }
+        }
+
+        $scorePercentage = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
+        if ($scorePercentage > 60) {
+            $remarks = 'Passed';
+        } else {
+            $remarks = 'Failed';
+        }
+        $score = $db->recordScore($quizId, $studentId, $correctAnswers, $totalQuestions, $remarks);
+        if ($score != false) {
+            echo json_encode(['success' => true, 'score' => $correctAnswers]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Error recording score.']);
+        }
+
+
     } else {
         echo '400';
     }

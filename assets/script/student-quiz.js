@@ -48,8 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
       cancelButtonColor: "#f44336",
     }).then((result) => {
       if (result.isConfirmed) {
-        quizModal.style.display = "none";
-        document.body.style.overflow = "auto";
+        closeQuiz();
       } else {
         Swal.fire({
           title: "Quiz taking still on progress",
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const questionsContainer = document.querySelector(
           ".modal-quiz-content"
         );
-        questionsContainer.innerHTML = ""; // Clear previous content
+        questionsContainer.innerHTML = "";
 
         data.questions.forEach((question, index) => {
           const quizItem = document.createElement("div");
@@ -124,13 +123,11 @@ document.addEventListener("DOMContentLoaded", function () {
           questionBox.innerHTML = `<span><strong>${index + 1}.</strong> ${
             question.question
           }</span>`;
-          quizItem.appendChild(questionBox); // Append question box to quiz item
+          quizItem.appendChild(questionBox);
 
-          // Append choices directly to quizItem
           question.choices.forEach((choice, i) => {
-            const choiceLetter = String.fromCharCode(65 + i); // A, B, C, etc.
+            const choiceLetter = String.fromCharCode(65 + i);
 
-            // Create a label for the choice
             const choiceElement = document.createElement("label");
             choiceElement.classList.add("quiz-ans");
             choiceElement.innerHTML = `
@@ -138,33 +135,103 @@ document.addEventListener("DOMContentLoaded", function () {
                     <strong>${choiceLetter}.</strong>&nbsp;${choice.choice}
                 `;
 
-            // Add event listener to handle radio button selection
             choiceElement.addEventListener("click", function () {
               const radioButton = this.querySelector('input[type="radio"]');
               if (radioButton) {
-                // Remove the subject code class from all other choice elements
                 document
                   .querySelectorAll(`input[name="question-${index}"]`)
                   .forEach((rb) => {
-                    const label = rb.parentElement; // Get the label associated with the radio button
+                    const label = rb.parentElement;
                     label.classList.remove(data.subject_code.toLowerCase());
                   });
 
-                // Add the subject code as a class to the selected choice element
                 choiceElement.classList.add(data.subject_code.toLowerCase());
               }
             });
 
-            // Append choice directly to quiz item
             quizItem.appendChild(choiceElement);
           });
 
-          questionsContainer.appendChild(quizItem); // Append the complete quiz item to questions container
+          questionsContainer.appendChild(quizItem);
         });
 
+        // Add quiz_id as an attribute to the submit button
+        const submitButton = document.getElementById("submit-quiz");
+        submitButton.setAttribute("data-quiz-id", quizId);
+
         const quizModal = document.getElementById("quizModal");
-        quizModal.style.display = "block"; // Show the modal
-        document.body.style.overflow = "hidden"; // Disable background scroll
+        quizModal.style.display = "block";
+        document.body.style.overflow = "hidden";
       });
+  }
+
+  // Function to handle quiz submission
+  function submitQuiz(quizId) {
+    const selectedAnswers = [];
+
+    // Loop through each quiz item and gather selected answers
+    document.querySelectorAll(".quiz-item").forEach((quizItem, index) => {
+      const selectedOption = quizItem.querySelector(
+        `input[name="question-${index}"]:checked`
+      );
+      if (selectedOption) {
+        selectedAnswers.push({
+          question_id: selectedOption.id.split("-")[1], // Extract question index from id
+          choice_id: selectedOption.value,
+        });
+      } else {
+        selectedAnswers.push({
+          question_id: index, // Use the index as the question_id when no option is selected
+          choice_id: null, // No answer selected
+        });
+      }
+    });
+
+    // Create form data for each answer
+    const formData = selectedAnswers
+      .map(
+        (answer, i) =>
+          `answers[${i}][question_id]=${encodeURIComponent(
+            answer.question_id
+          )}&answers[${i}][choice_id]=${encodeURIComponent(answer.choice_id)}`
+      )
+      .join("&");
+
+    // Prepare the data to be sent in the AJAX request
+    const bodyData = `submitType=submitQuiz&quiz_id=${quizId}&${formData}`;
+
+    // AJAX request to submit the quiz
+    fetch(`/SCES/backend/global.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: bodyData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          alert("Quiz submitted successfully!");
+          closeQuizModal(); // Close the modal after submission
+        } else {
+          alert("There was an error submitting your quiz.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
+  // Event listener for the submit button
+  document.getElementById("submit-quiz").addEventListener("click", function () {
+    // Retrieve the quizId from the submit button attribute
+    const quizId = this.getAttribute("data-quiz-id");
+    submitQuiz(quizId); // Pass the quizId to the submitQuiz function
+  });
+
+  function closeQuiz() {
+    const quizModal = document.getElementById("quizModal");
+    quizModal.style.display = "none";
+    document.body.style.overflow = "auto";
   }
 });

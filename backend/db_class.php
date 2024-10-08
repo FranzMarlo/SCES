@@ -1269,5 +1269,72 @@ class globalClass extends db_connect
 
         return [];
     }
+
+    public function checkQuizAnswer($choiceId)
+    {
+        $query = $this->conn->prepare("SELECT value FROM choices_tbl WHERE choice_id = ?");
+        $query->bind_param("s", $choiceId);
+
+        if ($query->execute()) {
+            $result = $query->get_result()->fetch_assoc();
+            return $result['value'] ?? null;
+        }
+        return null;
+    }
+
+    public function recordAnswer($studentId, $quizId, $questionId, $choiceId, $value)
+    {
+        $year = date("Y");
+        $answerId = 'A' . $year . sprintf('%05d', rand(0, 99999));
+
+        while ($this->checkAnswerId($answerId)->num_rows > 0) {
+            $answerId = 'A' . $year . sprintf('%05d', rand(0, 99999));
+        }
+
+        $query = $this->conn->prepare("INSERT INTO `answer_tbl` (`answer_id`, `student_id`, `quiz_id`, `question_id`, `choice_id`, `value`) VALUES (?, ?, ?, ?, ?, ?)");
+        $query->bind_param("sssssi", $answerId, $studentId, $quizId, $questionId, $choiceId, $value);
+
+        return $query->execute();
+    }
+
+    public function checkAnswerId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE choice_id = ?");
+        $query->bind_param("s", $id);
+
+        if ($query->execute()) {
+            return $query->get_result();
+        }
+        return false;
+    }
+
+    public function recordScore($quizId, $studentId, $score, $itemCount, $remarks)
+    {
+        $year = date("Y");
+        $scoreId = 'R' . $year . sprintf('%05d', rand(0, 99999));
+
+        while ($this->checkScoreId($scoreId)->num_rows > 0) {
+            $scoreId = 'R' . $year . sprintf('%05d', rand(0, 99999));
+        }
+
+        $query = $this->conn->prepare("INSERT INTO `score_tbl` (`score_id`, `quiz_id`, `student_id`, `score`, `item_number`, `remarks`) VALUES (?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssss", $scoreId, $quizId, $studentId, $score, $itemCount, $remarks);
+
+        return $query->execute();
+    }
+
+    public function checkScoreId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM score_tbl WHERE score_id = ?");
+        $query->bind_param("s", $id);
+
+        if ($query->execute()) {
+            return $query->get_result();
+        }
+        return false;
+    }
+
+
 }
+
 
