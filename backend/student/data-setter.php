@@ -22,6 +22,7 @@ if (isset($_SESSION['student_id'])) {
     $gradeLevel = $_SESSION['grade_level'];
     $passwordChange = $_SESSION['password_change'];
     $emailVerification = $_SESSION['email_verification'];
+    $middleInitial = substr($studentMname, 0, 1) . '.';
 }
 else{
     header('Location: /SCES/frontend/student/login.php');

@@ -19,6 +19,7 @@ if (isset($_SESSION['teacher_id'])) {
     $passwordChange = $_SESSION['password_change'];
     $emailVerification = $_SESSION['email_verification'];
     $title = ($gender == 'Female') ? 'Ma\'am' : 'Sir';
+    $middleInitial = substr($teacherMname, 0, 1) . '.';
 }
 else{
     header('Location: /SCES/frontend/faculty/login.php');

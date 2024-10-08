@@ -96,11 +96,10 @@ document.addEventListener("DOMContentLoaded", function () {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `submitType=getQuizContent&quiz_id=${quizId}`, // Fixed the request body
+      body: `submitType=getQuizContent&quiz_id=${quizId}`,
     })
       .then((response) => response.json())
       .then((data) => {
-        // Populate modal header with quiz details
         document.querySelector(
           ".modal-header-text h1"
         ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
@@ -108,9 +107,8 @@ document.addEventListener("DOMContentLoaded", function () {
           ".modal-icon-container img"
         ).src = `/SCES/assets/images/${data.icon}`;
 
-        // Update the modal header background based on the subject code
         const modalHeaderBg = document.querySelector(".modal-header-bg");
-        modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`; // Add the lowercase subject_code as a class
+        modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
 
         const questionsContainer = document.querySelector(
           ".modal-quiz-content"
@@ -118,14 +116,16 @@ document.addEventListener("DOMContentLoaded", function () {
         questionsContainer.innerHTML = "";
 
         data.questions.forEach((question, index) => {
-
           const quizItem = document.createElement("div");
           quizItem.classList.add("quiz-item");
 
           const questionBox = document.createElement("div");
           questionBox.classList.add("question-box");
 
-          questionBox.innerHTML = `<span>${question.question}</span>`;
+          // Make the question number bold
+          questionBox.innerHTML = `<span><strong>${index + 1}</strong>. ${
+            question.question
+          }</span>`;
 
           const choicesContainer = document.createElement("div");
           choicesContainer.classList.add("quiz-ans-container");
@@ -133,24 +133,23 @@ document.addEventListener("DOMContentLoaded", function () {
           question.choices.forEach((choice, i) => {
             const choiceElement = document.createElement("div");
             choiceElement.classList.add("quiz-ans");
+            const choiceLetter = String.fromCharCode(65 + i);
 
+            // Make the choice letter bold
             choiceElement.innerHTML = `
               <input type="radio" name="question-${index}" value="${choice.choice_id}" id="question-${index}-choice-${i}">
-              <label for="question-${index}-choice-${i}">${choice.choice}</label>
+              <label for="question-${index}-choice-${i}"><strong>${choiceLetter}</strong>. ${choice.choice}</label>
             `;
             choicesContainer.appendChild(choiceElement);
           });
-
           quizItem.appendChild(questionBox);
           quizItem.appendChild(choicesContainer);
           questionsContainer.appendChild(quizItem);
         });
 
-        // Display the quiz modal and disable scrolling on the body
         const quizModal = document.getElementById("quizModal");
         quizModal.style.display = "block";
         document.body.style.overflow = "hidden";
-
       });
   }
 });
