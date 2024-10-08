@@ -149,7 +149,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                       <img src="/SCES/assets/images/quiz-score.png" alt="quiz-score.png">
                       <div class="quiz-info">
                         <h1>Score</h1>
-                        <?php echo formatQuizScore($quiz['score'], $quiz['item_number']); ?>
+                        <span><?php echo formatQuizScore($quiz['score'], $quiz['item_number']); ?></span>
                       </div>
                     </div>
                     <?php $remarks = formatQuizRemarks($quiz['remarks']); ?>

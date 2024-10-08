@@ -201,11 +201,15 @@
   padding: 5px 10px;
   border-radius: 30px;
   display: flex;
-  flex-direction: row;
+  align-items: center;
   border: 2px solid #000;
-}
-.quiz-ans p {
+  cursor: pointer;
+  background-color: #f9f9f9;
   font-size: 1.1rem;
+}
+
+.quiz-ans:hover {
+  background-color: #e0e0e0; 
 }
 .fil {
   background-color: #ff8080;
@@ -214,6 +218,12 @@
   background-color: #ea7474;
 }
 .pending.fil:hover {
+  background-color: #ea7474;
+}
+.quiz-ans.fil {
+  background-color: #ff8080;
+}
+.quiz-ans.fil:hover {
   background-color: #ea7474;
 }
 .eng {
@@ -225,6 +235,12 @@
 .pending.eng:hover {
   background-color: #e39d6b;
 }
+.quiz-ans.eng {
+  background-color: #ffb480;
+}
+.quiz-ans.eng:hover {
+  background-color: #e39d6b;
+}
 .math {
   background-color: #f8f28d;
 }
@@ -232,6 +248,12 @@
   background-color: #d9d479;
 }
 .pending.math:hover {
+  background-color: #d9d479;
+}
+.quiz-ans.math {
+  background-color: #f8f28d;
+}
+.quiz-ans.math:hover {
   background-color: #d9d479;
 }
 .sci {
@@ -243,6 +265,12 @@
 .pending.sci:hover {
   background-color: #3baf88;
 }
+.quiz-ans.sci {
+  background-color: #42d6a4;
+}
+.quiz-ans.sci:hover {
+  background-color: #3baf88;
+}
 .esp {
   background-color: #08cad1;
 }
@@ -250,6 +278,12 @@
   background-color: #0ca1a6;
 }
 .pending.esp:hover {
+  background-color: #0ca1a6;
+}
+.quiz-ans.esp {
+  background-color: #08cad1;
+}
+.quiz-ans.esp:hover {
   background-color: #0ca1a6;
 }
 .mt {
@@ -261,6 +295,12 @@
 .pending.mt:hover {
   background-color: #5694ca;
 }
+.quiz-ans.mt {
+  background-color: #59adf6;
+}
+.quiz-ans.mt:hover {
+  background-color: #5694ca;
+}
 .ap {
   background-color: #f0bad1;
 }
@@ -268,6 +308,12 @@
   background-color: #c98da7;
 }
 .pending.ap:hover {
+  background-color: #c98da7;
+}
+.quiz-ans.ap {
+  background-color: #f0bad1;
+}
+.quiz-ans.ap:hover {
   background-color: #c98da7;
 }
 .mapeh {
@@ -279,6 +325,12 @@
 .pending.mapeh:hover {
   background-color: #8690db;
 }
+.quiz-ans.mapeh {
+  background-color: #a3adff;
+}
+.quiz-ans.mapeh:hover {
+  background-color: #8690db;
+}
 .epp {
   background-color: #d9ae9d;
 }
@@ -286,6 +338,12 @@
   background-color: #b68a79;
 }
 .pending.epp:hover {
+  background-color: #b68a79;
+}
+.quiz-ans.epp {
+  background-color: #d9ae9d;
+}
+.quiz-ans.epp:hover {
   background-color: #b68a79;
 }
 .correct {
@@ -428,7 +486,7 @@
   max-width: 1200px;
   animation: slideIn 0.3s ease-out;
 }
-.modal-quiz-content{
+.modal-quiz-content {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -490,16 +548,16 @@
   align-items: center;
   justify-content: space-between;
 }
-.student-info{
+.student-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.student-info span{
+.student-info span {
   font-size: 1.2rem;
   font-weight: 500;
 }
-.modal-direction{
+.modal-direction {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -507,7 +565,7 @@
   border-radius: 30px;
   padding: 10px 20px;
 }
-.modal-direction span{
+.modal-direction span {
   font-size: 1.2rem;
 }
 .modal-quiz-header {
@@ -588,12 +646,6 @@
   .modal-header-text img {
     height: 2rem;
   }
-  .question-box span {
-    font-size: 1rem;
-  }
-  .quiz-ans p {
-    font-size: 1rem;
-  }
   .modal-icon-container {
     left: 80%;
   }
@@ -608,11 +660,17 @@
   .modal-content {
     width: 80%;
   }
-  .student-info span{
+  .student-info span {
     font-size: 1.1rem;
   }
-  .modal-direction span{
+  .modal-direction span {
     font-size: 1.1rem;
+  }
+  .question-box span {
+    font-size: 1rem;
+  }
+  .quiz-ans{
+    font-size: 1rem;
   }
 }
 @media (width < 768px) {
@@ -651,10 +709,10 @@
   }
 }
 @media (width < 600px) {
-  .student-info span{
+  .student-info span {
     font-size: 1rem;
   }
-  .modal-direction span{
+  .modal-direction span {
     font-size: 1rem;
   }
   .quiz-panel .title-box .text-box img {
@@ -710,10 +768,10 @@
   }
 }
 @media (width < 375px) {
-  .student-info span{
+  .student-info span {
     font-size: 0.9rem;
   }
-  .modal-direction span{
+  .modal-direction span {
     font-size: 0.9rem;
   }
   .quiz-container {
@@ -747,5 +805,11 @@
   .modal-icon-container {
     left: 65%;
     top: 55%;
+  }
+  .question-box span {
+    font-size: 0.8rem;
+  }
+  .quiz-ans{
+    font-size: 0.8rem;
   }
 }

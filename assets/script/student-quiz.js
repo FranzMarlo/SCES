@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const questionsContainer = document.querySelector(
           ".modal-quiz-content"
         );
-        questionsContainer.innerHTML = "";
+        questionsContainer.innerHTML = ""; // Clear previous content
 
         data.questions.forEach((question, index) => {
           const quizItem = document.createElement("div");
@@ -121,35 +121,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
           const questionBox = document.createElement("div");
           questionBox.classList.add("question-box");
-
-          // Make the question number bold
-          questionBox.innerHTML = `<span><strong>${index + 1}</strong>. ${
+          questionBox.innerHTML = `<span><strong>${index + 1}.</strong> ${
             question.question
           }</span>`;
+          quizItem.appendChild(questionBox); // Append question box to quiz item
 
-          const choicesContainer = document.createElement("div");
-          choicesContainer.classList.add("quiz-ans-container");
-
+          // Append choices directly to quizItem
           question.choices.forEach((choice, i) => {
-            const choiceElement = document.createElement("div");
-            choiceElement.classList.add("quiz-ans");
-            const choiceLetter = String.fromCharCode(65 + i);
+            const choiceLetter = String.fromCharCode(65 + i); // A, B, C, etc.
 
-            // Make the choice letter bold
+            // Create a label for the choice
+            const choiceElement = document.createElement("label");
+            choiceElement.classList.add("quiz-ans");
             choiceElement.innerHTML = `
-              <input type="radio" name="question-${index}" value="${choice.choice_id}" id="question-${index}-choice-${i}">
-              <label for="question-${index}-choice-${i}"><strong>${choiceLetter}</strong>. ${choice.choice}</label>
-            `;
-            choicesContainer.appendChild(choiceElement);
+                    <input type="radio" name="question-${index}" value="${choice.choice_id}" id="question-${index}-choice-${i}" style="display: none;">
+                    <strong>${choiceLetter}.</strong>&nbsp;${choice.choice}
+                `;
+
+            // Add event listener to handle radio button selection
+            choiceElement.addEventListener("click", function () {
+              const radioButton = this.querySelector('input[type="radio"]');
+              if (radioButton) {
+                // Remove the subject code class from all other choice elements
+                document
+                  .querySelectorAll(`input[name="question-${index}"]`)
+                  .forEach((rb) => {
+                    const label = rb.parentElement; // Get the label associated with the radio button
+                    label.classList.remove(data.subject_code.toLowerCase());
+                  });
+
+                // Add the subject code as a class to the selected choice element
+                choiceElement.classList.add(data.subject_code.toLowerCase());
+              }
+            });
+
+            // Append choice directly to quiz item
+            quizItem.appendChild(choiceElement);
           });
-          quizItem.appendChild(questionBox);
-          quizItem.appendChild(choicesContainer);
-          questionsContainer.appendChild(quizItem);
+
+          questionsContainer.appendChild(quizItem); // Append the complete quiz item to questions container
         });
 
         const quizModal = document.getElementById("quizModal");
-        quizModal.style.display = "block";
-        document.body.style.overflow = "hidden";
+        quizModal.style.display = "block"; // Show the modal
+        document.body.style.overflow = "hidden"; // Disable background scroll
       });
   }
 });
