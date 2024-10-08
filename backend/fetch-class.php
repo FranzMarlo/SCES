@@ -96,12 +96,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode(['error' => 'Quiz ID not provided']);
         }
-    } else if ($submitType === 'getQuizTitle') {
+    } else if ($submitType === 'getQuizContent') {
         if (isset($_POST['quiz_id'])) {
             $quizId = $_POST['quiz_id'];
 
-            $quizData = $fetchDb->fetchQuizTitle($quizId);
+            $quizDetails = $fetchDb->fetchQuizInfo($quizId);
 
+            $questions = $fetchDb->fetchQuestions($quizId);
+
+            foreach ($questions as &$question) {
+                $question['choices'] = $fetchDb->fetchChoices($question['question_id']);
+            }
+            $quizData = [
+                'quiz_number' => $quizDetails['quiz_number'],
+                'title' => $quizDetails['title'],
+                'icon' => $quizDetails['icon'],
+                'subject_code' => $quizDetails['subject_code'],
+                'questions' => $questions,
+            ];
+
+            // Send response as JSON
             echo json_encode($quizData);
         } else {
             echo json_encode(['error' => 'Quiz ID not provided']);

@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const quizModal = document.getElementById("quizModal");
   const closeQuizModal = document.getElementById("closeQuizModal");
+
   closeQuizModal.addEventListener("click", function () {
     Swal.fire({
       title: "Do you want to quit taking this quiz?",
@@ -75,8 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
         cancelButtonColor: "#f44336",
       }).then((result) => {
         if (result.isConfirmed) {
-          quizModal.style.display = "block";
-          document.body.style.overflow = "hidden";
+          promptQuiz(quizId);
         } else {
           Swal.fire({
             title: "Quiz Remains Pending",
@@ -96,7 +96,61 @@ document.addEventListener("DOMContentLoaded", function () {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `submitType=getQuizTitle=${quizId}`,
-    }).then((response) => response.text());
+      body: `submitType=getQuizContent&quiz_id=${quizId}`, // Fixed the request body
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Populate modal header with quiz details
+        document.querySelector(
+          ".modal-header-text h1"
+        ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
+        document.querySelector(
+          ".modal-icon-container img"
+        ).src = `/SCES/assets/images/${data.icon}`;
+
+        // Update the modal header background based on the subject code
+        const modalHeaderBg = document.querySelector(".modal-header-bg");
+        modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`; // Add the lowercase subject_code as a class
+
+        const questionsContainer = document.querySelector(
+          ".modal-quiz-content"
+        );
+        questionsContainer.innerHTML = "";
+
+        data.questions.forEach((question, index) => {
+
+          const quizItem = document.createElement("div");
+          quizItem.classList.add("quiz-item");
+
+          const questionBox = document.createElement("div");
+          questionBox.classList.add("question-box");
+
+          questionBox.innerHTML = `<span>${question.question}</span>`;
+
+          const choicesContainer = document.createElement("div");
+          choicesContainer.classList.add("quiz-ans-container");
+
+          question.choices.forEach((choice, i) => {
+            const choiceElement = document.createElement("div");
+            choiceElement.classList.add("quiz-ans");
+
+            choiceElement.innerHTML = `
+              <input type="radio" name="question-${index}" value="${choice.choice_id}" id="question-${index}-choice-${i}">
+              <label for="question-${index}-choice-${i}">${choice.choice}</label>
+            `;
+            choicesContainer.appendChild(choiceElement);
+          });
+
+          quizItem.appendChild(questionBox);
+          quizItem.appendChild(choicesContainer);
+          questionsContainer.appendChild(quizItem);
+        });
+
+        // Display the quiz modal and disable scrolling on the body
+        const quizModal = document.getElementById("quizModal");
+        quizModal.style.display = "block";
+        document.body.style.overflow = "hidden";
+
+      });
   }
 });

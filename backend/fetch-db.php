@@ -101,32 +101,6 @@ class fetchClass extends db_connect
         }
     }
 
-    public function fetchQuestion($questionId): array
-    {
-        $query = $this->conn->prepare("SELECT * FROM question_tbl WHERE question_id = ?");
-        $query->bind_param("s", $questionId);
-
-        if ($query->execute()) {
-            $result = $query->get_result();
-            return $result->fetch_assoc();
-        } else {
-            return [];
-        }
-    }
-
-    public function fetchChoices($questionId): array
-    {
-        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE question_id = ?");
-        $query->bind_param("s", $questionId);
-
-        if ($query->execute()) {
-            $result = $query->get_result();
-            return $result->fetch_all(MYSQLI_ASSOC);
-        } else {
-            return [];
-        }
-    }
-
 
     public function fetchQuizDetails($quizId)
     {
@@ -388,9 +362,24 @@ class fetchClass extends db_connect
         }
     }
 
-    public function fetchQuizTitle($quizId): array
+    public function fetchQuizInfo($quizId): array
     {
-        $query = $this->conn->prepare("SELECT * FROM quiz_tbl WHERE quiz_id = ?");
+        $query = $this->conn->prepare(
+        "SELECT
+                    quiz.quiz_id,
+                    quiz.subject_id,
+                    quiz.quiz_number,
+                    quiz.title,
+                    subject.subject_code,
+                    subject.icon
+                FROM 
+                    quiz_tbl quiz
+                INNER JOIN
+                    subject_tbl subject
+                ON
+                    quiz.subject_id = subject.subject_id
+                WHERE quiz_id = ?"
+        );
         $query->bind_param("s", $quizId);
 
         if ($query->execute()) {
@@ -400,4 +389,31 @@ class fetchClass extends db_connect
             return [];
         }
     }
+
+    public function fetchQuestions($quizId): array
+    {
+        $query = $this->conn->prepare("SELECT * FROM question_tbl WHERE quiz_id = ? ORDER BY add_time ASC");
+        $query->bind_param("s", $quizId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
+    public function fetchChoices($questionId): array
+    {
+        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE question_id = ?");
+        $query->bind_param("s", $questionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
 }
