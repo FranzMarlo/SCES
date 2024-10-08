@@ -33,10 +33,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  const quizModal =  document.getElementById('quizModal');
-  const closeQuizModal = document.getElementById('closeQuizModal');
+  const quizModal = document.getElementById("quizModal");
+  const closeQuizModal = document.getElementById("closeQuizModal");
   closeQuizModal.addEventListener("click", function () {
-    quizModal.style.display = "none";
+    Swal.fire({
+      title: "Do you want to quit taking this quiz?",
+      text: "You are about to lose your progress",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      confirmButtonColor: "#4caf50",
+      cancelButtonColor: "#f44336",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        quizModal.style.display = "none";
+        document.body.style.overflow = "auto";
+      } else {
+        Swal.fire({
+          title: "Quiz taking still on progress",
+          icon: "info",
+          text: "Remember to submit the form when you are done answering",
+          confirmButtonText: "Ok",
+          confirmButtonColor: "#4caf50",
+        });
+      }
+    });
   });
 
   document.querySelectorAll(".take-quiz").forEach((button) => {
@@ -53,7 +75,8 @@ document.addEventListener("DOMContentLoaded", function () {
         cancelButtonColor: "#f44336",
       }).then((result) => {
         if (result.isConfirmed) {
-          quizModal.style.display = 'block';
+          quizModal.style.display = "block";
+          document.body.style.overflow = "hidden";
         } else {
           Swal.fire({
             title: "Quiz Remains Pending",
@@ -67,14 +90,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  function promptQuiz(quizId){
+  function promptQuiz(quizId) {
     fetch(`/SCES/backend/fetch-class.php`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: `submitType=getQuizTitle=${quizId}`,
-    }).then((response) => response.text())
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `submitType=getQuizTitle=${quizId}`,
+    }).then((response) => response.text());
   }
-  
 });
