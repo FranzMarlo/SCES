@@ -46,13 +46,13 @@ function formatQuizRemarks($remarks) {
 }
 
 function getQuizAttemptNotice($attempts) {
-    if (is_null($attempts)) {
+    if (is_null($attempts) || $attempts == 0) {
         return "You still have 3 attempts on submitting the quiz.";
-    } elseif ($attempts == 2) {
-        return "You still have 2 attempts on taking the quiz.";
     } elseif ($attempts == 1) {
+        return "You still have 2 attempts on taking the quiz.";
+    } elseif ($attempts == 2) {
         return "You still have 1 attempt on taking the quiz.";
-    } elseif ($attempts == 0) {
+    } elseif ($attempts == 3) {
         return "No attempts left on taking the quiz.";
     } else {
         return "Invalid number of attempts.";

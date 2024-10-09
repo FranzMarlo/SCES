@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
       const quizId = this.id.split("-")[2];
       const attempts = this.getAttribute("data-attempts");
-      if (attempts == null) {
+      if (attempts == 0) {
         Swal.fire({
           title: "Do you want to take this quiz?",
           icon: "question",
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
           }
         });
-      } else if (attempts == 2) {
+      } else if (attempts == 1) {
         Swal.fire({
           title: "Do you want to retake this quiz?",
           icon: "question",
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
           }
         });
-      } else if (attempts == 1) {
+      } else if (attempts == 2) {
         Swal.fire({
           title: "Do you want to retake this quiz?",
           icon: "question",
@@ -394,16 +394,29 @@ document.addEventListener("DOMContentLoaded", function () {
           .then((result) => {
             if (result.success) {
               closeQuiz();
-              Swal.fire({
-                icon: "success",
-                title: "Quiz Submitted",
-                text: `You scored ${result.score} out of ${result.totalQuestions}`,
-                confirmButtonColor: "#4CAF50",
-              }).then((result) => {
-                if (result.value) {
-                  window.location.reload();
-                }
-              });
+              if (result.remarks == "Passed") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Well Done!",
+                  text: `You passed with a score of ${result.score} out of ${result.totalQuestions}`,
+                  confirmButtonColor: "#4CAF50",
+                }).then((result) => {
+                  if (result.value) {
+                    window.location.reload();
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Try Harder Next Time",
+                  text: `Your score is ${result.score} out of ${result.totalQuestions}`,
+                  confirmButtonColor: "#4CAF50",
+                }).then((result) => {
+                  if (result.value) {
+                    window.location.reload();
+                  }
+                });
+              }
             } else {
               Swal.fire({
                 title: "Error",
@@ -494,16 +507,29 @@ document.addEventListener("DOMContentLoaded", function () {
           .then((result) => {
             if (result.success) {
               closeQuiz();
-              Swal.fire({
-                icon: "success",
-                title: "Quiz Resubmitted",
-                text: `You scored ${result.score} out of ${result.totalQuestions}`,
-                confirmButtonColor: "#4CAF50",
-              }).then((result) => {
-                if (result.value) {
-                  window.location.reload();
-                }
-              });
+              if (result.remarks == "Passed") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Well Done!",
+                  text: `You passed with a score of ${result.score} out of ${result.totalQuestions}`,
+                  confirmButtonColor: "#4CAF50",
+                }).then((result) => {
+                  if (result.value) {
+                    window.location.reload();
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Try Harder Next Time",
+                  text: `Your score is ${result.score} out of ${result.totalQuestions}`,
+                  confirmButtonColor: "#4CAF50",
+                }).then((result) => {
+                  if (result.value) {
+                    window.location.reload();
+                  }
+                });
+              }
             } else {
               Swal.fire({
                 title: "Error",

@@ -1278,7 +1278,8 @@ if (isset($_POST['submitType'])) {
             echo json_encode([
                 'success' => true,
                 'score' => $correctAnswers,
-                'totalQuestions' => $totalQuestions
+                'totalQuestions' => $totalQuestions,
+                'remarks' => $remarks
             ]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Error recording score.']);
@@ -1307,12 +1308,13 @@ if (isset($_POST['submitType'])) {
         $scorePercentage = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
         $remarks = ($scorePercentage >= 60) ? 'Passed' : 'Failed';
         $attempts = $db->getAttempts($quizId, $studentId);
-        $score = $db->updateScore($quizId, $studentId, $correctAnswers, $totalQuestions, $remarks, $attempts - 1);
+        $score = $db->updateScore($quizId, $studentId, $correctAnswers, $totalQuestions, $remarks, $attempts + 1);
         if ($score != false) {
             echo json_encode([
                 'success' => true,
                 'score' => $correctAnswers,
-                'totalQuestions' => $totalQuestions
+                'totalQuestions' => $totalQuestions,
+                'remarks' => $remarks
             ]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Error recording score.']);

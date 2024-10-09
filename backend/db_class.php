@@ -1245,7 +1245,7 @@ class globalClass extends db_connect
         LEFT JOIN
             score_tbl score
         ON
-            quiz.quiz_id = score.quiz_id
+            quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
         INNER JOIN
             teacher_tbl teacher
         ON
