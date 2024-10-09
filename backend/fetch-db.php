@@ -405,7 +405,7 @@ class fetchClass extends db_connect
 
     public function fetchChoices($questionId): array
     {
-        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE question_id = ?");
+        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE question_id = ? ORDER BY choice_order ASC");
         $query->bind_param("s", $questionId);
 
         if ($query->execute()) {

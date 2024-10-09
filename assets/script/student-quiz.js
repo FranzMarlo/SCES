@@ -160,11 +160,8 @@ document.addEventListener("DOMContentLoaded", function () {
           title: "Error",
           icon: "error",
           text: "You used up all of your remaining chances to retake this quiz",
-          showCancelButton: true,
-          confirmButtonText: "Yes",
-          cancelButtonText: "No",
+          confirmButtonText: "Ok",
           confirmButtonColor: "#4caf50",
-          cancelButtonColor: "#f44336",
         });
       }
     });
@@ -362,51 +359,66 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const formData = selectedAnswers
-      .map(
-        (answer, i) =>
-          `answers[${i}][question_id]=${encodeURIComponent(
-            answer.question_id
-          )}&answers[${i}][choice_id]=${encodeURIComponent(answer.choice_id)}`
-      )
-      .join("&");
+    Swal.fire({
+      title: "Submit Quiz?",
+      text: "Are you sure you want to submit the quiz?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      confirmButtonColor: "#4CAF50",
+      cancelButtonColor: "#f44336",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const formData = selectedAnswers
+          .map(
+            (answer, i) =>
+              `answers[${i}][question_id]=${encodeURIComponent(
+                answer.question_id
+              )}&answers[${i}][choice_id]=${encodeURIComponent(
+                answer.choice_id
+              )}`
+          )
+          .join("&");
 
-    const bodyData = `submitType=submitQuiz&quiz_id=${quizId}&${formData}`;
+        const bodyData = `submitType=submitQuiz&quiz_id=${quizId}&${formData}`;
 
-    fetch(`/SCES/backend/global.php`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: bodyData,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.success) {
-          closeQuiz();
-          Swal.fire({
-            icon: "success",
-            title: "Quiz Submitted",
-            text: `You scored ${result.score} out of ${result.totalQuestions}`,
-            confirmButtonColor: "#4CAF50",
-          }).then((result) => {
-            if (result.value) {
-              window.location.reload();
+        fetch(`/SCES/backend/global.php`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: bodyData,
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.success) {
+              closeQuiz();
+              Swal.fire({
+                icon: "success",
+                title: "Quiz Submitted",
+                text: `You scored ${result.score} out of ${result.totalQuestions}`,
+                confirmButtonColor: "#4CAF50",
+              }).then((result) => {
+                if (result.value) {
+                  window.location.reload();
+                }
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                icon: "error",
+                text: "Server Offline",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#4caf50",
+              });
             }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
           });
-        } else {
-          Swal.fire({
-            title: "Error",
-            icon: "error",
-            text: "Server Offline",
-            confirmButtonText: "Ok",
-            confirmButtonColor: "#4caf50",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+      }
+    });
   }
 
   function resubmitQuiz(quizId) {
@@ -447,51 +459,66 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const formData = selectedAnswers
-      .map(
-        (answer, i) =>
-          `answers[${i}][question_id]=${encodeURIComponent(
-            answer.question_id
-          )}&answers[${i}][choice_id]=${encodeURIComponent(answer.choice_id)}`
-      )
-      .join("&");
+    Swal.fire({
+      title: "Submit Quiz?",
+      text: "Are you sure you want to submit the quiz?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      confirmButtonColor: "#4CAF50",
+      cancelButtonColor: "#f44336",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const formData = selectedAnswers
+          .map(
+            (answer, i) =>
+              `answers[${i}][question_id]=${encodeURIComponent(
+                answer.question_id
+              )}&answers[${i}][choice_id]=${encodeURIComponent(
+                answer.choice_id
+              )}`
+          )
+          .join("&");
 
-    const bodyData = `submitType=resubmitQuiz&quiz_id=${quizId}&${formData}`;
+        const bodyData = `submitType=resubmitQuiz&quiz_id=${quizId}&${formData}`;
 
-    fetch(`/SCES/backend/global.php`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: bodyData,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.success) {
-          closeQuiz();
-          Swal.fire({
-            icon: "success",
-            title: "Quiz Retaken Successfully",
-            text: `You scored ${result.score} out of ${result.totalQuestions}`,
-            confirmButtonColor: "#4CAF50",
-          }).then((result) => {
-            if (result.value) {
-              window.location.reload();
+        fetch(`/SCES/backend/global.php`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: bodyData,
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.success) {
+              closeQuiz();
+              Swal.fire({
+                icon: "success",
+                title: "Quiz Resubmitted",
+                text: `You scored ${result.score} out of ${result.totalQuestions}`,
+                confirmButtonColor: "#4CAF50",
+              }).then((result) => {
+                if (result.value) {
+                  window.location.reload();
+                }
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                icon: "error",
+                text: "Server Offline",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#4caf50",
+              });
             }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
           });
-        } else {
-          Swal.fire({
-            title: "Error",
-            icon: "error",
-            text: "Server Offline",
-            confirmButtonText: "Ok",
-            confirmButtonColor: "#4caf50",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+      }
+    });
   }
 
   function closeQuiz() {
