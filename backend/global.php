@@ -1262,8 +1262,6 @@ if (isset($_POST['submitType'])) {
             $questionId = validate($answer['question_id']);
             $selectedChoiceId = isset($answer['choice_id']) ? validate($answer['choice_id']) : null;
 
-            error_log("Answering Question $questionId: Selected Choice ID: $selectedChoiceId");
-
             $answerValue = $db->checkQuizAnswer($selectedChoiceId);
             if ($answerValue && $answerValue == 1) {
                 $correctAnswers++;
@@ -1275,8 +1273,41 @@ if (isset($_POST['submitType'])) {
         $scorePercentage = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
         $remarks = ($scorePercentage >= 60) ? 'Passed' : 'Failed';
 
-        // Record the score
         $score = $db->recordScore($quizId, $studentId, $correctAnswers, $totalQuestions, $remarks);
+        if ($score != false) {
+            echo json_encode([
+                'success' => true,
+                'score' => $correctAnswers,
+                'totalQuestions' => $totalQuestions
+            ]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Error recording score.']);
+        }
+    } else if ($_POST['submitType'] === 'resubmitQuiz') {
+        session_start();
+        $quizId = validate($_POST['quiz_id']);
+        $studentId = $_SESSION['student_id'];
+        $answers = $_POST['answers'];
+
+        $totalQuestions = $db->getItemCount($quizId);
+        $correctAnswers = 0;
+
+        foreach ($answers as $answer) {
+            $questionId = validate($answer['question_id']);
+            $selectedChoiceId = isset($answer['choice_id']) ? validate($answer['choice_id']) : null;
+
+            $answerValue = $db->checkQuizAnswer($selectedChoiceId);
+            if ($answerValue && $answerValue == 1) {
+                $correctAnswers++;
+            }
+
+            $db->updateAnswer($studentId, $quizId, $questionId, $selectedChoiceId, $answerValue);
+        }
+
+        $scorePercentage = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
+        $remarks = ($scorePercentage >= 60) ? 'Passed' : 'Failed';
+        $attempts = $db->getAttempts($quizId, $studentId);
+        $score = $db->updateScore($quizId, $studentId, $correctAnswers, $totalQuestions, $remarks, $attempts - 1);
         if ($score != false) {
             echo json_encode([
                 'success' => true,

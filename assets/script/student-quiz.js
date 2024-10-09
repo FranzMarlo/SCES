@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
           cancelButtonColor: "#f44336",
         }).then((result) => {
           if (result.isConfirmed) {
-            promptQuiz(quizId);
+            rePromptQuiz(quizId);
           } else {
             Swal.fire({
               title: "Quiz Remains Pending",
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
           cancelButtonColor: "#f44336",
         }).then((result) => {
           if (result.isConfirmed) {
-            promptQuiz(quizId);
+            rePromptQuiz(quizId);
           } else {
             Swal.fire({
               title: "Quiz Remains Pending",
@@ -241,6 +241,83 @@ document.addEventListener("DOMContentLoaded", function () {
         const submitButton = document.getElementById("submit-quiz");
         submitButton.setAttribute("data-quiz-id", quizId);
 
+        submitButton.onclick = () => submitQuiz(quizId);
+
+        const quizModal = document.getElementById("quizModal");
+        quizModal.style.display = "block";
+        document.body.style.overflow = "hidden";
+      });
+  }
+
+  function rePromptQuiz(quizId) {
+    fetch(`/SCES/backend/fetch-class.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `submitType=getQuizContent&quiz_id=${quizId}`,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        document.querySelector(
+          ".modal-header-text h1"
+        ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
+        document.querySelector(
+          ".modal-icon-container img"
+        ).src = `/SCES/assets/images/${data.icon}`;
+
+        const modalHeaderBg = document.querySelector(".modal-header-bg");
+        modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
+
+        const questionsContainer = document.querySelector(
+          ".modal-quiz-content"
+        );
+        questionsContainer.innerHTML = "";
+
+        data.questions.forEach((question, index) => {
+          const quizItem = document.createElement("div");
+          quizItem.classList.add("quiz-item");
+
+          const questionBox = document.createElement("div");
+          questionBox.classList.add("question-box");
+          questionBox.setAttribute("data-question-id", question.question_id);
+          questionBox.innerHTML = `<span><strong>${index + 1}.</strong> ${
+            question.question
+          }</span>`;
+          quizItem.appendChild(questionBox);
+
+          question.choices.forEach((choice, i) => {
+            const choiceLetter = String.fromCharCode(65 + i);
+
+            const choiceElement = document.createElement("label");
+            choiceElement.classList.add("quiz-ans");
+            choiceElement.innerHTML = `
+                        <input type="radio" name="question-${index}" value="${choice.choice_id}" id="question-${index}-choice-${i}" style="display: none;">
+                        <strong>${choiceLetter}.</strong>&nbsp;${choice.choice}
+                    `;
+            choiceElement.addEventListener("click", function () {
+              const radioButton = this.querySelector('input[type="radio"]');
+              if (radioButton) {
+                document
+                  .querySelectorAll(`input[name="question-${index}"]`)
+                  .forEach((rb) => {
+                    const label = rb.parentElement;
+                    label.classList.remove(data.subject_code.toLowerCase());
+                  });
+
+                choiceElement.classList.add(data.subject_code.toLowerCase());
+              }
+            });
+            quizItem.appendChild(choiceElement);
+          });
+          questionsContainer.appendChild(quizItem);
+        });
+
+        const submitButton = document.getElementById("submit-quiz");
+        submitButton.setAttribute("data-quiz-id", quizId);
+
+        submitButton.onclick = () => resubmitQuiz(quizId);
+
         const quizModal = document.getElementById("quizModal");
         quizModal.style.display = "block";
         document.body.style.overflow = "hidden";
@@ -332,10 +409,90 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  document.getElementById("submit-quiz").addEventListener("click", function () {
-    const quizId = this.getAttribute("data-quiz-id");
-    submitQuiz(quizId);
-  });
+  function resubmitQuiz(quizId) {
+    const selectedAnswers = [];
+    let hasUnanswered = false;
+
+    document.querySelectorAll(".quiz-item").forEach((quizItem, index) => {
+      const questionId = quizItem
+        .querySelector(".question-box")
+        .getAttribute("data-question-id");
+
+      const selectedOption = quizItem.querySelector(
+        `input[name="question-${index}"]:checked`
+      );
+
+      if (selectedOption) {
+        selectedAnswers.push({
+          question_id: questionId,
+          choice_id: selectedOption.value,
+        });
+      } else {
+        hasUnanswered = true;
+        selectedAnswers.push({
+          question_id: questionId,
+          choice_id: null,
+        });
+      }
+    });
+
+    if (hasUnanswered) {
+      Swal.fire({
+        title: "Warning",
+        icon: "warning",
+        text: "Please answer all the questions of quiz",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#4caf50",
+      });
+      return;
+    }
+
+    const formData = selectedAnswers
+      .map(
+        (answer, i) =>
+          `answers[${i}][question_id]=${encodeURIComponent(
+            answer.question_id
+          )}&answers[${i}][choice_id]=${encodeURIComponent(answer.choice_id)}`
+      )
+      .join("&");
+
+    const bodyData = `submitType=resubmitQuiz&quiz_id=${quizId}&${formData}`;
+
+    fetch(`/SCES/backend/global.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: bodyData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          closeQuiz();
+          Swal.fire({
+            icon: "success",
+            title: "Quiz Retaken Successfully",
+            text: `You scored ${result.score} out of ${result.totalQuestions}`,
+            confirmButtonColor: "#4CAF50",
+          }).then((result) => {
+            if (result.value) {
+              window.location.reload();
+            }
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "Server Offline",
+            confirmButtonText: "Ok",
+            confirmButtonColor: "#4caf50",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
   function closeQuiz() {
     const quizModal = document.getElementById("quizModal");

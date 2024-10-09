@@ -1300,11 +1300,21 @@ class globalClass extends db_connect
 
     public function checkAnswerId($id)
     {
-        $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE choice_id = ?");
+        $query = $this->conn->prepare("SELECT * FROM answer_tbl WHERE answer_id = ?");
         $query->bind_param("s", $id);
 
         if ($query->execute()) {
             return $query->get_result();
+        }
+        return false;
+    }
+
+    public function updateAnswer($studentId, $quizId, $questionId, $choiceId, $value)
+    {
+        $query = $this->conn->prepare("UPDATE answer_tbl SET choice_id = ?, value = ? WHERE student_id = ? AND quiz_id = ? AND question_id = ?");
+        $query->bind_param("sisss", $choiceId, $value, $studentId, $quizId, $questionId);
+        if ($query->execute()) {
+            return true;
         }
         return false;
     }
@@ -1319,9 +1329,31 @@ class globalClass extends db_connect
         }
 
         $query = $this->conn->prepare("INSERT INTO `score_tbl` (`score_id`, `quiz_id`, `student_id`, `score`, `item_number`, `remarks`) VALUES (?, ?, ?, ?, ?, ?)");
-        $query->bind_param("ssssss", $scoreId, $quizId, $studentId, $score, $itemCount, $remarks);
+        $query->bind_param("sssiis", $scoreId, $quizId, $studentId, $score, $itemCount, $remarks);
 
         return $query->execute();
+    }
+
+    public function updateScore($quizId, $studentId, $score, $itemCount, $remarks, $attempts)
+    {
+        $query = $this->conn->prepare("UPDATE score_tbl SET score = ?, item_number = ?, remarks = ?, attempts = ? WHERE student_id = ? AND quiz_id = ?");
+        $query->bind_param("iisiss", $score, $itemCount, $remarks, $attempts, $studentId, $quizId);
+        if ($query->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getAttempts($quizId, $studentId)
+    {
+        $query = $this->conn->prepare("SELECT attempts FROM score_tbl WHERE quiz_id = ? AND student_id = ?");
+        $query->bind_param("ss", $quizId, $studentId);
+
+        if ($query->execute()) {
+            $attempts = $query->get_result()->fetch_assoc();
+            return $attempts['attempts'] ?? null;
+        }
+        return false;
     }
 
     public function checkScoreId($id)
