@@ -443,6 +443,7 @@
 .quiz-dropdown {
   position: relative;
   display: none;
+  cursor: pointer;
 }
 #activeDropdown {
   display: inline-block;
@@ -459,6 +460,7 @@
   box-shadow: 0 0 3px 0 #9c9c9c;
   padding: 5px 0;
   width: 220px;
+  cursor: pointer;
 }
 .quiz-dropdown-title {
   width: 100%;
@@ -487,6 +489,7 @@
   max-height: 100px;
   border: 2px solid #000;
   position: relative;
+  cursor: pointer;
 }
 .quiz-dropdown-content .pending:hover {
   background-color: #ddd;
@@ -507,6 +510,7 @@
   width: 20px;
   background-color: transparent;
   border: none;
+  cursor: pointer;
 }
 .quiz-dropdown-content button {
   display: flex;
@@ -518,6 +522,7 @@
   width: 90%;
   font-weight: 500;
   max-height: 100px;
+  cursor: pointer;
 }
 .quiz-dropdown-content button:hover {
   background-color: #ddd;

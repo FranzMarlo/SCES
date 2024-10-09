@@ -1,12 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Select all pending items
-  const pendingItems = document.querySelectorAll(".pending-item");
+  const pendingItems = document.querySelectorAll(".pending-item, .pending"); // Select both pending-item and pending divs
   const headers = document.querySelectorAll(".quiz-header");
   const infoContainers = document.querySelectorAll(".quiz-info-container");
   const buttonContainers = document.querySelectorAll(".button-container");
-  const noticeBoxes = document.querySelectorAll(".notice-box"); // Select all notice boxes
+  const noticeBoxes = document.querySelectorAll(".notice-box");
 
-  // Function to hide all headers, info-containers, buttons, and notices
   function hideAllQuizzes() {
     headers.forEach((header) => (header.style.display = "none"));
     infoContainers.forEach((info) => (info.style.display = "none"));

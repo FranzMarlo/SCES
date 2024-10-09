@@ -361,6 +361,7 @@ canvas {
     align-items: center;
     padding: 5px 10px;
     border-radius: 50px;
+    cursor: pointer;
   }
   .logo-panel {
     display: flex;

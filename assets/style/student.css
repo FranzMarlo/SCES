@@ -473,6 +473,7 @@ canvas {
     align-items: center;
     padding: 5px 10px;
     border-radius: 50px;
+    cursor: pointer;
   }
   .logo-panel {
     display: flex;
@@ -575,6 +576,7 @@ canvas {
   .dropdown {
     position: relative;
     display: inline-block;
+    cursor: pointer;
   }
   .dropdown-content {
     display: none;
@@ -595,6 +597,7 @@ canvas {
     flex-direction: row;
     align-items: center;
     font-weight: bold;
+    cursor: pointer;
   }
   .dropdown-content ul li a i {
     font-size: 1.2rem;
