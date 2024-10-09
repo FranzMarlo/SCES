@@ -67,10 +67,40 @@
   width: 100%;
   border-radius: 30px;
   display: flex;
-  flex-direction: row;
-  padding: 20px;
-  gap: 20px;
+  flex-direction: column;
   min-height: 620px;
+}
+.tab-controller{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  padding: 15px;
+  align-items: center;
+  gap: 15px;
+  padding-bottom: 0;
+}
+.tab-controller .tab{
+  font-size: 1rem;
+  padding: 12px 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 30px;
+  border: 2px solid #000;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+.tab-controller .tab:hover, .tab-controller .tab.active{
+  background-color: #fbe1f0;
+}
+.sub-container{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
 }
 .header-container {
   width: 70%;
@@ -693,6 +723,9 @@
   .quiz-ans{
     font-size: 1rem;
   }
+  .tab-controller .tab{
+    font-size: 0.9rem;
+  }
 }
 @media (width < 768px) {
   .quiz-btn {
@@ -727,6 +760,9 @@
   }
   .icon-container {
     top: 60%;
+  }
+  .tab-controller .tab{
+    font-size: 0.8rem;
   }
 }
 @media (width < 600px) {
@@ -793,6 +829,13 @@
   .notice-box span{
     font-size: 0.9rem;
   }
+  .tab-controller{
+    gap: 5px;
+  }
+  .tab-controller .tab{
+    padding: 10px;
+    font-size: 0.8rem;
+  }
 }
 @media (width < 375px) {
   .student-info span {
@@ -801,7 +844,8 @@
   .modal-direction span {
     font-size: 0.9rem;
   }
-  .quiz-container {
+  .sub-container {
+    gap: 10px;
     padding: 10px;
   }
   .icon-container {
@@ -838,5 +882,8 @@
   }
   .quiz-ans{
     font-size: 0.8rem;
+  }
+  .tab-controller .tab{
+    font-size: 0.7rem;
   }
 }
