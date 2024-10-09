@@ -4,6 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const infoContainers = document.querySelectorAll(".quiz-info-container");
   const buttonContainers = document.querySelectorAll(".button-container");
   const noticeBoxes = document.querySelectorAll(".notice-box");
+  const tabController = document.querySelectorAll(".tab"); // Tab controller for toggling between active and past
+  const activeQuizContainer = document.getElementById("activeQuizContainer");
+  const pastQuizContainer = document.getElementById("pastQuizContainer");
+  const activeTab = document.getElementById("pending-tab");
+  const pastTab = document.getElementById("past-tab");
 
   function hideAllQuizzes() {
     headers.forEach((header) => (header.style.display = "none"));
@@ -23,16 +28,43 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("notice-quiz-" + quizId).style.display = "flex"; // Show the correct notice
   }
 
-  // Function to update URL with the quiz_id
-  function updateURLWithQuizId(quizId) {
+  // Function to update URL with the quiz_id and active state
+  function updateURLWithQuizId(quizId, isActive) {
     const url = new URL(window.location.href);
     url.searchParams.set("quiz_id", quizId); // Set the quiz_id in URL
+    url.searchParams.set("active", isActive); // Set the active state in URL
     window.history.pushState({}, "", url); // Update the URL without reloading
   }
 
-  // Check if there's a quiz_id in the URL
+  // Function to toggle between tabs
+  function toggleTab(isActive) {
+    if (isActive) {
+      activeQuizContainer.style.display = "flex";
+      pastQuizContainer.style.display = "none";
+      activeTab.classList.add("active");
+      pastTab.classList.remove("active");
+    } else {
+      activeQuizContainer.style.display = "none";
+      pastQuizContainer.style.display = "flex";
+      activeTab.classList.remove("active");
+      pastTab.classList.add("active");
+    }
+  }
+
   const urlParams = new URLSearchParams(window.location.search);
   const initialQuizId = urlParams.get("quiz_id");
+  let isActiveTab = urlParams.get("active");
+
+  // Default to `true` for active quizzes if `active` is null or missing
+  if (isActiveTab === null) {
+    isActiveTab = "true"; // Default to true when the parameter is not present
+  }
+
+  // Convert `isActiveTab` to a boolean value for use in the toggle function
+  const isActiveTabBoolean = isActiveTab === "true";
+
+  // Toggle tabs based on the active parameter
+  toggleTab(isActiveTabBoolean);
 
   // Display the initial quiz based on URL or default to the first quiz
   if (initialQuizId) {
@@ -40,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
   } else if (pendingItems.length > 0) {
     const firstQuizId = pendingItems[0].getAttribute("data-quiz-id");
     displayQuizById(firstQuizId); // Display the first quiz by default
-    updateURLWithQuizId(firstQuizId); // Update URL with the first quiz_id
+    updateURLWithQuizId(firstQuizId, isActiveTab); // Update URL with the first quiz_id and active state
   }
 
   // Event listeners for toggling between quizzes
@@ -49,7 +81,24 @@ document.addEventListener("DOMContentLoaded", function () {
       const quizId = this.getAttribute("data-quiz-id");
 
       displayQuizById(quizId); // Display the selected quiz
-      updateURLWithQuizId(quizId); // Update the URL with the selected quiz_id
+      updateURLWithQuizId(quizId, isActiveTabBoolean); // Update the URL with the selected quiz_id and active state
+    });
+  });
+
+  // Event listeners for tab clicks
+  tabController.forEach((tab) => {
+    tab.addEventListener("click", function () {
+      const isActive = this.id === "pending-tab"; // Determine if the active tab is clicked
+
+      toggleTab(isActive); // Toggle between active and past quizzes
+      const firstQuizId =
+        pendingItems.length > 0
+          ? pendingItems[0].getAttribute("data-quiz-id")
+          : null;
+
+      if (firstQuizId) {
+        updateURLWithQuizId(firstQuizId, isActive); // Update the URL with the active state and quiz_id
+      }
     });
   });
 

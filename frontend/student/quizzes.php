@@ -55,8 +55,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
         </div>
         <div class="quiz-container">
           <div class="tab-controller">
-            <div class="tab active">Pending Quizzes</div>
-            <div class="tab">Past Quizzes</div>
+            <div class="tab" id="pending-tab">Pending Quizzes</div>
+            <div class="tab" id="past-tab">Past Quizzes</div>
           </div>
           <div class="sub-container" id="activeQuizContainer">
             <div class="pending-container">
@@ -189,6 +189,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
               <?php endif; ?>
 
             </div>
+          </div>
+          <div class="sub-container" id="pastQuizContainer">
+
           </div>
         </div>
       </div>
