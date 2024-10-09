@@ -115,7 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'questions' => $questions,
             ];
 
-            // Send response as JSON
             echo json_encode($quizData);
         } else {
             echo json_encode(['error' => 'Quiz ID not provided']);

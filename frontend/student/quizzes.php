@@ -94,6 +94,12 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                     </h1>
                   </div>
                 </div>
+                <div class="notice-box" id="notice-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>"
+                  style="display: <?php echo ($index === 0) ? 'flex' : 'none'; ?>;">
+                  <img src="/SCES/assets/images/quiz-notice.png" alt="quiz-notice.png">
+                  <span><?php echo htmlspecialchars(getQuizAttemptNotice($quiz['attempts'])); ?></span>
+                </div>
+
                 <div class="info-container quiz-info-container" id="quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>"
                   style="display: <?php echo ($index === 0) ? 'flex' : 'none'; ?>;">
                   <div class="info-part">
@@ -164,7 +170,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                 </div>
                 <div class="button-container" id="button-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>"
                   style="display: <?php echo ($index === 0) ? 'flex' : 'none'; ?>;">
-                  <button class="take-quiz" id="take-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>">Take Quiz</button>
+                  <button class="take-quiz" id="take-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>"
+                    data-attempts="<?php echo htmlspecialchars($quiz['attempts']); ?>">Take
+                    Quiz</button>
                 </div>
               <?php endforeach; ?>
             <?php else: ?>

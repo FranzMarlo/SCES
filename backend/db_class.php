@@ -1219,7 +1219,8 @@ class globalClass extends db_connect
             teacher.gender,
             lesson.lesson_title,
             score.score,
-            score.remarks
+            score.remarks,
+            score.attempts
         FROM quiz_tbl quiz
         INNER JOIN
             subject_tbl subject
