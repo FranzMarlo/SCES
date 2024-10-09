@@ -341,7 +341,7 @@ class fetchClass extends db_connect
 
     public function updateQuizzes($currentDateTime)
     {
-        $query = $this->conn->prepare("UPDATE quiz_tbl SET status = 'Inactive', due_date = null WHERE due_date <= ? AND status = 'Active'");
+        $query = $this->conn->prepare("UPDATE quiz_tbl SET status = 'Completed' WHERE due_date <= ? AND status = 'Active'");
         $query->bind_param("s", $currentDateTime);
         $query->execute();
     }

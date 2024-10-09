@@ -10,6 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const activeTab = document.getElementById("pending-tab");
   const pastTab = document.getElementById("past-tab");
 
+  let lastActiveQuizId = null; // Store last active quiz ID
+  let lastPastQuizId = null; // Store last past quiz ID
+  let isFirstSwitchToPast = true; // Flag to track first switch to past quizzes
+
   function hideAllQuizzes() {
     headers.forEach((header) => (header.style.display = "none"));
     infoContainers.forEach((info) => (info.style.display = "none"));
@@ -26,6 +30,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("quiz-" + quizId).style.display = "flex";
     document.getElementById("button-quiz-" + quizId).style.display = "flex";
     document.getElementById("notice-quiz-" + quizId).style.display = "flex"; // Show the correct notice
+
+    // Store the last displayed quiz ID based on the current active tab
+    if (activeQuizContainer.style.display === "flex") {
+      lastActiveQuizId = quizId;
+    } else {
+      lastPastQuizId = quizId;
+    }
   }
 
   // Function to update URL with the quiz_id and active state
@@ -43,11 +54,45 @@ document.addEventListener("DOMContentLoaded", function () {
       pastQuizContainer.style.display = "none";
       activeTab.classList.add("active");
       pastTab.classList.remove("active");
+
+      // Display the last active quiz if it exists
+      if (lastActiveQuizId) {
+        displayQuizById(lastActiveQuizId);
+        updateURLWithQuizId(lastActiveQuizId, true);
+      } else {
+        // Otherwise, display the first quiz from the active list
+        const firstActiveQuizId =
+          pendingItems.length > 0
+            ? pendingItems[0].getAttribute("data-quiz-id")
+            : null;
+        if (firstActiveQuizId) {
+          displayQuizById(firstActiveQuizId);
+          updateURLWithQuizId(firstActiveQuizId, true);
+        }
+      }
     } else {
       activeQuizContainer.style.display = "none";
       pastQuizContainer.style.display = "flex";
       activeTab.classList.remove("active");
       pastTab.classList.add("active");
+
+      // Display the first past quiz and update URL
+      const pastItems = document.querySelectorAll(
+        "#pastQuizContainer .pending-item"
+      );
+      if (pastItems.length > 0) {
+        const firstPastQuizId = pastItems[0].getAttribute("data-quiz-id");
+        displayQuizById(firstPastQuizId); // Display the first past quiz
+        updateURLWithQuizId(firstPastQuizId, false); // Update URL with the first past quiz ID
+      } else {
+        console.log("No past quizzes available");
+      }
+
+      // Optionally, if you want to display the last past quiz if it exists
+      if (lastPastQuizId) {
+        displayQuizById(lastPastQuizId);
+        updateURLWithQuizId(lastPastQuizId, false);
+      }
     }
   }
 
@@ -91,13 +136,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const isActive = this.id === "pending-tab"; // Determine if the active tab is clicked
 
       toggleTab(isActive); // Toggle between active and past quizzes
-      const firstQuizId =
-        pendingItems.length > 0
-          ? pendingItems[0].getAttribute("data-quiz-id")
-          : null;
 
-      if (firstQuizId) {
-        updateURLWithQuizId(firstQuizId, isActive); // Update the URL with the active state and quiz_id
+      // Update URL with the active state
+      const quizId = isActive ? lastActiveQuizId : lastPastQuizId;
+      if (quizId) {
+        updateURLWithQuizId(quizId, isActive); // Update the URL with the active state and quiz_id
       }
     });
   });
