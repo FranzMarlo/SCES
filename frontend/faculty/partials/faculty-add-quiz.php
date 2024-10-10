@@ -222,7 +222,7 @@
 </div>
 
 <div id="dueDateModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 600px">
         <div class="modal-head">
             <h2>Set Due Date for Quiz</h2>
             <span id="closeDueDateModal" class="close-btn">&times;</span>

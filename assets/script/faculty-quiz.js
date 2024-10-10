@@ -84,27 +84,40 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function displayContainer(containerToShow, activeValue) {
+    // Hide all containers
     activeContainer.style.display = "none";
     inactiveContainer.style.display = "none";
     completedContainer.style.display = "none";
 
+    // Hide all dropdowns
     document.getElementById("activeDropdown").style.display = "none";
     document.getElementById("inactiveDropdown").style.display = "none";
     document.getElementById("completedDropdown").style.display = "none";
 
+    // Show the container that corresponds to the active tab
     containerToShow.style.display = "flex";
 
+    // Remove the active class from all tabs
+    activeTab.classList.remove("active");
+    inactiveTab.classList.remove("active");
+    completedTab.classList.remove("active");
+
+    // Add the active class to the corresponding tab and show the dropdown
     switch (activeValue) {
       case 1:
+        activeTab.classList.add("active");
         document.getElementById("activeDropdown").style.display = "flex";
         break;
       case 2:
+        inactiveTab.classList.add("active");
         document.getElementById("inactiveDropdown").style.display = "flex";
         break;
       case 3:
+        completedTab.classList.add("active");
         document.getElementById("completedDropdown").style.display = "flex";
         break;
       default:
+        activeTab.classList.add("active");
         document.getElementById("activeDropdown").style.display = "flex";
     }
   }
@@ -1402,9 +1415,9 @@ document.addEventListener("DOMContentLoaded", function () {
           choiceElement.innerHTML = `${String.fromCharCode(65 + index)}. ${
             choice.text
           }`;
-          choiceElement.classList.add("choice-text")
-          if(choice.value == 1){
-            choiceElement.classList.add("correct-choice")
+          choiceElement.classList.add("choice-text");
+          if (choice.value == 1) {
+            choiceElement.classList.add("correct-choice");
           }
           choicesContainer.appendChild(choiceElement);
         });
@@ -1412,16 +1425,16 @@ document.addEventListener("DOMContentLoaded", function () {
         var correctCount = questionData.analytics.correct;
         var incorrectCount = questionData.analytics.incorrect;
         var totalResponses = parseInt(correctCount) + parseInt(incorrectCount);
-        if(parseInt(correctCount) == 0){
-          var accuracy = '0%';
+        if (parseInt(correctCount) == 0) {
+          var accuracy = "0%";
         }
-        var accuracy =  (parseInt(correctCount) / parseInt(totalResponses)) * 100 + '%';
-        
+        var accuracy =
+          (parseInt(correctCount) / parseInt(totalResponses)) * 100 + "%";
+
         document.getElementById("totalResponses").innerText = totalResponses;
         document.getElementById("totalCorrect").innerText = correctCount;
         document.getElementById("totalIncorrect").innerText = incorrectCount;
         document.getElementById("accuracy").innerText = accuracy;
-        
 
         renderPieChart(correctCount, incorrectCount);
       }

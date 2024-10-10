@@ -166,7 +166,7 @@ $page = '';
 
                 <div class="quiz-container">
                     <div class="tab-controller">
-                        <div class="tab active" id="activeTab">Active Quizzes</div>
+                        <div class="tab" id="activeTab">Active Quizzes</div>
                         <div class="tab" id="inactiveTab">Inactive Quizzes</div>
                         <div class="tab" id="completedTab">Completed Quizzes</div>
                     </div>
