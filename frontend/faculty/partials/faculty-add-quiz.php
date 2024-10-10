@@ -1,7 +1,9 @@
 <div id="addQuizModal" class="modal">
     <div class="modal-content">
-        <span class="close-btn" id="closeAddQuiz">&times;</span>
-        <h2>Add New Quiz</h2>
+        <div class="modal-head">
+            <h2>Add New Quiz</h2>
+            <span class="close-btn" id="closeAddQuiz">&times;</span>
+        </div>
         <form id="addQuiz">
             <label for="quizNumber">Quiz Number:</label>
             <input type="number" id="quizNumber" name="quizNumber" placeholder="Enter Quiz Number">
@@ -35,8 +37,10 @@
 
 <div id="addQuestionModal" class="modal">
     <div class="modal-content padded">
-        <span class="close-btn" id="closeAddQuestion">&times;</span>
-        <h2>Add Question</h2>
+        <div class="modal-head">
+            <h2>Add Question</h2>
+            <span class="close-btn" id="closeAddQuestion">&times;</span>
+        </div>
         <form id="addQuestion">
             <input type="hidden" id="quizId" name="quizId" value="" />
 
@@ -71,9 +75,10 @@
 
 <div id="editQuestionModal" class="modal">
     <div class="modal-content padded">
-        <span class="close-btn" id="closeEditQuestion">&times;</span>
-        <h2>Edit Question</h2>
-
+        <div class="modal-head">
+            <h2>Edit Question</h2>
+            <span class="close-btn" id="closeEditQuestion">&times;</span>
+        </div>
         <form id="editQuestion">
             <input type="hidden" id="editQuestionId" name="question_id" />
             <label for="editQuestionText">Question:</label>
@@ -118,8 +123,10 @@
 
 <div id="editQuizModal" class="modal">
     <div class="modal-content">
-        <span id="closeEditQuiz" class="close-btn">&times;</span>
-        <h2>Edit Quiz</h2>
+        <div class="modal-head">
+            <h2>Edit Quiz</h2>
+            <span id="closeEditQuiz" class="close-btn">&times;</span>
+        </div>
         <form id="editQuiz">
             <input type="hidden" id="editQuizId" value="">
 
@@ -216,12 +223,62 @@
 
 <div id="dueDateModal" class="modal">
     <div class="modal-content">
-        <span id="closeDueDateModal" class="close-btn">&times;</span>
-        <h2>Set Due Date for Quiz</h2>
+        <div class="modal-head">
+            <h2>Set Due Date for Quiz</h2>
+            <span id="closeDueDateModal" class="close-btn">&times;</span>
+        </div>
         <form id="dueDateForm">
             <label for="dueDate">Due Date:</label>
             <input type="datetime-local" id="dueDate" name="dueDate">
             <button type="submit" class="save-btn">Set Due Date</button>
         </form>
+    </div>
+</div>
+
+<div id="questionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-head">
+            <h2>Analytics</h2>
+            <span class="close-btn" id="closeQuestionModal">&times;</span>
+        </div>
+        <div class="analytics-tab">
+            <div class="tab-item">
+                <img src="/SCES/assets/images/quiz-grade-section.png" alt="quiz-grade-section.png">
+                <div class="item-group">
+                    <h3 id="totalResponses"></h3>
+                    <span>Total Responses</span>
+                </div>
+            </div>
+            <div class="tab-item">
+                <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
+                <div class="item-group">
+                    <h3 id="totalCorrect"></h3>
+                    <span>Total Correct</span>
+                </div>
+            </div>
+            <div class="tab-item">
+                <img src="/SCES/assets/images/quiz-failed.png" alt="quiz-failed.png">
+                <div class="item-group">
+                    <h3 id="totalIncorrect"></h3>
+                    <span>Total Incorrect</span>
+                </div>
+            </div>
+            <div class="tab-item">
+                <img src="/SCES/assets/images/quiz-rate.png" alt="quiz-rate.png">
+                <div class="item-group">
+                    <h3 id="accuracy"></h3>
+                    <span>Accuracy</span>
+                </div>
+            </div>
+        </div>
+        <h4 id="questionTitle"></h4>
+        <div id="questionChoices">
+            <!-- Choices will be dynamically inserted here -->
+        </div>
+        <div class="graph-container">
+            <div class="graph-full">
+                <canvas id="analyticsChart" width="400" height="400"></canvas>
+            </div>
+        </div>
     </div>
 </div>

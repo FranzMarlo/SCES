@@ -207,7 +207,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   if (noQuizHeader) {
-    noQuizHeader.onclick = modal.style.display = "flex";
+    noQuizHeader.addEventListener("click", function () {
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    });
   }
 
   const addQuestionModal = document.getElementById("addQuestionModal");
@@ -1356,5 +1359,108 @@ document.addEventListener("DOMContentLoaded", function () {
             break;
         }
       });
+  }
+
+  const questionModal = document.getElementById("questionModal");
+  const closeQuestionModal = document.getElementById("closeQuestionModal");
+  document.querySelectorAll(".view-question").forEach((button) => {
+    button.addEventListener("click", function () {
+      const questionId = this.getAttribute("data-question-id");
+      questionModal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+      fetchQuestionDetails(questionId);
+    });
+  });
+
+  closeQuestionModal.addEventListener("click", function () {
+    questionModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  });
+
+  function fetchQuestionDetails(questionId) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/SCES/backend/fetch-class.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    const requestBody = `question_id=${encodeURIComponent(
+      questionId
+    )}&submitType=questionAnalytics`;
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        const questionData = JSON.parse(xhr.responseText);
+
+        // Display question title
+        document.getElementById("questionTitle").innerText =
+          questionData.question;
+        const choicesContainer = document.getElementById("questionChoices");
+        choicesContainer.innerHTML = ""; // Clear previous choices
+
+        // Display choices
+        questionData.choices.forEach((choice, index) => {
+          const choiceElement = document.createElement("p");
+          choiceElement.innerHTML = `${String.fromCharCode(65 + index)}. ${
+            choice.text
+          }`;
+          choiceElement.classList.add("choice-text")
+          if(choice.value == 1){
+            choiceElement.classList.add("correct-choice")
+          }
+          choicesContainer.appendChild(choiceElement);
+        });
+
+        var correctCount = questionData.analytics.correct;
+        var incorrectCount = questionData.analytics.incorrect;
+        var totalResponses = parseInt(correctCount) + parseInt(incorrectCount);
+        if(parseInt(correctCount) == 0){
+          var accuracy = '0%';
+        }
+        var accuracy =  (parseInt(correctCount) / parseInt(totalResponses)) * 100 + '%';
+        
+        document.getElementById("totalResponses").innerText = totalResponses;
+        document.getElementById("totalCorrect").innerText = correctCount;
+        document.getElementById("totalIncorrect").innerText = incorrectCount;
+        document.getElementById("accuracy").innerText = accuracy;
+        
+
+        renderPieChart(correctCount, incorrectCount);
+      }
+    };
+
+    xhr.send(requestBody);
+  }
+
+  function renderPieChart(correctCount, incorrectCount) {
+    const ctx = document.getElementById("analyticsChart").getContext("2d");
+
+    if (window.analyticsChart instanceof Chart) {
+      window.analyticsChart.destroy();
+    }
+
+    // Create a new chart instance
+    window.analyticsChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: ["Correct", "Incorrect"],
+        datasets: [
+          {
+            label: "Student Answers",
+            data: [correctCount, incorrectCount],
+            backgroundColor: ["#4caf50", "#f44336"], // Green for correct, red for incorrect
+            borderWidth: 2,
+            borderColor: ["#000"],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom",
+          },
+        },
+      },
+    });
   }
 });

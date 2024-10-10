@@ -429,4 +429,38 @@ class fetchClass extends db_connect
         }
     }
 
+    public function fetchCorrectIncorrect($questionId): array
+    {
+        $query = $this->conn->prepare("
+            SELECT 
+                SUM(CASE WHEN value = 1 THEN 1 ELSE 0 END) AS correct,
+                SUM(CASE WHEN value = 0 THEN 1 ELSE 0 END) AS incorrect
+            FROM 
+                answer_tbl 
+            WHERE 
+                question_id = ?
+            ");
+        $query->bind_param("s", $questionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_assoc();
+        } else {
+            return [];
+        }
+    }
+
+    public function fetchQuestionInfo($questionId): array
+    {
+        $query = $this->conn->prepare("SELECT * FROM question_tbl WHERE question_id = ?");
+        $query->bind_param("s", $questionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_assoc();
+        } else {
+            return [];
+        }
+    }
+
 }

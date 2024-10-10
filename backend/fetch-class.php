@@ -178,6 +178,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode(['error' => 'Quiz ID not provided']);
         }
+    } else if ($submitType === 'questionAnalytics') {
+        $questionId = $_POST['question_id'];
+
+        $question = $fetchDb->fetchQuestionInfo($questionId);
+
+        $choices = $fetchDb->fetchChoices($questionId);
+
+        $analytics = $fetchDb->fetchCorrectIncorrect($questionId);
+
+        if ($question && $choices && $analytics) {
+            $response = [
+                'question' => $question['question'],
+                'choices' => array_map(function ($choice) {
+                    return [
+                        'choice_id' => $choice['choice_id'],
+                        'text' => $choice['choice'],
+                        'order' => $choice['choice_order'],
+                        'value' => $choice['value'],
+                    ];
+                }, $choices),
+                'analytics' => [
+                    'correct' => $analytics['correct'],
+                    'incorrect' => $analytics['incorrect']
+                ]
+            ];
+
+            echo json_encode($response);
+        }
+
+
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
