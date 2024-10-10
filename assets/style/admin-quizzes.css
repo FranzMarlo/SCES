@@ -154,11 +154,41 @@
   background: #f5f5f5;
   width: 100%;
   border-radius: 30px;
+  min-height: 670px;
+  display: flex;
+  flex-direction: column;
+}
+.tab-controller{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  padding: 15px;
+  align-items: center;
+  gap: 15px;
+  padding-bottom: 0;
+}
+.tab-controller .tab{
+  font-size: 1rem;
+  padding: 12px 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 30px;
+  border: 2px solid #000;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+.tab-controller .tab:hover, .tab-controller .tab.active{
+  background-color: #fbe1f0;
+}
+.sub-container {
   display: none;
   flex-direction: row;
   padding: 20px;
   gap: 20px;
-  min-height: 670px;
 }
 .header-container {
   width: 70%;
@@ -954,7 +984,7 @@ input:checked + .slider:before {
 .swal2-confirm-button-cancelled:hover {
   background-color: #45a049 !important;
 }
-.student-score-container p{
+.student-score-container p {
   font-size: 1.2rem;
   font-weight: bold;
   width: 100%;
@@ -1003,6 +1033,9 @@ input:checked + .slider:before {
   .pending-title h1 {
     font-size: 1.2rem;
   }
+  .tab-controller .tab{
+    font-size: 0.9rem;
+  }
 }
 @media (width < 768px) {
   .quiz-btn {
@@ -1034,6 +1067,9 @@ input:checked + .slider:before {
   }
   .view-modal-row h3 {
     font-size: 1.2rem;
+  }
+  .tab-controller .tab{
+    font-size: 0.8rem;
   }
 }
 @media (width < 600px) {
@@ -1104,12 +1140,20 @@ input:checked + .slider:before {
   .empty {
     text-align: left;
   }
-  .student-score-container p{
+  .student-score-container p {
     font-size: 1.1rem;
+  }
+  .tab-controller{
+    gap: 5px;
+  }
+  .tab-controller .tab{
+    padding: 7px;
+    font-size: 0.8rem;
+    text-align: center;
   }
 }
 @media (width < 375px) {
-  .quiz-container {
+  .sub-container {
     padding: 10px;
   }
   .icon-container {
@@ -1133,5 +1177,9 @@ input:checked + .slider:before {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  .tab-controller .tab{
+    font-size: 0.7rem;
+    padding: 5px 7px;
   }
 }

@@ -1,23 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const modal = document.getElementById("addQuizModal");
-  const addQuizBtn = document.getElementById("addQuizBtn");
-  const activeAddQuizBtn = document.getElementById("activeAddQuizBtn");
-  const addQuizItem = document.getElementById("addQuizItem");
-  const activeAddQuizItem = document.getElementById("activeAddQuizItem");
-  const noQuizHeader = document.querySelector(".no-quiz-header");
-  const form = document.getElementById("addQuiz");
   const lessonDropdown = document.getElementById("lesson");
-  const closeModal = document.getElementById("closeAddQuiz");
-  const activeDropdown = document.getElementById("activeDropdown");
   const activeContainer = document.getElementById("activeContainer");
-  const inactiveDropdown = document.getElementById("inactiveDropdown");
   const inactiveContainer = document.getElementById("inactiveContainer");
+  const completedContainer = document.getElementById("completedContainer");
+  const activeTab = document.getElementById("activeTab");
+  const inactiveTab = document.getElementById("inactiveTab");
+  const completedTab = document.getElementById("completedTab");
+
   let lastActiveQuizId = null;
   let lastInactiveQuizId = null;
-  let quizDisplayState = [];
-
-  const pendingItems = document.querySelectorAll(".pending-item");
-  const pendingButton = document.querySelectorAll(".pending");
+  let lastCompletedQuizId = null;
 
   function getFirstQuizId(container) {
     const firstPendingItem = container.querySelector(".pending-item");
@@ -31,24 +23,17 @@ document.addEventListener("DOMContentLoaded", function () {
     return urlParams.get("quiz_id");
   }
 
-  function isActiveFromURL() {
+  function getActiveFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get("active") === "true";
+    return parseInt(urlParams.get("active")) || 1;
   }
 
-  function setQuizIdInURL(quizId, isActive) {
-    const newUrl = `${window.location.pathname}?active=${isActive}&quiz_id=${quizId}`;
+  function setQuizIdInURL(quizId, activeValue) {
+    const newUrl = `${window.location.pathname}?active=${activeValue}&quiz_id=${quizId}`;
     history.replaceState(null, "", newUrl);
   }
 
   function displayQuizById(quizId) {
-    const quizHeader = document.querySelector(
-      `.quiz-header[data-quiz-id="${quizId}"]`
-    );
-    const quizItemsToShow = document.querySelectorAll(
-      `.quiz-item[data-quiz-id="${quizId}"]`
-    );
-
     document
       .querySelectorAll(".quiz-header")
       .forEach((header) => (header.style.display = "none"));
@@ -56,222 +41,172 @@ document.addEventListener("DOMContentLoaded", function () {
       .querySelectorAll(".quiz-item")
       .forEach((item) => (item.style.display = "none"));
 
-    if (quizHeader) {
-      quizHeader.style.display = "block";
-    }
-
-    quizItemsToShow.forEach((quizItem) => {
-      quizItem.style.display = "block";
-    });
-  }
-
-  function ensureActiveInURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (!urlParams.has("active")) {
-      urlParams.set("active", "true");
-      const quizId =
-        getQuizIdFromURL() || pendingItems[0]?.getAttribute("data-quiz-id");
-      urlParams.set("quiz_id", quizId);
-      const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
-      history.replaceState(null, "", newUrl);
-    }
-  }
-
-  ensureActiveInURL();
-
-  function openModal() {
-    modal.style.display = "flex";
-    storeQuizDisplayState();
-  }
-
-  if (
-    modal &&
-    addQuizBtn &&
-    addQuizItem &&
-    activeAddQuizItem &&
-    activeAddQuizBtn &&
-    closeModal
-  ) {
-    addQuizBtn.onclick = openModal;
-    addQuizItem.onclick = openModal;
-    activeAddQuizItem.onclick = openModal;
-    activeAddQuizBtn.onclick = openModal;
-
-    if (noQuizHeader) {
-      noQuizHeader.onclick = openModal;
-    }
-
-    closeModal.onclick = function () {
-      modal.style.display = "none";
-      form.reset();
-      resetLessonDropdown();
-      restoreQuizContent();
-    };
-
-    window.onclick = function (event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-        form.reset();
-        resetLessonDropdown();
-        restoreQuizContent();
-      }
-    };
-  }
-
-  function resetLessonDropdown() {
-    lessonDropdown.innerHTML =
-      '<option value="" selected>Select Subject First</option>';
-  }
-
-  function storeQuizDisplayState() {
-    quizDisplayState = [];
-    document.querySelectorAll(".quiz-header").forEach((header, index) => {
-      quizDisplayState.push({
-        headerVisible: header.style.display !== "none",
-        itemVisible:
-          document.querySelectorAll(".quiz-item")[index]?.style.display !==
-          "none",
-      });
-    });
-  }
-
-  function restoreQuizContent() {
-    const quizHeaders = document.querySelectorAll(".quiz-header");
-    const quizItems = document.querySelectorAll(".quiz-item");
-
-    quizDisplayState.forEach((state, index) => {
-      if (quizHeaders[index]) {
-        quizHeaders[index].style.display = state.headerVisible
-          ? "block"
-          : "none";
-      }
-      if (quizItems[index]) {
-        quizItems[index].style.display = state.itemVisible ? "block" : "none";
-      }
-    });
-  }
-
-  const quizHeaders = document.querySelectorAll(".quiz-header");
-  const quizItems = document.querySelectorAll(".quiz-item");
-
-  quizHeaders.forEach((header) => (header.style.display = "none"));
-  quizItems.forEach((item) => (item.style.display = "none"));
-
-  pendingItems.forEach((item) => {
-    const quizId = item.getAttribute("data-quiz-id");
-    item.href = `?quiz_id=${quizId}`;
-
-    item.addEventListener("click", function (event) {
-      event.preventDefault();
-      const isActive = quizSwitch.checked;
-      setQuizIdInURL(quizId, isActive);
-
-      quizHeaders.forEach((header) => (header.style.display = "none"));
-      quizItems.forEach((item) => (item.style.display = "none"));
-
-      displayQuizById(quizId);
-    });
-  });
-
-  pendingButton.forEach((item) => {
-    const quizId = item.getAttribute("data-quiz-id");
-    item.href = `?quiz_id=${quizId}`;
-
-    item.addEventListener("click", function (event) {
-      event.preventDefault();
-      const isActive = quizSwitch.checked;
-      setQuizIdInURL(quizId, isActive);
-
-      quizHeaders.forEach((header) => (header.style.display = "none"));
-      quizItems.forEach((item) => (item.style.display = "none"));
-
-      displayQuizById(quizId);
-    });
-  });
-
-  function displayQuizById(quizId) {
     const quizHeader = document.querySelector(
       `.quiz-header[data-quiz-id="${quizId}"]`
     );
     const quizItemsToShow = document.querySelectorAll(
-      ` .quiz-item[data-quiz-id="${quizId}"]`
+      `.quiz-item[data-quiz-id="${quizId}"]`
     );
 
-    if (quizHeader) {
-      quizHeader.style.display = "block";
-    }
-
-    quizItemsToShow.forEach((quizItem) => {
-      quizItem.style.display = "block";
-    });
+    if (quizHeader) quizHeader.style.display = "block";
+    quizItemsToShow.forEach((quizItem) => (quizItem.style.display = "block"));
   }
 
-  const quizSwitch = document.getElementById("quizSwitch");
-  function resetDisplayedQuizzes() {
-    quizHeaders.forEach((header) => (header.style.display = "none"));
-    quizItems.forEach((item) => (item.style.display = "none"));
+  function handleTabSwitch(container, lastQuizId, activeValue) {
+    displayContainer(container, activeValue);
+
+    const quizIdToShow = lastQuizId || getFirstQuizId(container);
+    if (quizIdToShow) {
+      setQuizIdInURL(quizIdToShow, activeValue);
+      displayQuizById(quizIdToShow);
+    }
   }
 
-  quizSwitch.addEventListener("change", function () {
-    const isActive = quizSwitch.checked;
-
-    resetDisplayedQuizzes();
-
-    if (isActive) {
-      lastInactiveQuizId = getQuizIdFromURL();
-
-      activeContainer.style.display = "flex";
-      inactiveContainer.style.display = "none";
-      activeDropdown.style.display = "inline-block";
-      inactiveDropdown.style.display = "none";
-
-      // Show the last active quiz or the first one if not available
-      const quizIdToShow = lastActiveQuizId || getFirstQuizId(activeContainer);
-      if (quizIdToShow) {
-        setQuizIdInURL(quizIdToShow, true); // Append active=true
-        displayQuizById(quizIdToShow);
-        lastActiveQuizId = quizIdToShow;
-      }
-    } else {
-      // Store the last active quiz ID
-      lastActiveQuizId = getQuizIdFromURL();
-
-      // Switch to inactive quizzes
-      inactiveContainer.style.display = "flex";
-      activeContainer.style.display = "none";
-      activeDropdown.style.display = "none";
-      inactiveDropdown.style.display = "inline-block";
-
-      // Show the first inactive quiz or the last inactive quiz
-      const quizIdToShow =
-        lastInactiveQuizId || getFirstQuizId(inactiveContainer);
-      if (quizIdToShow) {
-        setQuizIdInURL(quizIdToShow, false); // Append active=false
-        displayQuizById(quizIdToShow);
-        lastInactiveQuizId = quizIdToShow;
-      }
-    }
+  activeTab.addEventListener("click", function () {
+    handleTabSwitch(activeContainer, lastActiveQuizId, 1);
+    activeTab.classList.add("active");
+    inactiveTab.classList.remove("active");
+    completedTab.classList.remove("active");
   });
 
-  // Initially show active or inactive quizzes based on the URL or switch state
-  const initialQuizId =
-    getQuizIdFromURL() ||
-    (quizSwitch.checked
-      ? getFirstQuizId(activeContainer)
-      : getFirstQuizId(inactiveContainer));
-  const isActive = isActiveFromURL();
-  quizSwitch.checked = isActive; // Set switch based on URL
+  inactiveTab.addEventListener("click", function () {
+    handleTabSwitch(inactiveContainer, lastInactiveQuizId, 2);
+    activeTab.classList.remove("active");
+    inactiveTab.classList.add("active");
+    completedTab.classList.remove("active");
+  });
 
-  if (isActive) {
-    activeContainer.style.display = "flex";
-    inactiveContainer.style.display = "none";
-    displayQuizById(initialQuizId);
-    lastActiveQuizId = initialQuizId;
-  } else {
-    inactiveContainer.style.display = "flex";
+  completedTab.addEventListener("click", function () {
+    handleTabSwitch(completedContainer, lastCompletedQuizId, 3);
+    activeTab.classList.remove("active");
+    inactiveTab.classList.remove("active");
+    completedTab.classList.add("active");
+  });
+
+  function displayContainer(containerToShow, activeValue) {
     activeContainer.style.display = "none";
-    displayQuizById(initialQuizId);
-    lastInactiveQuizId = initialQuizId;
+    inactiveContainer.style.display = "none";
+    completedContainer.style.display = "none";
+
+    document.getElementById("activeDropdown").style.display = "none";
+    document.getElementById("inactiveDropdown").style.display = "none";
+    document.getElementById("completedDropdown").style.display = "none";
+
+    containerToShow.style.display = "flex";
+
+    switch (activeValue) {
+      case 1:
+        document.getElementById("activeDropdown").style.display = "flex";
+        break;
+      case 2:
+        document.getElementById("inactiveDropdown").style.display = "flex";
+        break;
+      case 3:
+        document.getElementById("completedDropdown").style.display = "flex";
+        break;
+      default:
+        document.getElementById("activeDropdown").style.display = "flex";
+    }
+  }
+
+  const activeTabValue = getActiveFromURL();
+  const currentQuizId = getQuizIdFromURL();
+  switch (activeTabValue) {
+    case 1:
+      lastActiveQuizId = currentQuizId;
+      displayContainer(activeContainer, 1);
+      displayQuizById(currentQuizId || getFirstQuizId(activeContainer));
+      break;
+    case 2:
+      lastInactiveQuizId = currentQuizId;
+      displayContainer(inactiveContainer, 2);
+      displayQuizById(currentQuizId || getFirstQuizId(inactiveContainer));
+      break;
+    case 3:
+      lastCompletedQuizId = currentQuizId;
+      displayContainer(completedContainer, 3);
+      displayQuizById(currentQuizId || getFirstQuizId(completedContainer));
+      break;
+    default:
+      displayContainer(activeContainer, 1);
+      displayQuizById(getFirstQuizId(activeContainer));
+  }
+
+  document.querySelectorAll(".pending-item").forEach((item) => {
+    const quizId = item.getAttribute("data-quiz-id");
+    item.href = `?quiz_id=${quizId}`;
+
+    item.addEventListener("click", function (event) {
+      event.preventDefault();
+      const activeValue = getActiveFromURL();
+      setQuizIdInURL(quizId, activeValue);
+      displayQuizById(quizId);
+
+      switch (activeValue) {
+        case 1:
+          lastActiveQuizId = quizId;
+          break;
+        case 2:
+          lastInactiveQuizId = quizId;
+          break;
+        case 3:
+          lastCompletedQuizId = quizId;
+          break;
+      }
+    });
+  });
+
+  document.querySelectorAll(".pending").forEach((item) => {
+    const quizId = item.getAttribute("data-quiz-id");
+    item.href = `?quiz_id=${quizId}`;
+
+    item.addEventListener("click", function (event) {
+      event.preventDefault();
+      const activeValue = getActiveFromURL();
+      setQuizIdInURL(quizId, activeValue);
+      displayQuizById(quizId);
+
+      switch (activeValue) {
+        case 1:
+          lastActiveQuizId = quizId;
+          break;
+        case 2:
+          lastInactiveQuizId = quizId;
+          break;
+        case 3:
+          lastCompletedQuizId = quizId;
+          break;
+      }
+    });
+  });
+
+  const modal = document.getElementById("addQuizModal");
+  const noQuizHeader = document.querySelector(".no-quiz-header");
+  const form = document.getElementById("addQuiz");
+  const closeModal = document.getElementById("closeAddQuiz");
+
+  document.querySelectorAll(".add-pending-item").forEach((button) => {
+    button.addEventListener("click", function () {
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  document.querySelectorAll(".addQuizBtn").forEach((button) => {
+    button.addEventListener("click", function () {
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  closeModal.addEventListener("click", function () {
+    form.reset();
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
+  });
+
+  if (noQuizHeader) {
+    noQuizHeader.onclick = modal.style.display = "flex";
   }
 
   const addQuestionModal = document.getElementById("addQuestionModal");
@@ -284,11 +219,13 @@ document.addEventListener("DOMContentLoaded", function () {
       const quizId = button.getAttribute("data-quiz-id");
       quizIdInput.value = quizId;
       addQuestionModal.style.display = "flex";
+      document.body.style.overflow = "hidden";
     });
   });
 
   closeAddQuestion.onclick = function () {
     addQuestionModal.style.display = "none";
+    document.body.style.overflow = "auto";
     addQuestionForm.reset();
   };
 
@@ -296,6 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.target == addQuestionModal) {
       addQuestionModal.style.display = "none";
       addQuestionForm.reset();
+      document.body.style.overflow = "auto";
     }
   };
 
@@ -388,12 +326,14 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       const editQuestionModal = document.getElementById("editQuestionModal");
       editQuestionModal.style.display = "flex";
+      document.body.style.overflow = "hidden";
     };
   });
   const editQuestionForm = document.getElementById("editQuestion");
   document.getElementById("closeEditQuestion").onclick = function () {
     document.getElementById("editQuestionModal").style.display = "none";
     editQuestionForm.reset();
+    document.body.style.overflow = "auto";
   };
 
   window.onclick = function (event) {
@@ -401,6 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.target == editQuestionModal) {
       editQuestionModal.style.display = "none";
       editQuestionForm.reset();
+      document.body.style.overflow = "auto";
     }
   };
 
@@ -501,7 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const quizId = this.getAttribute("data-quiz-id");
 
       const currentUrl = window.location.pathname;
-      const newUrl = `${currentUrl}?quiz_id=${quizId}&edit=true`;
+      const newUrl = `${currentUrl}?active=2&quiz_id=${quizId}&edit=true`;
       history.pushState(null, "", newUrl);
 
       fetchQuizDetails(quizId);
@@ -550,6 +491,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         document.getElementById("editLessonHolder").value = quizData.lesson_id;
         document.getElementById("editQuizModal").style.display = "flex";
+        document.body.style.overflow = "hidden";
       }
     };
 
@@ -566,6 +508,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
     history.replaceState(null, "", newUrl);
     document.getElementById("editQuizModal").style.display = "none";
+    document.body.style.overflow = "auto";
   };
 
   function fetchLessons(levelId, subjectId, sectionId, lessonId, submitType) {
@@ -615,22 +558,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (quizData.due_date == null) {
           dueDate = "Quiz hasn't been activated";
         } else {
-          // Parse the returned due_date into a JavaScript Date object
           const dueDateObj = new Date(quizData.due_date);
           const currentDate = new Date();
 
-          // Helper variables
           const daysInWeek = 7;
           const msInDay = 24 * 60 * 60 * 1000;
 
-          // Calculate time difference
           const timeDiff = dueDateObj - currentDate;
           const isToday =
             currentDate.toDateString() === dueDateObj.toDateString();
           const isThisWeek =
             timeDiff < daysInWeek * msInDay && dueDateObj > currentDate;
 
-          // Date formatting options
           const timeOptions = {
             hour: "numeric",
             minute: "numeric",
@@ -638,11 +577,9 @@ document.addEventListener("DOMContentLoaded", function () {
           };
 
           if (isToday) {
-            // If the due date is today, display "Today" and the time
             const timeStr = dueDateObj.toLocaleString("en-US", timeOptions);
             dueDate = `Today at ${timeStr}`;
           } else if (isThisWeek) {
-            // If the due date is within this week, show the day of the week and time
             const weekdayOptions = {
               weekday: "long",
               ...timeOptions,
@@ -650,7 +587,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const dayStr = dueDateObj.toLocaleString("en-US", weekdayOptions);
             dueDate = `Due ${dayStr}`;
           } else {
-            // If the due date is more than a week away, display the full date and time
             const fullDateOptions = {
               month: "long",
               day: "numeric",
@@ -665,7 +601,6 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         }
 
-        // Set quiz details in the modal
         document.getElementById("viewQuizId").value = quizId;
         document.getElementById(
           "viewQuizTitle"
@@ -688,18 +623,18 @@ document.addEventListener("DOMContentLoaded", function () {
         const optionButton = document.querySelector(".option-btn");
         optionButton.setAttribute("data-quiz-id", quizId);
 
-        if (quizData.status === "Active") {
-          optionButton.classList.remove("activate-btn");
-          optionButton.classList.add("deactivate-btn");
-          optionButton.textContent = "Deactivate Quiz";
-        } else if (quizData.status === "Inactive") {
+        if (quizData.status === "Inactive") {
           optionButton.classList.remove("deactivate-btn");
           optionButton.classList.add("activate-btn");
           optionButton.textContent = "Activate Quiz";
+        } else {
+          optionButton.classList.remove("activate-btn");
+          optionButton.classList.add("deactivate-btn");
+          optionButton.textContent = "Deactivate Quiz";
         }
 
-        // Show the modal
         document.getElementById("viewQuizModal").style.display = "flex";
+        document.body.style.overflow = "hidden";
       }
     };
 
@@ -743,6 +678,7 @@ document.addEventListener("DOMContentLoaded", function () {
     history.replaceState(null, "", newUrl);
 
     document.getElementById("viewQuizModal").style.display = "none";
+    document.body.style.overflow = "auto";
   };
 
   const quizToggle = document.getElementById("quiz-toggle");
@@ -859,6 +795,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     xhr.send(requestBody);
   }
+
   function fetchPassedStudents(quizId) {
     return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
@@ -904,6 +841,7 @@ document.addEventListener("DOMContentLoaded", function () {
       xhr.send(requestBody);
     });
   }
+
   function fetchTotalStudents(quizId) {
     return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
@@ -1078,12 +1016,14 @@ document.addEventListener("DOMContentLoaded", function () {
   closeDueDate.addEventListener("click", function () {
     dueDateForm.reset();
     dueDateModal.style.display = "none";
+    document.body.style.overflow = "auto";
   });
 
   window.addEventListener("click", function (event) {
     if (event.target == dueDateModal) {
       dueDateForm.reset();
       dueDateModal.style.display = "none";
+      document.body.style.overflow = "auto";
     }
   });
 
@@ -1115,6 +1055,7 @@ document.addEventListener("DOMContentLoaded", function () {
               if (result.isConfirmed) {
                 selectedQuizId = quizId;
                 dueDateModal.style.display = "flex";
+                document.body.style.overflow = "hidden";
               } else if (result.dismiss === Swal.DismissReason.cancel) {
                 Swal.fire({
                   title: "Quiz Remains Inactive",
@@ -1237,6 +1178,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (result.isConfirmed) {
                   selectedQuizId = quizId;
                   dueDateModal.style.display = "flex";
+                  document.body.style.overflow = "hidden";
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                   Swal.fire({
                     title: "Quiz Remains Inactive",
@@ -1305,7 +1247,7 @@ document.addEventListener("DOMContentLoaded", function () {
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.href = `?active=true&quiz_id=${quizId}`;
+                window.location.href = `?active=1&quiz_id=${quizId}`;
               }
             });
             break;
@@ -1348,7 +1290,7 @@ document.addEventListener("DOMContentLoaded", function () {
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.href = `?active=false&quiz_id=${quizId}`;
+                window.location.href = `?active=2&quiz_id=${quizId}`;
               }
             });
             break;
