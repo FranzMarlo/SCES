@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="modal-direction">
-            <span><strong>Direction:</strong> Select the correct answer that corresponds to the following
+            <span><strong>Direction:&nbsp;</strong>Select the correct answer that corresponds to the following
                 questions.</span>
         </div>
 
@@ -54,11 +54,8 @@
             </div>
         </div>
         <div class="modal-direction">
-            <span><strong>Direction:</strong>The green marked option is the correct answer, while the answers that are
-                marked red. A question with a selection of subject theme color and without a green option indicates that
-                you
-                got the correct answer. Hence, a question with a theme color option with a green option indicates that
-                you got the wrong answer.</span>
+            <span><strong>Note: &nbsp;</strong>The green marked option is the correct answer while the answers that are
+                marked red are wrong. The theme color represents your selected answer.</span>
         </div>
 
         <div class="modal-quiz-content" id="viewQuestionsContainer"></div>

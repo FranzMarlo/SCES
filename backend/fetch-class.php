@@ -119,6 +119,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode(['error' => 'Quiz ID not provided']);
         }
+    } else if ($submitType === 'viewQuizHistory') {
+        if (isset($_POST['quiz_id'])) {
+            session_start();
+            $quizId = $_POST['quiz_id'];
+            $studentId = $_SESSION['student_id'];
+
+            // Fetch quiz details
+            $quizDetails = $fetchDb->fetchQuizInfo($quizId);
+
+            // Fetch quiz questions
+            $questions = $fetchDb->fetchQuestions($quizId);
+
+            // Fetch the student's selected answers
+            $studentAnswers = $fetchDb->fetchStudentAnswers($studentId, $quizId);
+
+            foreach ($questions as &$question) {
+                // Fetch choices for the current question
+                $choices = $fetchDb->fetchChoices($question['question_id']);
+
+                foreach ($choices as &$choice) {
+                    // Add a flag to indicate if this choice was selected by the student
+                    $choice['isSelected'] = false;
+
+                    // Add a flag to indicate if the choice is correct (value 0 is correct)
+                    if ($choice['value'] == 1) {
+                        $choice['is_correct'] = 1; // Correct answer
+                    } else {
+                        $choice['is_correct'] = 0; // Wrong answer
+                    }
+
+                    // Check if the student selected this choice
+                    foreach ($studentAnswers as $answer) {
+                        if (
+                            $answer['question_id'] == $question['question_id'] &&
+                            $answer['choice_id'] == $choice['choice_id']
+                        ) {
+                            $choice['isSelected'] = true;
+                        }
+                    }
+                }
+
+                // Attach choices to each question
+                $question['choices'] = $choices;
+            }
+
+            // Prepare the quiz data for the response
+            $quizData = [
+                'quiz_number' => $quizDetails['quiz_number'],
+                'title' => $quizDetails['title'],
+                'icon' => $quizDetails['icon'],
+                'subject_code' => $quizDetails['subject_code'],
+                'questions' => $questions,
+            ];
+
+            // Return the data as JSON
+            echo json_encode($quizData);
+        } else {
+            echo json_encode(['error' => 'Quiz ID not provided']);
+        }
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

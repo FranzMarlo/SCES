@@ -84,7 +84,8 @@ function formatCompletionDate($dueDateString)
     }
     // Handle past dates
     elseif ($dueDate < $currentDate) {
-        if ($daysDifference === 1) {
+        // Check if the due date was exactly yesterday
+        if ($dueDate->format('Y-m-d') === $currentDate->modify('-1 day')->format('Y-m-d')) {
             return 'Yesterday at ' . $timeOfDay;
         } else {
             return $dueDate->format('F j, Y \a\t g:iA');
@@ -95,6 +96,7 @@ function formatCompletionDate($dueDateString)
         return $dueDate->format('F j, Y \a\t g:iA');
     }
 }
+
 
 function getQuizAttemptCount($attempts)
 {

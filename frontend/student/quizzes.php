@@ -308,7 +308,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                   </div>
                   <div class="button-container" id="button-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>"
                     style="display: <?php echo ($index === 0) ? 'flex' : 'none'; ?>;">
-                    <button class="take-quiz" id="take-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>">View
+                    <button class="view-quiz" id="view-quiz-<?php echo htmlspecialchars($quiz['quiz_id']); ?>">View
                       Quiz</button>
                   </div>
                 <?php endforeach; ?>

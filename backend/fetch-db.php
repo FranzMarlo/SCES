@@ -365,7 +365,7 @@ class fetchClass extends db_connect
     public function fetchQuizInfo($quizId): array
     {
         $query = $this->conn->prepare(
-        "SELECT
+            "SELECT
                     quiz.quiz_id,
                     quiz.subject_id,
                     quiz.quiz_number,
@@ -407,6 +407,19 @@ class fetchClass extends db_connect
     {
         $query = $this->conn->prepare("SELECT * FROM choices_tbl WHERE question_id = ? ORDER BY choice_order ASC");
         $query->bind_param("s", $questionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
+    public function fetchStudentAnswers($studentId, $quizId): array
+    {
+        $query = $this->conn->prepare("SELECT question_id, choice_id FROM answer_tbl WHERE student_id = ? AND quiz_id = ?");
+        $query->bind_param("ss", $studentId, $quizId);
 
         if ($query->execute()) {
             $result = $query->get_result();

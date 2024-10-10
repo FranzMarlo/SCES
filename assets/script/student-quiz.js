@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   const closeQuizModal = document.getElementById("closeQuizModal");
-
+  const quizModal = document.getElementById("quizModal");
   closeQuizModal.addEventListener("click", function () {
     Swal.fire({
       title: "Do you want to quit taking this quiz?",
@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
       cancelButtonColor: "#f44336",
     }).then((result) => {
       if (result.isConfirmed) {
-        closeQuiz();
+        closeQuiz(quizModal);
       } else {
         Swal.fire({
           title: "Quiz taking still on progress",
@@ -257,6 +257,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  document.querySelectorAll(".view-quiz").forEach((button) => {
+    button.addEventListener("click", function () {
+      const quizId = this.id.split("-")[2];
+      viewQuiz(quizId);
+    });
+  });
+
+  const closeViewQuizModal = document.getElementById("closeViewQuizModal");
+  const viewQuizModal = document.getElementById("viewQuizModal");
+  closeViewQuizModal.addEventListener("click", function () {
+    closeQuiz(viewQuizModal);
+  });
+
   function promptQuiz(quizId) {
     fetch(`/SCES/backend/fetch-class.php`, {
       method: "POST",
@@ -267,11 +280,12 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => response.json())
       .then((data) => {
+        const quizModal = document.getElementById("quizModal");
         // Set modal header and icon
-        document.querySelector(
+        quizModal.querySelector(
           ".modal-header-text h1"
         ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
-        document.querySelector(
+        quizModal.querySelector(
           ".modal-icon-container img"
         ).src = `/SCES/assets/images/${data.icon}`;
 
@@ -330,7 +344,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         submitButton.onclick = () => submitQuiz(quizId);
 
-        const quizModal = document.getElementById("quizModal");
         quizModal.style.display = "block";
         document.body.style.overflow = "hidden";
       });
@@ -483,7 +496,7 @@ document.addEventListener("DOMContentLoaded", function () {
           .then((response) => response.json())
           .then((result) => {
             if (result.success) {
-              closeQuiz();
+              closeQuiz(quizModal);
               if (result.remarks == "Passed") {
                 Swal.fire({
                   icon: "success",
@@ -596,7 +609,7 @@ document.addEventListener("DOMContentLoaded", function () {
           .then((response) => response.json())
           .then((result) => {
             if (result.success) {
-              closeQuiz();
+              closeQuiz(quizModal);
               if (result.remarks == "Passed") {
                 Swal.fire({
                   icon: "success",
@@ -637,9 +650,84 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function closeQuiz() {
-    const quizModal = document.getElementById("quizModal");
-    quizModal.style.display = "none";
+  function closeQuiz(modal) {
+    modal.style.display = "none";
     document.body.style.overflow = "auto";
+  }
+
+  function viewQuiz(quizId) {
+    fetch(`/SCES/backend/fetch-class.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `submitType=viewQuizHistory&quiz_id=${quizId}`,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const viewQuizModal = document.getElementById("viewQuizModal");
+
+        viewQuizModal.querySelector(
+          ".modal-header-text h1"
+        ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
+
+        viewQuizModal.querySelector(
+          ".modal-icon-container img"
+        ).src = `/SCES/assets/images/${data.icon}`;
+
+        const modalHeaderBg = viewQuizModal.querySelector(".modal-header-bg");
+        modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
+
+        const questionsContainer = viewQuizModal.querySelector(
+          "#viewQuestionsContainer"
+        );
+        questionsContainer.innerHTML = "";
+
+        data.questions.forEach((question, index) => {
+          const quizItem = document.createElement("div");
+          quizItem.classList.add("quiz-item");
+
+          const questionBox = document.createElement("div");
+          questionBox.classList.add("question-box");
+          questionBox.setAttribute("data-question-id", question.question_id);
+          questionBox.innerHTML = `<span><strong>${index + 1}.</strong> ${
+            question.question
+          }</span>`;
+          quizItem.appendChild(questionBox);
+
+          question.choices.forEach((choice, i) => {
+            const choiceLetter = String.fromCharCode(65 + i);
+            const choiceElement = document.createElement("div");
+            choiceElement.classList.add("quiz-ans-fixed");
+
+            if (choice.is_correct === 1) {
+              choiceElement.classList.add("correct");
+            } else {
+              choiceElement.classList.add("wrong");
+            }
+
+            if (choice.isSelected) {
+              choiceElement.classList.add(data.subject_code.toLowerCase());
+            }
+
+            choiceElement.innerHTML = `
+              <strong>${choiceLetter}.</strong>&nbsp;${choice.choice}
+            `;
+
+            quizItem.appendChild(choiceElement);
+          });
+
+          questionsContainer.appendChild(quizItem);
+        });
+        const closeButton = document.getElementById("close-quiz");
+
+        closeButton.onclick = () => closeQuiz(viewQuizModal);
+
+        viewQuizModal.style.display = "block";
+        document.body.style.overflow = "hidden";
+      })
+      .catch((error) => {
+        console.error("Error fetching quiz content:", error);
+      });
   }
 });
