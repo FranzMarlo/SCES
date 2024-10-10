@@ -162,6 +162,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     item.addEventListener("click", function (event) {
       event.preventDefault();
+      event.stopPropagation();
       const activeValue = getActiveFromURL();
       setQuizIdInURL(quizId, activeValue);
       displayQuizById(quizId);
@@ -193,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.querySelectorAll(".addQuizBtn").forEach((button) => {
-    button.addEventListener("click", function () {
+    button.addEventListener("click", function (event) {
       modal.style.display = "flex";
       document.body.style.overflow = "hidden";
     });

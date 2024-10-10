@@ -485,12 +485,14 @@
   min-width: 160px;
   overflow: auto;
   z-index: 5;
+  top: 50px;
   right: 30%;
   border-radius: 10px;
   box-shadow: 0 0 3px 0 #9c9c9c;
   padding: 5px 0;
   width: 220px;
   cursor: pointer;
+  overflow: visible;
 }
 .quiz-dropdown-title {
   width: 100%;

@@ -403,7 +403,7 @@ $page = '';
                                             <ul>
                                                 <li class="view-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">View Info
                                                 </li>
-                                                <li class="disable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Disable
+                                                <li class="enable-quiz" data-quiz-id="<?php echo $quiz['quiz_id']; ?>">Re-enable
                                                 </li>
                                             </ul>
                                         </div>
