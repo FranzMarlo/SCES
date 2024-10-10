@@ -53,6 +53,32 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
               <?php endif; ?>
             </div>
           </div>
+          <div class="quiz-dropdown" id="pastDropdown">
+            <div class="quiz-btn">
+              <i class="fa-solid fa-ellipsis-vertical icon"></i>
+            </div>
+            <div class="quiz-dropdown-content">
+              <div class="quiz-dropdown-title">
+                <img src="/SCES/assets/images/quiz-past.png" alt="quiz-past.png">
+                <h1>Past Quizzes</h1>
+              </div>
+              <?php if ($pastQuizzes): ?>
+                <?php foreach ($pastQuizzes as $index => $quiz): ?>
+                  <div class="pending <?php echo strtolower($quiz['subject_code']); ?>"
+                    data-quiz-index="<?php echo $index; ?>" data-quiz-id="<?php echo htmlspecialchars($quiz['quiz_id']) ?>">
+                    <span><?php echo htmlspecialchars($quiz['subject']) ?> - Quiz
+                      <?php echo htmlspecialchars($quiz['quiz_number']) ?></span>
+                  </div>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <div class="no-data-item">
+                  <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                  <h1>No Quiz Added.</h1>
+                  <h1>Add A Quiz By Clicking The Button Above.</h1>
+                </div>
+              <?php endif; ?>
+            </div>
+          </div>
         </div>
         <div class="quiz-container">
           <div class="tab-controller">

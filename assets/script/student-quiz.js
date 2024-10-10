@@ -14,6 +14,46 @@ document.addEventListener("DOMContentLoaded", function () {
   let lastPastQuizId = null; // Store last past quiz ID
   let isFirstSwitchToPast = true; // Flag to track first switch to past quizzes
 
+  function showDropdownBasedOnActiveState(isActiveTab) {
+    const activeDropdown = document.getElementById("activeDropdown");
+    const pastDropdown = document.getElementById("pastDropdown");
+
+    if (window.innerWidth < 768) {
+      // Show the dropdown based on the active state
+      if (isActiveTab) {
+        activeDropdown.style.display = "block";
+        pastDropdown.style.display = "none";
+      } else {
+        activeDropdown.style.display = "none";
+        pastDropdown.style.display = "block";
+      }
+    } else {
+      // Hide both dropdowns if screen width is >= 768px
+      activeDropdown.style.display = "none";
+      pastDropdown.style.display = "none";
+    }
+  }
+
+  function handleResize() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let isActiveTab = urlParams.get("active");
+
+    // Default to `true` for active quizzes if `active` is null or missing
+    if (isActiveTab === null) {
+      isActiveTab = "true"; // Default to active quizzes when the parameter is not present
+    }
+
+    // Convert `isActiveTab` to a boolean value
+    const isActiveTabBoolean = isActiveTab === "true";
+
+    // Show dropdown based on the current active tab
+    showDropdownBasedOnActiveState(isActiveTabBoolean);
+  }
+
+  window.addEventListener("resize", handleResize);
+
+  handleResize();
+
   function hideAllQuizzes() {
     headers.forEach((header) => (header.style.display = "none"));
     infoContainers.forEach((info) => (info.style.display = "none"));
@@ -55,6 +95,9 @@ document.addEventListener("DOMContentLoaded", function () {
       activeTab.classList.add("active");
       pastTab.classList.remove("active");
 
+      // Show active quizzes dropdown if on a small screen
+      showDropdownBasedOnActiveState(true);
+
       // Display the last active quiz if it exists
       if (lastActiveQuizId) {
         displayQuizById(lastActiveQuizId);
@@ -75,6 +118,9 @@ document.addEventListener("DOMContentLoaded", function () {
       pastQuizContainer.style.display = "flex";
       activeTab.classList.remove("active");
       pastTab.classList.add("active");
+
+      // Show past quizzes dropdown if on a small screen
+      showDropdownBasedOnActiveState(false);
 
       // Display the first past quiz and update URL
       const pastItems = document.querySelectorAll(
