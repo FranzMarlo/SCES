@@ -1352,7 +1352,7 @@ class adminLoggedIn
     public function needLogin()
     {
 
-        if (!isset($_SESSION['teacher_id'])) {
+        if (!isset($_SESSION['teacher_id']) && $_SESSION['role'] == 'Faculty') {
             session_destroy();
             header('Location:/SCES/frontend/admin/login.php');
             exit();
@@ -1362,7 +1362,7 @@ class adminLoggedIn
     public function needLogout()
     {
 
-        if (isset($_SESSION['teacher_id'])) {
+        if (isset($_SESSION['teacher_id']) && $_SESSION['role'] == 'Admin') {
             header('Location:/SCES/frontend/admin/dashboard.php');
             exit();
         }
@@ -1374,7 +1374,7 @@ class facultyLoggedIn
     public function needLogin()
     {
 
-        if (!isset($_SESSION['teacher_id'])) {
+        if (!isset($_SESSION['teacher_id']) && $_SESSION['role'] == 'Admin') {
             session_destroy();
             header('Location:/SCES/frontend/faculty/login.php');
             exit();
@@ -1384,7 +1384,7 @@ class facultyLoggedIn
     public function needLogout()
     {
 
-        if (isset($_SESSION['teacher_id'])) {
+        if (isset($_SESSION['teacher_id']) && $_SESSION['role'] == 'Faculty') {
             header('Location:/SCES/frontend/faculty/dashboard.php');
             exit();
         }
