@@ -66,8 +66,9 @@ $("#studSignUp").on("submit", function (e) {
               icon: "success",
               title: "Sign Up Succesful",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.href = "/SCES/frontend/student/dashboard.php";
               }
             });
@@ -245,9 +246,10 @@ $("#editProfileForm").on("submit", function (e) {
               icon: "success",
               title: "Profile Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/student/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -261,8 +263,8 @@ $("#editProfileForm").on("submit", function (e) {
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/student/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -334,9 +336,10 @@ $("#editPersonalForm").on("submit", function (e) {
               icon: "success",
               title: "Profile Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/student/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -350,8 +353,8 @@ $("#editPersonalForm").on("submit", function (e) {
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/student/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -478,9 +481,10 @@ $("#editBackgroundForm").on("submit", function (e) {
               icon: "success",
               title: "Profile Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/student/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -494,8 +498,8 @@ $("#editBackgroundForm").on("submit", function (e) {
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/student/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -593,9 +597,10 @@ $("#changeAvatarForm").on("submit", function (e) {
               icon: "success",
               title: "User Icon Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/student/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -642,8 +647,8 @@ $("#changeAvatarForm").on("submit", function (e) {
               title: "Update Profile Failed Please Try Again Later",
               confirmButtonColor: "#4CAF50",
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/student/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -678,9 +683,10 @@ $("#updatePassword").on("submit", function (e) {
               icon: "success",
               title: "Password Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/student/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -845,8 +851,9 @@ $("#adminSignUp").on("submit", function (e) {
               icon: "success",
               title: "Sign Up Succesful",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.href = "/SCES/frontend/admin/dashboard.php";
               }
             });
@@ -1013,9 +1020,10 @@ $("#adminEditProfileForm").on("submit", function (e) {
               icon: "success",
               title: "Profile Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/admin/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1028,9 +1036,10 @@ $("#adminEditProfileForm").on("submit", function (e) {
               icon: "info",
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/admin/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1102,9 +1111,10 @@ $("#adminEditPersonalForm").on("submit", function (e) {
               icon: "success",
               title: "Profile Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/admin/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1117,9 +1127,10 @@ $("#adminEditPersonalForm").on("submit", function (e) {
               icon: "info",
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/admin/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1244,9 +1255,10 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
               icon: "success",
               title: "Profile Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/admin/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1259,9 +1271,10 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
               icon: "info",
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/admin/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1348,9 +1361,10 @@ $("#adminChangeAvatarForm").on("submit", function (e) {
               icon: "success",
               title: "User Icon Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/admin/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1396,9 +1410,10 @@ $("#adminChangeAvatarForm").on("submit", function (e) {
               icon: "error",
               title: "Update Profile Failed Please Try Again Later",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/admin/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1433,9 +1448,10 @@ $("#adminUpdatePassword").on("submit", function (e) {
               icon: "success",
               title: "Password Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/admin/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1555,8 +1571,9 @@ $("#adminAddLesson").on("submit", function (e) {
               icon: "success",
               title: "Lesson Added",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.reload();
               }
             });
@@ -1725,8 +1742,9 @@ $("#facultySignUp").on("submit", function (e) {
               icon: "success",
               title: "Sign Up Succesful",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.href = "/SCES/frontend/faculty/dashboard.php";
               }
             });
@@ -1893,9 +1911,10 @@ $("#facultyEditProfileForm").on("submit", function (e) {
               icon: "success",
               title: "Profile Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1908,9 +1927,10 @@ $("#facultyEditProfileForm").on("submit", function (e) {
               icon: "info",
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1982,9 +2002,10 @@ $("#facultyEditPersonalForm").on("submit", function (e) {
               icon: "success",
               title: "Profile Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -1997,9 +2018,10 @@ $("#facultyEditPersonalForm").on("submit", function (e) {
               icon: "info",
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -2124,9 +2146,10 @@ $("#facultyEditBackgroundForm").on("submit", function (e) {
               icon: "success",
               title: "Profile Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -2139,9 +2162,10 @@ $("#facultyEditBackgroundForm").on("submit", function (e) {
               icon: "info",
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -2228,9 +2252,10 @@ $("#facultyChangeAvatarForm").on("submit", function (e) {
               icon: "success",
               title: "User Icon Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -2276,9 +2301,10 @@ $("#facultyChangeAvatarForm").on("submit", function (e) {
               icon: "error",
               title: "Update Profile Failed Please Try Again Later",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -2313,9 +2339,10 @@ $("#facultyUpdatePassword").on("submit", function (e) {
               icon: "success",
               title: "Password Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
-                window.location.href = "/SCES/frontend/faculty/settings.php";
+              if (result.isConfirmed) {
+                window.location.reload();
               }
             });
           }
@@ -2435,8 +2462,9 @@ $("#facultyAddLesson").on("submit", function (e) {
               icon: "success",
               title: "Lesson Added",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.reload();
               }
             });
@@ -2567,8 +2595,9 @@ $("#addQuiz").on("submit", function (e) {
               icon: "success",
               title: "Quiz Added Successfully",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.href = `?active=2&quiz_id=${response.quizId}`;
               }
             });
@@ -2679,8 +2708,9 @@ $("#addQuestion").on("submit", function (e) {
               icon: "success",
               title: "Question Added To Quiz Successfully",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.reload();
               }
             });
@@ -2820,8 +2850,9 @@ $("#editQuestion").on("submit", function (e) {
               icon: "success",
               title: "Question Updated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.reload();
               }
             });
@@ -2835,8 +2866,9 @@ $("#editQuestion").on("submit", function (e) {
               icon: "info",
               title: "No Changes Has Been Made",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.reload();
               }
             });
@@ -2965,8 +2997,9 @@ $("#editQuiz").on("submit", function (e) {
               icon: "success",
               title: "Quiz Updated Successfully",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.reload();
               }
             });
@@ -2980,8 +3013,9 @@ $("#editQuiz").on("submit", function (e) {
               icon: "info",
               title: "No Change Has Been Made",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
-              if (result.value) {
+              if (result.isConfirmed) {
                 window.location.reload();
               }
             });
@@ -3071,7 +3105,7 @@ function logoutFunc() {
     allowOutsideClick: false,
     cancelButtonText: "No",
   }).then((result) => {
-    if (result.value) {
+    if (result.isConfirmed) {
       window.location.href = "/SCES/backend/student/student-logout.php";
     }
   });
@@ -3088,7 +3122,7 @@ function adminLogoutFunc() {
     allowOutsideClick: false,
     cancelButtonText: "No",
   }).then((result) => {
-    if (result.value) {
+    if (result.isConfirmed) {
       window.location.href = "/SCES/backend/admin/admin-logout.php";
     }
   });
@@ -3105,7 +3139,7 @@ function facultyLogoutFunc() {
     allowOutsideClick: false,
     cancelButtonText: "No",
   }).then((result) => {
-    if (result.value) {
+    if (result.isConfirmed) {
       window.location.href = "/SCES/backend/faculty/faculty-logout.php";
     }
   });
