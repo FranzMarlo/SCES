@@ -137,6 +137,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Fetch the student's selected answers
             $studentAnswers = $fetchDb->fetchStudentAnswers($studentId, $quizId);
 
+            if (empty($studentAnswers)) {
+                echo json_encode(['error' => 'You have not answered this quiz yet.']);
+                exit;
+            }
+
             foreach ($questions as &$question) {
                 // Fetch choices for the current question
                 $choices = $fetchDb->fetchChoices($question['question_id']);

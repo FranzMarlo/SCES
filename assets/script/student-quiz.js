@@ -733,6 +733,11 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => response.json())
       .then((data) => {
+        if (data.error) {
+          showAlert("error", "You haven\'t answer the quiz yet");
+          return;
+        }
+
         const viewQuizModal = document.getElementById("viewQuizModal");
 
         viewQuizModal.querySelector(
@@ -806,5 +811,4 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmButtonColor: "#4CAF50",
     });
   }
-
 });
