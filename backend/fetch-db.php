@@ -487,16 +487,57 @@ class fetchClass extends db_connect
         }
     }
 
-    public function fetchAvgScore($quizId)
+    public function fetchMedianScore($quizId)
     {
-        $query = $this->conn->prepare("SELECT AVG(score) AS average_score FROM score_tbl WHERE quiz_id = ?");
+        // First, get the count of scores
+        $query = $this->conn->prepare("
+        SELECT COUNT(*) AS score_count FROM score_tbl WHERE quiz_id = ?
+    ");
         $query->bind_param("s", $quizId);
+        $query->execute();
+        $result = $query->get_result();
+        $countRow = $result->fetch_assoc();
+        $scoreCount = $countRow['score_count'];
 
-        if ($query->execute()) {
-            $result = $query->get_result();
-            return $result->fetch_assoc();
+        // If the score count is 0, return null
+        if ($scoreCount == 0) {
+            return ['average_score' => null];
+        }
+
+        // If odd, select the middle score
+        if ($scoreCount % 2 != 0) {
+            $offset = floor($scoreCount / 2);
+            $medianQuery = $this->conn->prepare("
+            SELECT score AS average_score
+            FROM score_tbl
+            WHERE quiz_id = ?
+            ORDER BY score
+            LIMIT 1 OFFSET ?
+        ");
+            $medianQuery->bind_param("si", $quizId, $offset);
+
+            // If even, select the average of the two middle scores
         } else {
-            return [];
+            $offset = ($scoreCount / 2) - 1;
+            $medianQuery = $this->conn->prepare("
+            SELECT AVG(score) AS average_score
+            FROM (
+                SELECT score FROM score_tbl
+                WHERE quiz_id = ?
+                ORDER BY score
+                LIMIT 2 OFFSET ?
+            ) AS middle_values
+        ");
+            $medianQuery->bind_param("si", $quizId, $offset);
+        }
+
+        // Execute the median query
+        if ($medianQuery->execute()) {
+            $medianResult = $medianQuery->get_result();
+            return $medianResult->fetch_assoc();
+        } else {
+            return ['average_score' => null];
         }
     }
+
 }

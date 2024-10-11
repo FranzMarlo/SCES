@@ -582,11 +582,23 @@ document.addEventListener("DOMContentLoaded", function () {
           const daysInWeek = 7;
           const msInDay = 24 * 60 * 60 * 1000;
 
-          const timeDiff = dueDateObj - currentDate;
+          // Calculate the start of today (00:00:00 of the current day) for accurate comparison
+          const startOfToday = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate()
+          );
+          const startOfYesterday = new Date(startOfToday.getTime() - msInDay); // 1 day before today
+          const startOfWeek = new Date(
+            startOfToday.getTime() - currentDate.getDay() * msInDay
+          ); // Start of the current week (Sunday)
+
           const isToday =
-            currentDate.toDateString() === dueDateObj.toDateString();
+            startOfToday.toDateString() === dueDateObj.toDateString();
           const isThisWeek =
-            timeDiff < daysInWeek * msInDay && dueDateObj > currentDate;
+            dueDateObj >= startOfWeek && dueDateObj < startOfToday;
+          const isInPast = dueDateObj < startOfToday;
+          const isLessThanYesterday = dueDateObj < startOfYesterday;
 
           const timeOptions = {
             hour: "numeric",
@@ -597,14 +609,31 @@ document.addEventListener("DOMContentLoaded", function () {
           if (isToday) {
             const timeStr = dueDateObj.toLocaleString("en-US", timeOptions);
             dueDate = `Today at ${timeStr}`;
-          } else if (isThisWeek) {
+          } else if (isThisWeek && isInPast && !isLessThanYesterday) {
+            // If due date is less than today but still within the current week
             const weekdayOptions = {
               weekday: "long",
-              ...timeOptions,
             };
             const dayStr = dueDateObj.toLocaleString("en-US", weekdayOptions);
-            dueDate = `${dayStr}`;
+            const timeStr = dueDateObj.toLocaleString("en-US", timeOptions);
+            dueDate = `Last ${dayStr}, ${timeStr}`; // Add comma between day and time
+          } else if (isLessThanYesterday && dueDateObj >= startOfWeek) {
+            // If due date is less than yesterday but still within the current week
+            const weekdayOptions = {
+              weekday: "long",
+            };
+            const dayStr = dueDateObj.toLocaleString("en-US", weekdayOptions);
+            const timeStr = dueDateObj.toLocaleString("en-US", timeOptions);
+            dueDate = `Last ${dayStr}, ${timeStr}`; // Add comma between day and time
+          } else if (isThisWeek && dueDateObj > currentDate) {
+            const weekdayOptions = {
+              weekday: "long",
+            };
+            const dayStr = dueDateObj.toLocaleString("en-US", weekdayOptions);
+            const timeStr = dueDateObj.toLocaleString("en-US", timeOptions);
+            dueDate = `${dayStr}, ${timeStr}`; // Add comma between day and time
           } else {
+            // For dates outside the current week (past or future)
             const fullDateOptions = {
               month: "long",
               day: "numeric",
@@ -615,7 +644,7 @@ document.addEventListener("DOMContentLoaded", function () {
               "en-US",
               fullDateOptions
             );
-            dueDate = `Due on ${fullDateStr}`;
+            dueDate = isInPast ? `Last ${fullDateStr}` : `${fullDateStr}`;
           }
         }
 
@@ -1454,9 +1483,13 @@ document.addEventListener("DOMContentLoaded", function () {
             parseInt(correctCount) + parseInt(incorrectCount);
           if (parseInt(correctCount) == 0) {
             var accuracy = "0%";
+          } else {
+            var accuracy =
+              (
+                (parseInt(correctCount) / parseInt(totalResponses)) *
+                100
+              ).toFixed(2) + "%";
           }
-          var accuracy =
-            (parseInt(correctCount) / parseInt(totalResponses)) * 100 + "%";
 
           document.getElementById("totalResponses").innerText = totalResponses;
           document.getElementById("totalCorrect").innerText = correctCount;

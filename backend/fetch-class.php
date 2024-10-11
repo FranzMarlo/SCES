@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $quizId = $_POST['quiz_id'];
 
             $quizData = $fetchDb->fetchFullQuizDetails($quizId);
-            $averageData = $fetchDb->fetchAvgScore($quizId);
+            $averageData = $fetchDb->fetchMedianScore($quizId);
 
             $quizData['average_score'] = $averageData['average_score'] ?? 0;
 

@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let lastActiveQuizId = null; // Store last active quiz ID
   let lastPastQuizId = null; // Store last past quiz ID
-  let isFirstSwitchToPast = true; // Flag to track first switch to past quizzes
 
   function showDropdownBasedOnActiveState(isActiveTab) {
     const activeDropdown = document.getElementById("activeDropdown");
@@ -65,11 +64,32 @@ document.addEventListener("DOMContentLoaded", function () {
   function displayQuizById(quizId) {
     hideAllQuizzes();
 
-    // Display the selected quiz's header, info-container, button, and notice
-    document.getElementById("header-quiz-" + quizId).style.display = "block";
-    document.getElementById("quiz-" + quizId).style.display = "flex";
-    document.getElementById("button-quiz-" + quizId).style.display = "flex";
-    document.getElementById("notice-quiz-" + quizId).style.display = "flex"; // Show the correct notice
+    const headerElement = document.getElementById("header-quiz-" + quizId);
+    const quizElement = document.getElementById("quiz-" + quizId);
+    const buttonElement = document.getElementById("button-quiz-" + quizId);
+    const noticeElement = document.getElementById("notice-quiz-" + quizId);
+
+    // If the main quiz element is not found, attempt to find the next available quiz
+    if (!headerElement) {
+      showAlert("warning", "Quiz status updated");
+    }
+
+    // Display elements if they exist
+    if (headerElement) {
+      headerElement.style.display = "block";
+    }
+
+    if (buttonElement) {
+      buttonElement.style.display = "flex";
+    }
+
+    if (quizElement) {
+      quizElement.style.display = "flex";
+    }
+
+    if (noticeElement) {
+      noticeElement.style.display = "flex";
+    }
 
     // Store the last displayed quiz ID based on the current active tab
     if (activeQuizContainer.style.display === "flex") {
@@ -131,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
         displayQuizById(firstPastQuizId); // Display the first past quiz
         updateURLWithQuizId(firstPastQuizId, false); // Update URL with the first past quiz ID
       } else {
-        console.log("No past quizzes available");
+        showAlert("info", "No past quizzes found");
       }
 
       // Optionally, if you want to display the last past quiz if it exists
@@ -338,9 +358,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const modalHeaderBg = document.querySelector(".modal-header-bg");
         modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
 
-        const questionsContainer = document.querySelector(
-          ".modal-quiz-content"
-        );
+        const questionsContainer =
+          document.getElementById("questionsContainer");
         questionsContainer.innerHTML = "";
 
         // Iterate through questions
@@ -370,7 +389,7 @@ document.addEventListener("DOMContentLoaded", function () {
             choiceElement.addEventListener("click", function () {
               const radioButton = this.querySelector('input[type="radio"]');
               if (radioButton) {
-                document
+                questionsContainer
                   .querySelectorAll(`input[name="question-${index}"]`)
                   .forEach((rb) => {
                     const label = rb.parentElement;
@@ -415,9 +434,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const modalHeaderBg = document.querySelector(".modal-header-bg");
         modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
 
-        const questionsContainer = document.querySelector(
-          ".modal-quiz-content"
-        );
+        const questionsContainer =
+          document.getElementById("questionsContainer");
         questionsContainer.innerHTML = "";
 
         data.questions.forEach((question, index) => {
@@ -444,7 +462,7 @@ document.addEventListener("DOMContentLoaded", function () {
             choiceElement.addEventListener("click", function () {
               const radioButton = this.querySelector('input[type="radio"]');
               if (radioButton) {
-                document
+                questionsContainer
                   .querySelectorAll(`input[name="question-${index}"]`)
                   .forEach((rb) => {
                     const label = rb.parentElement;
@@ -473,29 +491,31 @@ document.addEventListener("DOMContentLoaded", function () {
   function submitQuiz(quizId) {
     const selectedAnswers = [];
     let hasUnanswered = false;
+    const questionsContainer = document.getElementById("questionsContainer");
+    questionsContainer
+      .querySelectorAll(".quiz-item")
+      .forEach((quizItem, index) => {
+        const questionId = quizItem
+          .querySelector(".question-box")
+          .getAttribute("data-question-id");
 
-    document.querySelectorAll(".quiz-item").forEach((quizItem, index) => {
-      const questionId = quizItem
-        .querySelector(".question-box")
-        .getAttribute("data-question-id");
+        const selectedOption = quizItem.querySelector(
+          `input[name="question-${index}"]:checked`
+        );
 
-      const selectedOption = quizItem.querySelector(
-        `input[name="question-${index}"]:checked`
-      );
-
-      if (selectedOption) {
-        selectedAnswers.push({
-          question_id: questionId,
-          choice_id: selectedOption.value,
-        });
-      } else {
-        hasUnanswered = true;
-        selectedAnswers.push({
-          question_id: questionId,
-          choice_id: null,
-        });
-      }
-    });
+        if (selectedOption) {
+          selectedAnswers.push({
+            question_id: questionId,
+            choice_id: selectedOption.value,
+          });
+        } else {
+          hasUnanswered = true;
+          selectedAnswers.push({
+            question_id: questionId,
+            choice_id: null,
+          });
+        }
+      });
 
     if (hasUnanswered) {
       Swal.fire({
@@ -586,29 +606,31 @@ document.addEventListener("DOMContentLoaded", function () {
   function resubmitQuiz(quizId) {
     const selectedAnswers = [];
     let hasUnanswered = false;
+    const questionsContainer = document.getElementById("questionsContainer");
+    questionsContainer
+      .querySelectorAll(".quiz-item")
+      .forEach((quizItem, index) => {
+        const questionId = quizItem
+          .querySelector(".question-box")
+          .getAttribute("data-question-id");
 
-    document.querySelectorAll(".quiz-item").forEach((quizItem, index) => {
-      const questionId = quizItem
-        .querySelector(".question-box")
-        .getAttribute("data-question-id");
+        const selectedOption = quizItem.querySelector(
+          `input[name="question-${index}"]:checked`
+        );
 
-      const selectedOption = quizItem.querySelector(
-        `input[name="question-${index}"]:checked`
-      );
-
-      if (selectedOption) {
-        selectedAnswers.push({
-          question_id: questionId,
-          choice_id: selectedOption.value,
-        });
-      } else {
-        hasUnanswered = true;
-        selectedAnswers.push({
-          question_id: questionId,
-          choice_id: null,
-        });
-      }
-    });
+        if (selectedOption) {
+          selectedAnswers.push({
+            question_id: questionId,
+            choice_id: selectedOption.value,
+          });
+        } else {
+          hasUnanswered = true;
+          selectedAnswers.push({
+            question_id: questionId,
+            choice_id: null,
+          });
+        }
+      });
 
     if (hasUnanswered) {
       Swal.fire({
@@ -776,4 +798,13 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Error fetching quiz content:", error);
       });
   }
+
+  function showAlert(icon, message) {
+    Swal.fire({
+      icon: icon,
+      title: message,
+      confirmButtonColor: "#4CAF50",
+    });
+  }
+
 });
