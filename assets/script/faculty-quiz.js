@@ -793,23 +793,28 @@ document.addEventListener("DOMContentLoaded", function () {
                   : ""
               }</div>
               </div>
-              <div class="box-data">
+              <div class="box-data full">
                 <div class="box-part empty">Assessment Pending for Student</div>
               </div>
               `;
             } else {
               studentScoreBox.innerHTML = `
-                <div class="box-data">
+              <div class="box-data">
                 <div class="box-part full-name">${student.student_lname}, ${
                 student.student_fname
               } ${student.student_mname.charAt(0)}.</div>
-                <div class="box-part score ${scoreClass}">${
-                  student.score || "N/A"
-                }/${student.item_number || "N/A"}</div>
+              </div>
+              <div class="box-score">
+                <div class="box-part score ${scoreClass}">${student.score}/${
+                student.item_number
+              }</div>
+                <div class="box-part percentage ${scoreClass}">${
+                student.percentage + "%"
+              }</div>
                 </div>
                 <div class="box-data">
                 <div class="box-part remarks ${remarksClass}">
-                    ${student.remarks || "N/A"}
+                    ${student.remarks}
                 </div>
                 <div class="box-part time">${
                   student.time ? student.time : "N/A"
@@ -829,7 +834,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     xhr.send(requestBody);
   }
-
 
   function fetchPassedStudents(quizId) {
     return new Promise((resolve) => {

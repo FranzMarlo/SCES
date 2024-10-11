@@ -123,7 +123,7 @@ $page = '';
                         </div>
                         <div class="quiz-dropdown-content">
                             <div class="quiz-dropdown-title">
-                                <img src="/SCES/assets/images/status-inactive.png" alt="status-inactive.png">
+                                <img src="/SCES/assets/images/quiz-past.png" alt="quiz-past.png">
                                 <h1>Completed Quizzes</h1>
                             </div>
                             <button class="addQuizBtn">

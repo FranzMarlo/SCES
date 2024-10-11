@@ -957,7 +957,17 @@ canvas {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 50%;
+  width: 33%;
+  align-items: center;
+}
+.box-data.full{
+  width: 100%;
+}
+.box-score {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 33%;
   align-items: center;
 }
 .box-part {
@@ -965,7 +975,7 @@ canvas {
 }
 .passed {
   border-radius: 15px;
-  background-color: #64d468;
+  background-color: #4caf50;
   color: #fff;
 }
 .failed {
@@ -975,29 +985,37 @@ canvas {
 }
 .full-name {
   text-align: left;
-  width: 80%;
+  width: 100%;
+  max-width: 400px;
 }
 .score {
   text-align: center;
   width: 20%;
+  max-width: 100px;
+  min-width: 100px;
 }
 .time {
   width: 80%;
+  max-width: 200px;
 }
 .remarks {
-  width: 40%;
+  max-width: 100px;
+  width: 50%;
+  min-width: 60px;
 }
 .good {
   border-radius: 15px;
   background-color: #4caf50;
   font-weight: bold;
   color: #fff;
+  min-width: 60px;
 }
 .warning {
   border-radius: 15px;
   background-color: #c85650;;
   font-weight: bold;
   color: #fff;
+  min-width: 60px;
 }
 .empty {
   width: 100%;
@@ -1109,6 +1127,7 @@ canvas {
   .low-padding {
     padding: 5px;
   }
+
 }
 @media (width < 768px) {
   .quiz-btn {
@@ -1265,6 +1284,10 @@ canvas {
   }
   .view-part{
     flex-direction: column;
+  }
+  .box-score{
+    width: 100%;
+    justify-content: space-between;
   }
 }
 @media (width < 375px) {

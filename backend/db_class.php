@@ -1319,7 +1319,7 @@ class globalClass extends db_connect
         return false;
     }
 
-    public function recordScore($quizId, $studentId, $score, $itemCount, $remarks)
+    public function recordScore($quizId, $studentId, $score, $itemCount, $remarks, $scorePercentage)
     {
         $year = date("Y");
         $scoreId = 'R' . $year . sprintf('%05d', rand(0, 99999));
@@ -1328,16 +1328,16 @@ class globalClass extends db_connect
             $scoreId = 'R' . $year . sprintf('%05d', rand(0, 99999));
         }
 
-        $query = $this->conn->prepare("INSERT INTO `score_tbl` (`score_id`, `quiz_id`, `student_id`, `score`, `item_number`, `remarks`) VALUES (?, ?, ?, ?, ?, ?)");
-        $query->bind_param("sssiis", $scoreId, $quizId, $studentId, $score, $itemCount, $remarks);
+        $query = $this->conn->prepare("INSERT INTO `score_tbl` (`score_id`, `quiz_id`, `student_id`, `score`, `item_number`, `remarks`, `percentage`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("sssiisi", $scoreId, $quizId, $studentId, $score, $itemCount, $remarks, $scorePercentage);
 
         return $query->execute();
     }
 
-    public function updateScore($quizId, $studentId, $score, $itemCount, $remarks, $attempts)
+    public function updateScore($quizId, $studentId, $score, $itemCount, $remarks, $attempts, $scorePercentage)
     {
-        $query = $this->conn->prepare("UPDATE score_tbl SET score = ?, item_number = ?, remarks = ?, attempts = ? WHERE student_id = ? AND quiz_id = ?");
-        $query->bind_param("iisiss", $score, $itemCount, $remarks, $attempts, $studentId, $quizId);
+        $query = $this->conn->prepare("UPDATE score_tbl SET score = ?, item_number = ?, remarks = ?, attempts = ?, percentage = ? WHERE student_id = ? AND quiz_id = ?");
+        $query->bind_param("iisiiss", $score, $itemCount, $remarks, $attempts, $scorePercentage, $studentId, $quizId);
         if ($query->execute()) {
             return true;
         }

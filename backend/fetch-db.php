@@ -230,7 +230,8 @@ class fetchClass extends db_connect
             student.student_mname,
             score.item_number,
             score.remarks,
-            score.time
+            score.time,
+            score.percentage
         FROM
             quiz_tbl quiz
         INNER JOIN
