@@ -485,4 +485,17 @@ class fetchClass extends db_connect
             return [];
         }
     }
+
+    public function fetchAvgScore($quizId)
+    {
+        $query = $this->conn->prepare("SELECT AVG(score) AS average_score FROM score_tbl WHERE quiz_id = ?");
+        $query->bind_param("s", $quizId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_assoc();
+        } else {
+            return [];
+        }
+    }
 }

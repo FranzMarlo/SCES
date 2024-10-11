@@ -642,6 +642,10 @@
   align-items: center;
   justify-content: space-between;
 }
+.view-part{
+  display: flex;
+  flex-direction: column;
+}
 .analytics-tab {
   width: 100%;
   display: flex;
@@ -667,6 +671,27 @@
 }
 .item-group h3 {
   font-size: 1.8rem;
+}
+.item-group h4 {
+  font-size: 1.2rem;
+}
+.sized {
+  width: 30%;
+}
+.low-padding {
+  padding: 5px 10px !important;
+}
+.not-bold {
+  font-weight: 500 !important;
+}
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+.option-btn {
+  font-size: 1rem;
 }
 .item-group span {
   font-weight: bold;
@@ -792,28 +817,22 @@ select option {
 .save-btn:hover {
   background-color: #45a049;
 }
-.activate-btn {
-  background-color: #4caf50;
+.option-btn {
   color: white;
   padding: 10px 20px;
-  border: none;
   cursor: pointer;
-  float: right;
   border-radius: 10px;
   border: 2px solid #000;
+  width: 100%;
+}
+.activate-btn {
+  background-color: #4caf50;
 }
 .activate-btn:hover {
   background-color: #45a049;
 }
 .deactivate-btn {
   background-color: #f44336;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  float: right;
-  border-radius: 10px;
-  border: 2px solid #000;
 }
 .deactivate-btn:hover {
   background-color: #e53935;
@@ -950,6 +969,7 @@ canvas {
   color: #fff;
 }
 .failed {
+  border-radius: 15px;
   background-color: #c85650;
   color: #fff;
 }
@@ -968,12 +988,16 @@ canvas {
   width: 40%;
 }
 .good {
-  color: #4caf50;
+  border-radius: 15px;
+  background-color: #4caf50;
   font-weight: bold;
+  color: #fff;
 }
 .warning {
-  color: #b32c2c;
+  border-radius: 15px;
+  background-color: #c85650;;
   font-weight: bold;
+  color: #fff;
 }
 .empty {
   width: 100%;
@@ -1076,6 +1100,15 @@ canvas {
   .modal-content h4 {
     font-size: 1.3rem;
   }
+  .item-group h4 {
+    font-size: 1.1rem;
+  }
+  .sized {
+    width: 30%;
+  }
+  .low-padding {
+    padding: 5px;
+  }
 }
 @media (width < 768px) {
   .quiz-btn {
@@ -1132,8 +1165,17 @@ canvas {
   .choice-text {
     font-size: 1.2rem;
   }
-  .modal-content h4 {
-    font-size: 1.3rem;
+  .item-group h4 {
+    font-size: 1.1rem;
+  }
+  .sized {
+    width: 100%;
+  }
+  .low-padding {
+    padding: 0 5px;
+  }
+  .view-part{
+    flex-direction: row;
   }
 }
 @media (width < 600px) {
@@ -1185,9 +1227,6 @@ canvas {
   .box-part {
     padding: 5px;
   }
-  .failed {
-    color: #fff;
-  }
   .full-name {
     width: 80%;
   }
@@ -1214,6 +1253,18 @@ canvas {
     padding: 7px;
     font-size: 0.8rem;
     text-align: center;
+  }
+  .item-group h4 {
+    font-size: 1.1rem;
+  }
+  .sized {
+    width: 100%;
+  }
+  .low-padding {
+    padding: 0 5px;
+  }
+  .view-part{
+    flex-direction: column;
   }
 }
 @media (width < 375px) {

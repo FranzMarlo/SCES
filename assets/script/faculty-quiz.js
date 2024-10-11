@@ -572,6 +572,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const quizId = quizData.quiz_id;
         let dueDate;
 
+        // Handle due date formatting
         if (quizData.due_date == null) {
           dueDate = "Quiz hasn't been activated";
         } else {
@@ -602,7 +603,7 @@ document.addEventListener("DOMContentLoaded", function () {
               ...timeOptions,
             };
             const dayStr = dueDateObj.toLocaleString("en-US", weekdayOptions);
-            dueDate = `Due ${dayStr}`;
+            dueDate = `${dayStr}`;
           } else {
             const fullDateOptions = {
               month: "long",
@@ -618,6 +619,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         }
 
+        // Set quiz details
         document.getElementById("viewQuizId").value = quizId;
         document.getElementById(
           "viewQuizTitle"
@@ -636,7 +638,24 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById(
           "studentViewSection"
         ).textContent = `${quizData.grade_level} - ${quizData.section}`;
+        const averageScore = quizData.average_score;
+        document.getElementById("viewQuizAve").textContent =
+          parseFloat(averageScore);
 
+        // Handle quiz status image
+        const statusImage = document.getElementById("quiz-status");
+        if (quizData.status === "Inactive") {
+          statusImage.src = "/SCES/assets/images/status-inactive.png";
+          statusImage.alt = "status-inactive.png";
+        } else if (quizData.status === "Completed") {
+          statusImage.src = "/SCES/assets/images/quiz-past.png";
+          statusImage.alt = "quiz-past.png";
+        } else {
+          statusImage.src = "/SCES/assets/images/status-active.png";
+          statusImage.alt = "status-active.png";
+        }
+
+        // Handle option button (activate/deactivate)
         const optionButton = document.querySelector(".option-btn");
         optionButton.setAttribute("data-quiz-id", quizId);
 
@@ -650,6 +669,7 @@ document.addEventListener("DOMContentLoaded", function () {
           optionButton.textContent = "Deactivate Quiz";
         }
 
+        // Show modal and disable page scroll
         document.getElementById("viewQuizModal").style.display = "flex";
         document.body.style.overflow = "hidden";
       }
@@ -744,6 +764,19 @@ document.addEventListener("DOMContentLoaded", function () {
             const studentScoreBox = document.createElement("div");
             studentScoreBox.classList.add("student-score-box");
 
+            // Default classes for score and remarks
+            let scoreClass = "";
+            let remarksClass = "";
+
+            // Check remarks for score and remarks class
+            if (student.remarks === "Passed") {
+              scoreClass = "good"; // Passed
+              remarksClass = "passed"; // Passed
+            } else if (student.remarks === "Failed") {
+              scoreClass = "warning"; // Failed
+              remarksClass = "failed"; // Failed
+            }
+
             if (
               student.student_lname === null ||
               student.student_fname === null ||
@@ -770,29 +803,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="box-part full-name">${student.student_lname}, ${
                 student.student_fname
               } ${student.student_mname.charAt(0)}.</div>
-                <div class="box-part score ${
-                  student.remarks !== null
-                    ? student.remarks
-                      ? "good"
-                      : "bad"
-                    : ""
-                }">${student.score}/${student.item_number}</div>
+                <div class="box-part score ${scoreClass}">${
+                  student.score || "N/A"
+                }/${student.item_number || "N/A"}</div>
                 </div>
                 <div class="box-data">
-                <div class="box-part remarks ${
-                  student.remarks !== null
-                    ? student.remarks
-                      ? "passed"
-                      : "failed"
-                    : ""
-                }">
-                    ${
-                      student.remarks !== null
-                        ? student.remarks
-                          ? "Passed"
-                          : "Failed"
-                        : "N/A"
-                    }
+                <div class="box-part remarks ${remarksClass}">
+                    ${student.remarks || "N/A"}
                 </div>
                 <div class="box-part time">${
                   student.time ? student.time : "N/A"
@@ -812,6 +829,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     xhr.send(requestBody);
   }
+
 
   function fetchPassedStudents(quizId) {
     return new Promise((resolve) => {

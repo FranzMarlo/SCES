@@ -175,27 +175,55 @@
         <div class="view-container" id="view-quiz">
             <input type="hidden" id="viewQuizId">
             <div class="view-modal-row">
-                <h3 id="viewQuizTitle"></h3>
+                <h2 id="viewQuizTitle"></h2>
             </div>
-            <div class="view-modal-row">
-                <i class="fa-solid fa-book"></i>
-                <span id="viewQuizSubject"></span>
-            </div>
-            <div class="view-modal-row">
-                <i class="fa-solid fa-graduation-cap"></i>
-                <span id="viewQuizStudents"></span>
-            </div>
-            <div class="view-modal-row">
-                <i class="fa-solid fa-list-ol"></i>
-                <span id="viewQuizItem"></span>
-            </div>
-            <div class="view-modal-row">
-                <i class="fa-solid fa-square-check"></i>
-                <span id="viewQuizStatus"></span>
-            </div>
-            <div class="view-modal-row">
-                <i class="fa-solid fa-clock"></i>
-                <span id="viewQuizDue"></span>
+            <div class="view-part">
+                <div class="analytics-tab low-padding">
+                    <div class="tab-item sized">
+                        <img src="/SCES/assets/images/quiz-subject.png" alt="quiz-subject.png">
+                        <div class="item-group">
+                            <h4>Subject</h4>
+                            <span class="not-bold" id="viewQuizSubject"></span>
+                        </div>
+                    </div>
+                    <div class="tab-item sized">
+                        <img src="/SCES/assets/images/quiz-grade-section.png" alt="quiz-grade-section.png">
+                        <div class="item-group">
+                            <h4>Total Students</h4>
+                            <span class="not-bold" id="viewQuizStudents"></span>
+                        </div>
+                    </div>
+                    <div class="tab-item sized">
+                        <img src="/SCES/assets/images/quiz-question.png" alt="quiz-question.png">
+                        <div class="item-group">
+                            <h4>Total Questions</h4>
+                            <span class="not-bold" id="viewQuizItem"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="analytics-tab low-padding">
+                    <div class="tab-item sized">
+                        <img src="/SCES/assets/images/quiz-1.png" alt="quiz-1.png" id="quiz-status">
+                        <div class="item-group">
+                            <h4>Quiz Status</h4>
+                            <span class="not-bold" id="viewQuizStatus"></span>
+                        </div>
+                    </div>
+                    <div class="tab-item sized">
+                        <img src="/SCES/assets/images/quiz-due-date.png" alt="quiz-due-date.png">
+                        <div class="item-group">
+                            <h4>Due Date</h4>
+                            <span class="not-bold" id="viewQuizDue"></span>
+                        </div>
+                    </div>
+                    <div class="tab-item sized">
+                        <img src="/SCES/assets/images/quiz-rate.png" alt="quiz-rate.png">
+                        <div class="item-group">
+                            <h4>Average Score</h4>
+                            <span class="not-bold" id="viewQuizAve"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="graph-container">
                 <div class="graph">
@@ -208,7 +236,9 @@
                 </div>
             </div>
             <br>
-            <button class="option-btn" style="margin-top: 15px;"></button>
+            <div class="button-container">
+                <button class="option-btn" style="margin-top: 15px;"></button>
+            </div>
         </div>
         <div class="view-container" id="view-student">
             <div class="view-modal-row">
