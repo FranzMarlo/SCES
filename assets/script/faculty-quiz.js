@@ -1410,67 +1410,91 @@ document.addEventListener("DOMContentLoaded", function () {
         choicesContainer.innerHTML = ""; // Clear previous choices
 
         // Display choices
+        const labels = []; // To store choice labels for chart
         questionData.choices.forEach((choice, index) => {
           const choiceElement = document.createElement("p");
-          choiceElement.innerHTML = `${String.fromCharCode(65 + index)}. ${
+          const choiceLabel = `${String.fromCharCode(65 + index)}. ${
             choice.text
           }`;
+
+          choiceElement.innerHTML = choiceLabel;
           choiceElement.classList.add("choice-text");
+
           if (choice.value == 1) {
             choiceElement.classList.add("correct-choice");
           }
+
           choicesContainer.appendChild(choiceElement);
+
+          var correctCount = questionData.analytics.correct;
+          var incorrectCount = questionData.analytics.incorrect;
+          var totalResponses =
+            parseInt(correctCount) + parseInt(incorrectCount);
+          if (parseInt(correctCount) == 0) {
+            var accuracy = "0%";
+          }
+          var accuracy =
+            (parseInt(correctCount) / parseInt(totalResponses)) * 100 + "%";
+
+          document.getElementById("totalResponses").innerText = totalResponses;
+          document.getElementById("totalCorrect").innerText = correctCount;
+          document.getElementById("totalIncorrect").innerText = incorrectCount;
+          document.getElementById("accuracy").innerText = accuracy;
+
+          labels.push(String.fromCharCode(65 + index));
         });
 
-        var correctCount = questionData.analytics.correct;
-        var incorrectCount = questionData.analytics.incorrect;
-        var totalResponses = parseInt(correctCount) + parseInt(incorrectCount);
-        if (parseInt(correctCount) == 0) {
-          var accuracy = "0%";
-        }
-        var accuracy =
-          (parseInt(correctCount) / parseInt(totalResponses)) * 100 + "%";
+        const selections = questionData.choices.map(
+          (choice) => choice.selections
+        );
 
-        document.getElementById("totalResponses").innerText = totalResponses;
-        document.getElementById("totalCorrect").innerText = correctCount;
-        document.getElementById("totalIncorrect").innerText = incorrectCount;
-        document.getElementById("accuracy").innerText = accuracy;
-
-        renderPieChart(correctCount, incorrectCount);
+        renderPieChart(labels, selections);
       }
     };
 
     xhr.send(requestBody);
   }
 
-  function renderPieChart(correctCount, incorrectCount) {
+  function renderPieChart(labels, selections) {
     const ctx = document.getElementById("analyticsChart").getContext("2d");
 
+    // Destroy any existing chart instance to avoid conflicts
     if (window.analyticsChart instanceof Chart) {
       window.analyticsChart.destroy();
     }
 
-    // Create a new chart instance
+    // Create a new pie chart instance
     window.analyticsChart = new Chart(ctx, {
       type: "pie",
       data: {
-        labels: ["Correct", "Incorrect"],
+        labels: labels, // Choices' text as labels
         datasets: [
           {
-            label: "Student Answers",
-            data: [correctCount, incorrectCount],
-            backgroundColor: ["#4caf50", "#f44336"], // Green for correct, red for incorrect
+            label: "Student Selections",
+            data: selections, // Number of selections for each choice
+            backgroundColor: ["#4caf50", "#f44336", "#2196f3", "#ffeb3b"], // Different colors for each choice
             borderWidth: 2,
             borderColor: ["#000"],
           },
         ],
       },
       options: {
+        maintainAspectRatio: false,
         responsive: true,
         plugins: {
           legend: {
             display: true,
             position: "bottom",
+            fullSize: false, // Prevents resizing of legend box
+            labels: {
+              boxWidth: 40, // Width of the color box in the legend
+              padding: 10, // Padding between legend items
+            },
+          },
+        },
+        layout: {
+          padding: {
+            bottom: 30, // Adds padding at the bottom to make space for the legend
           },
         },
       },

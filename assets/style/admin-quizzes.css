@@ -906,13 +906,14 @@ button.controller.active {
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 220px;
+  height: 300px;
 }
 canvas {
   padding: 5px;
   background-color: transparent;
   border: none;
   height: 100%;
+  width: 100%;
 }
 .student-score-container {
   display: flex;

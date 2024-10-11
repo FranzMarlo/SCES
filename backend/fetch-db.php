@@ -463,4 +463,26 @@ class fetchClass extends db_connect
         }
     }
 
+    public function fetchChoiceSelections($questionId): array
+    {
+        $query = $this->conn->prepare("
+            SELECT 
+                choice_id, 
+                COUNT(answer_tbl.choice_id) as selections 
+            FROM 
+                answer_tbl 
+            WHERE 
+                answer_tbl.question_id = ? 
+            GROUP BY 
+                choice_id
+        ");
+        $query->bind_param("s", $questionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
 }

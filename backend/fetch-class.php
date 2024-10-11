@@ -182,20 +182,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $questionId = $_POST['question_id'];
 
         $question = $fetchDb->fetchQuestionInfo($questionId);
-
         $choices = $fetchDb->fetchChoices($questionId);
-
         $analytics = $fetchDb->fetchCorrectIncorrect($questionId);
+        $selections = $fetchDb->fetchChoiceSelections($questionId);
 
-        if ($question && $choices && $analytics) {
+        if ($question && $choices && $analytics && $selections) {
+            // Mapping selections into the choices array
             $response = [
                 'question' => $question['question'],
-                'choices' => array_map(function ($choice) {
+                'choices' => array_map(function ($choice) use ($selections) {
+                    // Find the selection count for this choice
+                    $choice['selections'] = 0;  // Default to 0 if not found
+                    foreach ($selections as $selection) {
+                        if ($selection['choice_id'] == $choice['choice_id']) {
+                            $choice['selections'] = $selection['selections'];
+                            break;
+                        }
+                    }
                     return [
                         'choice_id' => $choice['choice_id'],
                         'text' => $choice['choice'],
                         'order' => $choice['choice_order'],
                         'value' => $choice['value'],
+                        'selections' => $choice['selections'], // Include selections count
                     ];
                 }, $choices),
                 'analytics' => [
@@ -206,8 +215,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             echo json_encode($response);
         }
-
-
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

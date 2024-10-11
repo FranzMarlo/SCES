@@ -277,7 +277,7 @@
         </div>
         <div class="graph-container">
             <div class="graph-full">
-                <canvas id="analyticsChart" width="400" height="400"></canvas>
+                <canvas id="analyticsChart"></canvas>
             </div>
         </div>
     </div>
