@@ -1430,8 +1430,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".view-question").forEach((button) => {
     button.addEventListener("click", function () {
       const questionId = this.getAttribute("data-question-id");
-      questionModal.style.display = "flex";
-      document.body.style.overflow = "hidden";
+
       fetchQuestionDetails(questionId);
     });
   });
@@ -1451,59 +1450,99 @@ document.addEventListener("DOMContentLoaded", function () {
     )}&submitType=questionAnalytics`;
 
     xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        const questionData = JSON.parse(xhr.responseText);
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          try {
+            // Ensure the response is not empty before parsing
+            if (xhr.responseText.trim()) {
+              const questionData = JSON.parse(xhr.responseText);
 
-        // Display question title
-        document.getElementById("questionTitle").innerText =
-          questionData.question;
-        const choicesContainer = document.getElementById("questionChoices");
-        choicesContainer.innerHTML = ""; // Clear previous choices
+              // Check for error in the response
+              if (questionData.error || !questionData.choices.length) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "No students answered the quiz yet",
+                  confirmButtonColor: "#4CAF50",
+                });
+                return; // Exit the function to prevent showing the modal
+              }
 
-        // Display choices
-        const labels = []; // To store choice labels for chart
-        questionData.choices.forEach((choice, index) => {
-          const choiceElement = document.createElement("p");
-          const choiceLabel = `${String.fromCharCode(65 + index)}. ${
-            choice.text
-          }`;
+              questionModal.style.display = "flex";
+              document.body.style.overflow = "hidden";
 
-          choiceElement.innerHTML = choiceLabel;
-          choiceElement.classList.add("choice-text");
+              // Display question title
+              document.getElementById("questionTitle").innerText =
+                questionData.question;
+              const choicesContainer =
+                document.getElementById("questionChoices");
+              choicesContainer.innerHTML = ""; // Clear previous choices
 
-          if (choice.value == 1) {
-            choiceElement.classList.add("correct-choice");
+              // Display choices
+              const labels = []; // To store choice labels for chart
+              questionData.choices.forEach((choice, index) => {
+                const choiceElement = document.createElement("p");
+                const choiceLabel = `${String.fromCharCode(65 + index)}. ${
+                  choice.text
+                }`;
+
+                choiceElement.innerHTML = choiceLabel;
+                choiceElement.classList.add("choice-text");
+
+                if (choice.value == 1) {
+                  choiceElement.classList.add("correct-choice");
+                }
+
+                choicesContainer.appendChild(choiceElement);
+                labels.push(String.fromCharCode(65 + index));
+              });
+
+              const selections = questionData.choices.map(
+                (choice) => choice.selections
+              );
+
+              var correctCount = questionData.analytics.correct;
+              var incorrectCount = questionData.analytics.incorrect;
+              var totalResponses =
+                parseInt(correctCount) + parseInt(incorrectCount);
+              var accuracy =
+                correctCount == 0
+                  ? "0%"
+                  : (
+                      (parseInt(correctCount) / parseInt(totalResponses)) *
+                      100
+                    ).toFixed(2) + "%";
+
+              document.getElementById("totalResponses").innerText =
+                totalResponses;
+              document.getElementById("totalCorrect").innerText = correctCount;
+              document.getElementById("totalIncorrect").innerText =
+                incorrectCount;
+              document.getElementById("accuracy").innerText = accuracy;
+
+              // Only render chart and show modal if valid data is present
+              renderPieChart(labels, selections);
+              document.getElementById("questionModal").style.display = "block"; // Show the modal
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "No data received from the server",
+                confirmButtonColor: "#4CAF50",
+              });
+            }
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Error processing data",
+              confirmButtonColor: "#4CAF50",
+            });
           }
-
-          choicesContainer.appendChild(choiceElement);
-
-          var correctCount = questionData.analytics.correct;
-          var incorrectCount = questionData.analytics.incorrect;
-          var totalResponses =
-            parseInt(correctCount) + parseInt(incorrectCount);
-          if (parseInt(correctCount) == 0) {
-            var accuracy = "0%";
-          } else {
-            var accuracy =
-              (
-                (parseInt(correctCount) / parseInt(totalResponses)) *
-                100
-              ).toFixed(2) + "%";
-          }
-
-          document.getElementById("totalResponses").innerText = totalResponses;
-          document.getElementById("totalCorrect").innerText = correctCount;
-          document.getElementById("totalIncorrect").innerText = incorrectCount;
-          document.getElementById("accuracy").innerText = accuracy;
-
-          labels.push(String.fromCharCode(65 + index));
-        });
-
-        const selections = questionData.choices.map(
-          (choice) => choice.selections
-        );
-
-        renderPieChart(labels, selections);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Server error",
+            confirmButtonColor: "#4CAF50",
+          });
+        }
       }
     };
 

@@ -187,41 +187,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['error' => 'Quiz ID not provided']);
         }
     } else if ($submitType === 'questionAnalytics') {
-        $questionId = $_POST['question_id'];
+        if (isset($_POST['question_id'])) {
+            $questionId = $_POST['question_id'];
 
-        $question = $fetchDb->fetchQuestionInfo($questionId);
-        $choices = $fetchDb->fetchChoices($questionId);
-        $analytics = $fetchDb->fetchCorrectIncorrect($questionId);
-        $selections = $fetchDb->fetchChoiceSelections($questionId);
+            // Fetch data
+            $question = $fetchDb->fetchQuestionInfo($questionId);
+            $choices = $fetchDb->fetchChoices($questionId);
+            $analytics = $fetchDb->fetchCorrectIncorrect($questionId);
+            $selections = $fetchDb->fetchChoiceSelections($questionId);
 
-        if ($question && $choices && $analytics && $selections) {
-            // Mapping selections into the choices array
-            $response = [
-                'question' => $question['question'],
-                'choices' => array_map(function ($choice) use ($selections) {
-                    // Find the selection count for this choice
-                    $choice['selections'] = 0;  // Default to 0 if not found
-                    foreach ($selections as $selection) {
-                        if ($selection['choice_id'] == $choice['choice_id']) {
-                            $choice['selections'] = $selection['selections'];
-                            break;
+            // Check if all necessary data is present
+            if ($question && $choices && $analytics && $selections) {
+                // Mapping selections into the choices array
+                $response = [
+                    'question' => $question['question'],
+                    'choices' => array_map(function ($choice) use ($selections) {
+                        // Find the selection count for this choice
+                        $choice['selections'] = 0;  // Default to 0 if not found
+                        foreach ($selections as $selection) {
+                            if ($selection['choice_id'] == $choice['choice_id']) {
+                                $choice['selections'] = $selection['selections'];
+                                break;
+                            }
                         }
-                    }
-                    return [
-                        'choice_id' => $choice['choice_id'],
-                        'text' => $choice['choice'],
-                        'order' => $choice['choice_order'],
-                        'value' => $choice['value'],
-                        'selections' => $choice['selections'], // Include selections count
-                    ];
-                }, $choices),
-                'analytics' => [
-                    'correct' => $analytics['correct'],
-                    'incorrect' => $analytics['incorrect']
-                ]
-            ];
+                        return [
+                            'choice_id' => $choice['choice_id'],
+                            'text' => $choice['choice'],
+                            'order' => $choice['choice_order'],
+                            'value' => $choice['value'],
+                            'selections' => $choice['selections'], // Include selections count
+                        ];
+                    }, $choices),
+                    'analytics' => [
+                        'correct' => $analytics['correct'],
+                        'incorrect' => $analytics['incorrect']
+                    ]
+                ];
 
-            echo json_encode($response);
+                echo json_encode($response);
+            } else {
+                // If any data is missing, return a proper error response
+                echo json_encode(['error' => 'Data not found or incomplete']);
+            }
+        } else {
+            echo json_encode(['error' => 'Question ID not provided']);
         }
     } else {
         echo json_encode(['error' => 'Invalid submit type']);

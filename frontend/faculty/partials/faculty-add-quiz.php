@@ -1,5 +1,5 @@
 <div id="addQuizModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 600px">
         <div class="modal-head">
             <h2>Add New Quiz</h2>
             <span class="close-btn" id="closeAddQuiz">&times;</span>
@@ -122,7 +122,7 @@
 </div>
 
 <div id="editQuizModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 600px">
         <div class="modal-head">
             <h2>Edit Quiz</h2>
             <span id="closeEditQuiz" class="close-btn">&times;</span>
