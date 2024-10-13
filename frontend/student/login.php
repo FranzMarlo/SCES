@@ -5,6 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/head.php';
 </head>
 
 <body>
+  <div class="max-content">
   <div class="flex-container">
     <div class="column left">
       <div class="opening">
@@ -46,6 +47,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/head.php';
         </div>
       </a>
     </div>
+  </div>
   </div>
   <?php
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/footer.php';

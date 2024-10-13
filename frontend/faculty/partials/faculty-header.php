@@ -7,3 +7,4 @@
         <img src="/SCES/storage/faculty/images/<?php echo $image; ?>" alt="admin icon">
     </div>
 </div>
+<div class="max-content">

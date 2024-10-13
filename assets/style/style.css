@@ -8,8 +8,17 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: #fff;
+  display: flex;
+  justify-content: center;
+}
+.max-content{
+  display: flex;
+  width: 100%;
+  max-width: 1600px;
+  gap: 10px;
 }
 .flex-container {
+  width: 100%;
   margin: 40px 70px;
   align-items: center;
 }
@@ -66,18 +75,15 @@ body {
   font-weight: bold;
   width: 100%;
 }
-
 .separator::before,
 .separator::after {
   content: "";
   flex: 1;
   border-bottom: 1px solid #b3b3b3;
 }
-
 .separator:not(:empty)::before {
   margin-right: 25px;
 }
-
 .separator:not(:empty)::after {
   margin-left: 25px;
 }
@@ -114,6 +120,8 @@ a.button-container{
   margin-bottom: 30px;
 }
 .input-icons {
+  width: 70%;
+  max-width: 320px;
   margin-bottom: 25px;
   position: relative;
 }
@@ -135,7 +143,7 @@ a.button-container{
 }
 .form-wrapper form .input-icons input {
   border-radius: 30px;
-  min-width: 320px;
+  width: 100%;
   padding: 0 50px;
   height: 45px;
   box-shadow: -4px 0 5px -2px #5b5b5b;
@@ -158,7 +166,7 @@ a.button-container{
 }
 .form-wrapper form .input-icons select {
   border-radius: 30px;
-  min-width: 320px;
+  width: 100%;
   padding: 0 45px;
   height: 45px;
   box-shadow: -4px 0 5px -2px #5b5b5b;
@@ -228,10 +236,11 @@ a.button-container{
     margin: 0 10px;
     width: 100%;
   }
-  .form-wrapper form .input-icons input,
-  .form-wrapper form .input-icons select {
-    min-width: 0;
-    width: 250px;
+  .input-icons {
+    width: 90%;
+  }
+  .form-wrapper form {
+    padding: 3rem;
   }
 }
 @media (width < 767px) {
@@ -292,16 +301,17 @@ a.button-container{
   .input-icons {
     margin-bottom: 20px;
   }
-  .form-wrapper form .input-icons input {
-    min-width: 0;
-    width: 400px;
-  }
-  .form-wrapper form .input-icons select {
-    min-width: 0;
-    width: 400px;
-  }
   .form-wrapper form input[type="submit"] {
     margin-top: 0;
+  }
+  .icon {
+    padding: 12px;
+  }
+  .form-wrapper form .input-icons input {
+    height: 40px;
+  }
+  .form-wrapper form .input-icons select {
+    height: 40px;
   }
 }
 @media (width < 600px) {
@@ -354,21 +364,17 @@ a.button-container{
   }
   .form-wrapper form h1 {
     margin: 0;
-    font-size: 20px;
-    margin-bottom: 30px;
-  }
-  .input-icons {
+    font-size: 1.7rem;
     margin-bottom: 20px;
   }
-  .form-wrapper form .input-icons input {
-    min-width: 0;
-    width: 250px;
-  }
-  .form-wrapper form .input-icons select{
-    min-width: 0;
-    width: 250px;
+  .input-icons {
+    max-width: 250px;
+    margin-bottom: 20px;
   }
   .form-wrapper form input[type="submit"] {
     margin-top: 0;
+  }
+  .form-wrapper form {
+    padding: 2rem;
   }
 }

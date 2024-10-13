@@ -13,6 +13,13 @@ body {
   padding: 10px 40px;
   gap: 20px;
 }
+.max-content{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1440px;
+  gap: 10px;
+}
 .pop-up {
   display: none;
 }
@@ -34,6 +41,7 @@ body {
   gap: 20px;
   transition: all 0.3s;
   border: 2px solid #000;
+  max-height: 1080px;
 }
 .sidebar .head {
   display: flex;
@@ -106,6 +114,7 @@ body {
   flex-direction: column;
   flex: 1;
   gap: 10px;
+  align-items: center;
 }
 .header {
   display: flex;
@@ -173,6 +182,7 @@ body {
   height: 150px;
 }
 .box-container {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;

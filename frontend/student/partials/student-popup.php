@@ -17,6 +17,12 @@
                         <span class="text">Home</span>
                     </a>
                 </li>
+                <li class="<?= $current_page == 'profile.php' ? 'active' : '' ?>">
+                    <a href="/SCES/frontend/student/profile.php">
+                        <i class="fa-solid fa-user icon"></i>
+                        <span class="text">My Profile</span>
+                    </a>
+                </li>
                 <li class="<?= $current_page == 'subject.php' ? 'active' : '' ?>">
                     <a href="/SCES/frontend/student/subject.php">
                         <i class="fa-solid fa-briefcase icon"></i>
