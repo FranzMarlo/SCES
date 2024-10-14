@@ -18,6 +18,7 @@
   font-size: 1.5rem;
 }
 .profile-container {
+  width: 100%;
   display: flex;
   flex-direction: column;
   border: 2px solid #000;
@@ -113,10 +114,10 @@
   text-transform: uppercase;
 }
 .blue-bg {
-  background-color: #5a85f5;
+  background-color: #5a85f5 !important;
 }
 .pink-bg {
-  background-color: #fa4e91;
+  background-color: #fa4e91 !important;
 }
 .blue {
   text-shadow: -2px -2px 0 #5a85f5, 2px -2px 0 #5a85f5, -2px 2px 0 #5a85f5,
@@ -152,10 +153,10 @@
   font-weight: bold;
 }
 .male {
-  background-color: #c5e3ff;
+  background-color: #c5e3ff !important;
 }
 .female {
-  background-color: #ffd6e6;
+  background-color: #ffd6e6 !important;
 }
 .side-controller {
   width: 100%;
@@ -247,14 +248,33 @@
   font-size: 1.3rem;
 }
 .data-table {
+  border: 2px solid #000;
   margin-top: 20px;
+  max-width: 1100px;
+  border-collapse: collapse;
+  background-color: #f9f9f9;
 }
-.dataTables_wrapper {
-  margin: 20px 0;
+/* Styling table headers */
+.data-table thead th {
+  color: white; /* White text for better contrast */
+  font-weight: bold;
+  text-align: left;
+  padding: 12px; /* Padding for spacing */
+  border-bottom: 3px solid #ddd; /* Clear separation between header and rows */
 }
-h2 {
-  margin-top: 20px;
-  font-size: 24px;
+/* Styling table rows */
+.data-table tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd; /* Row separator */
+  text-align: left; /* Align text to left */
+}
+/* Styling alternating rows for better readability */
+.data-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Light gray for alternate rows */
+}
+
+.data-table tbody tr:hover {
+  background-color: #eaeaea; /* Slightly darker on hover */
 }
 @media (width < 1199px) {
   .profile-panel .title-box img {
@@ -282,8 +302,14 @@ h2 {
   .info-panel .title-box {
     margin-bottom: 10px;
   }
+  .data-table {
+    max-width: 900px !important;
+  }
 }
 @media (width < 992px) {
+  .data-table {
+    max-width: 700px !important;
+  }
 }
 @media (width < 768px) {
   .profile-panel .title-box img {
@@ -294,6 +320,9 @@ h2 {
   }
   .id-box {
     min-width: 550px;
+  }
+  .data-table {
+    max-width: 500px !important;
   }
 }
 @media (width < 600px) {
@@ -338,6 +367,9 @@ h2 {
   .info-panel .title-box {
     margin-bottom: 10px;
   }
+  .data-table {
+    max-width: 450px !important;
+  }
 }
 @media (width < 460px) {
   .id-box {
@@ -351,6 +383,9 @@ h2 {
   }
   .dashed-line {
     margin: 15px 0;
+  }
+  .data-table {
+    max-width: 380px !important;
   }
 }
 @media (width < 425px) {
@@ -366,6 +401,9 @@ h2 {
   }
   .id-col span {
     font-size: 0.9rem;
+  }
+  .data-table {
+    max-width: 350px !important;
   }
 }
 @media (width < 375px) {
@@ -397,5 +435,11 @@ h2 {
   }
   .id-col span {
     font-size: 0.7rem;
+  }
+  .data-table {
+    max-width: 300px;
+  }
+  .data-table {
+    max-width: 300px !important;
   }
 }

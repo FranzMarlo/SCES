@@ -2,8 +2,9 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php';
 ?>
-<link rel="stylesheet" href="/SCES/assets/style/student-profile.css" />
 <link rel="stylesheet" href="/SCES/assets/style/datatables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="/SCES/assets/style/student-profile.css" />
 <title>Profile | SCES Online Learning Platform</title>
 </head>
 
@@ -174,30 +175,41 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                         </div>
                     </div>
                     <div class="profile-tab">
-                        <h2>Quiz Scores</h2>
-                        <table id="quizScoresTable" class="display data-table" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Quiz Number</th>
-                                    <th>Subject</th>
-                                    <th>Title</th>
-                                    <th>Score</th>
-                                    <th>Total Question</th>
-                                    <th>Submit Time</th>
-                                </tr>
-                            </thead>
-                        </table>
+                        <div class="title-box">
+                            <img src="/SCES/assets/images/profile-scores.png">
+                            <h1>Quiz Scores</h1>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="quizScoresTable" class="display data-table">
+                                <thead>
+                                    <tr class="<?php echo htmlspecialchars(getMottoStyle($gender)); ?>">
+                                        <th>Quiz No.</th>
+                                        <th>Subject</th>
+                                        <th>Title</th>
+                                        <th>Score</th>
+                                        <th>Total Question</th>
+                                        <th>Date Taken</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
 
-                        <h2>Grades</h2>
-                        <table id="gradesTable" class="display data-table" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Subject</th>
-                                    <th>Grade</th>
-                                    <th>Remarks</th>
-                                </tr>
-                            </thead>
-                        </table>
+                        <div class="title-box">
+                            <img src="/SCES/assets/images/profile-grades.png">
+                            <h1>Grades</h1>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="gradesTable" class="display data-table">
+                                <thead>
+                                    <tr class="<?php echo htmlspecialchars(getMottoStyle($gender)); ?>">
+                                        <th>Subject</th>
+                                        <th>Grade</th>
+                                        <th>Remarks</th>
+                                        <th>Quarter</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -207,4 +219,5 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
     ?>
     <script src="/SCES/assets/script/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
     <script src="/SCES/assets/script/student-profile.js"></script>
