@@ -232,6 +232,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode(['error' => 'Question ID not provided']);
         }
+    } else if ($submitType === 'getQuizRecords') {
+        session_start();
+        $studentId = $_SESSION['student_id'];
+
+        $studentRecords = $fetchDb->studentFetchScores($studentId);
+        echo json_encode($studentRecords);
+    } else if ($submitType === 'getGrades') {
+        session_start();
+        $studentId = $_SESSION['student_id'];
+
+        $studentGrades = $fetchDb->studentFetchGrades($studentId);
+        echo json_encode($studentGrades);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

@@ -3,6 +3,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/student-profile.css" />
+<link rel="stylesheet" href="/SCES/assets/style/datatables.min.css" />
 <title>Profile | SCES Online Learning Platform</title>
 </head>
 
@@ -109,7 +110,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                                     <p>Birthday</p>
                                     <span>August 14, 2002</span>
                                 </div>
-
                             </div>
                         </div>
                         <div class="info-panel">
@@ -173,6 +173,32 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                             </div>
                         </div>
                     </div>
+                    <div class="profile-tab">
+                        <h2>Quiz Scores</h2>
+                        <table id="quizScoresTable" class="display data-table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Quiz Number</th>
+                                    <th>Subject</th>
+                                    <th>Title</th>
+                                    <th>Score</th>
+                                    <th>Total Question</th>
+                                    <th>Submit Time</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <h2>Grades</h2>
+                        <table id="gradesTable" class="display data-table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Grade</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -180,3 +206,5 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
     <?php
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
     ?>
+    <script src="/SCES/assets/script/datatables.min.js"></script>
+    <script src="/SCES/assets/script/student-profile.js"></script>

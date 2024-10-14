@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Barcode+39&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Barcode+39&display=swap");
 .profile-panel {
   width: 100%;
   display: flex;
@@ -80,7 +80,7 @@
   flex-direction: column;
   align-items: center;
 }
-.logo{
+.logo {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -106,25 +106,25 @@
   border-radius: 20px;
   padding: 5px;
 }
-.motto p{
+.motto p {
   font-weight: bold;
   color: #fff;
   font-size: 1rem;
   text-transform: uppercase;
 }
-.blue-bg{
+.blue-bg {
   background-color: #5a85f5;
 }
-.pink-bg{
+.pink-bg {
   background-color: #fa4e91;
 }
-.blue{
+.blue {
   text-shadow: -2px -2px 0 #5a85f5, 2px -2px 0 #5a85f5, -2px 2px 0 #5a85f5,
     2px 2px 0 #5a85f5;
 }
-.pink{
+.pink {
   text-shadow: -2px -2px 0 #fa4e91, 2px -2px 0 #fa4e91, -2px 2px 0 #fa4e91,
-  2px 2px 0 #fa4e91;
+    2px 2px 0 #fa4e91;
 }
 .id-info {
   width: 100%;
@@ -173,7 +173,7 @@
   cursor: pointer;
   border: 2px solid #000;
 }
-.side-controller .tab-item:hover{
+.side-controller .tab-item:hover {
   background-color: #fce344;
 }
 .side-controller .tab-item.active {
@@ -211,14 +211,14 @@
 .epp {
   background-color: #d9ae9d;
 }
-.profile-tab{
+.profile-tab {
   width: 100%;
   display: flex;
   flex-direction: column;
   padding: 20px;
   gap: 20px;
 }
-.info-panel{
+.info-panel {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -227,24 +227,34 @@
   border-radius: 30px;
   padding: 20px;
 }
-.info-row{
+.info-row {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
 }
-.info-col{
+.info-col {
   display: flex;
   flex-direction: column;
   width: 25%;
 }
-.info-col p{
+.info-col p {
   font-size: 1.2rem;
   color: #797979;
   margin-bottom: 5px;
 }
-.info-col span{
-  font-size: 1.4rem;
+.info-col span {
+  font-size: 1.3rem;
+}
+.data-table {
+  margin-top: 20px;
+}
+.dataTables_wrapper {
+  margin: 20px 0;
+}
+h2 {
+  margin-top: 20px;
+  font-size: 24px;
 }
 @media (width < 1199px) {
   .profile-panel .title-box img {
@@ -252,6 +262,25 @@
   }
   .profile-panel .title-box h1 {
     font-size: 1.4rem;
+  }
+  .info-panel {
+    gap: 0;
+  }
+  .info-row {
+    flex-wrap: wrap;
+  }
+  .info-col p {
+    font-size: 1.1rem;
+  }
+  .info-col span {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  .info-col {
+    width: 50%;
+  }
+  .info-panel .title-box {
+    margin-bottom: 10px;
   }
 }
 @media (width < 992px) {
@@ -263,7 +292,7 @@
   .profile-panel .title-box h1 {
     font-size: 1.3rem;
   }
-  .id-box{
+  .id-box {
     min-width: 550px;
   }
 }
@@ -271,89 +300,102 @@
   .profile-bg {
     height: 320px;
   }
-  .id-box{
+  .id-box {
     min-width: 450px;
   }
-  .id-image img{
+  .id-image img {
     height: 150px;
     width: 150px;
   }
-  .id-image span{
+  .id-image span {
     font-size: 2rem;
   }
-  .logo img{
+  .logo img {
     height: 50px;
   }
-  .logo span{
+  .logo span {
     font-size: 2.2rem;
   }
-  .motto p{
+  .motto p {
     font-size: 0.7rem;
   }
-  .id-col p{
+  .id-col p {
     font-size: 0.7rem;
   }
-  .id-col span{
+  .id-col span {
     font-size: 1rem;
+  }
+  .info-col p {
+    font-size: 1rem;
+  }
+  .info-col span {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  .info-col {
+    width: 100%;
+  }
+  .info-panel .title-box {
+    margin-bottom: 10px;
   }
 }
 @media (width < 460px) {
-  .id-box{
+  .id-box {
     top: 25px;
     min-width: 400px;
     padding: 15px;
   }
-  .id-image img{
+  .id-image img {
     height: 120px;
     width: 120px;
   }
-  .dashed-line{
+  .dashed-line {
     margin: 15px 0;
   }
 }
 @media (width < 425px) {
-  .profile-bg{
+  .profile-bg {
     height: 300px;
   }
-  .id-box{
+  .id-box {
     min-width: 350px;
     padding: 15px;
   }
-  .id-col p{
+  .id-col p {
     font-size: 0.6rem;
   }
-  .id-col span{
+  .id-col span {
     font-size: 0.9rem;
   }
 }
 @media (width < 375px) {
-  .id-box{
+  .id-box {
     min-width: 300px;
     padding: 10px 15px;
   }
-  .dashed-line{
+  .dashed-line {
     margin: 10px 0;
   }
-  .id-image img{
+  .id-image img {
     height: 120px;
     width: 120px;
   }
-  .id-image span{
+  .id-image span {
     font-size: 1.8rem;
   }
-  .logo img{
+  .logo img {
     height: 40px;
   }
-  .logo span{
+  .logo span {
     font-size: 2rem;
   }
-  .motto p{
+  .motto p {
     font-size: 0.5rem;
   }
-  .id-col p{
+  .id-col p {
     font-size: 0.5rem;
   }
-  .id-col span{
+  .id-col span {
     font-size: 0.7rem;
   }
 }
