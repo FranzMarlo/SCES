@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Barcode+39&display=swap');
+.profile-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.profile-panel .title-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.profile-panel .title-box img {
+  height: 2.5rem;
+  margin-right: 15px;
+}
+.profile-panel .title-box h1 {
+  font-size: 1.5rem;
+}
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #000;
+  border-radius: 30px;
+}
+.profile-bg {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  background-image: url("/SCES/assets/images/kids-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+.id-box {
+  top: 30px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  border-radius: 20px;
+  border: 2px solid #000;
+  background-color: #c5e3ff;
+  min-width: 600px;
+  padding: 20px;
+}
+.id-image {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  margin-right: 15px;
+}
+.id-image img {
+  height: 180px;
+  width: 200px;
+  margin-bottom: 10px;
+  border: 2px solid #000;
+}
+.id-image span {
+  font-family: "Libre Barcode 39", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3rem;
+}
+.id-section {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+.id-logo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.logo{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+.logo img {
+  height: 60px;
+  margin-right: 10px;
+}
+.logo span {
+  font-family: "Balsamiq Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 3rem;
+  color: #fff;
+}
+.motto {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  border-radius: 20px;
+  padding: 5px;
+}
+.motto p{
+  font-weight: bold;
+  color: #fff;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+.blue-bg{
+  background-color: #5a85f5;
+}
+.pink-bg{
+  background-color: #fa4e91;
+}
+.blue{
+  text-shadow: -2px -2px 0 #5a85f5, 2px -2px 0 #5a85f5, -2px 2px 0 #5a85f5,
+    2px 2px 0 #5a85f5;
+}
+.pink{
+  text-shadow: -2px -2px 0 #fa4e91, 2px -2px 0 #fa4e91, -2px 2px 0 #fa4e91,
+  2px 2px 0 #fa4e91;
+}
+.id-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.id-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.id-col {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.id-col p {
+  font-size: 0.8rem;
+}
+.id-col span {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.male {
+  background-color: #c5e3ff;
+}
+.female {
+  background-color: #ffd6e6;
+}
+.side-controller {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  padding: 15px;
+}
+.side-controller .tab-item {
+  width: 30%;
+  border-radius: 30px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border: 2px solid #000;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+.side-controller .tab-item:hover,
+.side-controller .tab-item.active {
+  background-color: #f0bad1;
+}
+.dashed-line {
+  border: none;
+  border-top: 2px dashed #000;
+  margin: 20px 0;
+}
+.fil {
+  background-color: #ff8080;
+}
+.eng {
+  background-color: #ffb480;
+}
+.math {
+  background-color: #e1e149;
+}
+.sci {
+  background-color: #42d6a4;
+}
+.esp {
+  background-color: #08cad1;
+}
+.mt {
+  background-color: #59adf6;
+}
+.ap {
+  background-color: #f0bad1;
+}
+.mapeh {
+  background-color: #a3adff;
+}
+.epp {
+  background-color: #d9ae9d;
+}
+
+@media (width < 1199px) {
+  .profile-panel .title-box img {
+    height: 2.3rem;
+  }
+  .profile-panel .title-box h1 {
+    font-size: 1.4rem;
+  }
+}
+@media (width < 992px) {
+}
+@media (width < 768px) {
+  .profile-panel .title-box img {
+    height: 2.1rem;
+  }
+  .profile-panel .title-box h1 {
+    font-size: 1.3rem;
+  }
+}
+@media (width < 600px) {
+}

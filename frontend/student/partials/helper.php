@@ -112,3 +112,39 @@ function getQuizAttemptCount($attempts)
         return "Invalid number of attempts.";
     }
 }
+
+function getProfileImage($gender)
+{
+    if ($gender == 'Female') {
+        return 'student-female.png';
+    } else {
+        return 'student-male.png';
+    }
+}
+
+function getLogoStyle($gender)
+{
+    if ($gender == 'Female') {
+        return 'pink';
+    } else {
+        return 'blue';
+    }
+}
+
+function getMottoStyle($gender)
+{
+    if ($gender == 'Female') {
+        return 'pink-bg';
+    } else {
+        return 'blue-bg';
+    }
+}
+
+function getIdBg($gender){
+    if ($gender == 'Female') {
+        return 'female';
+    }
+    else{
+        return 'male';
+    }
+}
