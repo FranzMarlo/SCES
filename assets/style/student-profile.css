@@ -162,20 +162,22 @@
   display: flex;
   flex-direction: row;
   gap: 15px;
-  padding: 15px;
+  padding: 15px 20px;
 }
 .side-controller .tab-item {
-  width: 30%;
+  width: fit-content;
   border-radius: 30px;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  border: 2px solid #000;
   padding: 10px 15px;
   cursor: pointer;
+  border: 2px solid #000;
 }
-.side-controller .tab-item:hover,
+.side-controller .tab-item:hover{
+  background-color: #fce344;
+}
 .side-controller .tab-item.active {
-  background-color: #f0bad1;
+  background-color: #fce344;
 }
 .dashed-line {
   border: none;
@@ -209,7 +211,41 @@
 .epp {
   background-color: #d9ae9d;
 }
-
+.profile-tab{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+}
+.info-panel{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 2px solid #000;
+  border-radius: 30px;
+  padding: 20px;
+}
+.info-row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+.info-col{
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+}
+.info-col p{
+  font-size: 1.2rem;
+  color: #797979;
+  margin-bottom: 5px;
+}
+.info-col span{
+  font-size: 1.4rem;
+}
 @media (width < 1199px) {
   .profile-panel .title-box img {
     height: 2.3rem;
@@ -227,6 +263,97 @@
   .profile-panel .title-box h1 {
     font-size: 1.3rem;
   }
+  .id-box{
+    min-width: 550px;
+  }
 }
 @media (width < 600px) {
+  .profile-bg {
+    height: 320px;
+  }
+  .id-box{
+    min-width: 450px;
+  }
+  .id-image img{
+    height: 150px;
+    width: 150px;
+  }
+  .id-image span{
+    font-size: 2rem;
+  }
+  .logo img{
+    height: 50px;
+  }
+  .logo span{
+    font-size: 2.2rem;
+  }
+  .motto p{
+    font-size: 0.7rem;
+  }
+  .id-col p{
+    font-size: 0.7rem;
+  }
+  .id-col span{
+    font-size: 1rem;
+  }
+}
+@media (width < 460px) {
+  .id-box{
+    top: 25px;
+    min-width: 400px;
+    padding: 15px;
+  }
+  .id-image img{
+    height: 120px;
+    width: 120px;
+  }
+  .dashed-line{
+    margin: 15px 0;
+  }
+}
+@media (width < 425px) {
+  .profile-bg{
+    height: 300px;
+  }
+  .id-box{
+    min-width: 350px;
+    padding: 15px;
+  }
+  .id-col p{
+    font-size: 0.6rem;
+  }
+  .id-col span{
+    font-size: 0.9rem;
+  }
+}
+@media (width < 375px) {
+  .id-box{
+    min-width: 300px;
+    padding: 10px 15px;
+  }
+  .dashed-line{
+    margin: 10px 0;
+  }
+  .id-image img{
+    height: 120px;
+    width: 120px;
+  }
+  .id-image span{
+    font-size: 1.8rem;
+  }
+  .logo img{
+    height: 40px;
+  }
+  .logo span{
+    font-size: 2rem;
+  }
+  .motto p{
+    font-size: 0.5rem;
+  }
+  .id-col p{
+    font-size: 0.5rem;
+  }
+  .id-col span{
+    font-size: 0.7rem;
+  }
 }

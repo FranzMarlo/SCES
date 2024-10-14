@@ -148,3 +148,22 @@ function getIdBg($gender){
         return 'male';
     }
 }
+
+function getCurrentSchoolYear() {
+    // Get the current year and month
+    $currentYear = date("Y");
+    $currentMonth = date("n"); // n = numeric representation of a month (1-12)
+
+    // Check if the month is before or after the start of the school year (June)
+    if ($currentMonth >= 6) {
+        // School year starts in June and ends in April of the next year
+        $startYear = $currentYear;
+        $endYear = $currentYear + 1;
+    } else {
+        // If it's before June, we're still in the previous school year
+        $startYear = $currentYear - 1;
+        $endYear = $currentYear;
+    }
+
+    return $startYear . " - " . $endYear;
+}

@@ -50,7 +50,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                                         </div>
                                         <div class="id-col">
                                             <p>SCHOOL YEAR</p>
-                                            <span>2024-2025</span>
+                                            <span><?php echo htmlspecialchars(getCurrentSchoolYear()); ?></span>
                                         </div>
                                     </div>
                                     <div class="id-row">
@@ -72,7 +72,107 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                         <div class="tab-item">Records</div>
                         <div class="tab-item">Performance</div>
                     </div>
+                    <div class="profile-tab">
+                        <div class="info-panel">
+                            <div class="title-box">
+                                <img src="/SCES/assets/images/personal-info.png">
+                                <h1>Personal Information</h1>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-col">
+                                    <p>Last Name</p>
+                                    <span><?php echo htmlspecialchars($studentLname); ?></span>
+                                </div>
+                                <div class="info-col">
+                                    <p>First Name</p>
+                                    <span><?php echo htmlspecialchars($studentFname); ?></span>
+                                </div>
+                                <div class="info-col">
+                                    <p>Middle Name</p>
+                                    <span><?php echo htmlspecialchars($studentMname); ?></span>
+                                </div>
+                                <div class="info-col">
+                                    <p>Suffix</p>
+                                    <span>N/A</span>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-col">
+                                    <p>Gender</p>
+                                    <span><?php echo htmlspecialchars($gender); ?></span>
+                                </div>
+                                <div class="info-col">
+                                    <p>Age</p>
+                                    <span><?php echo htmlspecialchars($age); ?></span>
+                                </div>
+                                <div class="info-col">
+                                    <p>Birthday</p>
+                                    <span>August 14, 2002</span>
+                                </div>
 
+                            </div>
+                        </div>
+                        <div class="info-panel">
+                            <div class="title-box">
+                                <img src="/SCES/assets/images/school-info.png">
+                                <h1>School Information</h1>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-col">
+                                    <p>Student No.</p>
+                                    <span>Doe</span>
+                                </div>
+                                <div class="info-col">
+                                    <p>LRN</p>
+                                    <span>John</span>
+                                </div>
+                                <div class="info-col">
+                                    <p>Grade Level</p>
+                                    <span><?php echo htmlspecialchars($gradeLevel); ?></span>
+                                </div>
+                                <div class="info-col">
+                                    <p>Section</p>
+                                    <span><?php echo htmlspecialchars($section); ?></span>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-col">
+                                    <p>Email</p>
+                                    <span><?php echo htmlspecialchars($email); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-panel">
+                            <div class="title-box">
+                                <img src="/SCES/assets/images/background-info.png">
+                                <h1>Background Information</h1>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-col">
+                                    <p>City/State</p>
+                                    <span><?php echo htmlspecialchars($city); ?></span>
+                                </div>
+                                <div class="info-col">
+                                    <p>Barangay</p>
+                                    <span><?php echo htmlspecialchars($barangay); ?></span>
+                                </div>
+                                <div class="info-col">
+                                    <p>Street</p>
+                                    <span><?php echo htmlspecialchars($street); ?></span>
+                                </div>
+                                <div class="info-col">
+                                    <p>Guardian Name</p>
+                                    <span><?php echo htmlspecialchars($guardianName); ?></span>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-col">
+                                    <p>Guardian Contact</p>
+                                    <span><?php echo htmlspecialchars($guardianContact); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
