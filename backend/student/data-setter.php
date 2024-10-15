@@ -2,6 +2,7 @@
 
 if (isset($_SESSION['student_id'])) {
     $studentId = $_SESSION['student_id'];
+    $lrn = $_SESSION['lrn'];
     $studentFname = $_SESSION['student_fname'];
     $studentMname = $_SESSION['student_mname'];
     $studentLname = $_SESSION['student_lname'];

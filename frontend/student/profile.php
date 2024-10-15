@@ -5,6 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
 <link rel="stylesheet" href="/SCES/assets/style/datatables.min.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.dataTables.min.css">
 <link rel="stylesheet" href="/SCES/assets/style/student-profile.css" />
+<script src="/SCES/vendor/node_modules/chart.js/dist/chart.umd.js"></script>
 <title>Profile | SCES Online Learning Platform</title>
 </head>
 
@@ -70,14 +71,14 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                         </div>
                     </div>
                     <div class="side-controller">
-                        <div class="tab-item">Profile</div>
-                        <div class="tab-item">Records</div>
-                        <div class="tab-item">Performance</div>
+                        <div class="tab-item" id="profileTab">My Profile</div>
+                        <div class="tab-item" id="recordsTab">My Records</div>
+                        <div class="tab-item" id="statsTab">My Stats</div>
                     </div>
-                    <div class="profile-tab">
+                    <div class="profile-tab" id="profileContainer">
                         <div class="info-panel">
                             <div class="title-box">
-                                <img src="/SCES/assets/images/personal-info.png">
+                                <img src="/SCES/assets/images/personal-info.png" alt="personal-info.png">
                                 <h1>Personal Information</h1>
                             </div>
                             <div class="info-row">
@@ -115,7 +116,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                         </div>
                         <div class="info-panel">
                             <div class="title-box">
-                                <img src="/SCES/assets/images/school-info.png">
+                                <img src="/SCES/assets/images/school-info.png" alt="school-info.png">
                                 <h1>School Information</h1>
                             </div>
                             <div class="info-row">
@@ -145,7 +146,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                         </div>
                         <div class="info-panel">
                             <div class="title-box">
-                                <img src="/SCES/assets/images/background-info.png">
+                                <img src="/SCES/assets/images/background-info.png" alt="background-info.png">
                                 <h1>Background Information</h1>
                             </div>
                             <div class="info-row">
@@ -174,9 +175,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                             </div>
                         </div>
                     </div>
-                    <div class="profile-tab">
+                    <div class="profile-tab" id="recordsContainer">
                         <div class="title-box">
-                            <img src="/SCES/assets/images/profile-scores.png">
+                            <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
                             <h1>Quiz Scores</h1>
                         </div>
                         <div class="table-responsive">
@@ -188,6 +189,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                                         <th>Title</th>
                                         <th>Score</th>
                                         <th>Total Question</th>
+                                        <th>Remarks</th>
                                         <th>Date Taken</th>
                                     </tr>
                                 </thead>
@@ -195,7 +197,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                         </div>
 
                         <div class="title-box">
-                            <img src="/SCES/assets/images/profile-grades.png">
+                            <img src="/SCES/assets/images/profile-grades.png" alt="profile-grades.png">
                             <h1>Grades</h1>
                         </div>
                         <div class="table-responsive">
@@ -209,6 +211,54 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                                     </tr>
                                 </thead>
                             </table>
+                        </div>
+                    </div>
+                    <div class="profile-tab" id="statsContainer">
+                        <div class="title-box">
+                            <img src="/SCES/assets/images/profile-analytics.png" alt="profile-analytics.png">
+                            <h1>My Stats</h1>
+                        </div>
+                        <div class="stats-panel">
+                            <div class="panel-box completed">
+                                <?php $totalCompletedQuizzes = $db->studentGetTotalQuizzesCount($studentId); ?>
+                                <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
+                                <div class="panel-col">
+                                    <p>Quizzes Completed</p>
+                                    <span><?php echo htmlspecialchars($totalCompletedQuizzes); ?></span>
+                                </div>
+                            </div>
+                            <div class="panel-box pending">
+                                <?php $totalPendingQuizzes = $db->studentGetPendingQuizzesCount($sectionId, $studentId); ?>
+                                <img src="/SCES/assets/images/hourglass.png" alt="hourglass.png">
+                                <div class="panel-col">
+                                    <p>Pending Quizzes</p>
+                                    <span><?php echo htmlspecialchars($totalPendingQuizzes); ?></span>
+                                </div>
+                            </div>
+                            <div class="panel-box quiz-score">
+                                <?php $averageScore = $db->studentGetAverageScore($studentId); ?>
+                                <img src="/SCES/assets/images/gpa.png" alt="gpa.png">
+                                <div class="panel-col">
+                                    <p>Average Score</p>
+                                    <span><?php echo htmlspecialchars($averageScore); ?></span>
+                                </div>
+                            </div>
+                            <div class="panel-box average">
+                                <?php $generalAverage = $db->computeStudentGWAByLRN($lrn); ?>
+                                <img src="/SCES/assets/images/profile-gwa.png" alt="profile-gwa.png">
+                                <div class="panel-col">
+                                    <p>General Average</p>
+                                    <span><?php echo htmlspecialchars($generalAverage); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="graph-container">
+                            <div class="graph">
+                                <canvas id="lineChart"></canvas>
+                            </div>
+                            <div class="graph">
+                                <canvas id="barChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>

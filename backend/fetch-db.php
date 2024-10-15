@@ -636,4 +636,131 @@ class fetchClass extends db_connect
         }
     }
 
+    public function studentFetchScoresPerMonth($studentId)
+    {
+        // Define start and end of the academic year (June to April)
+        $currentMonth = date('n');  // Numeric representation of the current month (1 to 12)
+        $currentYear = date('Y');
+
+        // Check if we are currently in or after June (to determine the academic year range)
+        if ($currentMonth >= 6) {
+            // If the current month is June or later, the academic year starts in June of this year
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;  // It will end in April of next year
+        } else {
+            // If the current month is before June, the academic year started in June of the previous year
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;  // It will end in April of the current year
+        }
+
+        // Initialize an array to store months and set all to 0 initially
+        $months = [];
+        $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
+        $endDate = strtotime("$endYear-04-30");       // End of academic year (April 30)
+
+        while ($currentDate <= $endDate) {
+            $monthLabel = date('F', $currentDate);   // Month only, no year
+            $months[date('Y-m', $currentDate)] = [
+                'month' => $monthLabel,
+                'avg_score' => 0  // Initialize score to 0 for every month
+            ];
+            $currentDate = strtotime("+1 month", $currentDate);  // Increment to next month
+        }
+
+        // Query to get the average scores per month within the academic year range
+        $query = $this->conn->prepare("
+        SELECT 
+            DATE_FORMAT(score.time, '%Y-%m') AS month,  -- Group by Year-Month format
+            AVG(score.score) AS avg_score               -- Get the average score per month
+        FROM
+            quiz_tbl quiz
+        INNER JOIN
+            score_tbl score ON score.quiz_id = quiz.quiz_id
+        WHERE 
+            score.student_id = ?
+        AND 
+            score.score IS NOT NULL
+        AND 
+            score.time BETWEEN ? AND ?  -- Limit the scores to the academic year range
+        GROUP BY 
+            month
+        ORDER BY 
+            month ASC
+    ");
+
+        // Bind parameters: studentId, start date (June 1), and end date (April 30)
+        $startDate = "$startYear-06-01";
+        $endDate = "$endYear-04-30";
+        $query->bind_param("sss", $studentId, $startDate, $endDate);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $monthKey = $row['month'];  // 'Y-m' format
+
+                // Update the score for the month if it exists in the query results
+                if (isset($months[$monthKey])) {
+                    $months[$monthKey]['avg_score'] = (float) $row['avg_score'];
+                }
+            }
+
+            // Prepare the data to return for the line chart
+            $data = [
+                'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
+                'scores' => array_column($months, 'avg_score')  // Average scores
+            ];
+
+            return $data;  // Return the final data for the line chart
+        } else {
+            return null;  // Return null in case of failure
+        }
+    }
+
+    public function fetchGWAByAcademicYear($lrn)
+    {
+        // Prepare the SQL query to get GWA records for the student by LRN
+        $query = $this->conn->prepare("
+        SELECT 
+            grade_level,          -- Select grade_level
+            gwa                   -- Select GWA for each record
+        FROM 
+            record_tbl 
+        WHERE 
+            lrn = ?              -- Filter by the given LRN
+        ORDER BY 
+            grade_level ASC      -- Order the results by grade_level
+    ");
+
+        // Bind the LRN parameter
+        $query->bind_param("s", $lrn);
+
+        // Execute the query
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $gwaRecords = $result->fetch_all(MYSQLI_ASSOC);
+
+            // Prepare arrays for labels and GWA values
+            $labels = [];
+            $gwaValues = [];
+
+            // Loop through GWA records to populate labels and GWA values
+            foreach ($gwaRecords as $record) {
+                // Capitalize and format grade_level as "Grade X"
+                $labels[] = ucfirst(strtolower($record['grade_level']));  // Capitalize 'Grade' and append level
+                $gwaValues[] = round($record['gwa'], 2);    // Store rounded GWA values
+            }
+
+            // Return both labels and GWA values
+            return [
+                'labels' => $labels,
+                'gwaValues' => $gwaValues,
+            ];
+        }
+
+        return null; // Return null if no GWA records are found or query fails
+    }
+
+
+
 }

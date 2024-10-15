@@ -244,6 +244,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $studentGrades = $fetchDb->studentFetchGrades($studentId);
         echo json_encode($studentGrades);
+    } else if ($submitType === 'fetchLineChartData') {
+        session_start();
+        $studentId = $_SESSION['student_id'];
+
+        $data = $fetchDb->studentFetchScoresPerMonth($studentId);
+
+        echo json_encode([
+            'labels' => $data['months'],  // X-axis: months
+            'lineData' => $data['scores'] // Y-axis: average scores
+        ]);
+    } else if ($submitType === 'fetchBarChartData') {
+        session_start();
+        $lrn = $_SESSION['lrn'];
+
+        // Fetch data using the function
+        $data = $fetchDb->fetchGWAByAcademicYear($lrn);
+
+        if ($data) {
+            
+            echo json_encode([
+                'labels' => $data['labels'],
+                'barData' => $data['gwaValues']
+            ]);
+        } else {
+            
+            echo json_encode([
+                'labels' => [],
+                'barData' => []
+            ]);
+        }
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
