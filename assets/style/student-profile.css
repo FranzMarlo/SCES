@@ -46,7 +46,6 @@
   flex-direction: row;
   border-radius: 20px;
   border: 2px solid #000;
-  background-color: #c5e3ff;
   min-width: 600px;
   padding: 20px;
 }
@@ -160,7 +159,7 @@
 }
 .side-controller {
   width: 100%;
-  display: flex;
+  display: none;
   flex-direction: row;
   gap: 15px;
   padding: 15px 20px;
@@ -216,6 +215,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 20px;
   gap: 20px;
 }
@@ -247,10 +247,19 @@
 .info-col span {
   font-size: 1.3rem;
 }
+.test {
+  display: none;
+}
+.table-responsive {
+  display: flex;
+  flex-direction: column;
+  max-width: 1100px;
+  width: 100%;
+}
 .data-table {
   border: 2px solid #000;
   margin-top: 20px;
-  max-width: 1100px;
+  width: 100%;
   border-collapse: collapse;
   background-color: #f9f9f9;
 }
@@ -275,6 +284,26 @@
 
 .data-table tbody tr:hover {
   background-color: #eaeaea; /* Slightly darker on hover */
+}
+.profile-tab .title-box{
+  width: 100%;
+}
+table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before {
+  content: "+"; /* Adds a plus sign for rows with hidden content */
+  font-size: 16px;
+  color: #333;
+  margin-right: 10px;
+}
+table.dataTable.dtr-inline.collapsed
+  > tbody
+  > tr.parent
+  > td:first-child:before {
+  content: "-"; /* Switches to minus when expanded */
+}
+.dtr-details {
+  background-color: #f9f9f9; /* Light background for hidden details */
+  font-size: 12px;
+  padding: 8px;
 }
 @media (width < 1199px) {
   .profile-panel .title-box img {
@@ -302,13 +331,13 @@
   .info-panel .title-box {
     margin-bottom: 10px;
   }
-  .data-table {
-    max-width: 900px !important;
+  .table-responsive {
+    max-width: 720px;
   }
 }
 @media (width < 992px) {
-  .data-table {
-    max-width: 700px !important;
+  .table-responsive {
+    max-width: 700px;
   }
 }
 @media (width < 768px) {
@@ -318,13 +347,39 @@
   .profile-panel .title-box h1 {
     font-size: 1.3rem;
   }
-  .id-box {
-    min-width: 550px;
+  .profile-bg {
+    height: 320px;
   }
-  .data-table {
-    max-width: 500px !important;
+  .id-box {
+    min-width: 500px;
+  }
+  .id-image img {
+    height: 150px;
+    width: 150px;
+  }
+  .id-image span {
+    font-size: 2rem;
+  }
+  .logo img {
+    height: 50px;
+  }
+  .logo span {
+    font-size: 2.2rem;
+  }
+  .motto p {
+    font-size: 0.7rem;
+  }
+  .id-col p {
+    font-size: 0.7rem;
+  }
+  .id-col span {
+    font-size: 1rem;
+  }
+  .table-responsive {
+    max-width: 550px;
   }
 }
+
 @media (width < 600px) {
   .profile-bg {
     height: 320px;
@@ -367,11 +422,25 @@
   .info-panel .title-box {
     margin-bottom: 10px;
   }
-  .data-table {
-    max-width: 450px !important;
+  .profile-tab {
+    padding: 10px;
+  }
+  .profile-tab .title-box h1 {
+    font-size: 1.2rem;
+  }
+  .table-responsive {
+    max-width: 460px;
+  }
+}
+@media (width < 500px) {
+  .table-responsive {
+    max-width: 400px;
   }
 }
 @media (width < 460px) {
+  .profile-bg {
+    height: 310px;
+  }
   .id-box {
     top: 25px;
     min-width: 400px;
@@ -384,8 +453,14 @@
   .dashed-line {
     margin: 15px 0;
   }
-  .data-table {
-    max-width: 380px !important;
+  .info-col p {
+    font-size: 0.9rem;
+  }
+  .info-col span {
+    font-size: 1rem;
+  }
+  .table-responsive {
+    max-width: 380px;
   }
 }
 @media (width < 425px) {
@@ -393,7 +468,7 @@
     height: 300px;
   }
   .id-box {
-    min-width: 350px;
+    min-width: 360px;
     padding: 15px;
   }
   .id-col p {
@@ -402,11 +477,14 @@
   .id-col span {
     font-size: 0.9rem;
   }
-  .data-table {
-    max-width: 350px !important;
+  .table-responsive {
+    max-width: 330px;
   }
 }
 @media (width < 375px) {
+  .profile-bg {
+    height: 250px;
+  }
   .id-box {
     min-width: 300px;
     padding: 10px 15px;
@@ -436,10 +514,7 @@
   .id-col span {
     font-size: 0.7rem;
   }
-  .data-table {
-    max-width: 300px;
-  }
-  .data-table {
-    max-width: 300px !important;
+  .table-responsive {
+    max-width: 280px;
   }
 }
