@@ -1330,6 +1330,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   icon: "success",
                   title: "Verification Code Sent To Email",
                   confirmButtonColor: "#4CAF50",
+                  allowOutsideClick: false,
                 }).then(() => {
                   document.getElementById(
                     "emailVerificationModal"
@@ -1414,6 +1415,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     icon: "success",
                     title: "Email Verified Successfully",
                     confirmButtonColor: "#4CAF50",
+                    allowOutsideClick: false,
                   }).then(() => {
                     document.getElementById(
                       "emailVerificationModal"

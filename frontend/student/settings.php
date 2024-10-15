@@ -23,11 +23,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
 			</div>
 			<div class="settings-container">
 				<div class="side-panel">
-					<button class="panel-item active" onclick="toggleMyProfile()">My Profile</button>
-					<button class="panel-item" onclick="toggleSecurity()">Security</button>
-					<button class="panel-item">Notifications</button>
+					<button class="panel-item" id="profileBtn">My Profile</button>
+					<button class="panel-item" id="securityBtn">Security</button>
 				</div>
-				<div class="main-panel" id="myProfile">
+				<div class="main-panel" id="profileTab">
 					<div class="panel-title">
 						<h1>My Profile</h1>
 					</div>
@@ -132,7 +131,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
 						</div>
 					</div>
 				</div>
-				<div class="main-panel" id="security">
+				<div class="main-panel" id="securityTab">
                     <div class="panel-title">
                         <h1>Security</h1>
                     </div>

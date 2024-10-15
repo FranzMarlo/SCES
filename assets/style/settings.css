@@ -45,13 +45,6 @@
   gap: 10px;
   min-height: 700px;
 }
-
-#myProfile {
-  display: flex;
-}
-#security {
-  display: none;
-}
 .settings-container .main-panel .panel-title {
   width: 100%;
 }
@@ -125,6 +118,9 @@ img#change-avatar-icon {
   gap: 10px;
   font-size: 1rem;
   cursor: pointer;
+}
+.edit-btn:hover {
+  background-color: #ddd;
 }
 .current-user-info {
   display: flex;
