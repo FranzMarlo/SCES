@@ -128,28 +128,6 @@ function hiddenLink(element) {
   }
 }
 
-$(".panel-item").on("click", function () {
-  $(".panel-item").removeClass("active");
-
-  $(this).addClass("active");
-});
-
-function toggleMyProfile() {
-  const myProfilePanel = document.getElementById("myProfile");
-  const securityPanel = document.getElementById("security");
-
-  myProfilePanel.style.display = "flex";
-  securityPanel.style.display = "none";
-}
-
-function toggleSecurity() {
-  const myProfilePanel = document.getElementById("myProfile");
-  const securityPanel = document.getElementById("security");
-
-  myProfilePanel.style.display = "none";
-  securityPanel.style.display = "flex";
-}
-
 function toggleRecords(){
   const recordSection = document.getElementById("records");
   const profileSection = document.getElementById("profile");

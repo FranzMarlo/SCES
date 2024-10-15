@@ -1,4 +1,41 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const profileBtn = document.getElementById("profileBtn");
+  const securityBtn = document.getElementById("securityBtn");
+
+  const profileTab = document.getElementById("profileTab");
+  const securityTab = document.getElementById("securityTab");
+
+  function showTab(tabIndex) {
+    profileTab.style.display = "none";
+    securityTab.style.display = "none";
+
+    if (tabIndex === 1) {
+      profileTab.style.display = "flex";
+      profileBtn.classList.add("active");
+      securityBtn.classList.remove("active");
+    } else if (tabIndex === 2) {
+      securityTab.style.display = "flex";
+      profileBtn.classList.remove("active");
+      securityBtn.classList.add("active");
+    }
+
+    const url = new URL(window.location);
+    url.searchParams.set("active", tabIndex);
+    window.history.pushState({}, "", url);
+  }
+
+  profileBtn.addEventListener("click", function () {
+    showTab(1);
+  });
+
+  securityBtn.addEventListener("click", function () {
+    showTab(2);
+  });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const activeTab = parseInt(urlParams.get("active")) || 1;
+
+  showTab(activeTab);
   document.getElementById("edit-profile-info").onclick = function () {
     document.getElementById("adminEditProfileModal").style.display = "flex";
   };
