@@ -71,12 +71,6 @@
                         <span class="text">Analytics</span>
                     </a>
                 </li>
-                <li class="<?= $current_page == 'reports.php' ? 'active' : '' ?>">
-                    <a href="/SCES/frontend/admin/reports.php">
-                        <i class="fa-solid fa-print icon"></i>
-                        <span class="text">Reports</span>
-                    </a>
-                </li>
                 <li class="<?= $current_page == 'settings.php' ? 'active' : '' ?>">
                     <a href="/SCES/frontend/admin/settings.php">
                         <i class="fa-solid fa-gear icon"></i>
