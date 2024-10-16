@@ -265,8 +265,10 @@ body {
   border-radius: 30px;
   padding: 20px;
   border: 2px solid #000;
+  min-height: 240px;
 }
 .to-do-header {
+  width: 100%;
   display: flex;
   flex-direction: row;
 }
@@ -289,37 +291,38 @@ body {
   align-items: center;
   justify-content: space-between;
   border: 2px solid #000;
-}
-.info-box {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 40%;
-  gap: 20px;
-}
-.info-box h1 {
-  font-size: 20px;
+  text-decoration: none;
   color: #000;
 }
-.info-box p {
-  font-size: 15px;
-  color: #76747c;
+.to-do-item:hover {
+  background-color: #ffd6e6;
 }
-.date-box {
-  width: 60%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+.to-do-subject{
+  font-size: 1.2rem;
+  width: 32%;
+  text-align: left;
 }
-.date-box p {
-  font-size: 15px;
-  color: #46ac36;
+.to-do-lesson{
+  font-size: 1.1rem;
+  width: 32%;
+  text-align: center;
+}
+.to-do-date{
+  font-size: 1rem;
+  width: 32%;
+  text-align: right;
   font-weight: bold;
+  color: #46ac36;
 }
-.date-box span {
-  font-size: 15px;
-  color: #76747c;
+.no-data-item {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+}
+.no-data-item h1{
+  font-size: 1.2rem;
 }
 .overlay {
   position: fixed;
@@ -668,16 +671,14 @@ canvas {
   .overview-container .box .img-container {
     padding: 3px;
   }
-  .info-box {
-    flex-direction: column;
-    gap: 5px;
-    align-items: flex-start;
-  }
   .subject-text{
     font-size: 1.1rem!important;
   }
   .subject-text-large{
     font-size: 0.9rem!important;
+  }
+  .no-data-item h1{
+    font-size: 1.1rem;
   }
 }
 @media (width < 600px) {
@@ -729,8 +730,7 @@ canvas {
     font-size: 1.2rem;
   }
   .to-do-item {
-    flex-direction: column;
-    gap: 10px;
+    flex-wrap: wrap;
   }
   .info-box {
     width: 100%;
@@ -759,6 +759,21 @@ canvas {
   .subject-text-large{
     font-size: 0.9rem!important;
   }
+  .to-do-item{
+    row-gap: 5px;
+  }
+  .to-do-subject{
+    font-size: 1.1rem;
+    width: 100%;
+  }
+  .to-do-lesson{
+    font-size: 1rem;
+    width: 50%;
+  }
+  .to-do-date{
+    font-size: 0.9rem;
+    width: 50%;
+  }
 }
 @media (width < 425px) {
   .subject-text{
@@ -766,5 +781,19 @@ canvas {
   }
   .subject-text-large{
     font-size: 0.9rem!important;
+  }
+  .to-do-subject{
+    font-size: 1.1rem;
+    width: 100%;
+  }
+  .to-do-lesson{
+    font-size: 1rem;
+    width: 100%;
+    text-align: left;
+  }
+  .to-do-date{
+    font-size: 0.9rem;
+    width: 100%;
+    text-align: left;
   }
 }

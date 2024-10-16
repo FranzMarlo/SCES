@@ -37,7 +37,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
               <img src="/SCES/assets/images/completion-icon.png" alt="completion icon">
             </div>
             <div class="data-container">
-            <?php $completionRate = $db->studentGetQuizCompletion($studentId);?>
+              <?php $completionRate = $db->studentGetQuizCompletion($studentId); ?>
               <h1><?php echo htmlspecialchars($completionRate); ?></h1>
               <p>Completion</p>
             </div>
@@ -47,18 +47,20 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
               <img src="/SCES/assets/images/pending-icon.png" alt="pending icon">
             </div>
             <div class="data-container">
-              <?php $totalPendingQuizzes = $db->studentGetPendingQuizzesCount($sectionId, $studentId);?>
+              <?php $totalPendingQuizzes = $db->studentGetPendingQuizzesCount($sectionId, $studentId); ?>
               <h1><?php echo htmlspecialchars($totalPendingQuizzes); ?></h1>
               <p>Pending Quiz</p>
             </div>
           </div>
-          <?php $subjectData = $db->studentGetAverageScoreBySubject($studentId, $sectionId);?>
+          <?php $subjectData = $db->studentGetAverageScoreBySubject($studentId, $sectionId); ?>
           <div class="box excel">
             <div class="img-container">
               <img src="/SCES/assets/images/excel-icon.png" alt="excel icon">
             </div>
             <div class="data-container">
-              <h1 class="<?php echo htmlspecialchars(getSubjectFontSize($subjectData['largest']));?>"><?php echo htmlspecialchars($subjectData['largest']); ?></h1>
+              <h1 class="<?php echo htmlspecialchars(getSubjectFontSize($subjectData['largest'])); ?>">
+                <?php echo htmlspecialchars($subjectData['largest']); ?>
+              </h1>
               <p>Excels In</p>
             </div>
           </div>
@@ -67,7 +69,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
               <img src="/SCES/assets/images/regress-icon.png" alt="regress icon">
             </div>
             <div class="data-container">
-              <h1 class="<?php echo htmlspecialchars(getSubjectFontSize($subjectData['smallest']));?>"><?php echo htmlspecialchars($subjectData['smallest']); ?></h1>
+              <h1 class="<?php echo htmlspecialchars(getSubjectFontSize($subjectData['smallest'])); ?>">
+                <?php echo htmlspecialchars($subjectData['smallest']); ?>
+              </h1>
               <p>Regress In</p>
             </div>
           </div>
@@ -78,36 +82,24 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
           <i class="fa-solid fa-calendar"></i>
           <h1>To-do</h1>
         </div>
-        <div class="to-do-item">
-          <div class="info-box">
-            <h1>Science</h1>
-            <p>Lesson 1 - Quiz 3</p>
+        <?php $pendingQuizzes = $db->studentGetPendingQuizzes($sectionId, $studentId); ?>
+        <?php if ($pendingQuizzes): ?>
+          <?php foreach ($pendingQuizzes as $quiz): ?>
+            <?php $dueDate = formatDueDate($quiz['due_date']); ?>
+            <a href="/SCES/frontend/student/quizzes.php?quiz_id=<?php echo $quiz['quiz_id']; ?>&active=true"
+              class="to-do-item">
+              <h1 class="to-do-subject"><?php echo htmlspecialchars($quiz['subject']); ?></h1>
+              <p class="to-do-lesson">
+                <?php echo htmlspecialchars('Lesson ' . $quiz['lesson_number'] . ' - Quiz ' . $quiz['quiz_number']); ?>
+              </p>
+              <p class="to-do-date"><?php echo htmlspecialchars($dueDate); ?></p>
+            </a>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <div class="no-data-item">
+            <h1>No pending quiz found!</h1>
           </div>
-          <div class="date-box">
-            <p>Monday 11:59 PM</p>
-            <span>Posted 4 May 2024</span>
-          </div>
-        </div>
-        <div class="to-do-item">
-          <div class="info-box">
-            <h1>Mathematics</h1>
-            <p>Lesson 3 - Quiz 2</p>
-          </div>
-          <div class="date-box">
-            <p>Friday 11:59 PM</p>
-            <span>Posted 2 May 2024</span>
-          </div>
-        </div>
-        <div class="to-do-item">
-          <div class="info-box">
-            <h1>English</h1>
-            <p>Lesson 1 - Quiz 1</p>
-          </div>
-          <div class="date-box">
-            <p>Thursday 11:59 PM</p>
-            <span>Posted 4 Aug 2024</span>
-          </div>
-        </div>
+        <?php endif; ?>
       </div>
     </div>
   </div>

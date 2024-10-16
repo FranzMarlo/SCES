@@ -1593,7 +1593,6 @@ class globalClass extends db_connect
 
     public function studentGetAverageScoreBySubject($studentId, $sectionId)
     {
-        // Prepare the SQL query to calculate the average score per subject for the student
         $query = $this->conn->prepare("
         SELECT 
             subject.subject,          -- Get the subject name
@@ -1617,17 +1616,14 @@ class globalClass extends db_connect
             subject.subject ASC   -- Order by subject name (optional)
     ");
 
-        // Bind the studentId and sectionId parameters
         $query->bind_param("ss", $studentId, $sectionId);
 
-        // Execute the query
         if ($query->execute()) {
             $result = $query->get_result();
             $averageScores = $result->fetch_all(MYSQLI_ASSOC);
 
-            // Check if there's no data or if there's only one entry
             if (empty($averageScores) || count($averageScores) === 1) {
-                return 'No Data'; // Return 'No Data' if no scores are found or if there's only one entry
+                return 'No Data';
             }
 
             $largest = null;
@@ -1644,14 +1640,86 @@ class globalClass extends db_connect
                 }
             }
 
-            // Return only the subject names for largest and smallest scores
             return [
-                'largest' => $largest['subject'] ?? null,  // Subject with the largest average score
-                'smallest' => $smallest['subject'] ?? null, // Subject with the smallest average score
+                'largest' => $largest['subject'] ?? null,
+                'smallest' => $smallest['subject'] ?? null,
             ];
         }
 
-        return null; // Return null if the query fails
+        return null;
+    }
+
+    public function studentGetPendingQuizzes($sectionId, $studentId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            subject.subject_id,
+            subject.subject,
+            subject.level_id,
+            level.grade_level,
+            quiz.quiz_id,
+            quiz.title,
+            quiz.quiz_number,
+            quiz.status,
+            quiz.due_date,
+            lesson.lesson_id,
+            lesson.lesson_number,
+            student.section_id,
+            teacher.teacher_id,
+            lesson.lesson_title
+        FROM quiz_tbl quiz
+        INNER JOIN
+            subject_tbl subject
+        ON
+            subject.subject_id = quiz.subject_id
+        INNER JOIN
+            student_tbl student
+        ON
+            student.section_id = subject.section_id
+        INNER JOIN
+            section_tbl section
+        ON
+            subject.section_id = section.section_id
+        INNER JOIN
+            level_tbl level
+        ON
+            subject.level_id = level.level_id
+        INNER JOIN
+            lesson_tbl lesson
+        ON
+            quiz.lesson_id = lesson.lesson_id
+        LEFT JOIN
+            score_tbl score
+        ON
+            quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+        INNER JOIN
+            teacher_tbl teacher
+        ON
+            teacher.teacher_id = subject.teacher_id
+        WHERE 
+            student.section_id = ?
+        AND
+            student.student_id = ?
+        AND
+            quiz.status = 'Active'
+        AND
+            score.score IS NOT NULL
+        GROUP BY
+            quiz.quiz_id
+        ORDER BY
+            quiz.due_date DESC
+        LIMIT 3 
+    ");
+
+        $query->bind_param("ss", $sectionId, $studentId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjectDetails;
+        }
+
+        return [];
     }
 
 
