@@ -14,9 +14,9 @@
                 <i class="fa-solid fa-bell icon"></i>
             </div>
         </a>
-        <div class="current-user">
+        <a href="/SCES/frontend/student/profile.php?active=1" class="current-user">
             <img src="/SCES/storage/student/images/<?php echo $image;?>" alt="user icon">
-        </div>
+        </a>
     </div>
 </div>
 <div class="max-content">
