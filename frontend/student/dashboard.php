@@ -1,5 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php';
 ?>
 <title>Home | SCES Online Learning Platform</title>
 </head>
@@ -36,7 +37,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
               <img src="/SCES/assets/images/completion-icon.png" alt="completion icon">
             </div>
             <div class="data-container">
-              <h1>75%</h1>
+            <?php $completionRate = $db->studentGetQuizCompletion($studentId);?>
+              <h1><?php echo htmlspecialchars($completionRate); ?></h1>
               <p>Completion</p>
             </div>
           </div>
@@ -45,16 +47,18 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
               <img src="/SCES/assets/images/pending-icon.png" alt="pending icon">
             </div>
             <div class="data-container">
-              <h1>82%</h1>
-              <p>Pending Task</p>
+              <?php $totalPendingQuizzes = $db->studentGetPendingQuizzesCount($sectionId, $studentId);?>
+              <h1><?php echo htmlspecialchars($totalPendingQuizzes); ?></h1>
+              <p>Pending Quiz</p>
             </div>
           </div>
+          <?php $subjectData = $db->studentGetAverageScoreBySubject($studentId, $sectionId);?>
           <div class="box excel">
             <div class="img-container">
               <img src="/SCES/assets/images/excel-icon.png" alt="excel icon">
             </div>
             <div class="data-container">
-              <h1>Filipino</h1>
+              <h1 class="<?php echo htmlspecialchars(getSubjectFontSize($subjectData['largest']));?>"><?php echo htmlspecialchars($subjectData['largest']); ?></h1>
               <p>Excels In</p>
             </div>
           </div>
@@ -63,7 +67,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
               <img src="/SCES/assets/images/regress-icon.png" alt="regress icon">
             </div>
             <div class="data-container">
-              <h1>Math</h1>
+              <h1 class="<?php echo htmlspecialchars(getSubjectFontSize($subjectData['smallest']));?>"><?php echo htmlspecialchars($subjectData['smallest']); ?></h1>
               <p>Regress In</p>
             </div>
           </div>

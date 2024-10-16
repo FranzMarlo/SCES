@@ -172,7 +172,7 @@ body {
   margin-right: 10px;
 }
 .about-panel {
-  background-color: #f4df55;
+  background-color: #fcfd95;
   border-radius: 30px;
   width: 100%;
   height: 260px;
@@ -229,7 +229,7 @@ body {
 }
 .overview-panel .overview-container .box {
   height: 90px;
-  width: 22%;
+  width: 23%;
   padding: 10px;
   border-radius: 30px;
   display: flex;
@@ -246,16 +246,16 @@ body {
   text-align: center;
 }
 .completion {
-  background-color: #86d2c2;
+  background-color: #d2ebc4;
 }
 .pending {
-  background-color: #f0bad1;
+  background-color: #ffd6e6;
 }
 .excel {
-  background-color: #aac3fc;
+  background-color: #c5e3ff;
 }
 .regress {
-  background-color: #f2e04d;
+  background-color: #ddd1ff;
 }
 .to-do-panel {
   display: flex;
@@ -340,6 +340,15 @@ canvas {
   height: 100%;
   padding: 10px;
   border: 2px solid #000;
+}
+.subject-text{
+  font-size: 1.5rem!important;
+}
+.subject-text-large{
+  font-size: 1.2rem!important;
+}
+.test{
+  display: none;
 }
 @media (width < 1199px) {
   .container {
@@ -431,6 +440,12 @@ canvas {
   }
   .to-do-header h1 {
     font-size: 1.5rem;
+  }
+  .subject-text{
+    font-size: 1.3rem!important;
+  }
+  .subject-text-large{
+    font-size: 1rem!important;
   }
 }
 @media (width < 992px) {
@@ -549,11 +564,14 @@ canvas {
     height: 70px;
     width: 23%;
   }
-  .overview-container .box .data-container h1 {
-    font-size: 1.5rem;
-  }
   .overview-container .box .data-container p {
     font-size: 0.8rem;
+  }
+  .subject-text{
+    font-size: 1.3rem!important;
+  }
+  .subject-text-large{
+    font-size: 1.1rem!important;
   }
 }
 @media (width < 768px) {
@@ -642,7 +660,7 @@ canvas {
     height: 30px;
   }
   .overview-container .box .data-container h1 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   .overview-container .box .data-container p {
     font-size: 0.8rem;
@@ -654,6 +672,12 @@ canvas {
     flex-direction: column;
     gap: 5px;
     align-items: flex-start;
+  }
+  .subject-text{
+    font-size: 1.1rem!important;
+  }
+  .subject-text-large{
+    font-size: 0.9rem!important;
   }
 }
 @media (width < 600px) {
@@ -680,16 +704,17 @@ canvas {
     font-size: 1.2rem;
   }
   .overview-panel .overview-container {
-    justify-content: space-evenly;
+    justify-content: space-between;
+    row-gap: 10px;
   }
   .overview-panel .overview-container .box {
-    width: 45%;
+    width: 48%;
   }
   .overview-container .box .img-container img {
     height: 2rem;
   }
   .overview-container .box .data-container h1 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
   .overview-container .box .data-container p {
     font-size: 0.7rem;
@@ -727,5 +752,19 @@ canvas {
   }
   .date-box span {
     font-size: 0.8rem;
+  }
+  .subject-text{
+    font-size: 1.1rem!important;
+  }
+  .subject-text-large{
+    font-size: 0.9rem!important;
+  }
+}
+@media (width < 425px) {
+  .subject-text{
+    font-size: 1rem!important;
+  }
+  .subject-text-large{
+    font-size: 0.9rem!important;
   }
 }

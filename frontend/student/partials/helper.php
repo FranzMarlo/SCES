@@ -140,16 +140,17 @@ function getMottoStyle($gender)
     }
 }
 
-function getIdBg($gender){
+function getIdBg($gender)
+{
     if ($gender == 'Female') {
         return 'female';
-    }
-    else{
+    } else {
         return 'male';
     }
 }
 
-function getCurrentSchoolYear() {
+function getCurrentSchoolYear()
+{
     // Get the current year and month
     $currentYear = date("Y");
     $currentMonth = date("n"); // n = numeric representation of a month (1-12)
@@ -166,4 +167,17 @@ function getCurrentSchoolYear() {
     }
 
     return $startYear . " - " . $endYear;
+}
+
+function getSubjectFontSize($text)
+{
+    $length = strlen($text);
+
+    if ($length < 6 && $length < 10) {
+        return null;
+    } else if ($length > 5 && $length < 10) {
+        return 'subject-text';
+    } else {
+        return 'subject-text-large';
+    }
 }

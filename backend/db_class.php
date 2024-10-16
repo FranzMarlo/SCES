@@ -1485,9 +1485,9 @@ class globalClass extends db_connect
     }
 
     public function studentGetAverageScore($studentId)
-{
-    // Prepare the SQL query to calculate the average score for the student
-    $query = $this->conn->prepare("
+    {
+        // Prepare the SQL query to calculate the average score for the student
+        $query = $this->conn->prepare("
         SELECT 
             AVG(score.score) AS average_score
         FROM quiz_tbl quiz
@@ -1503,22 +1503,158 @@ class globalClass extends db_connect
             score.score IS NOT NULL
     ");
 
-    // Bind the studentId parameter
-    $query->bind_param("s", $studentId);
+        // Bind the studentId parameter
+        $query->bind_param("s", $studentId);
 
-    // Execute the query
-    if ($query->execute()) {
-        $result = $query->get_result();
-        $scoreDetails = $result->fetch_assoc();
+        // Execute the query
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $scoreDetails = $result->fetch_assoc();
 
-        // Return the average score if the result is valid
-        if ($scoreDetails && isset($scoreDetails['average_score'])) {
-            return round($scoreDetails['average_score'], 2); // Round to 2 decimal places
+            // Return the average score if the result is valid
+            if ($scoreDetails && isset($scoreDetails['average_score'])) {
+                return round($scoreDetails['average_score'], 2); // Round to 2 decimal places
+            }
         }
+
+        return null; // Return null if no scores are found or query fails
     }
 
-    return null; // Return null if no scores are found or query fails
-}
+    public function studentGetQuizCompletion($studentId)
+    {
+        $currentMonth = date('n');
+        $currentYear = date('Y');
+        $emptyValue = "0%";
+
+        if ($currentMonth >= 6) {
+            $schoolYearStart = "$currentYear-06-01";
+            $schoolYearEnd = ($currentYear + 1) . "-04-30";
+        } else {
+            $schoolYearStart = ($currentYear - 1) . "-06-01";
+            $schoolYearEnd = "$currentYear-04-30";
+        }
+
+        $totalQuizzesQuery = $this->conn->prepare("
+            SELECT 
+                COUNT(DISTINCT quiz.quiz_id) AS total_quiz_count
+            FROM quiz_tbl quiz
+            INNER JOIN subject_tbl subject
+            ON subject.subject_id = quiz.subject_id
+            INNER JOIN student_tbl student
+            ON student.section_id = subject.section_id
+            WHERE 
+                student.student_id = ?
+            AND quiz.status IN ('Active', 'Completed')
+            AND quiz.due_date BETWEEN ? AND ?
+        ");
+        $totalQuizzesQuery->bind_param("sss", $studentId, $schoolYearStart, $schoolYearEnd);
+
+        if ($totalQuizzesQuery->execute()) {
+            $result = $totalQuizzesQuery->get_result();
+            $totalQuizData = $result->fetch_assoc();
+            $totalQuizCount = $totalQuizData['total_quiz_count'];
+        } else {
+            return $emptyValue;
+        }
+
+        $completedQuizzesQuery = $this->conn->prepare("
+            SELECT 
+                COUNT(DISTINCT quiz.quiz_id) AS completed_quiz_count
+            FROM quiz_tbl quiz
+            INNER JOIN subject_tbl subject
+            ON subject.subject_id = quiz.subject_id
+            INNER JOIN student_tbl student
+            ON student.section_id = subject.section_id
+            LEFT JOIN score_tbl score
+            ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+            WHERE 
+                student.student_id = ?
+            AND quiz.status IN ('Active', 'Completed')
+            AND quiz.due_date BETWEEN ? AND ?
+            AND score.score IS NOT NULL
+        ");
+        $completedQuizzesQuery->bind_param("sss", $studentId, $schoolYearStart, $schoolYearEnd);
+
+        if ($completedQuizzesQuery->execute()) {
+            $result = $completedQuizzesQuery->get_result();
+            $completedQuizData = $result->fetch_assoc();
+            $completedQuizCount = $completedQuizData['completed_quiz_count'];
+        } else {
+            return $emptyValue;
+        }
+
+        if ($totalQuizCount > 0) {
+            $completionPercentage = ($completedQuizCount / $totalQuizCount) * 100;
+            return round($completionPercentage) . "%";
+        }
+
+        return $emptyValue;
+    }
+
+    public function studentGetAverageScoreBySubject($studentId, $sectionId)
+    {
+        // Prepare the SQL query to calculate the average score per subject for the student
+        $query = $this->conn->prepare("
+        SELECT 
+            subject.subject,          -- Get the subject name
+            AVG(score.score) AS average_score -- Calculate the average score for the subject
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_tbl student
+        ON student.section_id = subject.section_id
+        LEFT JOIN score_tbl score
+        ON quiz.quiz_id = score.quiz_id
+        WHERE 
+            score.student_id = ?
+        AND 
+            score.score IS NOT NULL
+        AND
+            subject.section_id = ?
+        GROUP BY 
+            subject.subject_id         -- Group by subject to calculate per subject
+        ORDER BY 
+            subject.subject ASC   -- Order by subject name (optional)
+    ");
+
+        // Bind the studentId and sectionId parameters
+        $query->bind_param("ss", $studentId, $sectionId);
+
+        // Execute the query
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $averageScores = $result->fetch_all(MYSQLI_ASSOC);
+
+            // Check if there's no data or if there's only one entry
+            if (empty($averageScores) || count($averageScores) === 1) {
+                return 'No Data'; // Return 'No Data' if no scores are found or if there's only one entry
+            }
+
+            $largest = null;
+            $smallest = null;
+
+            foreach ($averageScores as $scoreData) {
+                $averageScore = $scoreData['average_score'];
+
+                if ($largest === null || $averageScore > $largest['average_score']) {
+                    $largest = $scoreData;
+                }
+                if ($smallest === null || $averageScore < $smallest['average_score']) {
+                    $smallest = $scoreData;
+                }
+            }
+
+            // Return only the subject names for largest and smallest scores
+            return [
+                'largest' => $largest['subject'] ?? null,  // Subject with the largest average score
+                'smallest' => $smallest['subject'] ?? null, // Subject with the smallest average score
+            ];
+        }
+
+        return null; // Return null if the query fails
+    }
+
+
 
 }
 
