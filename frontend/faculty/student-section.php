@@ -1,9 +1,10 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables.php';
 $page = '';
 ?>
-<link rel="stylesheet" href="/SCES/assets/style/admin-quizzes.css" />
-<title>Student Score | SCES Online Learning Platform</title>
+<link rel="stylesheet" href="/SCES/assets/style/section.css" />
+<title>Student List | SCES Online Learning Platform</title>
 </head>
 
 <body>

@@ -39,23 +39,23 @@
                     </ul>
                 </li>
                 <li
-                    class="<?= in_array($current_page, ['student-list.php', 'student-score.php', 'student-grade.php']) ? 'active' : '' ?>">
+                    class="<?= in_array($current_page, ['section.php', 'student-list.php', 'student-grade.php']) ? 'active' : '' ?>">
                     <a href="javascript:void(0)">
                         <i class="fa-solid fa-user-graduate icon"></i>
                         <span class="text">Students</span>
                         <i class="fa-solid fa-chevron-down arrow"></i>
                     </a>
                     <ul class="sub-menu">
+                        <li class="<?= $current_page == 'section.php' ? 'active' : '' ?>">
+                            <a href="/SCES/frontend/faculty/section.php">
+                                <i class="fa-solid fa-users-rectangle icon"></i>
+                                <span class="text">Sections</span>
+                            </a>
+                        </li>
                         <li class="<?= $current_page == 'student-list.php' ? 'active' : '' ?>">
                             <a href="/SCES/frontend/faculty/student-list.php">
                                 <i class="fa-solid fa-list icon"></i>
                                 <span class="text">Student List</span>
-                            </a>
-                        </li>
-                        <li class="<?= $current_page == 'student-score.php' ? 'active' : '' ?>">
-                            <a href="/SCES/frontend/faculty/student-score.php">
-                                <i class="fa-solid fa-list-ol icon"></i>
-                                <span class="text">Student Score</span>
                             </a>
                         </li>
                         <li class="<?= $current_page == 'student-grade.php' ? 'active' : '' ?>">

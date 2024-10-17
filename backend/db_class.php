@@ -1403,7 +1403,6 @@ class globalClass extends db_connect
         return 0;
     }
 
-
     public function studentGetPendingQuizzesCount($sectionId, $studentId)
     {
         $query = $this->conn->prepare("
@@ -1713,6 +1712,46 @@ class globalClass extends db_connect
 
         $query->bind_param("ss", $sectionId, $studentId);
 
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjectDetails;
+        }
+
+        return [];
+    }
+
+    public function facultyGetSection($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            subject.subject_id,
+            subject.subject,
+            subject.level_id,
+            subject.icon,
+            subject.subject_title,
+            subject.subject_code,
+            level.level_id,
+            level.grade_level,
+            level.short,
+            section.section,
+            section.section_id
+        FROM 
+            subject_tbl subject
+        INNER JOIN
+            section_tbl section
+        ON
+            subject.section_id = section.section_id
+        INNER JOIN
+            level_tbl level
+        ON
+            subject.level_id = level.level_id
+        WHERE 
+            subject.teacher_id = ?
+        GROUP BY
+            section.section_id
+        ");
+        $query->bind_param("s", $teacherId);
         if ($query->execute()) {
             $result = $query->get_result();
             $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
