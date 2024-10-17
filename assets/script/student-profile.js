@@ -115,6 +115,12 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       { data: "time" },
     ],
+    language: {
+      emptyTable: "No data available in table", // Message when there's no data
+    },
+    initComplete: function () {
+      quizScoresTable.draw(); // Force a redraw to apply styles properly
+    },
   });
 
   var gradesTable = $("#gradesTable").DataTable({
@@ -175,7 +181,14 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       { data: "quarter" },
     ],
+    language: {
+      emptyTable: "No data available in table", // Message when there's no data
+    },
+    initComplete: function () {
+      gradesTable.draw(); // Force a redraw to apply styles properly
+    },
   });
+
   $.ajax({
     url: "/SCES/backend/fetch-class.php",
     type: "POST",

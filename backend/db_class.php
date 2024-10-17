@@ -1703,7 +1703,7 @@ class globalClass extends db_connect
         AND
             quiz.status = 'Active'
         AND
-            score.score IS NOT NULL
+            score.score IS NULL
         GROUP BY
             quiz.quiz_id
         ORDER BY

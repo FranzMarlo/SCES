@@ -317,6 +317,12 @@ table.dataTable.dtr-inline.collapsed
   border-radius: 20px;
   padding: 5px;
 }
+table.dataTable tbody td.dataTables_empty {
+  text-align: center; /* Center the text horizontally */
+  vertical-align: middle; /* Center it vertically */
+  font-weight: bold;
+  color: #333;
+}
 .passed {
   background-color: #4caf50;
 }
