@@ -1761,6 +1761,53 @@ class globalClass extends db_connect
         return [];
     }
 
+    public function getTotalStudentBySection($sectionId)
+    {
+        $query = $this->conn->prepare("SELECT COUNT(`student_id`) as total FROM student_tbl WHERE section_id = ?");
+
+        $query->bind_param("s", $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $count = $result->fetch_assoc();
+            return $count['total'];
+        } else {
+            return '0';
+        }
+    }
+
+    public function facultyGetSectionData($sectionId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            level.level_id,
+            level.grade_level,
+            level.short,
+            section.section,
+            section.section_id
+        FROM 
+            section_tbl section
+        INNER JOIN
+            level_tbl level
+        ON
+            section.level_id = level.level_id
+        WHERE 
+            section.section_id = ?
+        ");
+        $query->bind_param("s", $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc();
+            return $subjectDetails;
+        }
+
+        return [];
+    }
+
+    
+
+
+
+
 
 
 }

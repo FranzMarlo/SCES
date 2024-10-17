@@ -38,14 +38,14 @@
                     </ul>
                 </li>
                 <li
-                    class="<?= in_array($current_page, ['section.php', 'student-list.php', 'student-grade.php']) ? 'active' : '' ?>">
+                    class="<?= in_array($current_page, ['section.php', 'student-list.php', 'student-grade.php', 'student-section.php']) ? 'active' : '' ?>">
                     <a href="javascript:void(0)">
                         <i class="fa-solid fa-user-graduate icon"></i>
                         <span class="text">Students</span>
                         <i class="fa-solid fa-chevron-down arrow"></i>
                     </a>
                     <ul class="sub-menu">
-                        <li class="<?= $current_page == 'section.php' ? 'active' : '' ?>">
+                        <li class="<?= in_array($current_page, ['section.php', 'student-section.php']) ? 'active' : '' ?>">
                             <a href="/SCES/frontend/faculty/section.php">
                                 <i class="fa-solid fa-users-rectangle icon"></i>
                                 <span class="text">Sections</span>

@@ -262,17 +262,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = $fetchDb->fetchGWAByAcademicYear($lrn);
 
         if ($data) {
-            
+
             echo json_encode([
                 'labels' => $data['labels'],
                 'barData' => $data['gwaValues']
             ]);
         } else {
-            
+
             echo json_encode([
                 'labels' => [],
                 'barData' => []
             ]);
+        }
+    } else if ($submitType === 'fetchStudentsDataTable') {
+        session_start();
+        $sectionId = $_SESSION['section_id'];
+
+        $students = $fetchDb->getStudentsBySection($sectionId);
+
+        echo json_encode($students);
+    } elseif ($submitType === 'fetchStudentDetails') {
+        $studentId = $_POST['student_id'];
+        $student = $fetchDb->getStudentDetails($studentId);
+        if ($student) {
+            echo json_encode($student);
+        } else {
+            echo json_encode(['error' => 'No student found']);
         }
     } else {
         echo json_encode(['error' => 'Invalid submit type']);

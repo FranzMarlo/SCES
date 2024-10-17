@@ -5,7 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/faculty/data-setter.php';
 
 $log = new facultyLoggedIn();
 $log->needLogin();
-$current_page = basename($_SERVER['REQUEST_URI']);
+$current_page = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $totalStudents = $db->getTotalStudent();
 $totalTeachers = $db->getTotalTeacher();
 $totalSubjects = $db->getTotalSubject();

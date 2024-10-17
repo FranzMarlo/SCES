@@ -761,6 +761,45 @@ class fetchClass extends db_connect
         return null; // Return null if no GWA records are found or query fails
     }
 
+    public function getStudentsBySection($sectionId)
+    {
+        $query = $this->conn->prepare("
+            SELECT
+                student.lrn,
+                student.student_id,
+                student.student_lname,
+                student.student_fname,
+                student.student_mname,
+                student.age,
+                student.gender,
+                student.profile_image,
+                level.grade_level,
+                section.section
+            FROM
+                student_tbl student
+            INNER JOIN
+                level_tbl level
+            ON
+                student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section
+            ON
+                student.section_id = section.section_id
+            WHERE 
+                student.section_id = ?
+            ORDER BY
+                student.student_lname ASC
+        ");
+        $query->bind_param("s", $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $students = $result->fetch_all(MYSQLI_ASSOC);
+            return $students;
+        } else {
+
+            return false;
+        }
+    }
 
 
 }
