@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
             };
             document.getElementById("studId").textContent = student.student_id;
             document
-              .getElementById("studId")
+              .getElementById("recordsTab")
               .setAttribute("data-student-id", student.student_id);
             document.getElementById("fullName").textContent =
               student.student_fname + " " + student.student_lname;
@@ -159,7 +159,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.body.style.overflow = "hidden";
             document.getElementById("studentModal").style.display = "flex";
-            initializeQuizScoresTable(student.student_id);
 
           })
           .catch((error) => {
@@ -181,8 +180,11 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("recordsTab").addEventListener("click", function () {
+    var studentId = document.getElementById("recordsTab").getAttribute("data-student-id");
+
     showTabContent("recordsContainer");
     setActiveTab("recordsTab");
+    initializeQuizScoresTable(studentId);
   });
 
   document
@@ -214,8 +216,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function initializeQuizScoresTable(studentId) {
     if ($.fn.dataTable.isDataTable("#quizScoresTable")) {
-      $("#quizScoresTable").DataTable().destroy();
+      var quizScoresTable = $("#quizScoresTable").DataTable();
+        quizScoresTable.settings()[0].ajax.data = function (d) {
+            d.submitType = "facultyGetQuizRecords";
+            d.student_id = studentId;
+            return d;
+        };
+        
+        quizScoresTable.ajax.reload();
     }
+    else{
     var quizScoresTable = $("#quizScoresTable").DataTable({
       responsive: {
         details: {
@@ -278,6 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
   }
+}
   
   function showAlert(icon, title, message) {
     Swal.fire({
