@@ -296,6 +296,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $studentRecords = $fetchDb->facultyFetchScores($studentId, $teacherId);
         echo json_encode($studentRecords);
+    } else if ($submitType === 'facultyGetGrades') {
+        $studentId = $_POST['student_id'];
+
+        $studentGrades = $fetchDb->studentFetchGrades($studentId);
+        echo json_encode($studentGrades);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

@@ -147,6 +147,22 @@
                     </thead>
                 </table>
             </div>
+            <div class="title-box">
+                <img src="/SCES/assets/images/profile-grades.png" alt="profile-grades.png">
+                <h1>Grades</h1>
+            </div>
+            <div class="table-responsive">
+                <table id="gradesTable" class="display data-table">
+                    <thead>
+                        <tr class="colored-row">
+                            <th>Subject</th>
+                            <th>Grade</th>
+                            <th>Remarks</th>
+                            <th>Quarter</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
         <div class="tab-container" id="analyticsContainer">
 
