@@ -250,6 +250,17 @@ table.dataTable tbody td.dataTables_empty {
   border-radius: 30px;
   width: fit-content;
   font-size: 1rem;
+  cursor: pointer;
+}
+.tab-item.pink:hover,
+.tab-item.pink.active {
+  font-weight: bold;
+  background-color: #ffd6e6;
+}
+.tab-item.blue:hover,
+.tab-item.blue.active {
+  font-weight: bold;
+  background-color: #c5e3ff;
 }
 .title-box {
   display: flex;
@@ -266,12 +277,13 @@ table.dataTable tbody td.dataTables_empty {
   font-size: 1.4rem;
 }
 .tab-container {
-  display: flex;
+  display: none;
   flex-direction: column;
   padding: 0 15px;
   width: 100%;
   gap: 15px;
   padding-bottom: 15px;
+  align-items: center;
 }
 .tab-panel {
   width: 100%;
@@ -337,10 +349,16 @@ table.dataTable tbody td.dataTables_empty {
   .title-box h1 {
     font-size: 1.2rem;
   }
+  .table-responsive {
+    max-width: 580px;
+  }
+  .modal-content {
+    width: 95%;
+  }
 }
 @media (width < 600px) {
   .table-responsive {
-    max-width: 720px;
+    max-width: 500px;
   }
   .data-table thead th {
     font-size: 0.9rem;
@@ -359,12 +377,12 @@ table.dataTable tbody td.dataTables_empty {
     width: 100%;
   }
   .tab-col p {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #797979;
     margin-bottom: 5px;
   }
   .tab-col span {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   .head-row img {
     height: 100px;
@@ -372,6 +390,14 @@ table.dataTable tbody td.dataTables_empty {
   }
   .head-col span {
     font-size: 1.1rem;
+  }
+  .tab-item {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
+  .more-btn {
+    padding: 5px 8px;
+    font-size: 0.8rem;
   }
 }
 @media (width < 500px) {
@@ -425,4 +451,23 @@ table.dataTable tbody td.dataTables_empty {
 }
 .female {
   background-color: #ffd6e6 !important;
+}
+.passed,
+.failed,
+.fair {
+  display: inline-block; /* Ensures the elements are treated as block */
+  width: 100px; /* Set a fixed width for both */
+  text-align: center; /* Center align text */
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px;
+}
+.passed {
+  background-color: #4caf50;
+}
+.failed {
+  background-color: #c85650;
+}
+.fair {
+  background-color: #fce344;
 }

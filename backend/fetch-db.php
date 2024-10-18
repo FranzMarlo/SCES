@@ -807,5 +807,62 @@ class fetchClass extends db_connect
         }
     }
 
+    public function facultyFetchScores($studentId, $teacherId)
+    {
+        $query = $this->conn->prepare("
+    SELECT 
+        subject.subject_id,
+        subject.subject,
+        level.level_id,
+        level.grade_level,
+        section.section,
+        section.section_id,
+        quiz.quiz_id,
+        quiz.quiz_number,
+        quiz.title,
+        score.score,
+        student.student_lname,
+        student.student_fname,
+        student.student_mname,
+        score.item_number,
+        score.remarks,
+        score.time,
+        score.percentage
+    FROM
+        quiz_tbl quiz
+    INNER JOIN
+        subject_tbl subject ON subject.subject_id = quiz.subject_id
+    INNER JOIN 
+        section_tbl section ON section.section_id = subject.section_id
+    INNER JOIN 
+        level_tbl level ON level.level_id = section.level_id
+    LEFT JOIN 
+        student_tbl student ON student.section_id = section.section_id
+    LEFT JOIN 
+        score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
+    WHERE 
+        student.student_id = ?
+    AND
+        subject.teacher_id = ?
+    AND
+        score.score IS NOT NULL
+    ORDER BY
+        score.time DESC");
+
+        $query->bind_param("ss", $studentId, $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $allResults = $result->fetch_all(MYSQLI_ASSOC);
+
+            foreach ($allResults as &$record) {
+                $record['time'] = date('F j, Y', strtotime($record['time']));
+            }
+
+            return $allResults;
+        } else {
+            return null;
+        }
+    }
 
 }

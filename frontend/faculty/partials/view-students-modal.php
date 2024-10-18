@@ -1,12 +1,12 @@
 <div id="studentModal" class="modal">
     <div class="modal-content">
-        <div class="modal-head male">
+        <div class="modal-head" id="studentHeader">
             <div class="modal-header">
                 <h2>Student Info</h2>
                 <span class="close-btn">&times;</span>
             </div>
             <div class="head-row">
-                <img src="/SCES/storage/student/images/default-profile.png" alt="default-profile.png">
+                <img src="/SCES/storage/student/images/default-profile.png" alt="default-profile.png" id="profileImage">
                 <div class="head-col">
                     <span id="fullName"></span>
                     <span id="studId"></span>
@@ -15,11 +15,11 @@
             </div>
         </div>
         <div class="tab-controller">
-            <div class="tab-item">Profile</div>
-            <div class="tab-item">Records</div>
-            <div class="tab-item">Analytics</div>
+            <div class="tab-item" id="profileTab">Profile</div>
+            <div class="tab-item" id="recordsTab">Records</div>
+            <div class="tab-item" id="analyticsTab">Analytics</div>
         </div>
-        <div class="tab-container">
+        <div class="tab-container" id="profileContainer">
             <div class="tab-panel">
                 <div class="title-box">
                     <img src="/SCES/assets/images/personal-info.png" alt="personal-info.png">
@@ -126,6 +126,30 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="tab-container" id="recordsContainer">
+            <div class="title-box">
+                <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
+                <h1>Quiz Scores</h1>
+            </div>
+            <div class="table-responsive">
+                <table id="quizScoresTable" class="display data-table">
+                    <thead>
+                        <tr class="colored-row">
+                            <th>Quiz No.</th>
+                            <th>Subject</th>
+                            <th>Title</th>
+                            <th>Score</th>
+                            <th>Total Question</th>
+                            <th>Remarks</th>
+                            <th>Date Taken</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="tab-container" id="analyticsContainer">
+
         </div>
     </div>
 </div>

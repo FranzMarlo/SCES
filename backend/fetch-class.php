@@ -289,6 +289,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode(['error' => 'No student found']);
         }
+    } else if ($submitType === 'facultyGetQuizRecords') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $studentId = $_POST['student_id'];
+
+        $studentRecords = $fetchDb->facultyFetchScores($studentId, $teacherId);
+        echo json_encode($studentRecords);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
