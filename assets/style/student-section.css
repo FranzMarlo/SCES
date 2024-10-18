@@ -328,6 +328,9 @@ table.dataTable tbody td.dataTables_empty {
   .table-responsive {
     width: 90%;
   }
+  .panel-title h1 {
+    font-size: 1.5rem;
+  }
 }
 @media (width < 992px) {
   .modal-content {
@@ -336,6 +339,12 @@ table.dataTable tbody td.dataTables_empty {
   .head-row img {
     height: 110px;
     width: 110px;
+  }
+  .panel-title h1 {
+    font-size: 1.3rem;
+  }
+  .number-icon span {
+    font-size: 1.1rem;
   }
 }
 @media (width < 768px) {
@@ -357,6 +366,16 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 600px) {
+  .panel-title{
+    padding-bottom: 3px;
+  }
+  .number-icon{
+    height: 30px;
+    border-radius: 25px;
+  }
+  .number-icon span {
+    font-size: 1rem;
+  }
   .table-responsive {
     max-width: 500px;
   }
