@@ -44,6 +44,7 @@ class fetchClass extends db_connect
         $query = $this->conn->prepare(
             "SELECT
                 student.profile_image,
+                student.lrn,
                 student.student_id,
                 student.student_lname,
                 student.student_fname,
@@ -56,7 +57,8 @@ class fetchClass extends db_connect
                 student.guardian_name,
                 student.guardian_contact,
                 level.grade_level,
-                section.section
+                section.section,
+                login.email
             FROM
                 student_tbl student
             INNER JOIN
@@ -67,6 +69,10 @@ class fetchClass extends db_connect
                 section_tbl section
             ON
                 student.section_id = section.section_id
+            INNER JOIN
+                login_tbl login
+            ON
+                student.student_id = login.student_id
             WHERE
                 student.student_id = ?
             "

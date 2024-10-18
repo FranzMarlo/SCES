@@ -74,39 +74,61 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   });
 
-  document.addEventListener("click", function (event) {
-    if (event.target.classList.contains("more-btn")) {
-      const studentId = event.target.getAttribute("data-student-id");
+  document
+    .getElementById("studentsTable")
+    .addEventListener("click", function (event) {
+      if (event.target.closest(".more-btn")) {
+        const btn = event.target.closest(".more-btn");
+        const studentId = btn.getAttribute("data-student-id");
 
-      fetch("/SCES/backend/fetch-class.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          student_id: studentId,
-          submitType: "fetchStudentDetails",
-        }),
-      })
-        .then((response) => response.json())
-        .then((student) => {
-          if (!student || Object.keys(student).length === 0) {
-            showAlert("error", "Server Error", "Student Data Not Found");
-            return;
-          }
-
-
-          document.getElementById("studId").textContent = student.student_id;
-          document.getElementById("fullName").textContent =
-            student.student_fname + " " + student.student_lname;
-
-          document.getElementById("studentModal").style.display = "flex";
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=fetchStudentDetails&student_id=${studentId}`,
         })
-        .catch((error) => {
-          showAlert("error", "Server Error", "Please Try Again Later");
-        });
-    }
-  });
+          .then((response) => response.json())
+          .then((student) => {
+            if (!student || Object.keys(student).length === 0) {
+              showAlert("error", "Server Error", "Student Data Not Found");
+              return;
+            }
+
+            Object.keys(student).forEach((key) => {
+              if (student[key] === null || student[key] === "") {
+                student[key] = "Not Set";
+              }
+            });
+           
+            document.getElementById("studId").textContent = student.student_id;
+            document.getElementById("fullName").textContent =
+              student.student_fname + " " + student.student_lname;
+              document.getElementById("gradeSection").textContent = student.grade_level + ' - ' + student.section;
+              document.getElementById("lastName").textContent = student.student_lname;
+              document.getElementById("firstName").textContent = student.student_fname;
+              document.getElementById("middleName").textContent = student.student_mname;
+              document.getElementById("lastName").textContent = student.student_lname;
+              document.getElementById("gender").textContent = student.gender;
+              document.getElementById("age").textContent = student.age;
+              document.getElementById("lrn").textContent = student.lrn;
+              document.getElementById("studentId").textContent = student.student_id;
+              document.getElementById("gradeLevel").textContent = student.grade_level;
+              document.getElementById("section").textContent = student.section;
+              document.getElementById("email").textContent = student.email;
+              document.getElementById("city").textContent = student.city;
+              document.getElementById("barangay").textContent = student.barangay;
+              document.getElementById("street").textContent = student.street;
+              document.getElementById("guardian").textContent = student.guardian_name;
+              document.getElementById("contact").textContent = student.guardian_contact;
+
+            document.getElementById("studentModal").style.display = "flex";
+          })
+          .catch((error) => {
+            showAlert("error", "Server Error", "Please Try Again Later");
+          });
+      }
+    });
 
   document.querySelector(".close-btn").addEventListener("click", function () {
     document.getElementById("studentModal").style.display = "none"; // Hide modal

@@ -8,9 +8,9 @@
             <div class="head-row">
                 <img src="/SCES/storage/student/images/default-profile.png" alt="default-profile.png">
                 <div class="head-col">
-                    <span id="fullName">Franz Marlo B. Andal</span>
-                    <span id="studId">20240001</span>
-                    <span id="gradeSection">Grade 1 - Banana</span>
+                    <span id="fullName"></span>
+                    <span id="studId"></span>
+                    <span id="gradeSection"></span>
                 </div>
             </div>
         </div>
@@ -28,17 +28,17 @@
                 <div class="tab-row">
                     <div class="tab-col">
                         <p>Last Name</p>
-                        <span id="lastName">Andal</span>
+                        <span id="lastName"></span>
                     </div>
                     <div class="tab-col">
                         <p>First Name</p>
-                        <span id="firstName">Franz Marlo</span>
+                        <span id="firstName"></span>
                     </div>
                 </div>
                 <div class="tab-row">
                     <div class="tab-col">
                         <p>Middle Name</p>
-                        <span id="middleName">Barroga</span>
+                        <span id="middleName"></span>
                     </div>
                     <div class="tab-col">
                         <p>Suffix</p>
@@ -48,11 +48,11 @@
                 <div class="tab-row">
                     <div class="tab-col">
                         <p>Gender</p>
-                        <span id="gender">Male</span>
+                        <span id="gender"></span>
                     </div>
                     <div class="tab-col">
                         <p>Age</p>
-                        <span id="age">22</span>
+                        <span id="age"></span>
                     </div>
                 </div>
                 <div class="tab-row">
@@ -70,7 +70,7 @@
                 <div class="tab-row">
                     <div class="tab-col">
                         <p>LRN</p>
-                        <span id="lrn">Andal</span>
+                        <span id="lrn"></span>
                     </div>
                     <div class="tab-col">
                         <p>Student ID</p>
@@ -80,17 +80,17 @@
                 <div class="tab-row">
                     <div class="tab-col">
                         <p>Grade Level</p>
-                        <span id="gradeLevel">Grade 1</span>
+                        <span id="gradeLevel"></span>
                     </div>
                     <div class="tab-col">
                         <p>Section</p>
-                        <span id="section">Banana</span>
+                        <span id="section"></span>
                     </div>
                 </div>
                 <div class="tab-row">
                     <div class="tab-col">
                         <p>Email</p>
-                        <span id="email">test@gmail.com</span>
+                        <span id="email"></span>
                     </div>
                 </div>
             </div>
@@ -102,27 +102,27 @@
                 <div class="tab-row">
                     <div class="tab-col">
                         <p>City/State</p>
-                        <span id="city">Batangas City</span>
+                        <span id="city"></span>
                     </div>
                     <div class="tab-col">
                         <p>Barangay</p>
-                        <span id="barangay">Galamay Amo</span>
+                        <span id="barangay"></span>
                     </div>
                 </div>
                 <div class="tab-row">
                     <div class="tab-col">
                         <p>Street</p>
-                        <span id="street">Sitio Wala</span>
+                        <span id="street"></span>
                     </div>
                     <div class="tab-col">
                         <p>Guardian Name</p>
-                        <span id="guardian">John Doe</span>
+                        <span id="guardian"></span>
                     </div>
                 </div>
                 <div class="tab-row">
                     <div class="tab-col">
                         <p>Guardian Contact</p>
-                        <span id="contact">0991234678</span>
+                        <span id="contact"></span>
                     </div>
                 </div>
             </div>
