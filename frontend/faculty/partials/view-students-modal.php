@@ -202,13 +202,16 @@
             <div class="graph-container">
                 <div class="data-container">
                     <div class="data-box">
-
+                        <p>Predicted Performance</p>
+                        <span id="predictedPerformance"></span>
                     </div>
                     <div class="data-box">
-                        
+                        <p>Predicted Graduation Rate</p>
+                        <span id="predictedGraduationRate"></span>
                     </div>
                     <div class="data-box">
-
+                        <p>Predicted Academic Success Rate</p>
+                        <span id="predictedAcademicSuccessRate"></span>
                     </div>
                 </div>
                 <div class="graph">

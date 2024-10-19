@@ -392,7 +392,6 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => response.json())
       .then((data) => {
-
         document.getElementById("totalCompletion").textContent =
           data.totalCompleted || 0;
         document.getElementById("totalQuizzes").textContent =
@@ -417,11 +416,52 @@ document.addEventListener("DOMContentLoaded", function () {
       body: data,
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then((studentData) => {
+        // Check if studentData contains N/A values
+        const hasNoData = studentData.some(
+          (record) =>
+            record.gwa === "N/A" &&
+            record.grade_section === "N/A" &&
+            record.remarks === "N/A"
+        );
 
+        if (hasNoData) {
+          console.log("No Data");
+          return;
+        }
+
+        // Prepare data for the predictive analytics API
+        const predictiveData = {
+          gwa_records: studentData, // Send the entire studentData array
+        };
+
+        // Send the predictive data to Python API
+        fetch("http://127.0.0.1:5000/predict", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(predictiveData),
+        })
+          .then((response) => response.json())
+          .then((predictionData) => {
+            // Handle the returned prediction data
+            console.log(
+              "Predicted Performance:",
+              predictionData.predicted_performance
+            );
+            console.log(
+              "Predicted Academic Success Rate:",
+              predictionData.predicted_academic_success_rate
+            );
+            console.log("Predicted Remarks:", predictionData.predicted_remarks);
+          })
+          .catch((error) => {
+            console.error("Error fetching predictions:", error);
+          });
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching student data:", error);
       });
   }
 

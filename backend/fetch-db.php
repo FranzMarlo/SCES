@@ -1037,7 +1037,8 @@ class fetchClass extends db_connect
         // Prepare the SQL query to concatenate grade_level and section without capitalization
         $query = $this->conn->prepare("
             SELECT gwa, 
-                   CONCAT(grade_level, ' - ', section) AS grade_section
+                   CONCAT(grade_level, ' - ', section) AS grade_section,
+                   remarks
             FROM record_tbl 
             WHERE lrn = ?
         ");
@@ -1053,6 +1054,7 @@ class fetchClass extends db_connect
             // Capitalize first letter of each word in PHP
             foreach ($gwaRecords as &$record) {
                 $record['grade_section'] = ucwords(strtolower($record['grade_section']));
+                $record['remarks'] = ucwords(strtolower($record['remarks']));
             }
 
             return $gwaRecords;

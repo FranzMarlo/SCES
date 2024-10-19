@@ -301,7 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $studentGrades = $fetchDb->studentFetchGrades($studentId);
         echo json_encode($studentGrades);
-    } else if ($submitType === 'facultyGetGWA') {
+    } else if ($submitType === 'facultyGetPanelData') {
         session_start();
         $sectionId = $_SESSION['section_id'];
         $teacherId = $_SESSION['teacher_id'];
@@ -317,7 +317,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData['averageScore'] = $averageScore;
         $panelData['generalAverage'] = $generalAverage;
         echo json_encode($panelData);
-    } else if ($submitType === 'facultyGetPanelData') {
+    } else if ($submitType === 'facultyGetGWA') {
         $studentId = $_POST['student_id'];
         $lrn = $fetchDb->getStudentLRN($studentId);
 
@@ -329,13 +329,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($gwaRecords as $record) {
                 $gwaData[] = [
                     'gwa' => $record['gwa'],
-                    'grade_section' => $record['grade_section']
+                    'grade_section' => $record['grade_section'],
+                    'remarks' => $record['remarks']
                 ];
             }
         } else {
             $gwaData[] = [
                 'gwa' => 'N/A',
-                'grade_section' => 'N/A'
+                'grade_section' => 'N/A',
+                'remarks' => 'N/A'
             ];
         }
 
