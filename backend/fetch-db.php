@@ -864,5 +864,201 @@ class fetchClass extends db_connect
             return null;
         }
     }
+    public function facultyGetTotalQuizzesCount($studentId, $teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_tbl student
+        ON student.section_id = subject.section_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level
+        ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        LEFT JOIN score_tbl score
+        ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+        WHERE 
+            student.student_id = ?
+        AND 
+            score.score IS NOT NULL
+        AND
+            subject.teacher_id = ?
+    ");
+
+        $query->bind_param("ss", $studentId, $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc();
+            return $subjectDetails['quiz_count'];
+        }
+
+        return 0;
+    }
+
+    public function facultyGetPendingQuizzesCount($sectionId, $studentId, $teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_tbl student
+        ON student.section_id = subject.section_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level
+        ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        LEFT JOIN score_tbl score
+        ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        WHERE 
+            student.section_id = ?
+        AND 
+            student.student_id = ?
+        AND 
+            quiz.status = 'Active'
+        AND 
+            score.score IS NULL
+        AND
+            subject.teacher_id = ?
+    ");
+
+        // Bind parameters for sectionId, studentId, and status (pending)
+        $query->bind_param("sss", $sectionId, $studentId, $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc(); // Fetch as associative array
+            return $subjectDetails['quiz_count']; // Return the count of pending quizzes
+        }
+
+        return 0; // Return 0 if no result
+    }
+
+    public function computeStudentGWAByLRN($lrn)
+    {
+        // Prepare the SQL query to get all GWA records for the student by LRN
+        $query = $this->conn->prepare("
+        SELECT gwa 
+        FROM record_tbl 
+        WHERE lrn = ?
+    ");
+
+        // Bind the LRN parameter
+        $query->bind_param("s", $lrn);
+
+        // Execute the query
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $gwaRecords = $result->fetch_all(MYSQLI_ASSOC);
+
+            // Check if there are any GWA records
+            if (count($gwaRecords) > 0) {
+                $totalGwa = 0;
+                $gwaCount = 0;
+
+                // Loop through all GWA records and compute the sum
+                foreach ($gwaRecords as $record) {
+                    $totalGwa += $record['gwa'];
+                    $gwaCount++;
+                }
+
+                // Compute the average GWA
+                $generalAverage = $totalGwa / $gwaCount;
+
+                return round($generalAverage, 2); // Return the rounded average GWA
+            }
+        }
+
+        return null;
+    }
+
+    public function facultyGetAverageScore($studentId, $teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            AVG(score.score) AS average_score
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_tbl student
+        ON student.section_id = subject.section_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        LEFT JOIN score_tbl score
+        ON quiz.quiz_id = score.quiz_id
+        WHERE 
+            student.student_id = ?
+        AND 
+            score.score IS NOT NULL
+        AND
+            subject.teacher_id = ?
+    ");
+
+        $query->bind_param("ss", $studentId, $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $scoreDetails = $result->fetch_assoc();
+
+            if ($scoreDetails && isset($scoreDetails['average_score'])) {
+                return round($scoreDetails['average_score'], 2);
+            }
+        }
+
+        return null;
+    }
+
+    public function getStudentLRN($studentId)
+    {
+        $query = $this->conn->prepare("SELECT lrn FROM student_tbl WHERE student_id = ?");
+        $query->bind_param("s", $studentId);
+        if ($query->execute()) {
+            $result = $query->get_result()->fetch_assoc();
+            return $result['lrn'];
+        }
+
+        return null;
+    }
+
+    public function getStudentGWA($lrn)
+    {
+        // Prepare the SQL query to concatenate grade_level and section without capitalization
+        $query = $this->conn->prepare("
+            SELECT gwa, 
+                   CONCAT(grade_level, ' - ', section) AS grade_section
+            FROM record_tbl 
+            WHERE lrn = ?
+        ");
+
+        // Bind the LRN parameter
+        $query->bind_param("s", $lrn);
+
+        // Execute the query
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $gwaRecords = $result->fetch_all(MYSQLI_ASSOC);
+
+            // Capitalize first letter of each word in PHP
+            foreach ($gwaRecords as &$record) {
+                $record['grade_section'] = ucwords(strtolower($record['grade_section']));
+            }
+
+            return $gwaRecords;
+        } else {
+            return [];
+        }
+    }
 
 }

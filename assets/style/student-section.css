@@ -312,6 +312,75 @@ table.dataTable tbody td.dataTables_empty {
 .tab-col span {
   font-size: 1.2rem;
 }
+.stats-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.panel-box {
+  display: flex;
+  flex-direction: column;
+  width: 23%;
+  border-radius: 30px;
+  border: 2px solid #000;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.panel-box img {
+  height: 50px;
+  width: 50px;
+  margin-bottom: 10px;
+}
+.panel-col {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+.panel-col p {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.panel-col span {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.graph-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+.graph {
+  width: 50%;
+  height: 400px;
+  padding: 10px;
+}
+.data-container{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 400px;
+  padding: 10px;
+  justify-content: space-between;
+}
+.data-box{
+  width: 100%;
+  height: 30%;
+  border-radius: 30px;
+  border: 2px solid #000;
+}
+#lineChart {
+  width: 100%;
+}
+#barChart {
+  width: 100%;
+}
 @media (width < 1199px) {
   .modal-content {
     width: 80%;
@@ -331,6 +400,15 @@ table.dataTable tbody td.dataTables_empty {
   .panel-title h1 {
     font-size: 1.5rem;
   }
+  .graph {
+    height: 350px;
+  }
+  .data-container{
+    height: 350px;
+  }
+  .panel-col p {
+    font-size: 1rem;
+  }
 }
 @media (width < 992px) {
   .modal-content {
@@ -345,6 +423,22 @@ table.dataTable tbody td.dataTables_empty {
   }
   .number-icon span {
     font-size: 1.1rem;
+  }
+  .panel-box {
+    min-height: 160px;
+  }
+  .panel-box img {
+    height: 40px;
+    width: 40px;
+  }
+  .panel-col span {
+    font-size: 1.3rem;
+  }
+  .graph {
+    height: 300px;
+  }
+  .data-container{
+    height: 300px;
   }
 }
 @media (width < 768px) {
@@ -366,6 +460,40 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 600px) {
+  .stats-panel {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .panel-box img {
+    height: 30px;
+    width: 30px;
+  }
+  .panel-col p {
+    font-size: 0.9rem;
+  }
+  .panel-col span {
+    font-size: 1rem;
+  }
+  .graph-container {
+    margin-top: 5px;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .data-container{
+    width: 100%;
+    flex-direction: column;
+    height: 350px;
+  }
+  .graph {
+    width: 100%;
+    height: 350px;
+  }
+  .panel-box {
+    min-height: 0;
+    max-height: 120px;
+    width: 48%;
+    padding: 10px;
+  }
   .panel-title{
     padding-bottom: 3px;
   }
@@ -432,6 +560,11 @@ table.dataTable tbody td.dataTables_empty {
     max-width: 380px;
   }
 }
+@media (width < 425px){
+  .graph {
+    height: 300px;
+  }
+}
 @media (width < 375px) {
   .head-row img {
     height: 90px;
@@ -445,6 +578,26 @@ table.dataTable tbody td.dataTables_empty {
   }
   .panel {
     padding: 5px;
+  }
+  .panel-col p {
+    font-size: 0.7rem;
+  }
+  .panel-col span {
+    font-size: 0.9rem;
+  }
+  .panel-box img{
+    height: 25px;
+    width: 25px;
+  }
+  .graph {
+    width: 100%;
+    height: 300px;
+  }
+  .panel-box {
+    width: 48%;
+    padding: 5px 10px;
+    max-height: 0;
+    min-height: 100px;
   }
 }
 .G1 {
@@ -489,4 +642,16 @@ table.dataTable tbody td.dataTables_empty {
 }
 .fair {
   background-color: #fce344;
+}
+.completed {
+  background-color: #d2ebc4;
+}
+.pending {
+  background-color: #ffd6e6;
+}
+.quiz-score {
+  background-color: #c5e3ff;
+}
+.average {
+  background-color: #fcfd95;
 }

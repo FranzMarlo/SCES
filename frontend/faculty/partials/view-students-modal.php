@@ -165,7 +165,64 @@
             </div>
         </div>
         <div class="tab-container" id="analyticsContainer">
+            <div class="title-box">
+                <img src="/SCES/assets/images/profile-analytics.png" alt="profile-analytics.png">
+                <h1>Analytics</h1>
+            </div>
+            <div class="stats-panel">
+                <div class="panel-box completed">
+                    <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
+                    <div class="panel-col">
+                        <p>Quiz Completed</p>
+                        <span id="totalCompletion"></span>
+                    </div>
+                </div>
+                <div class="panel-box pending">
+                    <img src="/SCES/assets/images/hourglass.png" alt="hourglass.png">
+                    <div class="panel-col">
+                        <p>Pending Quiz</p>
+                        <span id="totalQuizzes"></span>
+                    </div>
+                </div>
+                <div class="panel-box quiz-score">
+                    <img src="/SCES/assets/images/gpa.png" alt="gpa.png">
+                    <div class="panel-col">
+                        <p>Average Score</p>
+                        <span id="averageScore"></span>
+                    </div>
+                </div>
+                <div class="panel-box average">
+                    <img src="/SCES/assets/images/profile-gwa.png" alt="profile-gwa.png">
+                    <div class="panel-col">
+                        <p>General Average</p>
+                        <span id="generalAverage"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="graph-container">
+                <div class="data-container">
+                    <div class="data-box">
 
+                    </div>
+                    <div class="data-box">
+                        
+                    </div>
+                    <div class="data-box">
+
+                    </div>
+                </div>
+                <div class="graph">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+            <div class="graph-container">
+                <div class="graph">
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <div class="graph">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>

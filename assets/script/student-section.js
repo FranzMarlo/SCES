@@ -106,9 +106,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const coloredRow = document.querySelectorAll(".colored-row");
 
             modalHeader.classList.remove("female", "male");
-            coloredRow.forEach((row) =>{
+            coloredRow.forEach((row) => {
               row.classList.remove("female", "male");
-            })
+            });
 
             const tabItems = document.querySelectorAll(".tab-item");
             tabItems.forEach((tab) => {
@@ -116,9 +116,9 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             modalHeader.classList.add(genderClass);
-            coloredRow.forEach((row) =>{
+            coloredRow.forEach((row) => {
               row.classList.add(genderClass);
-            })
+            });
             tabItems.forEach((tab) => {
               tab.classList.add(tabItemClass);
             });
@@ -163,6 +163,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.body.style.overflow = "hidden";
             document.getElementById("studentModal").style.display = "flex";
+            populatePanelData(student.student_id);
+            getStudentGWA(student.student_id);
           })
           .catch((error) => {
             showAlert("error", "Server Error", "Please Try Again Later");
@@ -373,10 +375,54 @@ document.addEventListener("DOMContentLoaded", function () {
           emptyTable: "No data available in table",
         },
         initComplete: function () {
-          gradesTable.draw(); 
+          gradesTable.draw();
         },
       });
     }
+  }
+
+  function populatePanelData(studentId) {
+    const data = new FormData();
+    data.append("submitType", "facultyGetPanelData");
+    data.append("student_id", studentId);
+
+    fetch("/SCES/backend/fetch-class.php", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+
+        document.getElementById("totalCompletion").textContent =
+          data.totalCompleted || 0;
+        document.getElementById("totalQuizzes").textContent =
+          data.totalPending || 0;
+        document.getElementById("averageScore").textContent =
+          data.averageScore || "N/A";
+        document.getElementById("generalAverage").textContent =
+          data.generalAverage || "N/A";
+      })
+      .catch((error) => {
+        console.error("Error fetching panel data:", error);
+      });
+  }
+
+  function getStudentGWA(studentId) {
+    const data = new FormData();
+    data.append("submitType", "facultyGetGWA");
+    data.append("student_id", studentId);
+
+    fetch("/SCES/backend/fetch-class.php", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }
 
   function showAlert(icon, title, message) {

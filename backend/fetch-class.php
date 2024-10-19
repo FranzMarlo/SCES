@@ -301,6 +301,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $studentGrades = $fetchDb->studentFetchGrades($studentId);
         echo json_encode($studentGrades);
+    } else if ($submitType === 'facultyGetGWA') {
+        session_start();
+        $sectionId = $_SESSION['section_id'];
+        $teacherId = $_SESSION['teacher_id'];
+        $studentId = $_POST['student_id'];
+        $lrn = $fetchDb->getStudentLRN($studentId);
+        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId, $teacherId);
+        $totalPending = $fetchDb->facultyGetPendingQuizzesCount($sectionId, $studentId, $teacherId);
+        $averageScore = $fetchDb->facultyGetAverageScore($studentId, $teacherId);
+        $generalAverage = $fetchDb->computeStudentGWAByLRN($lrn);
+
+        $panelData['totalCompleted'] = $totalCompleted;
+        $panelData['totalPending'] = $totalPending;
+        $panelData['averageScore'] = $averageScore;
+        $panelData['generalAverage'] = $generalAverage;
+        echo json_encode($panelData);
+    } else if ($submitType === 'facultyGetPanelData') {
+        $studentId = $_POST['student_id'];
+        $lrn = $fetchDb->getStudentLRN($studentId);
+
+        $gwaRecords = $fetchDb->getStudentGWA($lrn);
+
+        $gwaData = [];
+
+        if (!empty($gwaRecords)) {
+            foreach ($gwaRecords as $record) {
+                $gwaData[] = [
+                    'gwa' => $record['gwa'],
+                    'grade_section' => $record['grade_section']
+                ];
+            }
+        } else {
+            $gwaData[] = [
+                'gwa' => 'N/A',
+                'grade_section' => 'N/A'
+            ];
+        }
+
+        echo json_encode($gwaData);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
