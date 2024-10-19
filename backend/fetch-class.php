@@ -296,10 +296,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $studentRecords = $fetchDb->facultyFetchScores($studentId, $teacherId);
         echo json_encode($studentRecords);
+    } else if ($submitType === 'facultyGetQuizRecordsBySubject') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $subjectId = $_SESSION['subject_id'];
+        $studentId = $_POST['student_id'];
+
+        $studentRecords = $fetchDb->facultyFetchScoresBySubject($studentId, $teacherId, $subjectId);
+        echo json_encode($studentRecords);
     } else if ($submitType === 'facultyGetGrades') {
         $studentId = $_POST['student_id'];
 
         $studentGrades = $fetchDb->studentFetchGrades($studentId);
+        echo json_encode($studentGrades);
+    } else if ($submitType === 'facultyGetGradesBySubject') {
+        session_start();
+        $subjectId = $_SESSION['subject_id'];
+        $studentId = $_POST['student_id'];
+
+        $studentGrades = $fetchDb->studentFetchGradesBySubject($studentId, $subjectId);
         echo json_encode($studentGrades);
     } else if ($submitType === 'facultyGetPanelData') {
         session_start();

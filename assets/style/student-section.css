@@ -442,21 +442,21 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 768px) {
-  .center-image img {
+  .panel-box {
+    min-height: 160px;
+  }
+  .panel-box img {
     height: 40px;
     width: 40px;
   }
-  .title-box img {
-    height: 2rem;
+  .panel-col span {
+    font-size: 1.3rem;
   }
-  .title-box h1 {
-    font-size: 1.2rem;
+  .graph {
+    height: 300px;
   }
-  .table-responsive {
-    max-width: 580px;
-  }
-  .modal-content {
-    width: 95%;
+  .data-container{
+    height: 300px;
   }
 }
 @media (width < 600px) {

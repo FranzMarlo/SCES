@@ -1,9 +1,9 @@
-<div id="studentModal" class="modal">
-    <div class="modal-content">
+<div id="studentModal" class="modal-student">
+    <div class="modal-content-student">
         <div class="modal-head" id="studentHeader">
             <div class="modal-header">
                 <h2>Student Info</h2>
-                <span class="close-btn">&times;</span>
+                <span class="close-btn" id="closeStudentModal">&times;</span>
             </div>
             <div class="head-row">
                 <img src="/SCES/storage/student/images/default-profile.png" alt="default-profile.png" id="profileImage">
@@ -14,14 +14,14 @@
                 </div>
             </div>
         </div>
-        <div class="tab-controller">
-            <div class="tab-item" id="profileTab">Profile</div>
-            <div class="tab-item" id="recordsTab">Records</div>
-            <div class="tab-item" id="analyticsTab">Analytics</div>
+        <div class="modal-tab-controller">
+            <div class="tab-item" id="studentProfileTab">Profile</div>
+            <div class="tab-item" id="studentRecordsTab">Records</div>
+            <div class="tab-item" id="studentAnalyticsTab">Analytics</div>
         </div>
-        <div class="tab-container" id="profileContainer">
+        <div class="modal-tab" id="studentProfileContainer">
             <div class="tab-panel">
-                <div class="title-box">
+                <div class="tab-title">
                     <img src="/SCES/assets/images/personal-info.png" alt="personal-info.png">
                     <h1>Personal Information</h1>
                 </div>
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="tab-panel">
-                <div class="title-box">
+                <div class="tab-title">
                     <img src="/SCES/assets/images/school-info.png" alt="school-info.png">
                     <h1>School Information</h1>
                 </div>
@@ -95,7 +95,7 @@
                 </div>
             </div>
             <div class="tab-panel">
-                <div class="title-box">
+                <div class="tab-title">
                     <img src="/SCES/assets/images/background-info.png" alt="background-info.png">
                     <h1>Background Information</h1>
                 </div>
@@ -127,8 +127,8 @@
                 </div>
             </div>
         </div>
-        <div class="tab-container" id="recordsContainer">
-            <div class="title-box">
+        <div class="modal-tab" id="studentRecordsContainer">
+            <div class="tab-title">
                 <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
                 <h1>Quiz Scores</h1>
             </div>
@@ -147,7 +147,7 @@
                     </thead>
                 </table>
             </div>
-            <div class="title-box">
+            <div class="tab-title">
                 <img src="/SCES/assets/images/profile-grades.png" alt="profile-grades.png">
                 <h1>Grades</h1>
             </div>
@@ -164,8 +164,8 @@
                 </table>
             </div>
         </div>
-        <div class="tab-container" id="analyticsContainer">
-            <div class="title-box">
+        <div class="modal-tab" id="studentAnalyticsContainer">
+            <div class="tab-title">
                 <img src="/SCES/assets/images/profile-analytics.png" alt="profile-analytics.png">
                 <h1>Analytics</h1>
             </div>

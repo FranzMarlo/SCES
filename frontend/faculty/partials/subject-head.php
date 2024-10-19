@@ -11,3 +11,5 @@ $_SESSION['subject_id'] = $subject['subject_id'];
 $_SESSION['subject_title'] = $subject['subject_title'];
 $current_page = 'subject.php';
 $page = 'Lessons';
+$studentCount = $db->getTotalStudentBySection($_GET['section']);
+$sectionData = $db->facultyGetSectionData($_GET['section']);

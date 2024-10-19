@@ -2,7 +2,7 @@
   <div class="modal-content">
     <div class="modal-header">
       <h2>Add Lesson</h2>
-      <span class="close-btn">&times;</span>
+      <span class="close-btn" id="closeLessonModal">&times;</span>
     </div>
     <div class="modal-body">
       <form id="facultyAddLesson">
