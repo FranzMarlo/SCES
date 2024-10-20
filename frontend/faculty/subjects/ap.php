@@ -48,18 +48,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
             <div class="lesson-content">
               <div class="module-container">
                 <div class="module-box">
-                  <h1>Select Quarter:</h1>
-                  <div class="module-item quarter-1">
-                    <span>Quarter 1</span>
+                  <div class="module-item lessons" id="moduleLessons">
+                    <span>Lessons</span>
                   </div>
-                  <div class="module-item quarter-2">
-                    <span>Quarter 2</span>
+                  <div class="module-item students" id="moduleStudents">
+                    <span>Students</span>
                   </div>
-                  <div class="module-item quarter-3">
-                    <span>Quarter 3</span>
+                  <div class="module-item records" id="moduleRecords">
+                    <span>Records</span>
                   </div>
-                  <div class="module-item quarter-4">
-                    <span>Quarter 4</span>
+                  <div class="module-item analytics" id="moduleAnalytics">
+                    <span>Analytics</span>
                   </div>
                 </div>
               </div>
@@ -194,6 +193,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
                 <thead>
                   <tr class="ap">
                     <th>Rank</th>
+                    <th>LRN</th>
+                    <th>Student ID</th>
                     <th>Full Name</th>
                     <th>Average Score</th>
                     <th>More</th>

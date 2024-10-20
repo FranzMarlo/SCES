@@ -1698,12 +1698,19 @@ class fetchClass extends db_connect
     {
         $query = $this->conn->prepare("
         SELECT 
+            student.student_id,
+            student.lrn,
+            ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
             CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
-            AVG(score.score) AS average_score
-        FROM student_tbl student
-        INNER JOIN subject_tbl subject ON student.section_id = subject.section_id
-        INNER JOIN quiz_tbl quiz ON quiz.subject_id = subject.subject_id
-        LEFT JOIN score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+            AVG(score.score) AS average_score 
+        FROM 
+            student_tbl student
+        INNER JOIN 
+            subject_tbl subject ON student.section_id = subject.section_id
+        INNER JOIN 
+            quiz_tbl quiz ON quiz.subject_id = subject.subject_id
+        LEFT JOIN 
+            score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
         WHERE 
             student.section_id = ?
         AND 
@@ -1725,7 +1732,9 @@ class fetchClass extends db_connect
             while ($row = $result->fetch_assoc()) {
                 $students[] = [
                     'student_id' => $row['student_id'],
-                    'student_name' => $row['student_name'],
+                    'lrn' => $row['lrn'],
+                    'rank' => $row['rank'],
+                    'full_name' => $row['full_name'],
                     'average_score' => round($row['average_score'], 2),
                 ];
             }

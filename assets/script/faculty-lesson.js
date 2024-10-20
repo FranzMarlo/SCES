@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.history.pushState(null, "", newUrl);
   }
 
-  document.getElementById("lessonTab").classList.add("active");
   document.getElementById("lessonTab").addEventListener("click", function () {
     updateTabDisplay("lessonTab", 1);
     document.getElementById("lessonTab").classList.add("active");
@@ -92,13 +91,53 @@ document.addEventListener("DOMContentLoaded", function () {
       populateSubjectPanelData();
       fetchSubjectPieChartData();
       initializeSubjectLineChart();
+      initializeRankingTable();
       document.getElementById("lessonTab").classList.remove("active");
       document.getElementById("studentTab").classList.remove("active");
       document.getElementById("recordsTab").classList.remove("active");
       document.getElementById("analyticsTab").classList.add("active");
     });
 
-  // Default to lessonTab on page load
+  document.getElementById("moduleLessons").addEventListener("click", function () {
+    updateTabDisplay("lessonTab", 1);
+    document.getElementById("lessonTab").classList.add("active");
+    document.getElementById("studentTab").classList.remove("active");
+    document.getElementById("recordsTab").classList.remove("active");
+    document.getElementById("analyticsTab").classList.remove("active");
+  });
+
+  document.getElementById("moduleStudents").addEventListener("click", function () {
+    updateTabDisplay("studentTab", 2);
+    initializeStudentsTable();
+    document.getElementById("lessonTab").classList.remove("active");
+    document.getElementById("studentTab").classList.add("active");
+    document.getElementById("recordsTab").classList.remove("active");
+    document.getElementById("analyticsTab").classList.remove("active");
+  });
+
+  document.getElementById("moduleRecords").addEventListener("click", function () {
+    updateTabDisplay("recordsTab", 3);
+    initializeRecordsTable();
+    document.getElementById("lessonTab").classList.remove("active");
+    document.getElementById("studentTab").classList.remove("active");
+    document.getElementById("recordsTab").classList.add("active");
+    document.getElementById("analyticsTab").classList.remove("active");
+  });
+
+  document
+    .getElementById("moduleAnalytics")
+    .addEventListener("click", function () {
+      updateTabDisplay("analyticsTab", 4);
+      populateSubjectPanelData();
+      fetchSubjectPieChartData();
+      initializeSubjectLineChart();
+      initializeRankingTable();
+      document.getElementById("lessonTab").classList.remove("active");
+      document.getElementById("studentTab").classList.remove("active");
+      document.getElementById("recordsTab").classList.remove("active");
+      document.getElementById("analyticsTab").classList.add("active");
+    });
+
   window.addEventListener("load", function () {
     const params = new URLSearchParams(window.location.search);
     const activeTab = params.get("active") || "1"; // Default to '1' if no param
@@ -125,6 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
         populateSubjectPanelData();
         fetchSubjectPieChartData();
         initializeSubjectLineChart();
+        initializeRankingTable();
         document.getElementById("lessonTab").classList.remove("active");
         document.getElementById("studentTab").classList.remove("active");
         document.getElementById("recordsTab").classList.remove("active");
@@ -200,13 +240,13 @@ document.addEventListener("DOMContentLoaded", function () {
             searchable: false,
             className: "text-center",
           },
-          { data: "lrn" },
-          { data: "student_id" },
-          { data: "student_lname" },
-          { data: "student_fname" },
-          { data: "student_mname" },
-          { data: "age" },
-          { data: "gender" },
+          { data: "lrn", className: "text-center" },
+          { data: "student_id", className: "text-center" },
+          { data: "student_lname", className: "text-center" },
+          { data: "student_fname", className: "text-center" },
+          { data: "student_mname", className: "text-center" },
+          { data: "age", className: "text-center" },
+          { data: "gender", className: "text-center" },
           {
             data: null,
             render: function (data, type, row) {
@@ -438,11 +478,11 @@ document.addEventListener("DOMContentLoaded", function () {
           dataSrc: "",
         },
         columns: [
-          { data: "quiz_number" },
-          { data: "subject" },
-          { data: "title" },
-          { data: "score" },
-          { data: "item_number" },
+          { data: "quiz_number", className: "text-center" },
+          { data: "subject", className: "text-center" },
+          { data: "title", className: "text-center" },
+          { data: "score", className: "text-center" },
+          { data: "item_number", className: "text-center" },
           {
             data: "remarks",
             render: function (data) {
@@ -516,8 +556,8 @@ document.addEventListener("DOMContentLoaded", function () {
           dataSrc: "",
         },
         columns: [
-          { data: "subject" },
-          { data: "grade" },
+          { data: "subject", className: "text-center" },
+          { data: "grade", className: "text-center" },
           {
             data: "remarks",
             render: function (data) {
@@ -835,7 +875,7 @@ document.addEventListener("DOMContentLoaded", function () {
         dataSrc: "",
       },
       columns: [
-        { data: "full_name" },
+        { data: "full_name", className: "text-center" },
         {
           data: "quiz_number",
           className: "text-center",
@@ -1263,30 +1303,17 @@ document.addEventListener("DOMContentLoaded", function () {
           url: "/SCES/backend/fetch-class.php",
           type: "POST",
           data: function (d) {
-            d.submitType = "fetchStudentsDataTable";
+            d.submitType = "rankingStudentsBySubject";
             return d;
           },
           dataSrc: "",
         },
         columns: [
-          {
-            data: "profile_image",
-            render: function (data, type, row) {
-              return `<div class="center-image">
-                    <img src="/SCES/storage/student/images/${data}" alt="Profile Image" onerror="this.onerror=null; this.src='/SCES/storage/student/images/default.jpg';">
-                  </div>`;
-            },
-            orderable: false,
-            searchable: false,
-            className: "text-center",
-          },
-          { data: "lrn" },
-          { data: "student_id" },
-          { data: "student_lname" },
-          { data: "student_fname" },
-          { data: "student_mname" },
-          { data: "age" },
-          { data: "gender" },
+          { data: "rank", className: "text-center" },
+          { data: "lrn", className: "text-center" },
+          { data: "student_id", className: "text-center" },
+          { data: "full_name", className: "text-center" },
+          { data: "average_score", className: "text-center" },
           {
             data: null,
             render: function (data, type, row) {
@@ -1310,7 +1337,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   document
-    .getElementById("studentsTable")
+    .getElementById("rankingTable")
     .addEventListener("click", function (event) {
       if (event.target.closest(".more-btn")) {
         const btn = event.target.closest(".more-btn");
@@ -1405,5 +1432,4 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
     });
-
 });

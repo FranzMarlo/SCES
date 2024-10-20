@@ -143,6 +143,10 @@
   align-items: center;
   box-shadow: 0 2px 2px 0 #9c9c9c;
   border: 2px solid #000;
+  cursor: pointer;
+}
+.module-box .module-item:hover {
+  box-shadow: 0 0 12px 0 #9c9c9c;
 }
 .lesson-box {
   display: flex;
@@ -233,16 +237,16 @@
 .add-item i {
   font-size: 1.5rem;
 }
-.quarter-1 {
+.lessons {
   background-color: #ffd6e6;
 }
-.quarter-2 {
+.students {
   background-color: #d2ebc4;
 }
-.quarter-3 {
+.records {
   background-color: #fcfd95;
 }
-.quarter-4 {
+.analytics {
   background-color: #c5e3ff;
 }
 .fil {

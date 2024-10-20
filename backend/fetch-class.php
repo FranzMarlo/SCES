@@ -405,7 +405,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sectionId = $_SESSION['section_id'];
         $subjectId = $_SESSION['subject_id'];
 
-        $studentQuizRecords = $fetchDb->getStudentQuizRecords($sectionId, "S120240002");
+        $studentQuizRecords = $fetchDb->getStudentQuizRecords($sectionId, $subjectId);
         echo json_encode($studentQuizRecords);
     } else if ($submitType === 'fetchStudentQuizHistory') {
         $quizId = $_POST['quiz_id'];
@@ -468,10 +468,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subjectId = $_SESSION['subject_id'];
         $sectionId = $_SESSION['section_id'];
 
-        $totalCompleted = $fetchDb->facultyGetTotalSubjectQuizzesCount("S120240002");
-        $totalPending = $fetchDb->facultyGetPendingSubjectQuizzesCount("S120240002");
-        $averageScore = $fetchDb->facultyGetSubjectAverageScore("S120240002");
-        $highestAverage = $fetchDb->facultyGetHighestStudentAverageScore("S120240002");
+        $totalCompleted = $fetchDb->facultyGetTotalSubjectQuizzesCount($subjectId);
+        $totalPending = $fetchDb->facultyGetPendingSubjectQuizzesCount($subjectId);
+        $averageScore = $fetchDb->facultyGetSubjectAverageScore($subjectId);
+        $highestAverage = $fetchDb->facultyGetHighestStudentAverageScore($subjectId);
 
         $panelData['totalCompleted'] = $totalCompleted;
         $panelData['totalPending'] = $totalPending;
@@ -482,7 +482,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         session_start();
         $subjectId = $_SESSION['subject_id'];
 
-        $data = $fetchDb->subjectFetchScores("S120240002");
+        $data = $fetchDb->subjectFetchScores($subjectId);
 
         if ($data === null) {
             echo json_encode([
@@ -499,7 +499,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         session_start();
         $subjectId = $_SESSION['subject_id'];
 
-        $panelData = $fetchDb->subjectQuizCompletion("S120240002");
+        $panelData = $fetchDb->subjectQuizCompletion($subjectId);
+
+        echo json_encode($panelData);
+    } else if ($submitType === 'rankingStudentsBySubject') {
+        session_start();
+        $subjectId = $_SESSION['subject_id'];
+        $sectionId = $_SESSION['section_id'];
+
+        $panelData = $fetchDb->rankingStudentsBySubject($sectionId, $subjectId);
 
         echo json_encode($panelData);
     } else {
