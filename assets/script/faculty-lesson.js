@@ -311,6 +311,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.body.style.overflow = "hidden";
             document.getElementById("studentModal").style.display = "flex";
+            populatePanelData(student.student_id);
           })
           .catch((error) => {
             showAlert("error", "Server Error", error);
@@ -350,6 +351,12 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("studentAnalyticsTab")
     .addEventListener("click", function () {
+      var studentId = document
+        .getElementById("studentRecordsTab")
+        .getAttribute("data-student-id");
+
+      fetchDonutChartData(studentId);
+      initializeLineChart(studentId);
       showTabContent("studentAnalyticsContainer");
       setActiveTab("studentAnalyticsTab");
     });
@@ -534,7 +541,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function populatePanelData(studentId) {
     const data = new FormData();
-    data.append("submitType", "facultyGetPanelData");
+    data.append("submitType", "facultyGetPanelDataBySubject");
     data.append("student_id", studentId);
 
     fetch("/SCES/backend/fetch-class.php", {
@@ -555,5 +562,228 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) => {
         console.error("Error fetching panel data:", error);
       });
+  }
+
+  function fetchDonutChartData(studentId) {
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      data: {
+        submitType: "studentCompletionBySubject",
+        student_id: studentId,
+      },
+      dataType: "json",
+      success: function (response) {
+        var totalCompleted = response.totalCompleted;
+        var totalQuizzes = response.totalQuizzes;
+
+        initializeDonutChart(totalCompleted, totalQuizzes);
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data: " + error);
+      },
+    });
+  }
+
+  function initializeDonutChart(totalCompleted, totalQuizzes) {
+    var ctxDonut = document.getElementById("pieChart").getContext("2d");
+
+    if (ctxDonut.chart) {
+      ctxDonut.chart.destroy();
+    }
+    
+    if(totalCompleted == 0 && totalQuizzes == 0){
+      showAlert("info", "No Data Available For Student");
+    }
+
+    const centerLabelPlugin = {
+      id: "centerLabel",
+      beforeDraw: function (chart) {
+        const ctx = chart.ctx;
+        const chartArea = chart.chartArea;
+        const width = chartArea.right - chartArea.left;
+        const height = chartArea.bottom - chartArea.top;
+
+        // Calculate a responsive font size based on the chart dimensions
+        const fontSize = Math.min(width, height) / 6; // Adjust the divisor to control size
+
+        ctx.save();
+
+        ctx.font = `${fontSize.toFixed(0)}px sans-serif`; // Set the font size dynamically
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#000";
+
+        // Check if totalCompleted and totalQuizzes are both zero
+        let percentage = "0%";
+        if (totalQuizzes !== 0) {
+          percentage = ((totalCompleted / totalQuizzes) * 100).toFixed(0) + "%";
+        }
+
+        const xCenter = chartArea.left + width / 2;
+        const yCenter = chartArea.top + height / 2;
+
+        ctx.fillText(percentage, xCenter, yCenter);
+        ctx.restore();
+      },
+    };
+
+    // Only register the plugin locally for this chart
+    const donutChart = new Chart(ctxDonut, {
+      type: "doughnut",
+      data: {
+        labels: ["Completed", "Pending"],
+        datasets: [
+          {
+            data: [totalCompleted, totalQuizzes - totalCompleted],
+            backgroundColor: ["#d2ebc4", "#fcfd95"],
+            borderWidth: 2,
+            borderColor: "#000",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "bottom",
+          },
+          title: {
+            display: true,
+            text: "Quiz Completion", // Chart title
+            font: {
+              size: 17,
+              weight: "bold",
+            },
+            padding: {
+              top: 5,
+              bottom: 10,
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                return "Quizzes: " + tooltipItem.raw;
+              },
+            },
+          },
+          centerLabel: true, // Activate the center label plugin
+        },
+      },
+      plugins: [centerLabelPlugin], // Register the plugin locally here
+    });
+
+    ctxDonut.chart = donutChart;
+  }
+
+  function initializeLineChart(studentId) {
+    var ctxLine = document.getElementById("lineChart").getContext("2d");
+
+    // Destroy existing chart if it exists
+    if (Chart.getChart("lineChart")) {
+      Chart.getChart("lineChart").destroy();
+    }
+
+    // AJAX call to fetch data
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      data: {
+        submitType: "studentAverageScoreBySubject",
+        student_id: studentId,
+      },
+      success: function (response) {
+        const chartData = JSON.parse(response);
+        const months = chartData.labels || [];
+        const scores = chartData.lineData || [];
+
+        if (scores.length === 0) {
+          showAlert("info", "No Data Available For Student");
+          ctxLine.chart = new Chart(ctxLine, {
+            type: "line",
+            data: {
+              labels: ["No Data"],
+              datasets: [
+                {
+                  data: [0], // No data
+                  borderColor: "#ccc",
+                  backgroundColor: "rgba(200, 200, 200, 0.5)",
+                  fill: true,
+                  tension: 0.4,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              plugins: {
+                legend: false, // Disable the legend
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: false, // Remove title for y-axis
+                },
+                x: {
+                  title: false, // Remove title for x-axis
+                },
+              },
+            },
+          });
+        } else {
+          ctxLine.chart = new Chart(ctxLine, {
+            type: "line",
+            data: {
+              labels: months,
+              datasets: [
+                {
+                  label: "", // Remove label from the dataset
+                  data: scores,
+                  borderColor: "#ddd1ff", // Use #ddd1ff color for the line
+                  backgroundColor: "rgba(221, 209, 255, 0.5)",
+                  fill: true,
+                  tension: 0.4, // Curve the line
+                  pointBackgroundColor: "#fff",
+                  pointBorderColor: "#ddd1ff",
+                  pointHoverRadius: 5,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              plugins: {
+                legend: false, // Disable the legend
+                title: {
+                  display: true,
+                  text: "Average Score Per Month", // Add chart title
+                  font: {
+                    size: 17,
+                    weight: "bold",
+                  },
+                  padding: {
+                    top: 5,
+                    bottom: 10,
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: false, // Remove title for y-axis
+                },
+                x: {
+                  title: false, // Remove title for x-axis
+                },
+              },
+            },
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data: ", error);
+      },
+    });
   }
 });

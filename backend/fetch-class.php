@@ -332,6 +332,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData['averageScore'] = $averageScore;
         $panelData['generalAverage'] = $generalAverage;
         echo json_encode($panelData);
+    } else if ($submitType === 'facultyGetPanelDataBySubject') {
+        session_start();
+        $sectionId = $_SESSION['section_id'];
+        $studentId = $_POST['student_id'];
+        $subjectId = $_SESSION['subject_id'];
+
+        $lrn = $fetchDb->getStudentLRN($studentId);
+        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCountBySubject($studentId, $subjectId);
+        $totalPending = $fetchDb->facultyGetPendingQuizzesCountBySubject($sectionId, $studentId, $subjectId);
+        $averageScore = $fetchDb->facultyGetAverageScoreBySubject($studentId, $subjectId);
+        $generalAverage = $fetchDb->computeStudentGWAByLRN($lrn);
+
+        $panelData['totalCompleted'] = $totalCompleted;
+        $panelData['totalPending'] = $totalPending;
+        $panelData['averageScore'] = $averageScore;
+        $panelData['generalAverage'] = $generalAverage;
+        echo json_encode($panelData);
+    } else if ($submitType === 'studentCompletionBySubject') {
+        session_start();
+        $studentId = $_POST['student_id'];
+        $subjectId = $_SESSION['subject_id'];
+
+        $panelData = $fetchDb->studentGetQuizCompletionBySubject($studentId, $subjectId);
+
+        echo json_encode($panelData);
+    } else if ($submitType === 'studentAverageScoreBySubject') {
+        session_start();
+        $studentId = $_POST['student_id'];
+        $subjectId = $_SESSION['subject_id'];
+
+        $data = $fetchDb->studentFetchScoresBySubject($studentId, $subjectId);
+
+        if ($data === null) {
+            echo json_encode([
+                'labels' => [],
+                'lineData' => []
+            ]);
+        } else {
+            echo json_encode([
+                'labels' => $data['months'],
+                'lineData' => $data['scores']
+            ]);
+        }
     } else if ($submitType === 'facultyGetGWA') {
         $studentId = $_POST['student_id'];
         $lrn = $fetchDb->getStudentLRN($studentId);

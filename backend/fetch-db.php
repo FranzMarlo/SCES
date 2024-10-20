@@ -686,13 +686,10 @@ class fetchClass extends db_connect
 
     public function studentFetchScoresPerMonth($studentId)
     {
-        // Define start and end of the academic year (June to April)
-        $currentMonth = date('n');  // Numeric representation of the current month (1 to 12)
+        $currentMonth = date('n');
         $currentYear = date('Y');
 
-        // Check if we are currently in or after June (to determine the academic year range)
         if ($currentMonth >= 6) {
-            // If the current month is June or later, the academic year starts in June of this year
             $startYear = $currentYear;
             $endYear = $currentYear + 1;  // It will end in April of next year
         } else {
@@ -945,7 +942,7 @@ class fetchClass extends db_connect
     AND
         subject.teacher_id = ?
     AND
-        subject.subject_id = ?
+        quiz.subject_id = ?
     AND
         score.score IS NOT NULL
     ORDER BY
@@ -1005,6 +1002,44 @@ class fetchClass extends db_connect
         return 0;
     }
 
+    public function facultyGetTotalQuizzesCountBySubject($studentId, $subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_tbl student
+        ON student.section_id = subject.section_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level
+        ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        LEFT JOIN score_tbl score
+        ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+        WHERE 
+            student.student_id = ?
+        AND 
+            score.score IS NOT NULL
+        AND
+            quiz.subject_id = ?
+    ");
+
+        $query->bind_param("ss", $studentId, $subjectId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc();
+            return $subjectDetails['quiz_count'];
+        }
+
+        return 0;
+    }
+
     public function facultyGetPendingQuizzesCount($sectionId, $studentId, $teacherId)
     {
         $query = $this->conn->prepare("
@@ -1039,6 +1074,50 @@ class fetchClass extends db_connect
 
         // Bind parameters for sectionId, studentId, and status (pending)
         $query->bind_param("sss", $sectionId, $studentId, $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc(); // Fetch as associative array
+            return $subjectDetails['quiz_count']; // Return the count of pending quizzes
+        }
+
+        return 0; // Return 0 if no result
+    }
+
+    public function facultyGetPendingQuizzesCountBySubject($sectionId, $studentId, $subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_tbl student
+        ON student.section_id = subject.section_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level
+        ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        LEFT JOIN score_tbl score
+        ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        WHERE 
+            student.section_id = ?
+        AND 
+            student.student_id = ?
+        AND 
+            quiz.status = 'Active'
+        AND 
+            score.score IS NULL
+        AND
+            quiz.subject_id = ?
+    ");
+
+        // Bind parameters for sectionId, studentId, and status (pending)
+        $query->bind_param("sss", $sectionId, $studentId, $subjectId);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -1123,6 +1202,42 @@ class fetchClass extends db_connect
         return null;
     }
 
+    public function facultyGetAverageScoreBySubject($studentId, $subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            AVG(score.score) AS average_score
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_tbl student
+        ON student.section_id = subject.section_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        LEFT JOIN score_tbl score
+        ON quiz.quiz_id = score.quiz_id
+        WHERE 
+            student.student_id = ?
+        AND 
+            score.score IS NOT NULL
+        AND
+            quiz.subject_id = ?
+    ");
+
+        $query->bind_param("ss", $studentId, $subjectId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $scoreDetails = $result->fetch_assoc();
+
+            if ($scoreDetails && isset($scoreDetails['average_score'])) {
+                return round($scoreDetails['average_score'], 2);
+            }
+        }
+
+        return null;
+    }
+
     public function getStudentLRN($studentId)
     {
         $query = $this->conn->prepare("SELECT lrn FROM student_tbl WHERE student_id = ?");
@@ -1165,5 +1280,160 @@ class fetchClass extends db_connect
             return [];
         }
     }
+
+    public function studentGetQuizCompletionBySubject($studentId, $subjectId)
+    {
+        $currentMonth = date('n');
+        $currentYear = date('Y');
+        $emptyValue = "0%";
+
+        if ($currentMonth >= 6) {
+            $schoolYearStart = "$currentYear-06-01";
+            $schoolYearEnd = ($currentYear + 1) . "-04-30";
+        } else {
+            $schoolYearStart = ($currentYear - 1) . "-06-01";
+            $schoolYearEnd = "$currentYear-04-30";
+        }
+
+        $totalQuizzesQuery = $this->conn->prepare("
+            SELECT 
+                COUNT(DISTINCT quiz.quiz_id) AS total_quiz_count
+            FROM quiz_tbl quiz
+            INNER JOIN subject_tbl subject
+            ON subject.subject_id = quiz.subject_id
+            INNER JOIN student_tbl student
+            ON student.section_id = subject.section_id
+            WHERE 
+                student.student_id = ?
+            AND quiz.subject_id = ?
+            AND quiz.status IN ('Active', 'Completed')
+            AND quiz.due_date BETWEEN ? AND ?
+        ");
+        $totalQuizzesQuery->bind_param("ssss", $studentId, $subjectId, $schoolYearStart, $schoolYearEnd);
+
+        if ($totalQuizzesQuery->execute()) {
+            $result = $totalQuizzesQuery->get_result();
+            $totalQuizData = $result->fetch_assoc();
+            $totalQuizCount = $totalQuizData['total_quiz_count'];
+        } else {
+            return $emptyValue;
+        }
+
+        $completedQuizzesQuery = $this->conn->prepare("
+            SELECT 
+                COUNT(DISTINCT quiz.quiz_id) AS completed_quiz_count
+            FROM quiz_tbl quiz
+            INNER JOIN subject_tbl subject
+            ON subject.subject_id = quiz.subject_id
+            INNER JOIN student_tbl student
+            ON student.section_id = subject.section_id
+            LEFT JOIN score_tbl score
+            ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+            WHERE 
+                student.student_id = ?
+            AND quiz.subject_id = ?
+            AND quiz.status IN ('Active', 'Completed')
+            AND quiz.due_date BETWEEN ? AND ?
+            AND score.score IS NOT NULL
+        ");
+        $completedQuizzesQuery->bind_param("ssss", $studentId, $subjectId, $schoolYearStart, $schoolYearEnd);
+
+        if ($completedQuizzesQuery->execute()) {
+            $result = $completedQuizzesQuery->get_result();
+            $completedQuizData = $result->fetch_assoc();
+            $completedQuizCount = $completedQuizData['completed_quiz_count'];
+        } else {
+            return $emptyValue;
+        }
+
+        return [
+            'totalQuizzes' => $totalQuizCount,
+            'totalCompleted' => $completedQuizCount
+        ];
+    }
+
+    public function studentFetchScoresBySubject($studentId, $subjectId)
+{
+    $currentMonth = date('n');  // Current month number (1-12)
+    $currentYear = date('Y');   // Current year
+
+    // Determine the academic year based on the current month
+    if ($currentMonth >= 6) {
+        $startYear = $currentYear;       // Academic year starts this year
+        $endYear = $currentYear + 1;     // Academic year ends next year
+    } else {
+        $startYear = $currentYear - 1;   // Academic year started last year
+        $endYear = $currentYear;         // Academic year ends this year
+    }
+
+    // Initialize months array with all months in the academic year (June-April)
+    $months = [];
+    $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
+    $endDate = strtotime("$endYear-04-30");       // End of academic year (April 30)
+
+    while ($currentDate <= $endDate) {
+        $monthLabel = date('F', $currentDate);   // e.g., "June", "July"
+        $months[date('Y-m', $currentDate)] = [
+            'month' => $monthLabel,
+            'avg_score' => 0  // Initialize score to 0 for each month
+        ];
+        $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
+    }
+
+    // Query to get the average scores per month within the academic year range
+    $query = $this->conn->prepare("
+        SELECT 
+            DATE_FORMAT(score.time, '%Y-%m') AS month,  
+            AVG(score.score) AS avg_score
+        FROM
+            quiz_tbl quiz
+        INNER JOIN
+            score_tbl score ON score.quiz_id = quiz.quiz_id
+        WHERE 
+            score.student_id = ?
+        AND 
+            score.score IS NOT NULL
+        AND 
+            score.time BETWEEN ? AND ?
+        AND
+            quiz.subject_id = ?
+        GROUP BY 
+            month
+        ORDER BY 
+            month ASC
+    ");
+
+    // Bind parameters: studentId, start date (June 1), and end date (April 30)
+    $startDate = "$startYear-06-01";
+    $endDate = "$endYear-04-30";
+    $query->bind_param("ssss", $studentId, $startDate, $endDate, $subjectId);
+
+    if ($query->execute()) {
+        $result = $query->get_result();
+
+        // Fetch the average scores per month
+        while ($row = $result->fetch_assoc()) {
+            $monthKey = $row['month'];  // 'Y-m' format
+
+            // Update the score for the month if it exists in the query results
+            if (isset($months[$monthKey])) {
+                $months[$monthKey]['avg_score'] = (float) $row['avg_score'];
+            }
+        }
+
+        // Prepare the data to return for the line chart
+        $data = [
+            'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
+            'scores' => array_column($months, 'avg_score')  // Average scores
+        ];
+
+        return $data;  // Return the final data for the line chart
+    } else {
+        return null;  // Return null in case of failure
+    }
+}
+
+
+
 
 }

@@ -198,32 +198,13 @@
                         <span id="generalAverage"></span>
                     </div>
                 </div>
-            </div>
+            </div>        
             <div class="graph-container">
-                <div class="data-container">
-                    <div class="data-box">
-                        <p>Predicted Performance</p>
-                        <span id="predictedPerformance"></span>
-                    </div>
-                    <div class="data-box">
-                        <p>Predicted Graduation Rate</p>
-                        <span id="predictedGraduationRate"></span>
-                    </div>
-                    <div class="data-box">
-                        <p>Predicted Academic Success Rate</p>
-                        <span id="predictedAcademicSuccessRate"></span>
-                    </div>
+                <div class="pie-chart">
+                    <canvas id="pieChart"></canvas>
                 </div>
-                <div class="graph">
-                    <canvas id="barChart"></canvas>
-                </div>
-            </div>
-            <div class="graph-container">
-                <div class="graph">
+                <div class="line-chart">
                     <canvas id="lineChart"></canvas>
-                </div>
-                <div class="graph">
-                    <canvas id="barChart"></canvas>
                 </div>
             </div>
         </div>
