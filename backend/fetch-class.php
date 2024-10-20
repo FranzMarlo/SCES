@@ -408,61 +408,76 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $studentQuizRecords = $fetchDb->getStudentQuizRecords($sectionId, "S120240002");
         echo json_encode($studentQuizRecords);
     } else if ($submitType === 'fetchStudentQuizHistory') {
-            $quizId = $_POST['quiz_id'];
-            $studentId = $_POST['student_id'];
+        $quizId = $_POST['quiz_id'];
+        $studentId = $_POST['student_id'];
 
-            $quizDetails = $fetchDb->fetchQuizInfo($quizId);
+        $quizDetails = $fetchDb->fetchQuizInfo($quizId);
 
-            $questions = $fetchDb->fetchQuestions($quizId);
+        $questions = $fetchDb->fetchQuestions($quizId);
 
-            $studentAnswers = $fetchDb->fetchStudentAnswers($studentId, $quizId);
+        $studentAnswers = $fetchDb->fetchStudentAnswers($studentId, $quizId);
 
-            if (empty($studentAnswers)) {
-                echo json_encode(['error' => 'Student has not answered the quiz yet.']);
-                exit;
-            }
+        if (empty($studentAnswers)) {
+            echo json_encode(['error' => 'Student has not answered the quiz yet.']);
+            exit;
+        }
 
-            foreach ($questions as &$question) {
-                // Fetch choices for the current question
-                $choices = $fetchDb->fetchChoices($question['question_id']);
+        foreach ($questions as &$question) {
+            // Fetch choices for the current question
+            $choices = $fetchDb->fetchChoices($question['question_id']);
 
-                foreach ($choices as &$choice) {
-                    // Add a flag to indicate if this choice was selected by the student
-                    $choice['isSelected'] = false;
+            foreach ($choices as &$choice) {
+                // Add a flag to indicate if this choice was selected by the student
+                $choice['isSelected'] = false;
 
-                    // Add a flag to indicate if the choice is correct (value 0 is correct)
-                    if ($choice['value'] == 1) {
-                        $choice['is_correct'] = 1; // Correct answer
-                    } else {
-                        $choice['is_correct'] = 0; // Wrong answer
-                    }
-
-                    // Check if the student selected this choice
-                    foreach ($studentAnswers as $answer) {
-                        if (
-                            $answer['question_id'] == $question['question_id'] &&
-                            $answer['choice_id'] == $choice['choice_id']
-                        ) {
-                            $choice['isSelected'] = true;
-                        }
-                    }
+                // Add a flag to indicate if the choice is correct (value 0 is correct)
+                if ($choice['value'] == 1) {
+                    $choice['is_correct'] = 1; // Correct answer
+                } else {
+                    $choice['is_correct'] = 0; // Wrong answer
                 }
 
-                // Attach choices to each question
-                $question['choices'] = $choices;
+                // Check if the student selected this choice
+                foreach ($studentAnswers as $answer) {
+                    if (
+                        $answer['question_id'] == $question['question_id'] &&
+                        $answer['choice_id'] == $choice['choice_id']
+                    ) {
+                        $choice['isSelected'] = true;
+                    }
+                }
             }
 
-            // Prepare the quiz data for the response
-            $quizData = [
-                'quiz_number' => $quizDetails['quiz_number'],
-                'title' => $quizDetails['title'],
-                'icon' => $quizDetails['icon'],
-                'subject_code' => $quizDetails['subject_code'],
-                'questions' => $questions,
-            ];
+            // Attach choices to each question
+            $question['choices'] = $choices;
+        }
 
-            // Return the data as JSON
-            echo json_encode($quizData);
+        // Prepare the quiz data for the response
+        $quizData = [
+            'quiz_number' => $quizDetails['quiz_number'],
+            'title' => $quizDetails['title'],
+            'icon' => $quizDetails['icon'],
+            'subject_code' => $quizDetails['subject_code'],
+            'questions' => $questions,
+        ];
+
+        // Return the data as JSON
+        echo json_encode($quizData);
+    } else if ($submitType === 'facultyGetSubjectPanelData') {
+        session_start();
+        $subjectId = $_SESSION['subject_id'];
+        $sectionId = $_SESSION['section_id'];
+
+        $totalCompleted = $fetchDb->facultyGetTotalSubjectQuizzesCount("S120240002");
+        $totalPending = $fetchDb->facultyGetPendingSubjectQuizzesCount("S120240002");
+        $averageScore = $fetchDb->facultyGetSubjectAverageScore("S120240002");
+        $highestAverage = $fetchDb->facultyGetHighestStudentAverageScore("S120240002");
+
+        $panelData['totalCompleted'] = $totalCompleted;
+        $panelData['totalPending'] = $totalPending;
+        $panelData['averageScore'] = $averageScore;
+        $panelData['highestAverage'] = $highestAverage;
+        echo json_encode($panelData);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("analyticsTab")
     .addEventListener("click", function () {
       updateTabDisplay("analyticsTab", 4);
+      populateSubjectPanelData();
       document.getElementById("lessonTab").classList.remove("active");
       document.getElementById("studentTab").classList.remove("active");
       document.getElementById("recordsTab").classList.remove("active");
@@ -102,8 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     switch (activeTab) {
       case "2":
-        initializeStudentsTable();
         updateTabDisplay("studentTab", 2);
+        initializeStudentsTable();
         document.getElementById("lessonTab").classList.remove("active");
         document.getElementById("studentTab").classList.add("active");
         document.getElementById("recordsTab").classList.remove("active");
@@ -119,6 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
         break;
       case "4":
         updateTabDisplay("analyticsTab", 4);
+        populateSubjectPanelData();
         document.getElementById("lessonTab").classList.remove("active");
         document.getElementById("studentTab").classList.remove("active");
         document.getElementById("recordsTab").classList.remove("active");
@@ -789,7 +791,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function initializeRecordsTable() {
-
     if ($.fn.dataTable.isDataTable("#recordsTable")) {
       return;
     }
@@ -923,7 +924,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             const quizTakerSpan = document.getElementById("quizTaker");
             quizTakerSpan.textContent = quizTaker;
-            
+
             const viewQuizModal = document.getElementById("viewQuizModal");
 
             viewQuizModal.querySelector(
@@ -1005,4 +1006,31 @@ document.addEventListener("DOMContentLoaded", function () {
     modal.style.display = "none";
     document.body.style.overflow = "auto";
   }
+
+  function populateSubjectPanelData() {
+    const data = new FormData();
+    data.append("submitType", "facultyGetSubjectPanelData");
+
+    fetch("/SCES/backend/fetch-class.php", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById("subjectTotalCompletion").textContent =
+          data.totalCompleted || 0;
+        document.getElementById("subjectTotalQuizzes").textContent =
+          data.totalPending || 0;
+        document.getElementById("subjectAverageScore").textContent =
+          data.averageScore || "N/A";
+        document.getElementById("subjectHighestAverage").textContent =
+          data.highestAverage || "N/A";
+      })
+      .catch((error) => {
+        console.error("Error fetching panel data:", error);
+      });
+  }
+
+
+  
 });

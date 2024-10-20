@@ -170,10 +170,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
                 </div>
               </div>
               <div class="panel-box average">
-                <img src="/SCES/assets/images/profile-gwa.png" alt="profile-gwa.png">
+                <img src="/SCES/assets/images/subject-highest.png" alt="subject-highest.png">
                 <div class="panel-col">
-                  <p>General Average</p>
-                  <span id="subjectGeneralAverage"></span>
+                  <p>Highest Average</p>
+                  <span id="subjectHighestAverage"></span>
                 </div>
               </div>
             </div>
@@ -193,12 +193,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
               <table id="topStudents" class="display data-table">
                 <thead>
                   <tr class="ap">
+                    <th>Rank</th>
                     <th>Full Name</th>
-                    <th>Quiz Number</th>
-                    <th>Score</th>
-                    <th>Remarks</th>
-                    <th>Submission Time</th>
-                    <th>View</th>
+                    <th>Average Score</th>
+                    <th>More</th>
                   </tr>
                 </thead>
                 <tbody>

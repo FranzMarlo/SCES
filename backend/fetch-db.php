@@ -1460,11 +1460,138 @@ class fetchClass extends db_connect
         if ($query->execute()) {
             $result = $query->get_result();
             $studentQuizRecords = $result->fetch_all(MYSQLI_ASSOC);
-            return $studentQuizRecords; // Return the data
+            return $studentQuizRecords;
         }
 
         return [];
     }
+
+    public function facultyGetTotalSubjectQuizzesCount($subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level
+        ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        WHERE
+            quiz.subject_id = ?
+        AND
+            quiz.status  = 'Completed'
+    ");
+
+        $query->bind_param("s", $subjectId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc();
+            return $subjectDetails['quiz_count'];
+        }
+        return 0;
+    }
+
+    public function facultyGetPendingSubjectQuizzesCount($subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level
+        ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        WHERE 
+            quiz.subject_id = ?
+        AND 
+            quiz.status = 'Completed'
+    ");
+
+        $query->bind_param("s", $subjectId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc();
+            return $subjectDetails['quiz_count'];
+        }
+
+        return 0;
+    }
+
+    public function facultyGetSubjectAverageScore($subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            AVG(score.score) AS average_score
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        LEFT JOIN score_tbl score
+        ON quiz.quiz_id = score.quiz_id
+        WHERE 
+            score.score IS NOT NULL
+        AND
+            quiz.subject_id = ?
+    ");
+
+        $query->bind_param("s", $subjectId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $scoreDetails = $result->fetch_assoc();
+
+            if ($scoreDetails && isset($scoreDetails['average_score'])) {
+                return round($scoreDetails['average_score'], 2);
+            }
+        }
+
+        return null;
+    }
+
+    public function facultyGetHighestStudentAverageScore($subjectId)
+{
+    $query = $this->conn->prepare("
+        SELECT 
+            MAX(student_avg.avg_score) AS highest_average_score
+        FROM (
+            SELECT 
+                student.student_id,
+                AVG(score.score) AS avg_score
+            FROM quiz_tbl quiz
+            INNER JOIN score_tbl score ON quiz.quiz_id = score.quiz_id
+            INNER JOIN student_tbl student ON student.student_id = score.student_id
+            WHERE 
+                score.score IS NOT NULL
+            AND
+                quiz.subject_id = ?
+            GROUP BY student.student_id
+        ) AS student_avg
+    ");
+
+    $query->bind_param("s", $subjectId);
+
+    if ($query->execute()) {
+        $result = $query->get_result();
+        $scoreDetails = $result->fetch_assoc();
+
+        if ($scoreDetails && isset($scoreDetails['highest_average_score'])) {
+            return round($scoreDetails['highest_average_score'], 2);
+        }
+    }
+
+    return null;
+}
+
 
 
 
