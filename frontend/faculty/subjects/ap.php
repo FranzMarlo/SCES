@@ -187,10 +187,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
             </div>
             <div class="container-title">
               <img src="/SCES/assets/images/quiz-score.png" alt="quiz-score.png">
-              <h1>Top Students</h1>
+              <h1>Students Ranking</h1>
             </div>
             <div class="table-responsive">
-              <table id="topStudents" class="display data-table">
+              <table id="rankingTable" class="display data-table">
                 <thead>
                   <tr class="ap">
                     <th>Rank</th>

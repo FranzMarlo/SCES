@@ -90,6 +90,8 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", function () {
       updateTabDisplay("analyticsTab", 4);
       populateSubjectPanelData();
+      fetchSubjectPieChartData();
+      initializeSubjectLineChart();
       document.getElementById("lessonTab").classList.remove("active");
       document.getElementById("studentTab").classList.remove("active");
       document.getElementById("recordsTab").classList.remove("active");
@@ -121,6 +123,8 @@ document.addEventListener("DOMContentLoaded", function () {
       case "4":
         updateTabDisplay("analyticsTab", 4);
         populateSubjectPanelData();
+        fetchSubjectPieChartData();
+        initializeSubjectLineChart();
         document.getElementById("lessonTab").classList.remove("active");
         document.getElementById("studentTab").classList.remove("active");
         document.getElementById("recordsTab").classList.remove("active");
@@ -1031,6 +1035,375 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  function initializeSubjectLineChart() {
+    var ctxLine = document.getElementById("subjectLineChart").getContext("2d");
 
-  
+    // Destroy existing chart if it exists
+    if (Chart.getChart("subjectLineChart")) {
+      Chart.getChart("subjectLineChart").destroy();
+    }
+
+    // AJAX call to fetch data
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      data: {
+        submitType: "subjectAverageScore",
+      },
+      success: function (response) {
+        const chartData = JSON.parse(response);
+        const months = chartData.labels || [];
+        const scores = chartData.lineData || [];
+
+        if (scores.length === 0) {
+          showAlert("info", "No Data Available For Subject");
+          ctxLine.chart = new Chart(ctxLine, {
+            type: "line",
+            data: {
+              labels: ["No Data"],
+              datasets: [
+                {
+                  data: [0], // No data
+                  borderColor: "#ccc",
+                  backgroundColor: "rgba(200, 200, 200, 0.5)",
+                  fill: true,
+                  tension: 0.4,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              plugins: {
+                legend: false, // Disable the legend
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: false, // Remove title for y-axis
+                },
+                x: {
+                  title: false, // Remove title for x-axis
+                },
+              },
+            },
+          });
+        } else {
+          ctxLine.chart = new Chart(ctxLine, {
+            type: "line",
+            data: {
+              labels: months,
+              datasets: [
+                {
+                  label: "", // Remove label from the dataset
+                  data: scores,
+                  borderColor: "#ddd1ff", // Use #ddd1ff color for the line
+                  backgroundColor: "rgba(221, 209, 255, 0.5)",
+                  fill: true,
+                  tension: 0.4, // Curve the line
+                  pointBackgroundColor: "#fff",
+                  pointBorderColor: "#ddd1ff",
+                  pointHoverRadius: 5,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              plugins: {
+                legend: false, // Disable the legend
+                title: {
+                  display: true,
+                  text: "Average Score Per Month", // Add chart title
+                  font: {
+                    size: 17,
+                    weight: "bold",
+                  },
+                  padding: {
+                    top: 5,
+                    bottom: 10,
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: false, // Remove title for y-axis
+                },
+                x: {
+                  title: false, // Remove title for x-axis
+                },
+              },
+            },
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data: ", error);
+      },
+    });
+  }
+
+  function fetchSubjectPieChartData() {
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      data: {
+        submitType: "subjectCompletion",
+      },
+      dataType: "json",
+      success: function (response) {
+        var totalCompleted = response.completed;
+        var totalInactive = response.inactive;
+        var totalActive = response.active;
+
+        initializeSubjectPieChart(totalCompleted, totalInactive, totalActive);
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data: " + error);
+      },
+    });
+  }
+
+  function initializeSubjectPieChart(
+    totalCompleted,
+    totalInactive,
+    totalActive
+  ) {
+    var ctxPie = document.getElementById("subjectPieChart").getContext("2d");
+
+    // Destroy existing chart if it exists
+    if (ctxPie.chart) {
+      ctxPie.chart.destroy();
+    }
+
+    // Handle case where there's no data
+    if (totalCompleted == 0 && totalInactive == 0 && totalActive == 0) {
+      showAlert("info", "No Data Available For Subject");
+      return;
+    }
+
+    const pieChart = new Chart(ctxPie, {
+      type: "pie", // Changed from 'doughnut' to 'pie'
+      data: {
+        labels: ["Completed", "Inactive", "Active"],
+        datasets: [
+          {
+            data: [totalCompleted, totalInactive, totalActive],
+            backgroundColor: ["#d2ebc4", "#fcfd95", "#c5e3ff"],
+            borderWidth: 2,
+            borderColor: "#000",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "bottom",
+          },
+          title: {
+            display: true,
+            text: "Quizzes By Status",
+            font: {
+              size: 17,
+              weight: "bold",
+            },
+            padding: {
+              top: 5,
+              bottom: 10,
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                return "Quizzes: " + tooltipItem.raw;
+              },
+            },
+          },
+        },
+      },
+    });
+
+    ctxPie.chart = pieChart; // Save chart instance to the context
+  }
+
+  function initializeRankingTable() {
+    if ($.fn.dataTable.isDataTable("#rankingTable")) {
+    } else {
+      var studentsTable = $("#rankingTable").DataTable({
+        responsive: {
+          details: {
+            type: "inline",
+            display: $.fn.dataTable.Responsive.display.childRowImmediate,
+            renderer: function (api, rowIdx, columns) {
+              var data = $.map(columns, function (col, i) {
+                return col.hidden
+                  ? '<tr data-dt-row="' +
+                      col.rowIdx +
+                      '" data-dt-column="' +
+                      col.columnIdx +
+                      '">' +
+                      "<td><strong>" +
+                      col.title +
+                      ":" +
+                      "</strong></td> " +
+                      "<td>" +
+                      col.data +
+                      "</td>" +
+                      "</tr>"
+                  : "";
+              }).join("");
+              return data ? $("<table/>").append(data) : false;
+            },
+          },
+        },
+        ajax: {
+          url: "/SCES/backend/fetch-class.php",
+          type: "POST",
+          data: function (d) {
+            d.submitType = "fetchStudentsDataTable";
+            return d;
+          },
+          dataSrc: "",
+        },
+        columns: [
+          {
+            data: "profile_image",
+            render: function (data, type, row) {
+              return `<div class="center-image">
+                    <img src="/SCES/storage/student/images/${data}" alt="Profile Image" onerror="this.onerror=null; this.src='/SCES/storage/student/images/default.jpg';">
+                  </div>`;
+            },
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+          },
+          { data: "lrn" },
+          { data: "student_id" },
+          { data: "student_lname" },
+          { data: "student_fname" },
+          { data: "student_mname" },
+          { data: "age" },
+          { data: "gender" },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="center-image">
+          <button class="more-btn" data-student-id="${row.student_id}"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>`;
+            },
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+          },
+        ],
+        language: {
+          emptyTable: "No data available in table",
+        },
+        initComplete: function () {
+          studentsTable.draw();
+        },
+      });
+    }
+  }
+
+  document
+    .getElementById("studentsTable")
+    .addEventListener("click", function (event) {
+      if (event.target.closest(".more-btn")) {
+        const btn = event.target.closest(".more-btn");
+        const studentId = btn.getAttribute("data-student-id");
+
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=fetchStudentDetails&student_id=${studentId}`,
+        })
+          .then((response) => response.json())
+          .then((student) => {
+            if (!student || Object.keys(student).length === 0) {
+              showAlert("error", "Server Error", "Student Data Not Found");
+              return;
+            }
+
+            Object.keys(student).forEach((key) => {
+              if (student[key] === null || student[key] === "") {
+                student[key] = "Not Set";
+              }
+            });
+            const modalHeader = document.getElementById("studentHeader");
+            const genderClass = student.gender === "Female" ? "female" : "male";
+            const tabItemClass = student.gender === "Female" ? "pink" : "blue";
+            const coloredRow = document.querySelectorAll(".colored-row");
+
+            modalHeader.classList.remove("female", "male");
+            coloredRow.forEach((row) => {
+              row.classList.remove("female", "male");
+            });
+
+            const tabItems = document.querySelectorAll(".tab-item");
+            tabItems.forEach((tab) => {
+              tab.classList.remove("pink", "blue");
+            });
+
+            modalHeader.classList.add(genderClass);
+            coloredRow.forEach((row) => {
+              row.classList.add(genderClass);
+            });
+            tabItems.forEach((tab) => {
+              tab.classList.add(tabItemClass);
+            });
+
+            const imageElement = document.getElementById("profileImage");
+            imageElement.src = `/SCES/storage/student/images/${student.profile_image}`;
+            imageElement.onerror = function () {
+              this.src = "/SCES/storage/student/images/default-profile.png";
+            };
+            document.getElementById("studId").textContent = student.student_id;
+            document
+              .getElementById("studentRecordsTab")
+              .setAttribute("data-student-id", student.student_id);
+            document.getElementById("fullName").textContent =
+              student.student_fname + " " + student.student_lname;
+            document.getElementById("gradeSection").textContent =
+              student.grade_level + " - " + student.section;
+            document.getElementById("lastName").textContent =
+              student.student_lname;
+            document.getElementById("firstName").textContent =
+              student.student_fname;
+            document.getElementById("middleName").textContent =
+              student.student_mname;
+            document.getElementById("lastName").textContent =
+              student.student_lname;
+            document.getElementById("gender").textContent = student.gender;
+            document.getElementById("age").textContent = student.age;
+            document.getElementById("lrn").textContent = student.lrn;
+            document.getElementById("studentId").textContent =
+              student.student_id;
+            document.getElementById("gradeLevel").textContent =
+              student.grade_level;
+            document.getElementById("section").textContent = student.section;
+            document.getElementById("email").textContent = student.email;
+            document.getElementById("city").textContent = student.city;
+            document.getElementById("barangay").textContent = student.barangay;
+            document.getElementById("street").textContent = student.street;
+            document.getElementById("guardian").textContent =
+              student.guardian_name;
+            document.getElementById("contact").textContent =
+              student.guardian_contact;
+
+            document.body.style.overflow = "hidden";
+            document.getElementById("studentModal").style.display = "flex";
+            populatePanelData(student.student_id);
+          })
+          .catch((error) => {
+            showAlert("error", "Server Error", error);
+          });
+      }
+    });
+
 });

@@ -478,6 +478,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData['averageScore'] = $averageScore;
         $panelData['highestAverage'] = $highestAverage;
         echo json_encode($panelData);
+    } else if ($submitType === 'subjectAverageScore') {
+        session_start();
+        $subjectId = $_SESSION['subject_id'];
+
+        $data = $fetchDb->subjectFetchScores("S120240002");
+
+        if ($data === null) {
+            echo json_encode([
+                'labels' => [],
+                'lineData' => []
+            ]);
+        } else {
+            echo json_encode([
+                'labels' => $data['months'],
+                'lineData' => $data['scores']
+            ]);
+        }
+    } else if ($submitType === 'subjectCompletion') {
+        session_start();
+        $subjectId = $_SESSION['subject_id'];
+
+        $panelData = $fetchDb->subjectQuizCompletion("S120240002");
+
+        echo json_encode($panelData);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
