@@ -727,7 +727,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function initializeLineChart(studentId) {
     var ctxLine = document.getElementById("lineChart").getContext("2d");
 
-    // Destroy existing chart if it exists
     if (Chart.getChart("lineChart")) {
       Chart.getChart("lineChart").destroy();
     }
@@ -1078,9 +1077,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function initializeSubjectLineChart() {
     var ctxLine = document.getElementById("subjectLineChart").getContext("2d");
 
-    // Destroy existing chart if it exists
-    if (Chart.getChart("subjectLineChart")) {
-      Chart.getChart("subjectLineChart").destroy();
+    // Destroy existing chart if it exists, regardless of page
+    if (ctxLine.chart) {
+      ctxLine.chart.destroy();
     }
 
     // AJAX call to fetch data

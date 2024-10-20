@@ -23,7 +23,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
         <div class="title-box">
           <div class="text-box">
             <img src="/SCES/assets/images/graduation-cap.png" alt="graduation-cap.png">
-            <h1>Academic Lessons</h1>
+            <h1><?php echo htmlspecialchars($page); ?></h1>
           </div>
         </div>
         <div class="lesson-container">
