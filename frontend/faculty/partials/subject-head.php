@@ -10,6 +10,6 @@ $_SESSION['grade_level'] = $subject['grade_level'];
 $_SESSION['subject_id'] = $subject['subject_id'];
 $_SESSION['subject_title'] = $subject['subject_title'];
 $current_page = 'subject.php';
-$page = 'Lessons';
+$page = $subject['grade_level'] . ' - ' . $subject['section'];
 $studentCount = $db->getTotalStudentBySection($_GET['section']);
 $sectionData = $db->facultyGetSectionData($_GET['section']);

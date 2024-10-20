@@ -96,6 +96,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
             </div>
           </div>
           <div class="tab-container" id="studentContainer">
+            <div class="container-title">
+              <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
+              <h1>Student List</h1>
+            </div>
             <div class="table-responsive">
               <table id="studentsTable" class="display data-table">
                 <thead>
@@ -116,15 +120,99 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
               </table>
             </div>
           </div>
-          <div class="tab-container" id="recordsContainer"></div>
-          <div class="tab-container" id="analyticsContainer"></div>
+          <div class="tab-container" id="recordsContainer">
+            <div class="container-title">
+              <img src="/SCES/assets/images/personal-info.png" alt="personal-info.png">
+              <h1>Student Records</h1>
+            </div>
+            <div class="table-responsive">
+              <table id="recordsTable" class="display data-table">
+                <thead>
+                  <tr class="ap">
+                    <th>Full Name</th>
+                    <th>Quiz Number</th>
+                    <th>Score</th>
+                    <th>Remarks</th>
+                    <th>Submission Time</th>
+                    <th>View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-container" id="analyticsContainer">
+            <div class="container-title">
+              <img src="/SCES/assets/images/profile-analytics.png" alt="profile-analytics.png">
+              <h1>Analytics</h1>
+            </div>
+            <div class="stats-panel">
+              <div class="panel-box completed">
+                <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
+                <div class="panel-col">
+                  <p>Quiz Completed</p>
+                  <span id="subjectTotalCompletion"></span>
+                </div>
+              </div>
+              <div class="panel-box pending">
+                <img src="/SCES/assets/images/hourglass.png" alt="hourglass.png">
+                <div class="panel-col">
+                  <p>Pending Quiz</p>
+                  <span id="subjectTotalQuizzes"></span>
+                </div>
+              </div>
+              <div class="panel-box quiz-score">
+                <img src="/SCES/assets/images/gpa.png" alt="gpa.png">
+                <div class="panel-col">
+                  <p>Average Score</p>
+                  <span id="subjectAverageScore"></span>
+                </div>
+              </div>
+              <div class="panel-box average">
+                <img src="/SCES/assets/images/profile-gwa.png" alt="profile-gwa.png">
+                <div class="panel-col">
+                  <p>General Average</p>
+                  <span id="subjectGeneralAverage"></span>
+                </div>
+              </div>
+            </div>
+            <div class="graph-container">
+              <div class="pie-chart">
+                <canvas id="subjectPieChart"></canvas>
+              </div>
+              <div class="line-chart">
+                <canvas id="subjectLineChart"></canvas>
+              </div>
+            </div>
+            <div class="container-title">
+              <img src="/SCES/assets/images/quiz-score.png" alt="quiz-score.png">
+              <h1>Top Students</h1>
+            </div>
+            <div class="table-responsive">
+              <table id="topStudents" class="display data-table">
+                <thead>
+                  <tr class="ap">
+                    <th>Full Name</th>
+                    <th>Quiz Number</th>
+                    <th>Score</th>
+                    <th>Remarks</th>
+                    <th>Submission Time</th>
+                    <th>View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <?php
-  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/view-students-modal.php';
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-add-lesson.php';
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/view-students-modal.php';
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
   ?>
   <script src="/SCES/assets/script/datatables.min.js"></script>

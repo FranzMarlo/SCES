@@ -1353,35 +1353,35 @@ class fetchClass extends db_connect
     }
 
     public function studentFetchScoresBySubject($studentId, $subjectId)
-{
-    $currentMonth = date('n');  // Current month number (1-12)
-    $currentYear = date('Y');   // Current year
+    {
+        $currentMonth = date('n');  // Current month number (1-12)
+        $currentYear = date('Y');   // Current year
 
-    // Determine the academic year based on the current month
-    if ($currentMonth >= 6) {
-        $startYear = $currentYear;       // Academic year starts this year
-        $endYear = $currentYear + 1;     // Academic year ends next year
-    } else {
-        $startYear = $currentYear - 1;   // Academic year started last year
-        $endYear = $currentYear;         // Academic year ends this year
-    }
+        // Determine the academic year based on the current month
+        if ($currentMonth >= 6) {
+            $startYear = $currentYear;       // Academic year starts this year
+            $endYear = $currentYear + 1;     // Academic year ends next year
+        } else {
+            $startYear = $currentYear - 1;   // Academic year started last year
+            $endYear = $currentYear;         // Academic year ends this year
+        }
 
-    // Initialize months array with all months in the academic year (June-April)
-    $months = [];
-    $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
-    $endDate = strtotime("$endYear-04-30");       // End of academic year (April 30)
+        // Initialize months array with all months in the academic year (June-April)
+        $months = [];
+        $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
+        $endDate = strtotime("$endYear-04-30");       // End of academic year (April 30)
 
-    while ($currentDate <= $endDate) {
-        $monthLabel = date('F', $currentDate);   // e.g., "June", "July"
-        $months[date('Y-m', $currentDate)] = [
-            'month' => $monthLabel,
-            'avg_score' => 0  // Initialize score to 0 for each month
-        ];
-        $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
-    }
+        while ($currentDate <= $endDate) {
+            $monthLabel = date('F', $currentDate);   // e.g., "June", "July"
+            $months[date('Y-m', $currentDate)] = [
+                'month' => $monthLabel,
+                'avg_score' => 0  // Initialize score to 0 for each month
+            ];
+            $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
+        }
 
-    // Query to get the average scores per month within the academic year range
-    $query = $this->conn->prepare("
+        // Query to get the average scores per month within the academic year range
+        $query = $this->conn->prepare("
         SELECT 
             DATE_FORMAT(score.time, '%Y-%m') AS month,  
             AVG(score.score) AS avg_score
@@ -1403,35 +1403,68 @@ class fetchClass extends db_connect
             month ASC
     ");
 
-    // Bind parameters: studentId, start date (June 1), and end date (April 30)
-    $startDate = "$startYear-06-01";
-    $endDate = "$endYear-04-30";
-    $query->bind_param("ssss", $studentId, $startDate, $endDate, $subjectId);
+        // Bind parameters: studentId, start date (June 1), and end date (April 30)
+        $startDate = "$startYear-06-01";
+        $endDate = "$endYear-04-30";
+        $query->bind_param("ssss", $studentId, $startDate, $endDate, $subjectId);
 
-    if ($query->execute()) {
-        $result = $query->get_result();
+        if ($query->execute()) {
+            $result = $query->get_result();
 
-        // Fetch the average scores per month
-        while ($row = $result->fetch_assoc()) {
-            $monthKey = $row['month'];  // 'Y-m' format
+            // Fetch the average scores per month
+            while ($row = $result->fetch_assoc()) {
+                $monthKey = $row['month'];  // 'Y-m' format
 
-            // Update the score for the month if it exists in the query results
-            if (isset($months[$monthKey])) {
-                $months[$monthKey]['avg_score'] = (float) $row['avg_score'];
+                // Update the score for the month if it exists in the query results
+                if (isset($months[$monthKey])) {
+                    $months[$monthKey]['avg_score'] = (float) $row['avg_score'];
+                }
             }
+
+            // Prepare the data to return for the line chart
+            $data = [
+                'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
+                'scores' => array_column($months, 'avg_score')  // Average scores
+            ];
+
+            return $data;  // Return the final data for the line chart
+        } else {
+            return null;  // Return null in case of failure
+        }
+    }
+
+    public function getStudentQuizRecords($sectionId, $subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT
+            student.student_id,
+            quiz.quiz_id,
+            CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
+            quiz.quiz_number,
+            CONCAT(score_tbl.score, '/', score_tbl.item_number) AS quiz_score,
+            score_tbl.remarks,
+            score_tbl.time
+        FROM student_tbl student
+        INNER JOIN level_tbl level ON student.level_id = level.level_id
+        INNER JOIN section_tbl section ON student.section_id = section.section_id
+        LEFT JOIN score_tbl ON student.student_id = score_tbl.student_id
+        LEFT JOIN quiz_tbl quiz ON score_tbl.quiz_id = quiz.quiz_id
+        INNER JOIN subject_tbl subject ON quiz.subject_id = subject.subject_id
+        WHERE student.section_id = ?
+        AND subject.subject_id = ?
+        AND quiz.status IN ('Active', 'Completed')
+        ORDER BY score_tbl.time DESC
+    ");
+
+        $query->bind_param("ss", $sectionId, $subjectId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $studentQuizRecords = $result->fetch_all(MYSQLI_ASSOC);
+            return $studentQuizRecords; // Return the data
         }
 
-        // Prepare the data to return for the line chart
-        $data = [
-            'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
-            'scores' => array_column($months, 'avg_score')  // Average scores
-        ];
-
-        return $data;  // Return the final data for the line chart
-    } else {
-        return null;  // Return null in case of failure
+        return [];
     }
-}
 
 
 

@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("recordsTab").addEventListener("click", function () {
     updateTabDisplay("recordsTab", 3);
+    initializeRecordsTable();
     document.getElementById("lessonTab").classList.remove("active");
     document.getElementById("studentTab").classList.remove("active");
     document.getElementById("recordsTab").classList.add("active");
@@ -110,6 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
         break;
       case "3":
         updateTabDisplay("recordsTab", 3);
+        initializeRecordsTable();
         document.getElementById("lessonTab").classList.remove("active");
         document.getElementById("studentTab").classList.remove("active");
         document.getElementById("recordsTab").classList.add("active");
@@ -143,7 +145,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function initializeStudentsTable() {
     if ($.fn.dataTable.isDataTable("#studentsTable")) {
-      $("#quizScoresTable").DataTable().destroy();
     } else {
       var studentsTable = $("#studentsTable").DataTable({
         responsive: {
@@ -591,8 +592,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (ctxDonut.chart) {
       ctxDonut.chart.destroy();
     }
-    
-    if(totalCompleted == 0 && totalQuizzes == 0){
+
+    if (totalCompleted == 0 && totalQuizzes == 0) {
       showAlert("info", "No Data Available For Student");
     }
 
@@ -785,5 +786,223 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Error fetching data: ", error);
       },
     });
+  }
+
+  function initializeRecordsTable() {
+
+    if ($.fn.dataTable.isDataTable("#recordsTable")) {
+      return;
+    }
+
+    var recordsTable = $("#recordsTable").DataTable({
+      responsive: {
+        details: {
+          type: "inline",
+          display: $.fn.dataTable.Responsive.display.childRowImmediate,
+          renderer: function (api, rowIdx, columns) {
+            var data = $.map(columns, function (col, i) {
+              return col.hidden
+                ? '<tr data-dt-row="' +
+                    col.rowIdx +
+                    '" data-dt-column="' +
+                    col.columnIdx +
+                    '">' +
+                    "<td><strong>" +
+                    col.title +
+                    ":</strong></td>" +
+                    "<td>" +
+                    col.data +
+                    "</td>" +
+                    "</tr>"
+                : "";
+            }).join("");
+            return data ? $("<table/>").append(data) : false;
+          },
+        },
+      },
+      ajax: {
+        url: "/SCES/backend/fetch-class.php",
+        type: "POST",
+        data: function (d) {
+          d.submitType = "fetchStudentsRecordTable";
+          return d;
+        },
+        dataSrc: "",
+      },
+      columns: [
+        { data: "full_name" },
+        {
+          data: "quiz_number",
+          className: "text-center",
+          render: function (data, type, row) {
+            return `<span>Quiz #${data}</span>`;
+          },
+        },
+        {
+          data: "quiz_score",
+          className: "text-center",
+          render: function (data, type, row) {
+            var className =
+              row.remarks === "Passed"
+                ? "passed"
+                : row.remarks === "Failed"
+                ? "failed"
+                : "";
+            return `<span class="${className}">${data}</span>`;
+          },
+        },
+        {
+          data: "remarks",
+          className: "text-center",
+          render: function (data) {
+            var className =
+              data === "Passed" ? "passed" : data === "Failed" ? "failed" : "";
+            return `<span class="${className}">${data}</span>`;
+          },
+        },
+        {
+          data: "time",
+          className: "text-center",
+          render: function (data) {
+            var date = new Date(data);
+            var options = {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            };
+            var formattedDate = date.toLocaleString("en-US", options);
+            return `<span>${formattedDate}</span>`;
+          },
+        },
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="center-image">
+          <button class="more-btn" data-student-id="${row.student_id}" data-quiz-id="${row.quiz_id}" data-quiz-taker="${row.full_name}"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>`;
+          },
+          orderable: false,
+          searchable: false,
+          className: "text-center",
+        },
+      ],
+      order: [[1, "desc"]],
+      language: {
+        emptyTable: "No data available in table",
+      },
+      initComplete: function () {
+        recordsTable.draw();
+      },
+    });
+  }
+
+  document
+    .getElementById("recordsTable")
+    .addEventListener("click", function (event) {
+      if (event.target.closest(".more-btn")) {
+        const btn = event.target.closest(".more-btn");
+        const studentId = btn.getAttribute("data-student-id");
+        const quizId = btn.getAttribute("data-quiz-id");
+        const quizTaker = btn.getAttribute("data-quiz-taker");
+
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=fetchStudentQuizHistory&student_id=${studentId}&quiz_id=${quizId}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              showAlert("error", "Student has not answered the quiz yet");
+              return;
+            }
+            const quizTakerSpan = document.getElementById("quizTaker");
+            quizTakerSpan.textContent = quizTaker;
+            
+            const viewQuizModal = document.getElementById("viewQuizModal");
+
+            viewQuizModal.querySelector(
+              ".modal-header-text h1"
+            ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
+
+            viewQuizModal.querySelector(
+              ".modal-icon-container img"
+            ).src = `/SCES/assets/images/${data.icon}`;
+
+            const modalHeaderBg =
+              viewQuizModal.querySelector(".modal-header-bg");
+            modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
+
+            const questionsContainer = viewQuizModal.querySelector(
+              "#viewQuestionsContainer"
+            );
+            questionsContainer.innerHTML = "";
+
+            data.questions.forEach((question, index) => {
+              const quizItem = document.createElement("div");
+              quizItem.classList.add("quiz-item");
+
+              const questionBox = document.createElement("div");
+              questionBox.classList.add("question-box");
+              questionBox.setAttribute(
+                "data-question-id",
+                question.question_id
+              );
+              questionBox.innerHTML = `<span><strong>${index + 1}.</strong> ${
+                question.question
+              }</span>`;
+              quizItem.appendChild(questionBox);
+
+              question.choices.forEach((choice, i) => {
+                const choiceLetter = String.fromCharCode(65 + i);
+                const choiceElement = document.createElement("div");
+                choiceElement.classList.add("quiz-ans-fixed");
+
+                if (choice.is_correct === 1) {
+                  choiceElement.classList.add("correct");
+                } else {
+                  choiceElement.classList.add("wrong");
+                }
+
+                if (choice.isSelected) {
+                  choiceElement.classList.add(data.subject_code.toLowerCase());
+                }
+
+                choiceElement.innerHTML = `
+              <strong>${choiceLetter}.</strong>&nbsp;${choice.choice}
+            `;
+
+                quizItem.appendChild(choiceElement);
+              });
+
+              questionsContainer.appendChild(quizItem);
+            });
+            const closeButton = document.getElementById("close-quiz");
+
+            closeButton.onclick = () => closeQuiz(viewQuizModal);
+
+            viewQuizModal.style.display = "block";
+            document.body.style.overflow = "hidden";
+          })
+          .catch((error) => {
+            showAlert("error", "Server Error", error);
+          });
+      }
+    });
+
+  const closeViewQuizModal = document.getElementById("closeViewQuizModal");
+  const viewQuizModal = document.getElementById("viewQuizModal");
+  closeViewQuizModal.addEventListener("click", function () {
+    closeQuiz(viewQuizModal);
+  });
+
+  function closeQuiz(modal) {
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
   }
 });
