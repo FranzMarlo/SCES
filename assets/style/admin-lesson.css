@@ -303,12 +303,44 @@
 .epp-item {
   background-color: #edc9bb;
 }
-.tab.ap {
+.tab.ap, .tab.fil, .tab.eng, .tab.math, .tab.sci, .tab.esp, .tab.mt, .tab.mapeh, .tab.epp {
   background-color: #fff;
 }
 .tab.ap.active,
 .tab.ap:hover {
   background-color: #f0bad1;
+}
+.tab.fil.active,
+.tab.fil:hover {
+  background-color: #ff8080;
+}
+.tab.eng.active,
+.tab.eng:hover {
+  background-color: #ffb480;
+}
+.tab.math.active,
+.tab.math:hover {
+  background-color: #fff981;
+}
+.tab.sci.active,
+.tab.sci:hover {
+  background-color: #42d6a4;
+}
+.tab.esp.active,
+.tab.esp:hover {
+  background-color: #08cad1;
+}
+.tab.mt.active,
+.tab.mt:hover {
+  background-color: #59adf6;
+}
+.tab.mapeh.active,
+.tab.mapeh:hover {
+  background-color: #a3adff;
+}
+.tab.epp.active,
+.tab.epp:hover {
+  background-color: #d9ae9d;
 }
 .modal {
   display: none;

@@ -1508,7 +1508,7 @@ class fetchClass extends db_connect
         WHERE 
             quiz.subject_id = ?
         AND 
-            quiz.status = 'Completed'
+            quiz.status IN ('Active', 'Inactive')
     ");
 
         $query->bind_param("s", $subjectId);
