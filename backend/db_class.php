@@ -381,6 +381,7 @@ class globalClass extends db_connect
             s.subject,
             s.level_id,
             s.icon,
+            s.subject_code,
             s.link,
             s.subject_title,
             s.subject_code,
@@ -409,7 +410,7 @@ class globalClass extends db_connect
         AND
             s.section_id = ?
         AND
-            s.subject = ?
+            s.subject_id = ?
         AND
             s.level_id = ?
         ");

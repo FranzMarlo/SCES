@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+  var bodyElement = document.querySelector("body");
+  var section_id = bodyElement.getAttribute("data-section");
+  var subject_id = bodyElement.getAttribute("data-subject");
   var addLessonModal = document.getElementById("addLessonModal");
   var addLessonBtn = document.getElementById("addLesson");
   var closeBtn = document.getElementById("closeLessonModal");
@@ -224,6 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
           type: "POST",
           data: function (d) {
             d.submitType = "fetchStudentsDataTable";
+            d.section_id = section_id;
             return d;
           },
           dataSrc: "",
@@ -434,6 +438,7 @@ document.addEventListener("DOMContentLoaded", function () {
       quizScoresTable.settings()[0].ajax.data = function (d) {
         d.submitType = "facultyGetQuizRecordsBySubject";
         d.student_id = studentId;
+        d.subject_id = subject_id;
         return d;
       };
 
@@ -472,7 +477,8 @@ document.addEventListener("DOMContentLoaded", function () {
           type: "POST",
           data: function (d) {
             d.submitType = "facultyGetQuizRecordsBySubject";
-            d.student_id = studentId; // Pass the student ID here
+            d.student_id = studentId;
+            d.subject_id = subject_id;
             return d;
           },
           dataSrc: "",
@@ -512,6 +518,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var gradesTable = $("#gradesTable").DataTable();
       gradesTable.settings()[0].ajax.data = function (d) {
         d.submitType = "facultyGetGradesBySubject";
+        d.subject_id = subject_id;
         d.student_id = studentId;
         return d;
       };
@@ -550,6 +557,7 @@ document.addEventListener("DOMContentLoaded", function () {
           type: "POST",
           data: function (d) {
             d.submitType = "facultyGetGradesBySubject";
+            d.subject_id = subject_id;
             d.student_id = studentId;
             return d;
           },
@@ -590,6 +598,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const data = new FormData();
     data.append("submitType", "facultyGetPanelDataBySubject");
     data.append("student_id", studentId);
+    data.append("section_id", section_id);
+    data.append("subject_id", subject_id);
 
     fetch("/SCES/backend/fetch-class.php", {
       method: "POST",
@@ -618,6 +628,7 @@ document.addEventListener("DOMContentLoaded", function () {
       data: {
         submitType: "studentCompletionBySubject",
         student_id: studentId,
+        subject_id: subject_id,
       },
       dataType: "json",
       success: function (response) {
@@ -731,13 +742,13 @@ document.addEventListener("DOMContentLoaded", function () {
       Chart.getChart("lineChart").destroy();
     }
 
-    // AJAX call to fetch data
     $.ajax({
       url: "/SCES/backend/fetch-class.php",
       type: "POST",
       data: {
         submitType: "studentAverageScoreBySubject",
         student_id: studentId,
+        subject_id: subject_id,
       },
       success: function (response) {
         const chartData = JSON.parse(response);
@@ -869,6 +880,8 @@ document.addEventListener("DOMContentLoaded", function () {
         type: "POST",
         data: function (d) {
           d.submitType = "fetchStudentsRecordTable";
+          d.subject_id = subject_id;
+          d.section_id = section_id;
           return d;
         },
         dataSrc: "",
@@ -1053,6 +1066,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function populateSubjectPanelData() {
     const data = new FormData();
     data.append("submitType", "facultyGetSubjectPanelData");
+    data.append("section_id", section_id);
+    data.append("subject_id", subject_id);
 
     fetch("/SCES/backend/fetch-class.php", {
       method: "POST",
@@ -1073,7 +1088,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Error fetching panel data:", error);
       });
   }
-
+  
   function initializeSubjectLineChart() {
     var ctxLine = document.getElementById("subjectLineChart").getContext("2d");
 
@@ -1082,12 +1097,12 @@ document.addEventListener("DOMContentLoaded", function () {
       ctxLine.chart.destroy();
     }
 
-    // AJAX call to fetch data
     $.ajax({
       url: "/SCES/backend/fetch-class.php",
       type: "POST",
       data: {
         submitType: "subjectAverageScore",
+        subject_id: subject_id,
       },
       success: function (response) {
         const chartData = JSON.parse(response);
@@ -1189,6 +1204,7 @@ document.addEventListener("DOMContentLoaded", function () {
       type: "POST",
       data: {
         submitType: "subjectCompletion",
+        subject_id: subject_id,
       },
       dataType: "json",
       success: function (response) {
@@ -1303,6 +1319,8 @@ document.addEventListener("DOMContentLoaded", function () {
           type: "POST",
           data: function (d) {
             d.submitType = "rankingStudentsBySubject";
+            d.section_id = section_id;
+            d.subject_id = subject_id;
             return d;
           },
           dataSrc: "",

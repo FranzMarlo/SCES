@@ -59,9 +59,10 @@ $page = '';
                     <?php if ($subjects): ?>
                         <?php foreach ($subjects as $subject): ?>
                             <div class="subject-item">
-                                <a href="/SCES/frontend/faculty/subjects/<?php echo htmlspecialchars($subject['link']); ?>?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>"
+                                <a href="/SCES/frontend/faculty/subjects/subject-module.php?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject_id']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>"
                                     class="hidden-link"></a>
-                                <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>" onclick="hiddenLink(this)">
+                                <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>"
+                                    onclick="hiddenLink(this)">
                                     <button class="subject-btn" onclick="subjectBtn(event, this)">
                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                     </button>
@@ -84,16 +85,16 @@ $page = '';
                                     </ul>
                                 </div>
                             </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="no-data-box">
-                                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
-                                <h1>No subject found.</h1>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="no-data-box">
+                            <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                            <h1>No subject found.</h1>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
-            <?php
-            include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
-            ?>
+        </div>
+        <?php
+        include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
+        ?>
