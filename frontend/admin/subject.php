@@ -1,8 +1,8 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.php';
-$teacherStudent = $db->getTotalTeacherStudent($teacherId);
-$teacherLesson = $db->getTotalTeacherLesson($teacherId);
-$teacherArchived = $db->getTotalTeacherArchived($teacherId);
+$teacherStudent = $db->adminGetTotalTeacherStudent();
+$teacherLesson = $db->adminGetTotalTeacherLesson();
+$teacherArchived = $db->adminGetTotalTeacherArchived();
 $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-subject.css" />
@@ -54,12 +54,12 @@ $page = '';
                 <div class="panel-title">
                     <h1>Subjects</h1>
                 </div>
-                <?php $subjects = $db->getAdminSubjects($teacherId); ?>
+                <?php $subjects = $db->getAdminSubjects(); ?>
                 <div class="subject-container <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>">
                     <?php if ($subjects): ?>
                         <?php foreach ($subjects as $subject): ?>
                             <div class="subject-item">
-                                <a href="/SCES/frontend/admin/subjects/<?php echo htmlspecialchars($subject['link']); ?>?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>"
+                                <a href="/SCES/frontend/admin/subjects/subject-module.php?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject_id']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>&teacher=<?php echo urlencode($subject['teacher_id']); ?>"
                                     class="hidden-link"></a>
                                 <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>" onclick="hiddenLink(this)">
                                     <button class="subject-btn" onclick="subjectBtn(event, this)">

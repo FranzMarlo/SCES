@@ -12,7 +12,7 @@
             <input type="text" id="quizTitle" name="quizTitle" placeholder="Enter Quiz Title">
 
             <label for="subject">Subject:</label>
-            <?php $selectSubject = $db->getAdminSubjects($teacherId); ?>
+            <?php $selectSubject = $db->getFacultySubjects($teacherId); ?>
             <select id="subject" name="subject">
                 <option value="" selected>Select Subject</option>
                 <?php if ($selectSubject): ?>
@@ -139,7 +139,7 @@
             <input type="hidden" id="editQuizNumberHolder" value="">
 
             <label for="editSubject">Subject:</label>
-            <?php $selectSubject = $db->getAdminSubjects($teacherId); ?>
+            <?php $selectSubject = $db->getFacultySubjects($teacherId); ?>
             <select id="editSubject" name="editSubject">
                 <option value="">Select Subject</option>
                 <?php if ($selectSubject): ?>

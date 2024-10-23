@@ -615,15 +615,15 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'adminAddLesson') {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
-        $levelId = $_SESSION['level_id'];
-        $gradeLevel = $_SESSION['grade_level'];
-        $sectionId = $_SESSION['section_id'];
-        $subjectId = $_SESSION['subject_id'];
-        $subject = $_SESSION['subject_title'];
+        $levelId = $_POST['level_id'];
+        $gradeLevel = $_POST['grade_level'];
+        $sectionId = $_POST['section_id'];
+        $subjectId = $_POST['subject_id'];
+        $subject = $_POST['subject_title'];
         $lessonNumber = validate($_POST['lessonNumber']);
         $lessonTitle = validate($_POST['lessonTitle']);
         $quarter = validate($_POST['quarter']);
-        $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $teacherId, $sectionId, $lessonNumber);
+        $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $sectionId, $lessonNumber);
         if (empty($lessonNumber)) {
             echo '484';
         } else if ($checkNumber->num_rows > 0) {
@@ -956,15 +956,15 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'addLesson') {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
-        $levelId = $_SESSION['level_id'];
-        $gradeLevel = $_SESSION['grade_level'];
-        $sectionId = $_SESSION['section_id'];
-        $subjectId = $_SESSION['subject_id'];
-        $subject = $_SESSION['subject_title'];
+        $levelId = $_POST['level_id'];
+        $gradeLevel = $_POST['grade_level'];
+        $sectionId = $_POST['section_id'];
+        $subjectId = $_POST['subject_id'];
+        $subject = $_POST['subject_title'];
         $lessonNumber = validate($_POST['lessonNumber']);
         $lessonTitle = validate($_POST['lessonTitle']);
         $quarter = validate($_POST['quarter']);
-        $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $teacherId, $sectionId, $lessonNumber);
+        $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $teacherId, $lessonNumber);
         if (empty($lessonNumber)) {
             echo '484';
         } else if ($checkNumber->num_rows > 0) {

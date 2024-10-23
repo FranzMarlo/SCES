@@ -1552,9 +1552,20 @@ $("#adminUpdatePassword").on("submit", function (e) {
 
 $("#adminAddLesson").on("submit", function (e) {
   e.preventDefault();
+  var bodyElement = document.querySelector("body");
+  var section_id = bodyElement.getAttribute("data-section");
+  var subject_id = bodyElement.getAttribute("data-subject");
+  var level_id = bodyElement.getAttribute("data-level");
+  var grade_level = bodyElement.getAttribute("data-gradeLevel");
+  var subjectTitle = bodyElement.getAttribute("data-title");
+
   var formData = new FormData(this);
   formData.append("submitType", "adminAddLesson");
-
+  formData.append("level_id", level_id);
+  formData.append("grade_level", grade_level);
+  formData.append("subject_id", subject_id);
+  formData.append("section_id", section_id);
+  formData.append("subject_title", subjectTitle);
   $.ajax({
     type: "POST",
     url: "/SCES/backend/global.php",
@@ -2443,8 +2454,20 @@ $("#facultyUpdatePassword").on("submit", function (e) {
 
 $("#facultyAddLesson").on("submit", function (e) {
   e.preventDefault();
+  var bodyElement = document.querySelector("body");
+  var section_id = bodyElement.getAttribute("data-section");
+  var subject_id = bodyElement.getAttribute("data-subject");
+  var level_id = bodyElement.getAttribute("data-level");
+  var grade_level = bodyElement.getAttribute("data-gradeLevel");
+  var subjectTitle = bodyElement.getAttribute("data-title");
+
   var formData = new FormData(this);
   formData.append("submitType", "addLesson");
+  formData.append("level_id", level_id);
+  formData.append("grade_level", grade_level);
+  formData.append("subject_id", subject_id);
+  formData.append("section_id", section_id);
+  formData.append("subject_title", subjectTitle);
 
   $.ajax({
     type: "POST",

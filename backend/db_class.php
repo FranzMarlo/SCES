@@ -291,7 +291,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function getAdminSubjects($teacherId)
+    public function getFacultySubjects($teacherId)
     {
 
         $query = $this->conn->prepare("
@@ -328,6 +328,50 @@ class globalClass extends db_connect
          AND
             s.archived = 'No'");
         $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjects = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjects;
+        } else {
+            return false;
+        }
+    }
+
+    public function getAdminSubjects()
+    {
+
+        $query = $this->conn->prepare("
+        SELECT 
+            s.subject_id,
+            s.subject,
+            s.level_id,
+            s.icon,
+            s.link,
+            s.section_id,
+            s.subject_title,
+            s.subject_code,
+            t.teacher_id,
+            t.teacher_fname,
+            t.teacher_lname,
+            t.gender,
+            l.level_id,
+            l.grade_level,
+            c.section
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        INNER JOIN
+            level_tbl l
+        ON
+            s.level_id = l.level_id
+        INNER JOIN
+            section_tbl c
+        ON
+            s.section_id = c.section_id
+        WHERE 
+            s.archived = 'No'");
         if ($query->execute()) {
             $result = $query->get_result();
             $subjects = $result->fetch_all(MYSQLI_ASSOC);
@@ -518,6 +562,22 @@ class globalClass extends db_connect
         }
     }
 
+    public function adminGetTotalTeacherStudent()
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT `student_id`) as total
+        FROM student_tbl
+            ");
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return false;
+        }
+    }
+
     public function getTotalTeacherLesson($teacherId)
     {
         $query = $this->conn->prepare("
@@ -545,6 +605,22 @@ class globalClass extends db_connect
         }
     }
 
+    public function adminGetTotalTeacherLesson()
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT `lesson_id`) as total
+        FROM lesson_tbl
+            ");
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return false;
+        }
+    }
+
     public function getTotalTeacherArchived($teacherId)
     {
         $query = $this->conn->prepare("
@@ -561,6 +637,24 @@ class globalClass extends db_connect
             s.archived = 'Yes'
             ");
         $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return false;
+        }
+    }
+
+    public function adminGetTotalTeacherArchived()
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(`subject_id`) as total
+        FROM subject_tbl 
+        WHERE
+            archived = 'Yes'
+            ");
         if ($query->execute()) {
             $result = $query->get_result();
             $total = $result->fetch_assoc();
@@ -816,10 +910,10 @@ class globalClass extends db_connect
         }
     }
 
-    public function facultyGetLessons($levelId, $subjectID, $teacherId, $sectionId)
+    public function facultyGetLessons($levelId, $subjectId, $sectionId)
     {
-        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND teacher_id = ? AND section_id = ? ORDER BY lesson_number ASC");
-        $query->bind_param("ssss", $levelId, $subjectID, $teacherId, $sectionId);
+        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND section_id = ? ORDER BY lesson_number ASC");
+        $query->bind_param("sss", $levelId, $subjectId, $sectionId);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -863,10 +957,10 @@ class globalClass extends db_connect
         }
     }
 
-    public function checkLessonNumber($levelId, $subjectID, $teacherId, $sectionId, $lessonNumber)
+    public function checkLessonNumber($levelId, $subjectID, $sectionId, $lessonNumber)
     {
-        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND teacher_id = ? AND section_id = ? AND lesson_number = ?");
-        $query->bind_param("ssssi", $levelId, $subjectID, $teacherId, $sectionId, $lessonNumber);
+        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND section_id = ? AND lesson_number = ?");
+        $query->bind_param("sssi", $levelId, $subjectID, $sectionId, $lessonNumber);
         if ($query->execute()) {
             $result = $query->get_result();
             return $result;
@@ -929,6 +1023,58 @@ class globalClass extends db_connect
             quiz.add_time DESC;
         ");
         $query->bind_param("ss", $teacherId, $status);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjectDetails;
+        }
+
+        return [];
+    }
+    public function adminGetQuizzes($status)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            subject.subject_id,
+            subject.subject,
+            subject.level_id,
+            subject.icon,
+            subject.subject_title,
+            subject.subject_code,
+            level.level_id,
+            level.grade_level,
+            section.section,
+            section.section_id,
+            quiz.quiz_id,
+            quiz.title,
+            quiz.quiz_number,
+            quiz.status,
+            lesson.lesson_id
+        FROM quiz_tbl quiz
+        INNER JOIN
+            subject_tbl subject
+        ON
+            subject.subject_id = quiz.subject_id
+        INNER JOIN
+            section_tbl section
+        ON
+            subject.section_id = section.section_id
+        INNER JOIN
+            level_tbl level
+        ON
+            subject.level_id = level.level_id
+        INNER JOIN
+            lesson_tbl lesson
+        ON
+            quiz.lesson_id = lesson.lesson_id
+        WHERE 
+            quiz.status = ?
+        GROUP BY
+            quiz.quiz_id
+        ORDER BY
+            quiz.add_time DESC;
+        ");
+        $query->bind_param("s", $status);
         if ($query->execute()) {
             $result = $query->get_result();
             $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
@@ -1804,7 +1950,7 @@ class globalClass extends db_connect
         return [];
     }
 
-    
+
 
 
 

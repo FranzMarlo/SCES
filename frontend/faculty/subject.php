@@ -54,7 +54,7 @@ $page = '';
                 <div class="panel-title">
                     <h1>Subjects</h1>
                 </div>
-                <?php $subjects = $db->getAdminSubjects($teacherId); ?>
+                <?php $subjects = $db->getFacultySubjects($teacherId); ?>
                 <div class="subject-container <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>">
                     <?php if ($subjects): ?>
                         <?php foreach ($subjects as $subject): ?>

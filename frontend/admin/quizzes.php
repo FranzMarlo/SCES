@@ -20,9 +20,9 @@ $page = '';
             include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-header.php';
             ?>
             <div class="quiz-panel">
-                <?php $activeQuizzes = $db->facultyGetQuizzes($teacherId, 'Active'); ?>
-                <?php $inactiveQuizzes = $db->facultyGetQuizzes($teacherId, 'Inactive'); ?>
-                <?php $completedQuizzes = $db->facultyGetQuizzes($teacherId, 'Completed'); ?>
+                <?php $activeQuizzes = $db->adminGetQuizzes('Active'); ?>
+                <?php $inactiveQuizzes = $db->adminGetQuizzes('Inactive'); ?>
+                <?php $completedQuizzes = $db->adminGetQuizzes('Completed'); ?>
                 <div class="title-box">
                     <div class="text-box">
                         <img src="/SCES/assets/images/graduation-cap.png" alt="graduation-cap.png">
