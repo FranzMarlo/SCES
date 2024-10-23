@@ -6,7 +6,8 @@ $studentCount = $db->getTotalStudentBySection($_GET['section']);
 $sectionData = $db->facultyGetSectionData($_GET['section']);
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/student-section.css" />
-<title><?php echo htmlspecialchars($sectionData['grade_level'] . ' - ' . $sectionData['section']); ?> | SCES Online Learning Platform</title>
+<title><?php echo htmlspecialchars($sectionData['grade_level'] . ' - ' . $sectionData['section']); ?> | SCES Online
+    Learning Platform</title>
 </head>
 
 <body data-section="<?php echo htmlspecialchars($_GET['section'] ?? '', ENT_QUOTES); ?>">
@@ -29,7 +30,8 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
             </div>
             <div class="panel">
                 <div class="main-tab-controller">
-                    <div class="tab-item <?php echo htmlspecialchars($sectionData['short']); ?> active" id="sectionStudentsTab">
+                    <div class="tab-item <?php echo htmlspecialchars($sectionData['short']); ?> active"
+                        id="sectionStudentsTab">
                         Students</div>
                     <div class="tab-item <?php echo htmlspecialchars($sectionData['short']); ?>" id="sectionRecordsTab">
                         Records</div>
@@ -37,6 +39,10 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
                         id="sectionAnalyticsTab">Analytics</div>
                 </div>
                 <div class="panel-tab" id="sectionStudentsPanel">
+                    <div class="title-box">
+                        <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
+                        <h1>Student List</h1>
+                    </div>
                     <div class="table-responsive">
                         <table id="studentsTable" class="display data-table">
                             <thead>
@@ -57,8 +63,18 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
                         </table>
                     </div>
                 </div>
-                <div class="panel-tab" id="sectionRecordsPanel"></div>
-                <div class="panel-tab" id="sectionAnalyticsPanel"></div>
+                <div class="panel-tab" id="sectionRecordsPanel">
+                    <div class="title-box">
+                        <img src="/SCES/assets/images/personal-info.png" alt="personal-info.png">
+                        <h1>Student Records</h1>
+                    </div>
+                </div>
+                <div class="panel-tab" id="sectionAnalyticsPanel">
+                    <div class="title-box">
+                        <img src="/SCES/assets/images/profile-analytics.png" alt="profile-analytics.png">
+                        <h1>Analytics</h1>
+                    </div>
+                </div>
             </div>
 
         </div>

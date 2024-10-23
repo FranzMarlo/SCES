@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   var bodyElement = document.querySelector("body");
   var section_id = bodyElement.getAttribute("data-section");
+
   const sectionStudentsTab = document.getElementById("sectionStudentsTab");
   const sectionRecordsTab = document.getElementById("sectionRecordsTab");
   const sectionAnalyticsTab = document.getElementById("sectionAnalyticsTab");
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const sectionAnalyticsPanel = document.getElementById(
     "sectionAnalyticsPanel"
   );
+  
   function switchTab(activeTab, activePanel, activeValue) {
     // Remove 'active' class from all tabs
     sectionStudentsTab.classList.remove("active");
@@ -41,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     switchTab(sectionAnalyticsTab, sectionAnalyticsPanel, 3);
   });
 
+  window.addEventListener("load", function () {
   const urlParams = new URLSearchParams(window.location.search);
   const active = urlParams.get("active") || 1;
 
@@ -54,6 +57,8 @@ document.addEventListener("DOMContentLoaded", function () {
     default:
       switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
   }
+
+});
 
   var studentsTable = $("#studentsTable").DataTable({
     responsive: {
