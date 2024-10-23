@@ -1,6 +1,7 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-head.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/helper.php';
 $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/section.css" />
@@ -24,7 +25,7 @@ $page = '';
                     <img src="/SCES/assets/images/quiz-grade-section.png" alt="section icon">
                     <h1>Sections</h1>
                 </div>
-                <?php $sections = $db->facultyGetSection($teacherId); ?>
+                <?php $sections = $db->facultyGetSection(); ?>
                 <div class="section-container <?php echo empty($sections) ? 'no-data-box-centered' : ''; ?>">
                     <?php if ($sections): ?>
                         <?php foreach ($sections as $section): ?>
@@ -32,12 +33,14 @@ $page = '';
                                 <div class="icon-box <?php echo $section['short']; ?>">
                                     <div class="icon-text-in">
                                         <span><?php echo htmlspecialchars($section['grade_level'] . ' - ' . $section['section']); ?></span>
+                                        <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?></p>
                                     </div>
                                     <img src="/SCES/assets/images/<?php echo $section['short']; ?>.png"
                                         alt="<?php echo $section['short']; ?> icon">
                                 </div>
                                 <div class="icon-text">
                                     <span><?php echo htmlspecialchars($section['grade_level'] . ' - ' . $section['section']); ?></span>
+                                    <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?></p>
                                 </div>
                             </a>
                         <?php endforeach; ?>

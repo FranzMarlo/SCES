@@ -1,4 +1,60 @@
 document.addEventListener("DOMContentLoaded", function () {
+  var bodyElement = document.querySelector("body");
+  var section_id = bodyElement.getAttribute("data-section");
+  const sectionStudentsTab = document.getElementById("sectionStudentsTab");
+  const sectionRecordsTab = document.getElementById("sectionRecordsTab");
+  const sectionAnalyticsTab = document.getElementById("sectionAnalyticsTab");
+
+  const sectionStudentsPanel = document.getElementById("sectionStudentsPanel");
+  const sectionRecordsPanel = document.getElementById("sectionRecordsPanel");
+  const sectionAnalyticsPanel = document.getElementById(
+    "sectionAnalyticsPanel"
+  );
+  function switchTab(activeTab, activePanel, activeValue) {
+    // Remove 'active' class from all tabs
+    sectionStudentsTab.classList.remove("active");
+    sectionRecordsTab.classList.remove("active");
+    sectionAnalyticsTab.classList.remove("active");
+
+    // Hide all panels
+    sectionStudentsPanel.style.display = "none";
+    sectionRecordsPanel.style.display = "none";
+    sectionAnalyticsPanel.style.display = "none";
+
+    activeTab.classList.add("active");
+    activePanel.style.display = "flex";
+
+    const url = new URL(window.location);
+    url.searchParams.set("active", activeValue);
+    window.history.pushState({}, "", url);
+  }
+
+  sectionStudentsTab.addEventListener("click", function () {
+    switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
+  });
+
+  sectionRecordsTab.addEventListener("click", function () {
+    switchTab(sectionRecordsTab, sectionRecordsPanel, 2);
+  });
+
+  sectionAnalyticsTab.addEventListener("click", function () {
+    switchTab(sectionAnalyticsTab, sectionAnalyticsPanel, 3);
+  });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const active = urlParams.get("active") || 1;
+
+  switch (active) {
+    case "2":
+      switchTab(sectionRecordsTab, sectionRecordsPanel, 2);
+      break;
+    case "3":
+      switchTab(sectionAnalyticsTab, sectionAnalyticsPanel, 3);
+      break;
+    default:
+      switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
+  }
+
   var studentsTable = $("#studentsTable").DataTable({
     responsive: {
       details: {
@@ -31,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
       type: "POST",
       data: function (d) {
         d.submitType = "fetchStudentsDataTable";
+        d.section_id = section_id;
         return d;
       },
       dataSrc: "",
@@ -100,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 student[key] = "Not Set";
               }
             });
+            const modal = document.getElementById("studentModal");
             const modalHeader = document.getElementById("studentHeader");
             const genderClass = student.gender === "Female" ? "female" : "male";
             const tabItemClass = student.gender === "Female" ? "pink" : "blue";
@@ -110,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
               row.classList.remove("female", "male");
             });
 
-            const tabItems = document.querySelectorAll(".tab-item");
+            const tabItems = modal.querySelectorAll(".tab-item");
             tabItems.forEach((tab) => {
               tab.classList.remove("pink", "blue");
             });
@@ -162,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
               student.guardian_contact;
 
             document.body.style.overflow = "hidden";
-            document.getElementById("studentModal").style.display = "flex";
+            modal.style.display = "flex";
             populatePanelData(student.student_id);
             getStudentGWA(student.student_id);
           })

@@ -1868,37 +1868,33 @@ class globalClass extends db_connect
         return [];
     }
 
-    public function facultyGetSection($teacherId)
+    public function facultyGetSection()
     {
         $query = $this->conn->prepare("
         SELECT 
-            subject.subject_id,
-            subject.subject,
-            subject.level_id,
-            subject.icon,
-            subject.subject_title,
-            subject.subject_code,
             level.level_id,
             level.grade_level,
             level.short,
             section.section,
-            section.section_id
-        FROM 
-            subject_tbl subject
-        INNER JOIN
+            section.section_id,
+            teacher.teacher_lname,
+            teacher.teacher_fname,
+            teacher.gender
+        FROM
             section_tbl section
-        ON
-            subject.section_id = section.section_id
         INNER JOIN
             level_tbl level
         ON
-            subject.level_id = level.level_id
-        WHERE 
-            subject.teacher_id = ?
+            section.level_id = level.level_id
+        LEFT JOIN
+            teacher_tbl teacher
+        ON
+            section.teacher_id = teacher.teacher_id
         GROUP BY
             section.section_id
+        ORDER BY
+                section.section ASC
         ");
-        $query->bind_param("s", $teacherId);
         if ($query->execute()) {
             $result = $query->get_result();
             $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
