@@ -964,7 +964,7 @@ class fetchClass extends db_connect
         }
     }
 
-    public function facultyGetTotalQuizzesCount($studentId, $teacherId)
+    public function facultyGetTotalQuizzesCount($studentId)
     {
         $query = $this->conn->prepare("
         SELECT 
@@ -988,11 +988,9 @@ class fetchClass extends db_connect
             student.student_id = ?
         AND 
             score.score IS NOT NULL
-        AND
-            subject.teacher_id = ?
     ");
 
-        $query->bind_param("ss", $studentId, $teacherId);
+        $query->bind_param("s", $studentId);
         if ($query->execute()) {
             $result = $query->get_result();
             $subjectDetails = $result->fetch_assoc();
@@ -1040,7 +1038,7 @@ class fetchClass extends db_connect
         return 0;
     }
 
-    public function facultyGetPendingQuizzesCount($sectionId, $studentId, $teacherId)
+    public function facultyGetPendingQuizzesCount($sectionId, $studentId)
     {
         $query = $this->conn->prepare("
         SELECT 
@@ -1068,12 +1066,10 @@ class fetchClass extends db_connect
             quiz.status = 'Active'
         AND 
             score.score IS NULL
-        AND
-            subject.teacher_id = ?
     ");
 
         // Bind parameters for sectionId, studentId, and status (pending)
-        $query->bind_param("sss", $sectionId, $studentId, $teacherId);
+        $query->bind_param("ss", $sectionId, $studentId);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -1166,29 +1162,20 @@ class fetchClass extends db_connect
         return null;
     }
 
-    public function facultyGetAverageScore($studentId, $teacherId)
+    public function facultyGetAverageScore($studentId)
     {
         $query = $this->conn->prepare("
         SELECT 
             AVG(score.score) AS average_score
-        FROM quiz_tbl quiz
-        INNER JOIN subject_tbl subject
-        ON subject.subject_id = quiz.subject_id
-        INNER JOIN student_tbl student
-        ON student.section_id = subject.section_id
-        INNER JOIN teacher_tbl teacher
-        ON teacher.teacher_id = subject.teacher_id
-        LEFT JOIN score_tbl score
-        ON quiz.quiz_id = score.quiz_id
+        FROM score_tbl score
+        INNER JOIN quiz_tbl quiz ON score.quiz_id = quiz.quiz_id
         WHERE 
-            student.student_id = ?
+            score.student_id = ?
         AND 
             score.score IS NOT NULL
-        AND
-            subject.teacher_id = ?
     ");
 
-        $query->bind_param("ss", $studentId, $teacherId);
+        $query->bind_param("s", $studentId);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -1451,6 +1438,39 @@ class fetchClass extends db_connect
     ");
 
         $query->bind_param("ss", $sectionId, $subjectId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $studentQuizRecords = $result->fetch_all(MYSQLI_ASSOC);
+            return $studentQuizRecords;
+        }
+
+        return [];
+    }
+
+    public function getSectionQuizRecords($sectionId)
+    {
+        $query = $this->conn->prepare("
+        SELECT
+            student.student_id,
+            quiz.quiz_id,
+            CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
+            subject.subject,
+            quiz.quiz_number,
+            CONCAT(score_tbl.score, '/', score_tbl.item_number) AS quiz_score,
+            score_tbl.remarks,
+            score_tbl.time
+        FROM student_tbl student
+        INNER JOIN level_tbl level ON student.level_id = level.level_id
+        INNER JOIN section_tbl section ON student.section_id = section.section_id
+        LEFT JOIN score_tbl ON student.student_id = score_tbl.student_id
+        LEFT JOIN quiz_tbl quiz ON score_tbl.quiz_id = quiz.quiz_id
+        INNER JOIN subject_tbl subject ON quiz.subject_id = subject.subject_id
+        WHERE student.section_id = ?
+        AND quiz.status IN ('Active', 'Completed')
+        ORDER BY score_tbl.time DESC
+    ");
+
+        $query->bind_param("s", $sectionId);
         if ($query->execute()) {
             $result = $query->get_result();
             $studentQuizRecords = $result->fetch_all(MYSQLI_ASSOC);

@@ -68,6 +68,23 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
                         <img src="/SCES/assets/images/personal-info.png" alt="personal-info.png">
                         <h1>Student Records</h1>
                     </div>
+                    <div class="table-responsive">
+                        <table id="recordsTable" class="display data-table">
+                            <thead>
+                                <tr class="<?php echo htmlspecialchars($sectionData['short']); ?>">
+                                    <th>Student Name</th>
+                                    <th>Subject</th>
+                                    <th>Quiz Number</th>
+                                    <th>Score</th>
+                                    <th>Remarks</th>
+                                    <th>Submission Time</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="panel-tab" id="sectionAnalyticsPanel">
                     <div class="title-box">

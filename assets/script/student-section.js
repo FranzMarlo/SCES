@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const sectionAnalyticsPanel = document.getElementById(
     "sectionAnalyticsPanel"
   );
-  
+
   function switchTab(activeTab, activePanel, activeValue) {
     // Remove 'active' class from all tabs
     sectionStudentsTab.classList.remove("active");
@@ -33,10 +33,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   sectionStudentsTab.addEventListener("click", function () {
     switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
+    initializeStudentsTable();
   });
 
   sectionRecordsTab.addEventListener("click", function () {
     switchTab(sectionRecordsTab, sectionRecordsPanel, 2);
+    initializeRecordsTable();
   });
 
   sectionAnalyticsTab.addEventListener("click", function () {
@@ -44,97 +46,102 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   window.addEventListener("load", function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const active = urlParams.get("active") || 1;
+    const urlParams = new URLSearchParams(window.location.search);
+    const active = urlParams.get("active") || 1;
 
-  switch (active) {
-    case "2":
-      switchTab(sectionRecordsTab, sectionRecordsPanel, 2);
-      break;
-    case "3":
-      switchTab(sectionAnalyticsTab, sectionAnalyticsPanel, 3);
-      break;
-    default:
-      switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
-  }
-
-});
-
-  var studentsTable = $("#studentsTable").DataTable({
-    responsive: {
-      details: {
-        type: "inline",
-        display: $.fn.dataTable.Responsive.display.childRowImmediate,
-        renderer: function (api, rowIdx, columns) {
-          var data = $.map(columns, function (col, i) {
-            return col.hidden
-              ? '<tr data-dt-row="' +
-                  col.rowIdx +
-                  '" data-dt-column="' +
-                  col.columnIdx +
-                  '">' +
-                  "<td><strong>" +
-                  col.title +
-                  ":" +
-                  "</strong></td> " +
-                  "<td>" +
-                  col.data +
-                  "</td>" +
-                  "</tr>"
-              : "";
-          }).join("");
-          return data ? $("<table/>").append(data) : false;
+    switch (active) {
+      case "2":
+        switchTab(sectionRecordsTab, sectionRecordsPanel, 2);
+        initializeRecordsTable();
+        break;
+      case "3":
+        switchTab(sectionAnalyticsTab, sectionAnalyticsPanel, 3);
+        break;
+      default:
+        switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
+        initializeStudentsTable();
+    }
+  });
+  function initializeStudentsTable() {
+    if ($.fn.dataTable.isDataTable("#studentsTable")) {
+    } else {
+      var studentsTable = $("#studentsTable").DataTable({
+        responsive: {
+          details: {
+            type: "inline",
+            display: $.fn.dataTable.Responsive.display.childRowImmediate,
+            renderer: function (api, rowIdx, columns) {
+              var data = $.map(columns, function (col, i) {
+                return col.hidden
+                  ? '<tr data-dt-row="' +
+                      col.rowIdx +
+                      '" data-dt-column="' +
+                      col.columnIdx +
+                      '">' +
+                      "<td><strong>" +
+                      col.title +
+                      ":" +
+                      "</strong></td> " +
+                      "<td>" +
+                      col.data +
+                      "</td>" +
+                      "</tr>"
+                  : "";
+              }).join("");
+              return data ? $("<table/>").append(data) : false;
+            },
+          },
         },
-      },
-    },
-    ajax: {
-      url: "/SCES/backend/fetch-class.php",
-      type: "POST",
-      data: function (d) {
-        d.submitType = "fetchStudentsDataTable";
-        d.section_id = section_id;
-        return d;
-      },
-      dataSrc: "",
-    },
-    columns: [
-      {
-        data: "profile_image",
-        render: function (data, type, row) {
-          return `<div class="center-image">
+        ajax: {
+          url: "/SCES/backend/fetch-class.php",
+          type: "POST",
+          data: function (d) {
+            d.submitType = "fetchStudentsDataTable";
+            d.section_id = section_id;
+            return d;
+          },
+          dataSrc: "",
+        },
+        columns: [
+          {
+            data: "profile_image",
+            render: function (data, type, row) {
+              return `<div class="center-image">
                     <img src="/SCES/storage/student/images/${data}" alt="Profile Image" onerror="this.onerror=null; this.src='/SCES/storage/student/images/default.jpg';">
                   </div>`;
-        },
-        orderable: false,
-        searchable: false,
-        className: "text-center",
-      },
-      { data: "lrn" },
-      { data: "student_id" },
-      { data: "student_lname" },
-      { data: "student_fname" },
-      { data: "student_mname" },
-      { data: "age" },
-      { data: "gender" },
-      {
-        data: null,
-        render: function (data, type, row) {
-          return `<div class="center-image">
+            },
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+          },
+          { data: "lrn" },
+          { data: "student_id" },
+          { data: "student_lname" },
+          { data: "student_fname" },
+          { data: "student_mname" },
+          { data: "age" },
+          { data: "gender" },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="center-image">
           <button class="more-btn" data-student-id="${row.student_id}"><i class="fa-solid fa-chevron-right"></i></button>
           </div>`;
+            },
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+          },
+        ],
+        language: {
+          emptyTable: "No data available in table",
         },
-        orderable: false,
-        searchable: false,
-        className: "text-center",
-      },
-    ],
-    language: {
-      emptyTable: "No data available in table",
-    },
-    initComplete: function () {
-      studentsTable.draw();
-    },
-  });
+        initComplete: function () {
+          studentsTable.draw();
+        },
+      });
+    }
+  }
 
   document
     .getElementById("studentsTable")
@@ -448,6 +455,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const data = new FormData();
     data.append("submitType", "facultyGetPanelData");
     data.append("student_id", studentId);
+    data.append("section_id", section_id);
 
     fetch("/SCES/backend/fetch-class.php", {
       method: "POST",
@@ -527,6 +535,228 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Error fetching student data:", error);
       });
   }
+
+  function initializeRecordsTable() {
+    if ($.fn.dataTable.isDataTable("#recordsTable")) {
+      return;
+    }
+    var recordsTable = $("#recordsTable").DataTable({
+      responsive: {
+        details: {
+          type: "inline",
+          display: $.fn.dataTable.Responsive.display.childRowImmediate,
+          renderer: function (api, rowIdx, columns) {
+            var data = $.map(columns, function (col, i) {
+              return col.hidden
+                ? '<tr data-dt-row="' +
+                    col.rowIdx +
+                    '" data-dt-column="' +
+                    col.columnIdx +
+                    '">' +
+                    "<td><strong>" +
+                    col.title +
+                    ":</strong></td>" +
+                    "<td>" +
+                    col.data +
+                    "</td>" +
+                    "</tr>"
+                : "";
+            }).join("");
+            return data ? $("<table/>").append(data) : false;
+          },
+        },
+      },
+      ajax: {
+        url: "/SCES/backend/fetch-class.php",
+        type: "POST",
+        data: function (d) {
+          d.submitType = "fetchSectionRecordTable";
+          d.section_id = section_id;
+          return d;
+        },
+        dataSrc: "",
+      },
+      columns: [
+        { data: "full_name", className: "text-center" },
+        { data: "subject", className: "text-center" },
+        {
+          data: "quiz_number",
+          className: "text-center",
+          render: function (data, type, row) {
+            return `<span>Quiz #${data}</span>`;
+          },
+        },
+        {
+          data: "quiz_score",
+          className: "text-center",
+          render: function (data, type, row) {
+            var className =
+              row.remarks === "Passed"
+                ? "passed"
+                : row.remarks === "Failed"
+                ? "failed"
+                : "";
+            return `<span class="${className}">${data}</span>`;
+          },
+        },
+        {
+          data: "remarks",
+          className: "text-center",
+          render: function (data) {
+            var className =
+              data === "Passed" ? "passed" : data === "Failed" ? "failed" : "";
+            return `<span class="${className}">${data}</span>`;
+          },
+        },
+        {
+          data: "time",
+          className: "text-center",
+          render: function (data) {
+            var date = new Date(data);
+            var options = {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            };
+            var formattedDate = date.toLocaleString("en-US", options);
+            return `<span>${formattedDate}</span>`;
+          },
+        },
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `<div class="center-image">
+          <button class="more-btn" data-student-id="${row.student_id}" data-quiz-id="${row.quiz_id}" data-quiz-taker="${row.full_name}" data-quiz-subject="${row.subject}"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>`;
+          },
+          orderable: false,
+          searchable: false,
+          className: "text-center",
+        },
+      ],
+      order: [[2, "desc"]],
+      language: {
+        emptyTable: "No data available in table",
+      },
+      initComplete: function () {
+        recordsTable.draw();
+      },
+    });
+  }
+
+  document
+    .getElementById("recordsTable")
+    .addEventListener("click", function (event) {
+      if (event.target.closest(".more-btn")) {
+        const btn = event.target.closest(".more-btn");
+        const studentId = btn.getAttribute("data-student-id");
+        const quizId = btn.getAttribute("data-quiz-id");
+        const quizTaker = btn.getAttribute("data-quiz-taker");
+        const quizSubject = btn.getAttribute("data-quiz-subject");
+
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=fetchStudentQuizHistory&student_id=${studentId}&quiz_id=${quizId}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              showAlert("error", "Student has not answered the quiz yet");
+              return;
+            }
+            const quizTakerSpan = document.getElementById("quizTaker");
+            const quizSubjectSpan = document.getElementById("quizSubject");
+            quizTakerSpan.textContent = quizTaker;
+            quizSubjectSpan.textContent = `${quizSubject} - Quiz ${data.quiz_number}`;
+
+            const viewQuizModal = document.getElementById("viewQuizModal");
+
+            viewQuizModal.querySelector(
+              ".modal-header-text h1"
+            ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
+
+            viewQuizModal.querySelector(
+              ".modal-icon-container img"
+            ).src = `/SCES/assets/images/${data.icon}`;
+
+            const modalHeaderBg =
+              viewQuizModal.querySelector(".modal-header-bg");
+            modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
+
+            const questionsContainer = viewQuizModal.querySelector(
+              "#viewQuestionsContainer"
+            );
+            questionsContainer.innerHTML = "";
+
+            data.questions.forEach((question, index) => {
+              const quizItem = document.createElement("div");
+              quizItem.classList.add("quiz-item");
+
+              const questionBox = document.createElement("div");
+              questionBox.classList.add("question-box");
+              questionBox.setAttribute(
+                "data-question-id",
+                question.question_id
+              );
+              questionBox.innerHTML = `<span><strong>${index + 1}.</strong> ${
+                question.question
+              }</span>`;
+              quizItem.appendChild(questionBox);
+
+              question.choices.forEach((choice, i) => {
+                const choiceLetter = String.fromCharCode(65 + i);
+                const choiceElement = document.createElement("div");
+                choiceElement.classList.add("quiz-ans-fixed");
+
+                if (choice.is_correct === 1) {
+                  choiceElement.classList.add("correct");
+                } else {
+                  choiceElement.classList.add("wrong");
+                }
+
+                if (choice.isSelected) {
+                  choiceElement.classList.add(data.subject_code.toLowerCase());
+                }
+
+                choiceElement.innerHTML = `
+              <strong>${choiceLetter}.</strong>&nbsp;${choice.choice}
+            `;
+
+                quizItem.appendChild(choiceElement);
+              });
+
+              questionsContainer.appendChild(quizItem);
+            });
+            const closeButton = document.getElementById("close-quiz");
+
+            closeButton.onclick = () => closeQuiz(viewQuizModal);
+
+            viewQuizModal.style.display = "block";
+            document.body.style.overflow = "hidden";
+          })
+          .catch((error) => {
+            showAlert("error", "Server Error", error);
+          });
+      }
+    });
+
+  document
+    .getElementById("closeViewQuizModal")
+    .addEventListener("click", function () {
+      document.getElementById("viewQuizModal").style.display = "none";
+      document.body.style.overflow = "auto";
+    });
+
+  document.getElementById("close-quiz").addEventListener("click", function () {
+    document.getElementById("viewQuizModal").style.display = "none";
+    document.body.style.overflow = "auto";
+  });
 
   function showAlert(icon, title, message) {
     Swal.fire({

@@ -315,14 +315,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $studentGrades = $fetchDb->studentFetchGradesBySubject($studentId, $subjectId);
         echo json_encode($studentGrades);
     } else if ($submitType === 'facultyGetPanelData') {
-        session_start();
-        $sectionId = $_SESSION['section_id'];
-        $teacherId = $_SESSION['teacher_id'];
+        $sectionId = $_POST['section_id'];
         $studentId = $_POST['student_id'];
+
         $lrn = $fetchDb->getStudentLRN($studentId);
-        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId, $teacherId);
-        $totalPending = $fetchDb->facultyGetPendingQuizzesCount($sectionId, $studentId, $teacherId);
-        $averageScore = $fetchDb->facultyGetAverageScore($studentId, $teacherId);
+        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId);
+        $totalPending = $fetchDb->facultyGetPendingQuizzesCount($sectionId, $studentId);
+        $averageScore = $fetchDb->facultyGetAverageScore($studentId);
         $generalAverage = $fetchDb->computeStudentGWAByLRN($lrn);
 
         $panelData['totalCompleted'] = $totalCompleted;
@@ -457,6 +456,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Return the data as JSON
         echo json_encode($quizData);
+    } else if ($submitType === 'fetchSectionRecordTable') {
+        $sectionId = $_POST['section_id'];
+
+        $studentQuizRecords = $fetchDb->getSectionQuizRecords($sectionId);
+        echo json_encode($studentQuizRecords);
     } else if ($submitType === 'facultyGetSubjectPanelData') {
         $subjectId = $_POST['subject_id'];
         $sectionId = $_POST['section_id'];
