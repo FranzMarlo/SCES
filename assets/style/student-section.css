@@ -595,6 +595,19 @@ table.dataTable tbody td.dataTables_empty {
 .save-btn:hover {
   background-color: #45a049;
 }
+.stats-container{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.stats-box{
+  width: 48%;
+  border-radius: 30px;
+  border: 2px solid #000;
+  height: 30px;
+}
 @media (width < 1199px) {
   .modal-header-text img {
     height: 2rem;

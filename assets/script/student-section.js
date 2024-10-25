@@ -242,11 +242,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-  document.querySelector(".close-btn").addEventListener("click", function () {
-    document.getElementById("studentModal").style.display = "none";
+  document.getElementById("closeStudentModal").addEventListener("click", function () {
     showTabContent("profileContainer");
     setActiveTab("profileTab");
+    document.getElementById("studentModal").style.display = "none";
     document.body.style.overflow = "auto";
+    switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
+    initializeStudentsTable();
   });
 
   document.getElementById("profileTab").addEventListener("click", function () {
@@ -526,6 +528,7 @@ document.addEventListener("DOMContentLoaded", function () {
               predictionData.predicted_academic_success_rate
             );
             console.log("Predicted Remarks:", predictionData.predicted_remarks);
+            console.log("Predicted Next GWA:", predictionData.predicted_next_gwa);
           })
           .catch((error) => {
             console.error("Error fetching predictions:", error);

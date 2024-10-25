@@ -198,15 +198,15 @@
                         <span id="generalAverage"></span>
                     </div>
                 </div>
-            </div>        
-            <div class="graph-container">
-                <div class="pie-chart">
-                    <canvas id="pieChart"></canvas>
-                </div>
-                <div class="line-chart">
-                    <canvas id="lineChart"></canvas>
-                </div>
             </div>
+            <div class="stats-container">
+                <div class="stats-box"></div>
+                <div class="stats-box"></div>
+            </div>
+            <div class="stats-container">
+                <div class="stats-box"></div>
+                <div class="stats-box"></div>
+            </div>       
         </div>
     </div>
 </div>
