@@ -1,5 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables.php';
 $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/analytics.css" />
@@ -88,7 +89,7 @@ $page = '';
                 </div>
                 <div class="graph-container">
                     <div class="full-graph">
-                        <canvas id="fullLineChart"></canvas>
+                        <canvas id="fullBarChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -98,3 +99,6 @@ $page = '';
     <?php
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
     ?>
+    <script src="/SCES/assets/script/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="/SCES/assets/script/analytics.js"></script>

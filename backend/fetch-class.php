@@ -361,6 +361,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'barData' => $averageScores,
             'subjectCodes' => array_values($subjectCodes)
         ]);
+    } else if ($submitType === 'analyticsFullBarChart') {
+
+        $data = $fetchDb->fetchAverageGWA();
+
+        if ($data) {
+
+            echo json_encode([
+                'labels' => $data['labels'],
+                'barData' => $data['averageGwaValues']
+            ]);
+        } else {
+
+            echo json_encode([
+                'labels' => [],
+                'barData' => []
+            ]);
+        }
     } else if ($submitType === 'fetchStudentsDataTable') {
         $sectionId = $_POST['section_id'];
 
@@ -552,6 +569,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode([
                 'labels' => [],
                 'lineData' => []
+            ]);
+        }
+    } else if ($submitType === 'analyticsAverageScoreByMonth') {
+
+        $students = $fetchDb->getAllStudents();
+
+        $months = [];
+        $scores = [];
+
+        if (!empty($students)) {
+            foreach ($students as $student) {
+                $studentId = $student['student_id'];
+                $studentData = $fetchDb->studentFetchScoresByMonth($studentId);
+
+                if (empty($months)) {
+                    $months = $studentData['months'];
+                    $scores = array_fill(0, count($months), 0); // Initialize scores with zeroes
+                }
+
+                foreach ($studentData['scores'] as $index => $avgScore) {
+                    $scores[$index] += $avgScore;
+                }
+            }
+
+            $studentCount = count($students);
+            $sectionMonthlyAverages = array_map(function ($totalScore) use ($studentCount) {
+                return $studentCount > 0 ? $totalScore / $studentCount : 0;
+            }, $scores);
+
+            echo json_encode([
+                'labels' => $months,
+                'lineData' => $sectionMonthlyAverages
+            ]);
+        } else {
+            // If no students in section, return empty arrays
+            echo json_encode([
+                'labels' => [],
+                'lineData' => []
+            ]);
+        }
+    } else if ($submitType === 'analyticsAverageScoreByGradeLevel') {
+
+        $students = $fetchDb->getAllStudents();
+
+        $grades = [];
+        $scores = [];
+
+        if (!empty($students)) {
+            foreach ($students as $student) {
+                $studentId = $student['student_id'];
+                $studentData = $fetchDb->studentFetchScoresByGradeLevel($studentId);
+
+                if (empty($grades)) {
+                    $grades = $studentData['grades'];
+                    $scores = array_fill(0, count($grades), 0); // Initialize scores with zeroes
+                }
+
+                foreach ($studentData['scores'] as $index => $avgScore) {
+                    $scores[$index] += $avgScore;
+                }
+            }
+
+            $studentCount = count($students);
+            $averageScoresByGradeLevel = array_map(function ($totalScore) use ($studentCount) {
+                return $studentCount > 0 ? $totalScore / $studentCount : 0;
+            }, $scores);
+
+            echo json_encode([
+                'labels' => $grades,
+                'barData' => $averageScoresByGradeLevel
+            ]);
+        } else {
+            // If no students in section, return empty arrays
+            echo json_encode([
+                'labels' => [],
+                'barData' => []
             ]);
         }
     } else if ($submitType === 'facultyGetGWA') {

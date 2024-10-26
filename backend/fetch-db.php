@@ -806,6 +806,43 @@ class fetchClass extends db_connect
         return null; // Return null if no GWA records are found or query fails
     }
 
+    public function fetchAverageGWA()
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            grade_level,         
+            AVG(gwa) AS average_gwa
+        FROM 
+            record_tbl 
+        GROUP BY 
+            grade_level
+        ORDER BY 
+            grade_level ASC
+    ");
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $gwaRecords = $result->fetch_all(MYSQLI_ASSOC);
+
+            $labels = [];
+            $averageGwaValues = [];
+
+            foreach ($gwaRecords as $record) {
+                $labels[] = ucfirst(strtolower($record['grade_level']));
+                $averageGwaValues[] = round($record['average_gwa'], 2); // Round to 2 decimal places
+            }
+
+            // Return both labels and average GWA values
+            return [
+                'labels' => $labels,
+                'averageGwaValues' => $averageGwaValues,
+            ];
+        }
+
+        return null; // Return null if no GWA records are found or query fails
+    }
+
+
     public function getStudentsBySection($sectionId)
     {
         $query = $this->conn->prepare("
@@ -836,6 +873,43 @@ class fetchClass extends db_connect
                 student.student_lname ASC
         ");
         $query->bind_param("s", $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $students = $result->fetch_all(MYSQLI_ASSOC);
+            return $students;
+        } else {
+
+            return false;
+        }
+    }
+
+    public function getAllStudents()
+    {
+        $query = $this->conn->prepare("
+            SELECT
+                student.lrn,
+                student.student_id,
+                student.student_lname,
+                student.student_fname,
+                student.student_mname,
+                student.age,
+                student.gender,
+                student.profile_image,
+                level.grade_level,
+                section.section
+            FROM
+                student_tbl student
+            INNER JOIN
+                level_tbl level
+            ON
+                student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section
+            ON
+                student.section_id = section.section_id
+            ORDER BY
+                student.student_lname ASC
+        ");
         if ($query->execute()) {
             $result = $query->get_result();
             $students = $result->fetch_all(MYSQLI_ASSOC);
@@ -1551,7 +1625,60 @@ class fetchClass extends db_connect
             return null;
         }
     }
+    public function studentFetchScoresByGradeLevel($studentId)
+    {
+        // Step 1: Retrieve all grade levels from level_tbl
+        $allLevelsQuery = $this->conn->prepare("SELECT grade_level FROM level_tbl ORDER BY grade_level ASC");
+        $allLevelsQuery->execute();
+        $allLevelsResult = $allLevelsQuery->get_result();
 
+        // Initialize grades and scores arrays with all grade levels and default scores of 0
+        $grades = [];
+        $scores = [];
+        while ($row = $allLevelsResult->fetch_assoc()) {
+            $grades[$row['grade_level']] = 0;  // Initialize each grade level with a score of 0
+        }
+
+        // Step 2: Retrieve average scores for each grade level associated with the student
+        $query = $this->conn->prepare("
+        SELECT 
+            level.grade_level AS grade_level,  
+            AVG(score.score) AS avg_score
+        FROM
+            quiz_tbl quiz
+        INNER JOIN
+            score_tbl score ON score.quiz_id = quiz.quiz_id
+        INNER JOIN
+            subject_tbl subject ON quiz.subject_id = subject.subject_id
+        INNER JOIN
+            level_tbl level ON subject.level_id = level.level_id
+        WHERE 
+            score.student_id = ?
+        AND 
+            score.score IS NOT NULL
+        GROUP BY 
+            level.grade_level
+        ORDER BY 
+            level.grade_level ASC
+    ");
+        $query->bind_param("s", $studentId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            // Update scores for grade levels that have data
+            while ($row = $result->fetch_assoc()) {
+                $grades[$row['grade_level']] = (float) $row['avg_score'];
+            }
+
+            return [
+                'grades' => array_keys($grades),  // Grade level labels
+                'scores' => array_values($grades)  // Average scores, with 0 for missing grade levels
+            ];
+        } else {
+            return null;
+        }
+    }
 
     public function getStudentQuizRecords($sectionId, $subjectId)
     {
