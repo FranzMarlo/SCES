@@ -679,9 +679,6 @@ table.dataTable tbody td.dataTables_empty {
   .graph {
     height: 350px;
   }
-  .data-container{
-    height: 350px;
-  }
   .panel-col p {
     font-size: 1rem;
   }
@@ -728,9 +725,6 @@ table.dataTable tbody td.dataTables_empty {
   .full-graph{
     height: 300px;
   }
-  .data-container{
-    height: 300px;
-  }
   .stats-col p{
     font-size: 1.1rem;
   }
@@ -764,9 +758,6 @@ table.dataTable tbody td.dataTables_empty {
   .graph {
     height: 300px;
   }.full-graph{
-    height: 300px;
-  }
-  .data-container{
     height: 300px;
   }
 }
@@ -810,11 +801,6 @@ table.dataTable tbody td.dataTables_empty {
     margin-top: 5px;
     flex-direction: column;
     justify-content: center;
-  }
-  .data-container{
-    width: 100%;
-    flex-direction: column;
-    height: 350px;
   }
   .graph {
     width: 100%;
