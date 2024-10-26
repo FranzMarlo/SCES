@@ -964,7 +964,7 @@ class fetchClass extends db_connect
         }
     }
 
-    public function facultyGetTotalQuizzesCount($studentId)
+    public function facultyGetTotalQuizzesCount($studentId, $sectionId)
     {
         $query = $this->conn->prepare("
         SELECT 
@@ -986,11 +986,45 @@ class fetchClass extends db_connect
         ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
         WHERE 
             student.student_id = ?
-        AND 
+        AND
+            student.section_id = ?
+        AND
             score.score IS NOT NULL
     ");
 
-        $query->bind_param("s", $studentId);
+        $query->bind_param("ss", $studentId, $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc();
+            return $subjectDetails['quiz_count'];
+        }
+
+        return 0;
+    }
+
+    public function sectionGetTotalQuizzesCount($sectionId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_tbl student
+        ON student.section_id = subject.section_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level
+        ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        WHERE 
+            subject.section_id = ?
+        AND
+            quiz.status = 'Completed'
+    ");
+
+        $query->bind_param("s", $sectionId);
         if ($query->execute()) {
             $result = $query->get_result();
             $subjectDetails = $result->fetch_assoc();
@@ -1063,13 +1097,45 @@ class fetchClass extends db_connect
         AND 
             student.student_id = ?
         AND 
-            quiz.status = 'Active'
-        AND 
             score.score IS NULL
+        AND
+            (quiz.status = 'Active' OR quiz.status = 'Completed')
     ");
 
         // Bind parameters for sectionId, studentId, and status (pending)
         $query->bind_param("ss", $sectionId, $studentId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc(); // Fetch as associative array
+            return $subjectDetails['quiz_count']; // Return the count of pending quizzes
+        }
+
+        return 0; // Return 0 if no result
+    }
+
+    public function sectionGetPendingQuizzesCount($sectionId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN level_tbl level
+        ON subject.level_id = level.level_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        WHERE 
+            subject.section_id = ?
+        AND
+            quiz.status = 'Active'
+    ");
+
+        // Bind parameters for sectionId, studentId, and status (pending)
+        $query->bind_param("s", $sectionId);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -1104,8 +1170,8 @@ class fetchClass extends db_connect
             student.section_id = ?
         AND 
             student.student_id = ?
-        AND 
-            quiz.status = 'Active'
+        AND
+            (quiz.status = 'Active' OR quiz.status = 'Completed')
         AND 
             score.score IS NULL
         AND
@@ -1121,7 +1187,7 @@ class fetchClass extends db_connect
             return $subjectDetails['quiz_count']; // Return the count of pending quizzes
         }
 
-        return 0; // Return 0 if no result
+        return 0;
     }
 
     public function computeStudentGWAByLRN($lrn)
@@ -1485,6 +1551,7 @@ class fetchClass extends db_connect
             return null;
         }
     }
+
 
     public function getStudentQuizRecords($sectionId, $subjectId)
     {

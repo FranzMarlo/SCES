@@ -91,6 +91,46 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
                         <img src="/SCES/assets/images/profile-analytics.png" alt="profile-analytics.png">
                         <h1>Analytics</h1>
                     </div>
+                    <div class="stats-panel">
+                        <div class="panel-box completed">
+                            <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
+                            <div class="panel-col">
+                                <p>Quiz Completed</p>
+                                <span id="sectionCompletion"></span>
+                            </div>
+                        </div>
+                        <div class="panel-box pending">
+                            <img src="/SCES/assets/images/hourglass.png" alt="hourglass.png">
+                            <div class="panel-col">
+                                <p>Pending Quiz</p>
+                                <span id="sectionQuizzes"></span>
+                            </div>
+                        </div>
+                        <div class="panel-box quiz-score">
+                            <img src="/SCES/assets/images/gpa.png" alt="gpa.png">
+                            <div class="panel-col">
+                                <p>Average Score</p>
+                                <span id="sectionAverageScore"></span>
+                            </div>
+                        </div>
+                        <div class="panel-box average">
+                            <img src="/SCES/assets/images/profile-gwa.png" alt="profile-gwa.png">
+                            <div class="panel-col">
+                                <p>General Average</p>
+                                <span id="sectionGeneralAverage"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="graph-container">
+                        <div class="full-graph">
+                            <canvas id="sectionLineChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="graph-container">
+                        <div class="full-graph">
+                            <canvas id="sectionFullBarChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
 

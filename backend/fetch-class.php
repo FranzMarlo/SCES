@@ -313,6 +313,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'subjectCodes' => []
             ]);
         }
+    } else if ($submitType === 'sectionFullBarChart') {
+        $sectionId = $_POST['section_id'];
+        $students = $fetchDb->getStudentsBySection($sectionId);
+
+        // Initialize arrays for subjects and total scores
+        $subjects = [];
+        $subjectTotals = [];
+        $subjectCounts = [];
+        $subjectCodes = [];
+
+        // Loop through each student to accumulate scores by subject
+        foreach ($students as $student) {
+            $studentId = $student['student_id'];
+            $studentData = $fetchDb->studentAverageScoreBySubject($studentId, $sectionId);
+
+            // Loop through each subject for the current student
+            foreach ($studentData['subjects'] as $index => $subject) {
+                $score = $studentData['scores'][$index];
+                $subjectCode = strtolower($studentData['subjectCodes'][$index]);
+
+                // Check if this subject is already in the totals array
+                if (!isset($subjectTotals[$subject])) {
+                    $subjectTotals[$subject] = 0;
+                    $subjectCounts[$subject] = 0;
+                    $subjectCodes[$subject] = $subjectCode;  // Store subject code
+                    $subjects[] = $subject;  // Add to subjects list once
+                }
+
+                // Accumulate scores and counts for each subject
+                $subjectTotals[$subject] += $score;
+                $subjectCounts[$subject] += 1;
+            }
+        }
+
+        // Calculate the average score for each subject across the section
+        $averageScores = [];
+        foreach ($subjects as $subject) {
+            $averageScores[] = $subjectCounts[$subject] > 0
+                ? $subjectTotals[$subject] / $subjectCounts[$subject]
+                : 0;
+        }
+
+        // Prepare data for chart
+        echo json_encode([
+            'labels' => $subjects,
+            'barData' => $averageScores,
+            'subjectCodes' => array_values($subjectCodes)
+        ]);
     } else if ($submitType === 'fetchStudentsDataTable') {
         $sectionId = $_POST['section_id'];
 
@@ -358,7 +406,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $studentId = $_POST['student_id'];
 
         $lrn = $fetchDb->getStudentLRN($studentId);
-        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId);
+        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId, $sectionId);
         $totalPending = $fetchDb->facultyGetPendingQuizzesCount($sectionId, $studentId);
         $averageScore = $fetchDb->facultyGetAverageScore($studentId);
         $generalAverage = $fetchDb->computeStudentGWAByLRN($lrn);
@@ -383,6 +431,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData['totalPending'] = $totalPending;
         $panelData['averageScore'] = $averageScore;
         $panelData['generalAverage'] = $generalAverage;
+        echo json_encode($panelData);
+
+    } else if ($submitType === 'facultyGetSectionPanelData') {
+        $sectionId = $_POST['section_id'];
+
+        // Fetch total quizzes completed and pending for the section
+        $totalCompleted = $fetchDb->sectionGetTotalQuizzesCount($sectionId);
+        $totalPending = $fetchDb->sectionGetPendingQuizzesCount($sectionId);
+
+        // Get all students in the section
+        $students = $fetchDb->getStudentsBySection($sectionId);
+
+        // Initialize counters and totals
+        $totalAverageScore = 0;
+        $totalGeneralAverageGWA = 0;
+        $studentCount = count($students);
+
+        // Loop through each student to calculate total scores and GWA
+        foreach ($students as $student) {
+            $studentId = $student['student_id'];
+            $lrn = $student['lrn'];
+
+            // Fetch the individual average score and GWA for the student
+            $averageScore = $fetchDb->facultyGetAverageScore($studentId);
+            $generalAverageGWA = $fetchDb->computeStudentGWAByLRN($lrn);
+
+            // Add to running totals
+            $totalAverageScore += $averageScore;
+            $totalGeneralAverageGWA += $generalAverageGWA;
+        }
+
+        // Calculate section averages
+        $averageScore = $studentCount > 0 ? $totalAverageScore / $studentCount : 0;
+        $generalAverageGWA = $studentCount > 0 ? $totalGeneralAverageGWA / $studentCount : 0;
+
+        // Prepare data for the panel
+        $panelData = [
+            'totalCompleted' => $totalCompleted,
+            'totalPending' => $totalPending,
+            'averageScore' => $averageScore,
+            'generalAverage' => $generalAverageGWA
+        ];
+
         echo json_encode($panelData);
     } else if ($submitType === 'studentCompletionBySubject') {
         $studentId = $_POST['student_id'];
@@ -422,6 +513,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode([
                 'labels' => $data['months'],
                 'lineData' => $data['scores']
+            ]);
+        }
+    } else if ($submitType === 'sectionAverageScoreByMonth') {
+        $sectionId = $_POST['section_id'];
+
+        $students = $fetchDb->getStudentsBySection($sectionId);
+
+        $months = [];
+        $scores = [];
+
+        if (!empty($students)) {
+            foreach ($students as $student) {
+                $studentId = $student['student_id'];
+                $studentData = $fetchDb->studentFetchScoresByMonth($studentId);
+
+                if (empty($months)) {
+                    $months = $studentData['months'];
+                    $scores = array_fill(0, count($months), 0); // Initialize scores with zeroes
+                }
+
+                foreach ($studentData['scores'] as $index => $avgScore) {
+                    $scores[$index] += $avgScore;
+                }
+            }
+
+            $studentCount = count($students);
+            $sectionMonthlyAverages = array_map(function ($totalScore) use ($studentCount) {
+                return $studentCount > 0 ? $totalScore / $studentCount : 0;
+            }, $scores);
+
+            echo json_encode([
+                'labels' => $months,
+                'lineData' => $sectionMonthlyAverages
+            ]);
+        } else {
+            // If no students in section, return empty arrays
+            echo json_encode([
+                'labels' => [],
+                'lineData' => []
             ]);
         }
     } else if ($submitType === 'facultyGetGWA') {

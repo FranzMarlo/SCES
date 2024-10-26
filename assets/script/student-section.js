@@ -54,6 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   sectionAnalyticsTab.addEventListener("click", function () {
     switchTab(sectionAnalyticsTab, sectionAnalyticsPanel, 3);
+    populateSectionPanelData();
+    initializeSectionLineChart();
+    initializeSectionFullBarChart();
   });
 
   window.addEventListener("load", function () {
@@ -67,6 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
         break;
       case "3":
         switchTab(sectionAnalyticsTab, sectionAnalyticsPanel, 3);
+        populateSectionPanelData();
+        initializeSectionLineChart();
+        initializeSectionFullBarChart();
         break;
       default:
         switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
@@ -507,6 +513,30 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  function populateSectionPanelData() {
+    const data = new FormData();
+    data.append("submitType", "facultyGetSectionPanelData");
+    data.append("section_id", section_id);
+    fetch("/SCES/backend/fetch-class.php", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById("sectionCompletion").textContent =
+          data.totalCompleted || 0;
+        document.getElementById("sectionQuizzes").textContent =
+          data.totalPending || 0;
+        document.getElementById("sectionAverageScore").textContent =
+          data.averageScore || "N/A";
+        document.getElementById("sectionGeneralAverage").textContent =
+          data.generalAverage || "N/A";
+      })
+      .catch((error) => {
+        console.error("Error fetching panel data:", error);
+      });
+  }
+
   function getStudentGWA(studentId) {
     const data = new FormData();
     data.append("submitType", "facultyGetGWA");
@@ -899,6 +929,114 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function initializeSectionLineChart() {
+    var ctxLine = document.getElementById("sectionLineChart").getContext("2d");
+
+    if (Chart.getChart("sectionLineChart")) {
+      Chart.getChart("sectionLineChart").destroy();
+    }
+
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      data: {
+        submitType: "sectionAverageScoreByMonth",
+        section_id: section_id,
+      },
+      success: function (response) {
+        const chartData = JSON.parse(response);
+        const months = chartData.labels || [];
+        const scores = chartData.lineData || [];
+
+        if (scores.length === 0) {
+          showAlert("info", "No Data Available For Section");
+          ctxLine.chart = new Chart(ctxLine, {
+            type: "line",
+            data: {
+              labels: ["No Data"],
+              datasets: [
+                {
+                  data: [0], // No data
+                  borderColor: "#ccc",
+                  backgroundColor: "rgba(200, 200, 200, 0.5)",
+                  fill: true,
+                  tension: 0.4,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              plugins: {
+                legend: false, // Disable the legend
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: false, // Remove title for y-axis
+                },
+                x: {
+                  title: false, // Remove title for x-axis
+                },
+              },
+            },
+          });
+        } else {
+          ctxLine.chart = new Chart(ctxLine, {
+            type: "line",
+            data: {
+              labels: months,
+              datasets: [
+                {
+                  label: "", // Remove label from the dataset
+                  data: scores,
+                  borderColor: "#ddd1ff", // Use #ddd1ff color for the line
+                  backgroundColor: "rgba(221, 209, 255, 0.5)",
+                  fill: true,
+                  tension: 0.4, // Curve the line
+                  pointBackgroundColor: "#fff",
+                  pointBorderColor: "#ddd1ff",
+                  pointHoverRadius: 5,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              plugins: {
+                legend: false, // Disable the legend
+                title: {
+                  display: true,
+                  text: "Average Score Per Month", // Add chart title
+                  font: {
+                    size: 17,
+                    weight: "bold",
+                  },
+                  padding: {
+                    top: 5,
+                    bottom: 10,
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: false, // Remove title for y-axis
+                },
+                x: {
+                  title: false, // Remove title for x-axis
+                },
+              },
+            },
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data: ", error);
+      },
+    });
+  }
+
   function initializeStudentBarChart(lrn) {
     var ctxBar = document.getElementById("studentBarChart").getContext("2d");
 
@@ -993,6 +1131,89 @@ document.addEventListener("DOMContentLoaded", function () {
       data: {
         submitType: "studentFullBarChart",
         student_id: studentId,
+        section_id: section_id,
+      },
+      success: function (data) {
+        // Define color mapping for subject codes
+        const colorMapping = {
+          fil: "#ff8080",
+          eng: "#ffb480",
+          math: "#e1e149",
+          sci: "#42d6a4",
+          esp: "#08cad1",
+          mt: "#59adf6",
+          ap: "#f0bad1",
+          mapeh: "#a3adff",
+          epp: "#d9ae9d",
+        };
+
+        // Map background colors based on subject codes
+        const backgroundColors = data.subjectCodes.map(
+          (code) => colorMapping[code] || "#cccccc" // Default color if code is missing
+        );
+
+        new Chart(ctxBar, {
+          type: "bar",
+          data: {
+            labels: data.labels,
+            datasets: [
+              {
+                label: "Average Score",
+                data: data.barData,
+                backgroundColor: backgroundColors,
+                borderColor: "#000",
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Average Score Per Subject",
+                font: {
+                  size: 18,
+                },
+                padding: {
+                  top: 10,
+                  bottom: 10,
+                },
+              },
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data for student full bar chart:", error);
+      },
+    });
+  }
+
+  function initializeSectionFullBarChart() {
+    const ctxBar = document
+      .getElementById("sectionFullBarChart")
+      .getContext("2d");
+
+    if (Chart.getChart("sectionFullBarChart")) {
+      Chart.getChart("sectionFullBarChart").destroy();
+    }
+
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        submitType: "sectionFullBarChart",
         section_id: section_id,
       },
       success: function (data) {

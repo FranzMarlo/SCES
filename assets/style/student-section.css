@@ -40,6 +40,7 @@
   width: 100%;
   align-items: center;
   padding: 20px;
+  gap: 20px;
 }
 .table-responsive {
   display: flex;
@@ -282,7 +283,6 @@ table.dataTable tbody td.dataTables_empty {
   flex-direction: row;
   align-items: center;
   width: 100%;
-  margin-bottom: 10px;
 }
 .title-box img {
   height: 2.3rem;
@@ -290,6 +290,9 @@ table.dataTable tbody td.dataTables_empty {
 }
 .title-box h1 {
   font-size: 1.4rem;
+}
+.tab-panel .title-box{
+  margin-bottom: 10px;
 }
 .tab-container {
   display: none;
@@ -392,6 +395,15 @@ table.dataTable tbody td.dataTables_empty {
   width: 100%;
 }
 #studentFullBarChart {
+  width: 100%;
+}
+#sectionLineChart {
+  width: 100%;
+}
+#sectionBarChart {
+  width: 100%;
+}
+#sectionFullBarChart {
   width: 100%;
 }
 .student-info {
@@ -648,9 +660,6 @@ table.dataTable tbody td.dataTables_empty {
   .title-box h1 {
     font-size: 1.3rem;
   }
-  .title-box {
-    margin-bottom: 10px;
-  }
   .table-responsive {
     width: 90%;
   }
@@ -876,6 +885,7 @@ table.dataTable tbody td.dataTables_empty {
 @media (width < 500px) {
   .panel-tab {
     padding: 10px;
+    gap: 10px;
   }
   .table-responsive {
     max-width: 400px;
@@ -929,6 +939,7 @@ table.dataTable tbody td.dataTables_empty {
   }
   .panel-tab {
     padding: 5px;
+    gap: 5px;
   }
   .panel-col p {
     font-size: 0.7rem;
