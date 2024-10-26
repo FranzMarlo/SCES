@@ -268,6 +268,16 @@ table.dataTable tbody td.dataTables_empty {
   font-size: 1rem;
   cursor: pointer;
 }
+.main-tab-item {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 20px;
+  border: 2px solid #000;
+  border-radius: 30px;
+  width: fit-content;
+  font-size: 1rem;
+  cursor: pointer;
+}
 .tab-item.pink:hover,
 .tab-item.pink.active {
   font-weight: bold;
@@ -864,6 +874,10 @@ table.dataTable tbody td.dataTables_empty {
     padding: 5px 10px;
     font-size: 0.9rem;
   }
+  .main-tab-item {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
   .more-btn {
     padding: 5px 8px;
     font-size: 0.8rem;
@@ -980,25 +994,25 @@ table.dataTable tbody td.dataTables_empty {
 .G6 {
   background-color: #fec590;
 }
-.tab-item.G1, .tab-item.G2, .tab-item.G3, .tab-item.G4, .tab-item.G5 ,.tab-item.G6 {
+.main-tab-item.G1, .main-tab-item.G2, .main-tab-item.G3, .main-tab-item.G4, .main-tab-item.G5 ,.main-tab-item.G6 {
   background-color: #fff;
 }
-.tab-item.G1:hover, .tab-item.G1.active {
+.main-tab-item.G1:hover, .main-tab-item.G1.active {
   background-color: #d2ebc4;
 }
-.tab-item.G2:hover, .tab-item.G2.active {
+.main-tab-item.G2:hover, .main-tab-item.G2.active {
   background-color: #ffd6e6;
 }
-.tab-item.G3:hover, .tab-item.G3.active {
+.main-tab-item.G3:hover, .main-tab-item.G3.active {
   background-color: #fcfd95;
 }
-.tab-item.G4:hover, .tab-item.G4.active {
+.main-tab-item.G4:hover, .main-tab-item.G4.active {
   background-color: #c5e3ff;
 }
-.tab-item.G5:hover, .tab-item.G5.active {
+.main-tab-item.G5:hover, .main-tab-item.G5.active {
   background-color: #ddd1ff;
 }
-.tab-item.G6:hover, .tab-item.G6.active {
+.main-tab-item.G6:hover, .main-tab-item.G6.active {
   background-color: #fec590;
 }
 .male {

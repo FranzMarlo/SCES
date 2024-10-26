@@ -79,9 +79,10 @@ document.addEventListener("DOMContentLoaded", function () {
       default:
         switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
         initializeStudentsTable();
+        break;
     }
   });
-  
+
   function initializeStudentsTable() {
     if ($.fn.dataTable.isDataTable("#studentsTable")) {
     } else {

@@ -30,12 +30,12 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
             </div>
             <div class="panel">
                 <div class="main-tab-controller">
-                    <div class="tab-item <?php echo htmlspecialchars($sectionData['short']); ?> active"
+                    <div class="main-tab-item <?php echo htmlspecialchars($sectionData['short']); ?> active"
                         id="sectionStudentsTab">
                         Students</div>
-                    <div class="tab-item <?php echo htmlspecialchars($sectionData['short']); ?>" id="sectionRecordsTab">
+                    <div class="main-tab-item <?php echo htmlspecialchars($sectionData['short']); ?>" id="sectionRecordsTab">
                         Records</div>
-                    <div class="tab-item <?php echo htmlspecialchars($sectionData['short']); ?>"
+                    <div class="main-tab-item <?php echo htmlspecialchars($sectionData['short']); ?>"
                         id="sectionAnalyticsTab">Analytics</div>
                 </div>
                 <div class="panel-tab" id="sectionStudentsPanel">
