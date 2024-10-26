@@ -131,6 +131,26 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
                             <canvas id="sectionFullBarChart"></canvas>
                         </div>
                     </div>
+                    <div class="title-box">
+                        <img src="/SCES/assets/images/quiz-score.png" alt="quiz-score.png">
+                        <h1>Students Ranking</h1>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="rankingTable" class="display data-table">
+                            <thead>
+                                <tr class="<?php echo htmlspecialchars($sectionData['short']); ?>">
+                                    <th>Rank</th>
+                                    <th>LRN</th>
+                                    <th>Student ID</th>
+                                    <th>Full Name</th>
+                                    <th>Average Score</th>
+                                    <th>More</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

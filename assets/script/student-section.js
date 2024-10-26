@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
     populateSectionPanelData();
     initializeSectionLineChart();
     initializeSectionFullBarChart();
+    initializeRankingTable();
   });
 
   window.addEventListener("load", function () {
@@ -73,12 +74,14 @@ document.addEventListener("DOMContentLoaded", function () {
         populateSectionPanelData();
         initializeSectionLineChart();
         initializeSectionFullBarChart();
+        initializeRankingTable();
         break;
       default:
         switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
         initializeStudentsTable();
     }
   });
+  
   function initializeStudentsTable() {
     if ($.fn.dataTable.isDataTable("#studentsTable")) {
     } else {
@@ -265,12 +268,10 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("closeStudentModal")
     .addEventListener("click", function () {
-      showTabContent("profileContainer");
-      setActiveTab("profileTab");
       document.getElementById("studentModal").style.display = "none";
       document.body.style.overflow = "auto";
-      switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
-      initializeStudentsTable();
+      showTabContent("profileContainer");
+      setActiveTab("profileTab");
     });
 
   document.getElementById("profileTab").addEventListener("click", function () {
@@ -1281,6 +1282,176 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
   }
+
+  function initializeRankingTable() {
+    if ($.fn.dataTable.isDataTable("#rankingTable")) {
+    } else {
+      var studentsTable = $("#rankingTable").DataTable({
+        responsive: {
+          details: {
+            type: "inline",
+            display: $.fn.dataTable.Responsive.display.childRowImmediate,
+            renderer: function (api, rowIdx, columns) {
+              var data = $.map(columns, function (col, i) {
+                return col.hidden
+                  ? '<tr data-dt-row="' +
+                      col.rowIdx +
+                      '" data-dt-column="' +
+                      col.columnIdx +
+                      '">' +
+                      "<td><strong>" +
+                      col.title +
+                      ":" +
+                      "</strong></td> " +
+                      "<td>" +
+                      col.data +
+                      "</td>" +
+                      "</tr>"
+                  : "";
+              }).join("");
+              return data ? $("<table/>").append(data) : false;
+            },
+          },
+        },
+        ajax: {
+          url: "/SCES/backend/fetch-class.php",
+          type: "POST",
+          data: function (d) {
+            d.submitType = "rankingStudentsBySection";
+            d.section_id = section_id;
+            return d;
+          },
+          dataSrc: "",
+        },
+        columns: [
+          { data: "rank", className: "text-center" },
+          { data: "lrn", className: "text-center" },
+          { data: "student_id", className: "text-center" },
+          { data: "full_name", className: "text-center" },
+          { data: "average_score", className: "text-center" },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="center-image">
+          <button class="more-btn" data-student-id="${row.student_id}"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>`;
+            },
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+          },
+        ],
+        language: {
+          emptyTable: "No data available in table",
+        },
+        initComplete: function () {
+          studentsTable.draw();
+        },
+      });
+    }
+  }
+
+  document
+    .getElementById("rankingTable")
+    .addEventListener("click", function (event) {
+      if (event.target.closest(".more-btn")) {
+        const btn = event.target.closest(".more-btn");
+        const studentId = btn.getAttribute("data-student-id");
+
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=fetchStudentDetails&student_id=${studentId}`,
+        })
+          .then((response) => response.json())
+          .then((student) => {
+            if (!student || Object.keys(student).length === 0) {
+              showAlert("error", "Server Error", "Student Data Not Found");
+              return;
+            }
+
+            Object.keys(student).forEach((key) => {
+              if (student[key] === null || student[key] === "") {
+                student[key] = "Not Set";
+              }
+            });
+            const modal = document.getElementById("studentModal");
+            const modalHeader = document.getElementById("studentHeader");
+            const genderClass = student.gender === "Female" ? "female" : "male";
+            const tabItemClass = student.gender === "Female" ? "pink" : "blue";
+            const coloredRow = document.querySelectorAll(".colored-row");
+
+            modalHeader.classList.remove("female", "male");
+            coloredRow.forEach((row) => {
+              row.classList.remove("female", "male");
+            });
+
+            const tabItems = modal.querySelectorAll(".tab-item");
+            tabItems.forEach((tab) => {
+              tab.classList.remove("pink", "blue");
+            });
+
+            modalHeader.classList.add(genderClass);
+            coloredRow.forEach((row) => {
+              row.classList.add(genderClass);
+            });
+            tabItems.forEach((tab) => {
+              tab.classList.add(tabItemClass);
+            });
+
+            const imageElement = document.getElementById("profileImage");
+            imageElement.src = `/SCES/storage/student/images/${student.profile_image}`;
+            imageElement.onerror = function () {
+              this.src = "/SCES/storage/student/images/default-profile.png";
+            };
+            document.getElementById("studId").textContent = student.student_id;
+            document
+              .getElementById("recordsTab")
+              .setAttribute("data-student-id", student.student_id);
+            document
+              .getElementById("analyticsTab")
+              .setAttribute("data-lrn", student.lrn);
+            document.getElementById("fullName").textContent =
+              student.student_fname + " " + student.student_lname;
+            document.getElementById("gradeSection").textContent =
+              student.grade_level + " - " + student.section;
+            document.getElementById("lastName").textContent =
+              student.student_lname;
+            document.getElementById("firstName").textContent =
+              student.student_fname;
+            document.getElementById("middleName").textContent =
+              student.student_mname;
+            document.getElementById("lastName").textContent =
+              student.student_lname;
+            document.getElementById("gender").textContent = student.gender;
+            document.getElementById("age").textContent = student.age;
+            document.getElementById("lrn").textContent = student.lrn;
+            document.getElementById("studentId").textContent =
+              student.student_id;
+            document.getElementById("gradeLevel").textContent =
+              student.grade_level;
+            document.getElementById("section").textContent = student.section;
+            document.getElementById("email").textContent = student.email;
+            document.getElementById("city").textContent = student.city;
+            document.getElementById("barangay").textContent = student.barangay;
+            document.getElementById("street").textContent = student.street;
+            document.getElementById("guardian").textContent =
+              student.guardian_name;
+            document.getElementById("contact").textContent =
+              student.guardian_contact;
+
+            document.body.style.overflow = "hidden";
+            modal.style.display = "flex";
+            populatePanelData(student.student_id);
+            getStudentGWA(student.student_id);
+          })
+          .catch((error) => {
+            showAlert("error", "Server Error", "Please Try Again Later");
+          });
+      }
+    });
 
   function showAlert(icon, title, message) {
     Swal.fire({

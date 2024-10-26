@@ -689,6 +689,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData = $fetchDb->rankingStudentsBySubject($sectionId, $subjectId);
 
         echo json_encode($panelData);
+    } else if ($submitType === 'rankingStudentsBySection') {
+        $sectionId = $_POST['section_id'];
+
+        $panelData = $fetchDb->rankingStudentsBySection($sectionId);
+
+        echo json_encode($panelData);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
