@@ -297,6 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
       getStudentGWA(studentId);
       initializeStudentLineChart(studentId);
       initializeStudentBarChart(lrn);
+      initializeStudentFullBarChart(studentId);
       showTabContent("analyticsContainer");
       setActiveTab("analyticsTab");
     });
@@ -913,7 +914,9 @@ document.addEventListener("DOMContentLoaded", function () {
         lrn: lrn,
       },
       success: function (data) {
-        var ctxBar = document.getElementById("studentBarChart").getContext("2d");
+        var ctxBar = document
+          .getElementById("studentBarChart")
+          .getContext("2d");
 
         var colors = [
           "#ffd6e6",
@@ -973,11 +976,89 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function initializeStudentFullBarChart(studentId) {
-    var ctxFullBar = document.getElementById("studentFullBarChart").getContext("2d");
+    const ctxBar = document
+      .getElementById("studentFullBarChart")
+      .getContext("2d");
 
+    // Destroy previous instance if it exists
     if (Chart.getChart("studentFullBarChart")) {
       Chart.getChart("studentFullBarChart").destroy();
     }
+
+    // AJAX request to fetch data
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        submitType: "studentFullBarChart",
+        student_id: studentId,
+        section_id: section_id,
+      },
+      success: function (data) {
+        // Define color mapping for subject codes
+        const colorMapping = {
+          fil: "#ff8080",
+          eng: "#ffb480",
+          math: "#e1e149",
+          sci: "#42d6a4",
+          esp: "#08cad1",
+          mt: "#59adf6",
+          ap: "#f0bad1",
+          mapeh: "#a3adff",
+          epp: "#d9ae9d",
+        };
+
+        // Map background colors based on subject codes
+        const backgroundColors = data.subjectCodes.map(
+          (code) => colorMapping[code] || "#cccccc" // Default color if code is missing
+        );
+
+        new Chart(ctxBar, {
+          type: "bar",
+          data: {
+            labels: data.labels,
+            datasets: [
+              {
+                label: "Average Score",
+                data: data.barData,
+                backgroundColor: backgroundColors,
+                borderColor: "#000",
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Average Score Per Subject",
+                font: {
+                  size: 18,
+                },
+                padding: {
+                  top: 10,
+                  bottom: 10,
+                },
+              },
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data for student full bar chart:", error);
+      },
+    });
   }
 
   function showAlert(icon, title, message) {

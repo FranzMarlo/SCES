@@ -1459,7 +1459,7 @@ class fetchClass extends db_connect
         ORDER BY 
             month ASC
     ");
-    
+
         $startDate = "$startYear-06-01";
         $endDate = "$endYear-04-30";
         $query->bind_param("sss", $studentId, $startDate, $endDate);
@@ -1518,6 +1518,61 @@ class fetchClass extends db_connect
 
         return [];
     }
+
+    public function studentAverageScoreBySubject($studentId, $sectionId)
+    {
+        // Query to get the average score per subject, including subjects with no scores
+        $query = $this->conn->prepare("
+        SELECT 
+            subj.subject AS subject_label,
+            COALESCE(AVG(score.score), 0) AS avg_score,
+            subj.subject_code
+        FROM
+            subject_tbl subj
+        LEFT JOIN
+            quiz_tbl quiz ON subj.subject_id = quiz.subject_id
+        LEFT JOIN
+            score_tbl score ON score.quiz_id = quiz.quiz_id
+            AND score.student_id = ?
+        WHERE
+            subj.section_id = ?
+        GROUP BY 
+            subj.subject
+        ORDER BY 
+            subj.subject ASC
+    ");
+
+        // Bind the studentId and sectionId parameters
+        $query->bind_param("ss", $studentId, $sectionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            // Initialize arrays to hold subjects, scores, and subject codes
+            $subjects = [];
+            $scores = [];
+            $subjectCodes = [];
+
+            // Fetch the average scores per subject
+            while ($row = $result->fetch_assoc()) {
+                $subjects[] = $row['subject_label'];        // Subject name
+                $scores[] = (float) $row['avg_score'];      // Average score
+                $subjectCodes[] = strtolower($row['subject_code']); // Subject code in lowercase
+            }
+
+            // Prepare the data to return for the bar chart
+            $data = [
+                'subjects' => $subjects,          // Subject labels
+                'scores' => $scores,              // Average scores
+                'subjectCodes' => $subjectCodes   // Subject codes for color mapping
+            ];
+
+            return $data;  // Return the final data for the bar chart
+        } else {
+            return null;  // Return null in case of failure
+        }
+    }
+
 
     public function getSectionQuizRecords($sectionId)
     {

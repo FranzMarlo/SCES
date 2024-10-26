@@ -291,6 +291,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'barData' => []
             ]);
         }
+    } else if ($submitType === 'studentFullBarChart') {
+        $studentId = $_POST['student_id'];
+        $sectionId = $_POST['section_id'];
+
+        // Call the studentAverageScoreBySubject method
+        $data = $fetchDb->studentAverageScoreBySubject($studentId, $sectionId);
+
+        if ($data) {
+            // Return subjects as labels, scores as barData, and subject codes for colors
+            echo json_encode([
+                'labels' => $data['subjects'],
+                'barData' => $data['scores'],
+                'subjectCodes' => $data['subjectCodes']
+            ]);
+        } else {
+            // If no data is returned, return empty arrays
+            echo json_encode([
+                'labels' => [],
+                'barData' => [],
+                'subjectCodes' => []
+            ]);
+        }
     } else if ($submitType === 'fetchStudentsDataTable') {
         $sectionId = $_POST['section_id'];
 
