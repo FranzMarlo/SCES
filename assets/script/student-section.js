@@ -2,6 +2,17 @@ document.addEventListener("DOMContentLoaded", function () {
   var bodyElement = document.querySelector("body");
   var section_id = bodyElement.getAttribute("data-section");
 
+  const performanceImg = document.getElementById(
+    "studentPredictedPerformanceIcon"
+  );
+  const studentPerformance = document.getElementById(
+    "studentPredictedPerformance"
+  );
+  const studentSuccess = document.getElementById("studentPredictedSuccess");
+  const remarksImg = document.getElementById("studentPredictedRemarksIcon");
+  const studentRemarks = document.getElementById("studentPredictedRemarks");
+  const studentGWA = document.getElementById("studentPredictedGWA");
+
   const sectionStudentsTab = document.getElementById("sectionStudentsTab");
   const sectionRecordsTab = document.getElementById("sectionRecordsTab");
   const sectionAnalyticsTab = document.getElementById("sectionAnalyticsTab");
@@ -242,14 +253,16 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-  document.getElementById("closeStudentModal").addEventListener("click", function () {
-    showTabContent("profileContainer");
-    setActiveTab("profileTab");
-    document.getElementById("studentModal").style.display = "none";
-    document.body.style.overflow = "auto";
-    switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
-    initializeStudentsTable();
-  });
+  document
+    .getElementById("closeStudentModal")
+    .addEventListener("click", function () {
+      showTabContent("profileContainer");
+      setActiveTab("profileTab");
+      document.getElementById("studentModal").style.display = "none";
+      document.body.style.overflow = "auto";
+      switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
+      initializeStudentsTable();
+    });
 
   document.getElementById("profileTab").addEventListener("click", function () {
     showTabContent("profileContainer");
@@ -499,7 +512,13 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
         if (hasNoData) {
-          console.log("No Data");
+          studentPerformance.innerText = "No Data";
+          studentSuccess.innerText = "No Data";
+          studentRemarks.innerText = 'No Data';
+          studentGWA.innerText = 'No Data';
+
+          remarksImg.src = "/SCES/assets/images/not-found.png";
+          performanceImg.src = "/SCES/assets/images/not-found.png";
           return;
         }
 
@@ -518,17 +537,17 @@ document.addEventListener("DOMContentLoaded", function () {
         })
           .then((response) => response.json())
           .then((predictionData) => {
-            // Handle the returned prediction data
-            console.log(
-              "Predicted Performance:",
-              predictionData.predicted_performance
-            );
-            console.log(
-              "Predicted Academic Success Rate:",
-              predictionData.predicted_academic_success_rate
-            );
-            console.log("Predicted Remarks:", predictionData.predicted_remarks);
-            console.log("Predicted Next GWA:", predictionData.predicted_next_gwa);
+            const remarks = predictionData.predicted_remarks;
+            const performance = predictionData.predicted_performance;
+
+            studentPerformance.innerText = predictionData.predicted_performance;
+            studentSuccess.innerText =
+              predictionData.predicted_academic_success_rate;
+            studentRemarks.innerText = predictionData.predicted_remarks;
+            studentGWA.innerText = predictionData.predicted_next_gwa;
+
+            remarksImg.src = getRemarksIcon(remarks);
+            performanceImg.src = getPerformanceIcon(performance);
           })
           .catch((error) => {
             console.error("Error fetching predictions:", error);
@@ -736,9 +755,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
               questionsContainer.appendChild(quizItem);
             });
-            const closeButton = document.getElementById("close-quiz");
-
-            closeButton.onclick = () => closeQuiz(viewQuizModal);
 
             viewQuizModal.style.display = "block";
             document.body.style.overflow = "hidden";
@@ -769,4 +785,27 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmButtonColor: "#4CAF50",
     });
   }
+
+  function getRemarksIcon(remarks) {
+    if (remarks === "Outstanding") {
+      return "/SCES/assets/images/outstanding.png";
+    } else if (remarks === "Very Good") {
+      return "/SCES/assets/images/very-good.png";
+    } else if (remarks === "Good") {
+      return "/SCES/assets/images/good.png";
+    } else if (remarks === "Fair") {
+      return "/SCES/assets/images/fair.png";
+    } else {
+      return "/SCES/assets/images/at-risk.png";
+    }
+  }
+
+  function getPerformanceIcon(performance) {
+    if (performance == "Passed") {
+      return "/SCES/assets/images/passed.png";
+    } else {
+      return "/SCES/assets/images/at-risk.png";
+    }
+  }
+
 });

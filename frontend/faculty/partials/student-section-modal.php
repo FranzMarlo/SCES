@@ -200,13 +200,45 @@
                 </div>
             </div>
             <div class="stats-container">
-                <div class="stats-box"></div>
-                <div class="stats-box"></div>
+                <div class="stats-box completed">
+                    <img id="studentPredictedPerformanceIcon" src="/SCES/assets/images/passed.png" alt="performance.png">
+                    <div class="stats-col">
+                        <p>Predicted Performance</p>
+                        <span id="studentPredictedPerformance">Passed</span>
+                    </div>
+                </div>
+                <div class="stats-box pending">
+                    <img src="/SCES/assets/images/success-rate.png" alt="success-rate.png">
+                    <div class="stats-col">
+                        <p>Predicted Success Rate</p>
+                        <span id="studentPredictedSuccess">Passed</span>
+                    </div>
+                </div>
             </div>
             <div class="stats-container">
-                <div class="stats-box"></div>
-                <div class="stats-box"></div>
-            </div>       
+            <div class="stats-box average">
+                    <img src="/SCES/assets/images/gwa.png" alt="gwa.png">
+                    <div class="stats-col">
+                        <p>Predicted GWA</p>
+                        <span id="studentPredictedGWA"></span>
+                    </div>
+                </div>
+                <div class="stats-box quiz-score">
+                    <img id="studentPredictedRemarksIcon" src="/SCES/assets/images/outstanding.png" alt="remarks.png">
+                    <div class="stats-col">
+                        <p>Predicted Remarks</p>
+                        <span id="studentPredictedRemarks"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="graph-container">
+                <div class="graph">
+                    <canvas id="studentLineChart"></canvas>
+                </div>
+                <div class="graph">
+                    <canvas id="studentBarChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>
