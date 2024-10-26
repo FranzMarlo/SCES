@@ -258,7 +258,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         session_start();
         $lrn = $_SESSION['lrn'];
 
-        // Fetch data using the function
+        $data = $fetchDb->fetchGWAByAcademicYear($lrn);
+
+        if ($data) {
+
+            echo json_encode([
+                'labels' => $data['labels'],
+                'barData' => $data['gwaValues']
+            ]);
+        } else {
+
+            echo json_encode([
+                'labels' => [],
+                'barData' => []
+            ]);
+        }
+    } else if ($submitType === 'studentBarChartGWA') {
+        $lrn = $_POST['lrn'];
+
         $data = $fetchDb->fetchGWAByAcademicYear($lrn);
 
         if ($data) {
@@ -357,6 +374,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subjectId = $_POST['subject_id'];
 
         $data = $fetchDb->studentFetchScoresBySubject($studentId, $subjectId);
+
+        if ($data === null) {
+            echo json_encode([
+                'labels' => [],
+                'lineData' => []
+            ]);
+        } else {
+            echo json_encode([
+                'labels' => $data['months'],
+                'lineData' => $data['scores']
+            ]);
+        }
+    } else if ($submitType === 'studentAverageScoreByMonth') {
+        $studentId = $_POST['student_id'];
+
+        $data = $fetchDb->studentFetchScoresByMonth($studentId);
 
         if ($data === null) {
             echo json_encode([

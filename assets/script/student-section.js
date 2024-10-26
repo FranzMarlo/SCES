@@ -213,6 +213,9 @@ document.addEventListener("DOMContentLoaded", function () {
             document
               .getElementById("recordsTab")
               .setAttribute("data-student-id", student.student_id);
+            document
+              .getElementById("analyticsTab")
+              .setAttribute("data-lrn", student.lrn);
             document.getElementById("fullName").textContent =
               student.student_fname + " " + student.student_lname;
             document.getElementById("gradeSection").textContent =
@@ -283,6 +286,17 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("analyticsTab")
     .addEventListener("click", function () {
+      var studentId = document
+        .getElementById("recordsTab")
+        .getAttribute("data-student-id");
+      var lrn = document
+        .getElementById("analyticsTab")
+        .getAttribute("data-lrn");
+
+      populatePanelData(studentId);
+      getStudentGWA(studentId);
+      initializeStudentLineChart(studentId);
+      initializeStudentBarChart(lrn);
       showTabContent("analyticsContainer");
       setActiveTab("analyticsTab");
     });
@@ -514,15 +528,14 @@ document.addEventListener("DOMContentLoaded", function () {
         if (hasNoData) {
           studentPerformance.innerText = "No Data";
           studentSuccess.innerText = "No Data";
-          studentRemarks.innerText = 'No Data';
-          studentGWA.innerText = 'No Data';
+          studentRemarks.innerText = "No Data";
+          studentGWA.innerText = "No Data";
 
           remarksImg.src = "/SCES/assets/images/not-found.png";
           performanceImg.src = "/SCES/assets/images/not-found.png";
           return;
         }
 
-        // Prepare data for the predictive analytics API
         const predictiveData = {
           gwa_records: studentData, // Send the entire studentData array
         };
@@ -777,6 +790,196 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.style.overflow = "auto";
   });
 
+  function initializeStudentLineChart(studentId) {
+    var ctxLine = document.getElementById("studentLineChart").getContext("2d");
+
+    if (Chart.getChart("studentLineChart")) {
+      Chart.getChart("studentLineChart").destroy();
+    }
+
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      data: {
+        submitType: "studentAverageScoreByMonth",
+        student_id: studentId,
+      },
+      success: function (response) {
+        const chartData = JSON.parse(response);
+        const months = chartData.labels || [];
+        const scores = chartData.lineData || [];
+
+        if (scores.length === 0) {
+          showAlert("info", "No Data Available For Student");
+          ctxLine.chart = new Chart(ctxLine, {
+            type: "line",
+            data: {
+              labels: ["No Data"],
+              datasets: [
+                {
+                  data: [0], // No data
+                  borderColor: "#ccc",
+                  backgroundColor: "rgba(200, 200, 200, 0.5)",
+                  fill: true,
+                  tension: 0.4,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              plugins: {
+                legend: false, // Disable the legend
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: false, // Remove title for y-axis
+                },
+                x: {
+                  title: false, // Remove title for x-axis
+                },
+              },
+            },
+          });
+        } else {
+          ctxLine.chart = new Chart(ctxLine, {
+            type: "line",
+            data: {
+              labels: months,
+              datasets: [
+                {
+                  label: "", // Remove label from the dataset
+                  data: scores,
+                  borderColor: "#ddd1ff", // Use #ddd1ff color for the line
+                  backgroundColor: "rgba(221, 209, 255, 0.5)",
+                  fill: true,
+                  tension: 0.4, // Curve the line
+                  pointBackgroundColor: "#fff",
+                  pointBorderColor: "#ddd1ff",
+                  pointHoverRadius: 5,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              plugins: {
+                legend: false, // Disable the legend
+                title: {
+                  display: true,
+                  text: "Average Score Per Month", // Add chart title
+                  font: {
+                    size: 17,
+                    weight: "bold",
+                  },
+                  padding: {
+                    top: 5,
+                    bottom: 10,
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: false, // Remove title for y-axis
+                },
+                x: {
+                  title: false, // Remove title for x-axis
+                },
+              },
+            },
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data: ", error);
+      },
+    });
+  }
+
+  function initializeStudentBarChart(lrn) {
+    var ctxBar = document.getElementById("studentBarChart").getContext("2d");
+
+    if (Chart.getChart("studentBarChart")) {
+      Chart.getChart("studentBarChart").destroy();
+    }
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        submitType: "studentBarChartGWA",
+        lrn: lrn,
+      },
+      success: function (data) {
+        var ctxBar = document.getElementById("studentBarChart").getContext("2d");
+
+        var colors = [
+          "#ffd6e6",
+          "#d2ebc4",
+          "#fcfd95",
+          "#c5e3ff",
+          "#ddd1ff",
+          "#fec590",
+        ];
+
+        var backgroundColors = data.labels.map((label, index) => {
+          return colors[index % colors.length];
+        });
+
+        var barChart = new Chart(ctxBar, {
+          type: "bar",
+          data: {
+            labels: data.labels,
+            datasets: [
+              {
+                label: "GWA",
+                data: data.barData,
+                backgroundColor: backgroundColors,
+                borderColor: "#000",
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "GWA by Grade Level",
+                font: {
+                  size: 18,
+                },
+                padding: {
+                  top: 10,
+                  bottom: 10,
+                },
+              },
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      },
+    });
+  }
+
+  function initializeStudentFullBarChart(studentId) {
+    var ctxFullBar = document.getElementById("studentFullBarChart").getContext("2d");
+
+    if (Chart.getChart("studentFullBarChart")) {
+      Chart.getChart("studentFullBarChart").destroy();
+    }
+  }
+
   function showAlert(icon, title, message) {
     Swal.fire({
       icon: icon,
@@ -807,5 +1010,4 @@ document.addEventListener("DOMContentLoaded", function () {
       return "/SCES/assets/images/at-risk.png";
     }
   }
-
 });

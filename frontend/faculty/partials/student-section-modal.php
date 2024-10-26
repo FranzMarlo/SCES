@@ -239,6 +239,11 @@
                     <canvas id="studentBarChart"></canvas>
                 </div>
             </div>
+            <div class="graph-container">
+                <div class="full-graph">
+                    <canvas id="studentFullBarChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>

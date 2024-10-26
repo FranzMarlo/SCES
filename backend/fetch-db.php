@@ -1414,6 +1414,78 @@ class fetchClass extends db_connect
         }
     }
 
+    public function studentFetchScoresByMonth($studentId)
+    {
+        $currentMonth = date('n');
+        $currentYear = date('Y');
+
+        if ($currentMonth >= 6) {
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else {
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        }
+
+        $months = [];
+        $currentDate = strtotime("$startYear-06-01");
+        $endDate = strtotime("$endYear-04-30");
+
+        while ($currentDate <= $endDate) {
+            $monthLabel = date('F', $currentDate);
+            $months[date('Y-m', $currentDate)] = [
+                'month' => $monthLabel,
+                'avg_score' => 0
+            ];
+            $currentDate = strtotime("+1 month", $currentDate);
+        }
+
+        $query = $this->conn->prepare("
+        SELECT 
+            DATE_FORMAT(score.time, '%Y-%m') AS month,  
+            AVG(score.score) AS avg_score
+        FROM
+            quiz_tbl quiz
+        INNER JOIN
+            score_tbl score ON score.quiz_id = quiz.quiz_id
+        WHERE 
+            score.student_id = ?
+        AND 
+            score.score IS NOT NULL
+        AND 
+            score.time BETWEEN ? AND ?
+        GROUP BY 
+            month
+        ORDER BY 
+            month ASC
+    ");
+    
+        $startDate = "$startYear-06-01";
+        $endDate = "$endYear-04-30";
+        $query->bind_param("sss", $studentId, $startDate, $endDate);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $monthKey = $row['month'];
+
+                if (isset($months[$monthKey])) {
+                    $months[$monthKey]['avg_score'] = (float) $row['avg_score'];
+                }
+            }
+
+            $data = [
+                'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
+                'scores' => array_column($months, 'avg_score')  // Average scores
+            ];
+
+            return $data;
+        } else {
+            return null;
+        }
+    }
+
     public function getStudentQuizRecords($sectionId, $subjectId)
     {
         $query = $this->conn->prepare("

@@ -372,9 +372,12 @@ table.dataTable tbody td.dataTables_empty {
   justify-content: space-between;
 }
 .graph {
-  width: 50%;
+  width: 49%;
   height: 350px;
-  padding: 10px;
+}
+.full-graph{
+  width: 100%;
+  height: 350px;
 }
 #lineChart {
   width: 100%;
@@ -386,6 +389,9 @@ table.dataTable tbody td.dataTables_empty {
   width: 100%;
 }
 #studentBarChart {
+  width: 100%;
+}
+#studentFullBarChart {
   width: 100%;
 }
 .student-info {
@@ -700,6 +706,9 @@ table.dataTable tbody td.dataTables_empty {
   .graph {
     height: 300px;
   }
+  .full-graph{
+    height: 300px;
+  }
   .data-container{
     height: 300px;
   }
@@ -734,6 +743,8 @@ table.dataTable tbody td.dataTables_empty {
     font-size: 1.3rem;
   }
   .graph {
+    height: 300px;
+  }.full-graph{
     height: 300px;
   }
   .data-container{
