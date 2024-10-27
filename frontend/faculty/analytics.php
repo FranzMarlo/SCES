@@ -92,11 +92,32 @@ $page = '';
                         <canvas id="fullBarChart"></canvas>
                     </div>
                 </div>
+                <div class="title-box">
+                    <img src="/SCES/assets/images/quiz-score.png" alt="quiz-score.png">
+                    <h1>Students Ranking</h1>
+                </div>
+                <div class="table-responsive">
+                    <table id="rankingTable" class="display data-table">
+                        <thead>
+                            <tr class="pink">
+                                <th>Rank</th>
+                                <th>LRN</th>
+                                <th>Student ID</th>
+                                <th>Full Name</th>
+                                <th>Average Score</th>
+                                <th>More</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
     </div>
     <?php
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/analytics-modal.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
     ?>
     <script src="/SCES/assets/script/datatables.min.js"></script>

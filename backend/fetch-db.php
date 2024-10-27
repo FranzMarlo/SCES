@@ -58,6 +58,7 @@ class fetchClass extends db_connect
                 student.guardian_contact,
                 level.grade_level,
                 section.section,
+                student.section_id,
                 login.email
             FROM
                 student_tbl student
@@ -2116,6 +2117,51 @@ class fetchClass extends db_connect
 
         $query->bind_param("s", $sectionId);
 
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $students = [];
+
+            while ($row = $result->fetch_assoc()) {
+                $students[] = [
+                    'student_id' => $row['student_id'],
+                    'lrn' => $row['lrn'],
+                    'rank' => $row['rank'],
+                    'full_name' => $row['full_name'],
+                    'average_score' => round($row['average_score'], 2),
+                ];
+            }
+
+            return $students;
+        }
+
+
+        return null;
+    }
+
+    public function rankingStudentsByYear()
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            student.student_id,
+            student.lrn,
+            ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
+            CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
+            AVG(score.score) AS average_score 
+        FROM 
+            student_tbl student
+        INNER JOIN 
+            subject_tbl subject ON student.section_id = subject.section_id
+        INNER JOIN 
+            quiz_tbl quiz ON quiz.subject_id = subject.subject_id
+        LEFT JOIN 
+            score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+        WHERE 
+            score.score IS NOT NULL
+        GROUP BY 
+            full_name
+        ORDER BY 
+            average_score DESC
+    ");
         if ($query->execute()) {
             $result = $query->get_result();
             $students = [];
