@@ -31,6 +31,7 @@ $page = '';
                     </div>
                     <div class="filter-part">
                         <select id="yearFilterDropdown" class="filter-dropdown">
+                            <option value="All">Overtime</option>
                             <option value="2024">Current SY</option>
                             <option value="2019">2019-2020</option>
                             <option value="2020">2020-2021</option>
@@ -39,13 +40,13 @@ $page = '';
                             <option value="2023">2023-2024</option>
                         </select>
                         <select id="gradeFilterDropdown" class="filter-dropdown">
-                            <option value="all">All Grades</option>
-                            <option value="grade1">Grade 1</option>
-                            <option value="grade2">Grade 2</option>
-                            <option value="grade3">Grade 3</option>
-                            <option value="grade4">Grade 4</option>
-                            <option value="grade5">Grade 5</option>
-                            <option value="grade6">Grade 6</option>
+                            <option value="All">All Grades</option>
+                            <option value="Grade 1">Grade 1</option>
+                            <option value="Grade 2">Grade 2</option>
+                            <option value="Grade 3">Grade 3</option>
+                            <option value="Grade 4">Grade 4</option>
+                            <option value="Grade 5">Grade 5</option>
+                            <option value="Grade 6">Grade 6</option>
                         </select>
                     </div>
                 </div>

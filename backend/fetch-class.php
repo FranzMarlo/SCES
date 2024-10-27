@@ -378,6 +378,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'barData' => []
             ]);
         }
+    } else if ($submitType === 'analyticsFullBarChartWithFilter') {
+        $year = $_POST['year'];
+        $gradeLevel = $_POST['gradeLevel'];
+
+        $data = $fetchDb->fetchAverageGWAWithFilter($year, $gradeLevel);
+
+        if ($data) {
+
+            echo json_encode([
+                'labels' => $data['labels'],
+                'barData' => $data['averageGwaValues']
+            ]);
+        } else {
+
+            echo json_encode([
+                'labels' => [],
+                'barData' => []
+            ]);
+        }
     } else if ($submitType === 'fetchStudentsDataTable') {
         $sectionId = $_POST['section_id'];
 
@@ -609,6 +628,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'lineData' => []
             ]);
         }
+    } else if ($submitType === 'analyticsAverageScoreByMonthWithFilter') {
+        $year = $_POST['year'];
+        $gradeLevel = $_POST['gradeLevel'];
+
+        $students = $fetchDb->getAllStudentsWithFilter($year, $gradeLevel);
+
+        $months = [];
+        $scores = [];
+
+        if (!empty($students)) {
+            foreach ($students as $student) {
+                $studentId = $student['student_id'];
+                $studentData = $fetchDb->studentFetchScoresByMonthWithFilter($studentId, $year, $gradeLevel);
+
+                if (empty($months)) {
+                    $months = $studentData['months'];
+                    $scores = array_fill(0, count($months), 0);
+                }
+
+                foreach ($studentData['scores'] as $index => $avgScore) {
+                    $scores[$index] += $avgScore;
+                }
+            }
+
+            $studentCount = count($students);
+            $sectionMonthlyAverages = array_map(function ($totalScore) use ($studentCount) {
+                return $studentCount > 0 ? $totalScore / $studentCount : 0;
+            }, $scores);
+
+            echo json_encode([
+                'labels' => $months,
+                'lineData' => $sectionMonthlyAverages
+            ]);
+        } else {
+            echo json_encode([
+                'labels' => [],
+                'lineData' => []
+            ]);
+        }
     } else if ($submitType === 'analyticsAverageScoreByGradeLevel') {
 
         $students = $fetchDb->getAllStudents();
@@ -642,6 +700,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
         } else {
             // If no students in section, return empty arrays
+            echo json_encode([
+                'labels' => [],
+                'barData' => []
+            ]);
+        }
+    } else if ($submitType === 'analyticsAverageScoreByGradeLevelWithFilter') {
+        $year = $_POST['year'];
+        $gradeLevel = $_POST['gradeLevel'];
+
+        $students = $fetchDb->getAllStudentsWithFilter($year, $gradeLevel);
+
+        $grades = [];
+        $scores = [];
+
+        if (!empty($students)) {
+            foreach ($students as $student) {
+                $studentId = $student['student_id'];
+                $studentData = $fetchDb->studentFetchScoresByGradeLevelWithFilter($studentId, $year, $gradeLevel);
+
+                if (empty($grades)) {
+                    $grades = $studentData['grades'];
+                    $scores = array_fill(0, count($grades), 0); // Initialize scores with zeroes
+                }
+
+                foreach ($studentData['scores'] as $index => $avgScore) {
+                    $scores[$index] += $avgScore;
+                }
+            }
+
+            $studentCount = count($students);
+            $averageScoresByGradeLevel = array_map(function ($totalScore) use ($studentCount) {
+                return $studentCount > 0 ? $totalScore / $studentCount : 0;
+            }, $scores);
+
+            echo json_encode([
+                'labels' => $grades,
+                'barData' => $averageScoresByGradeLevel
+            ]);
+        } else {
             echo json_encode([
                 'labels' => [],
                 'barData' => []

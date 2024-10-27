@@ -1,4 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const yearFilter = document.getElementById("yearFilterDropdown");
+  const gradeFilter = document.getElementById("gradeFilterDropdown");
+
+  function initializeData() {
+    const year = yearFilter.value;
+    const grade = gradeFilter.value;
+
+    initializeLineChart(year, grade);
+    initializeBarChart(year, grade);
+    initializeFullBarChart(year, grade);
+    initializeRankingTable(year, grade);
+  }
+
+  yearFilter.addEventListener("change", initializeData);
+  gradeFilter.addEventListener("change", initializeData);
+
+  initializeData();
 
   const performanceImg = document.getElementById(
     "studentPredictedPerformanceIcon"
@@ -11,12 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const studentRemarks = document.getElementById("studentPredictedRemarks");
   const studentGWA = document.getElementById("studentPredictedGWA");
 
-  initializeLineChart();
-  initializeBarChart();
-  initializeFullBarChart();
-  initializeRankingTable();
-
-  function initializeLineChart() {
+  function initializeLineChart(year, grade) {
     var ctxLine = document.getElementById("lineChart").getContext("2d");
 
     if (Chart.getChart("lineChart")) {
@@ -27,7 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
       url: "/SCES/backend/fetch-class.php",
       type: "POST",
       data: {
-        submitType: "analyticsAverageScoreByMonth",
+        submitType: "analyticsAverageScoreByMonthWithFilter",
+        year: year,
+        gradeLevel: grade,
       },
       success: function (response) {
         const chartData = JSON.parse(response);
@@ -83,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function initializeBarChart() {
+  function initializeBarChart(year, grade) {
     var ctxBar = document.getElementById("barChart").getContext("2d");
 
     if (Chart.getChart("barChart")) {
@@ -95,7 +109,9 @@ document.addEventListener("DOMContentLoaded", function () {
       type: "POST",
       dataType: "json",
       data: {
-        submitType: "analyticsAverageScoreByGradeLevel",
+        submitType: "analyticsAverageScoreByGradeLevelWithFilter",
+        year: year,
+        gradeLevel: grade,
       },
       success: function (data) {
         const colors = [
@@ -157,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function initializeFullBarChart() {
+  function initializeFullBarChart(year, grade) {
     var ctxBar = document.getElementById("fullBarChart").getContext("2d");
 
     if (Chart.getChart("fullBarChart")) {
@@ -168,7 +184,9 @@ document.addEventListener("DOMContentLoaded", function () {
       type: "POST",
       dataType: "json",
       data: {
-        submitType: "analyticsFullBarChart",
+        submitType: "analyticsFullBarChartWithFilter",
+        year: year,
+        gradeLevel: grade,
       },
       success: function (data) {
         var ctxBar = document.getElementById("fullBarChart").getContext("2d");
@@ -230,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function initializeRankingTable() {
+  function initializeRankingTable(year, grade) {
     if ($.fn.dataTable.isDataTable("#rankingTable")) {
     } else {
       var studentsTable = $("#rankingTable").DataTable({
@@ -265,6 +283,8 @@ document.addEventListener("DOMContentLoaded", function () {
           type: "POST",
           data: function (d) {
             d.submitType = "rankingStudentsByYear";
+            year = year;
+            gradeLevel = grade;
             return d;
           },
           dataSrc: "",
@@ -624,7 +644,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function populatePanelData(studentId) {
-    var section_id = document.getElementById("studentModal").getAttribute("data-section");
+    var section_id = document
+      .getElementById("studentModal")
+      .getAttribute("data-section");
     const data = new FormData();
     data.append("submitType", "facultyGetPanelData");
     data.append("student_id", studentId);
@@ -854,7 +876,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
   }
-  
+
   function initializeStudentLineChart(studentId) {
     var ctxLine = document.getElementById("studentLineChart").getContext("2d");
 
@@ -964,7 +986,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function initializeStudentFullBarChart(studentId) {
-    var section_id = document.getElementById("studentModal").getAttribute("data-section");
+    var section_id = document
+      .getElementById("studentModal")
+      .getAttribute("data-section");
     const ctxBar = document
       .getElementById("studentFullBarChart")
       .getContext("2d");

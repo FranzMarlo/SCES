@@ -843,6 +843,110 @@ class fetchClass extends db_connect
         return null; // Return null if no GWA records are found or query fails
     }
 
+    public function fetchAverageGWAWithFilter($year, $gradeLevel)
+    {
+        if ($year === 'All' && $gradeLevel === 'All') {
+            // Case 1: All years and all grade levels, grouped by grade_level
+            $query = $this->conn->prepare("
+            SELECT 
+                grade_level,
+                AVG(gwa) AS average_gwa
+            FROM 
+                record_tbl
+            GROUP BY 
+                grade_level
+            ORDER BY 
+                grade_level ASC
+        ");
+        } elseif ($year === 'All') {
+            // Case 2: All years for a specific grade level
+            $query = $this->conn->prepare("
+            SELECT 
+                year,
+                grade_level,
+                AVG(gwa) AS average_gwa
+            FROM 
+                record_tbl
+            WHERE 
+                grade_level = ?
+            GROUP BY 
+                year, grade_level
+            ORDER BY 
+                year ASC, grade_level ASC
+        ");
+            $query->bind_param("s", $gradeLevel);
+        } elseif ($gradeLevel === 'All') {
+            // Case 3: A specific year for all grade levels, with labeling by year
+            $query = $this->conn->prepare("
+            SELECT 
+                grade_level,
+                AVG(gwa) AS average_gwa
+            FROM 
+                record_tbl
+            WHERE 
+                year = ?
+            GROUP BY 
+                grade_level
+            ORDER BY 
+                grade_level ASC
+        ");
+            $query->bind_param("i", $year);
+        } else {
+            // Case 4: A specific year and a specific grade level
+            $query = $this->conn->prepare("
+            SELECT 
+                grade_level,
+                AVG(gwa) AS average_gwa
+            FROM 
+                record_tbl
+            WHERE 
+                year = ?
+            AND 
+                grade_level = ?
+            GROUP BY 
+                grade_level
+            ORDER BY 
+                grade_level ASC
+        ");
+            $query->bind_param("is", $year, $gradeLevel);
+        }
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $gwaRecords = $result->fetch_all(MYSQLI_ASSOC);
+
+            $labels = [];
+            $averageGwaValues = [];
+
+            foreach ($gwaRecords as $record) {
+                if ($year === 'All' && $gradeLevel === 'All') {
+                    // Label for all years and all grade levels
+                    $labels[] = ucfirst(strtolower($record['grade_level']));
+                } elseif ($year === 'All') {
+                    // Label for all years but specific grade level
+                    $labels[] = ucfirst(strtolower($record['year'])) . " - " . ucfirst(strtolower($record['grade_level']));
+                } elseif ($gradeLevel === 'All') {
+                    // Label for specific year and all grade levels
+                    $labels[] = ucfirst(strtolower($record['grade_level']));
+                } else {
+                    // Label for specific year and specific grade level
+                    $labels[] = ucfirst(strtolower($record['grade_level']));
+                }
+                $averageGwaValues[] = round($record['average_gwa'], 2); // Round to 2 decimal places
+            }
+
+            return [
+                'labels' => $labels,
+                'averageGwaValues' => $averageGwaValues,
+            ];
+        }
+
+        return null; // Return null if no GWA records are found or query fails
+    }
+
+
+
+
 
     public function getStudentsBySection($sectionId)
     {
@@ -920,6 +1024,124 @@ class fetchClass extends db_connect
             return false;
         }
     }
+
+    public function getAllStudentsWithFilter($year, $gradeLevel)
+    {
+        if ($year === 'All' && $gradeLevel === 'All') {
+            // Case 1: All years and all grade levels
+            $query = $this->conn->prepare("
+            SELECT
+                student.lrn,
+                student.student_id,
+                student.student_lname,
+                student.student_fname,
+                student.student_mname,
+                student.age,
+                student.gender,
+                student.profile_image,
+                level.grade_level,
+                section.section,
+                section.year
+            FROM
+                student_tbl student
+            INNER JOIN
+                level_tbl level ON student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON student.section_id = section.section_id
+            ORDER BY
+                student.student_lname ASC
+        ");
+        } elseif ($year === 'All') {
+            // Case 2: All years for a specific grade level
+            $query = $this->conn->prepare("
+            SELECT
+                student.lrn,
+                student.student_id,
+                student.student_lname,
+                student.student_fname,
+                student.student_mname,
+                student.age,
+                student.gender,
+                student.profile_image,
+                level.grade_level,
+                section.section,
+                section.year
+            FROM
+                student_tbl student
+            INNER JOIN
+                level_tbl level ON student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON student.section_id = section.section_id
+            WHERE
+                level.grade_level = ?
+            ORDER BY
+                student.student_lname ASC
+        ");
+            $query->bind_param("s", $gradeLevel);
+        } elseif ($gradeLevel === 'All') {
+            // Case 3: A specific year for all grade levels
+            $query = $this->conn->prepare("
+            SELECT
+                student.lrn,
+                student.student_id,
+                student.student_lname,
+                student.student_fname,
+                student.student_mname,
+                student.age,
+                student.gender,
+                student.profile_image,
+                level.grade_level,
+                section.section
+            FROM
+                student_tbl student
+            INNER JOIN
+                level_tbl level ON student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON student.section_id = section.section_id
+            WHERE
+                section.year = ?
+            ORDER BY
+                student.student_lname ASC
+        ");
+            $query->bind_param("i", $year);
+        } else {
+            // Case 4: A specific year and a specific grade level
+            $query = $this->conn->prepare("
+            SELECT
+                student.lrn,
+                student.student_id,
+                student.student_lname,
+                student.student_fname,
+                student.student_mname,
+                student.age,
+                student.gender,
+                student.profile_image,
+                level.grade_level,
+                section.section
+            FROM
+                student_tbl student
+            INNER JOIN
+                level_tbl level ON student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON student.section_id = section.section_id
+            WHERE
+                section.year = ?
+                AND level.grade_level = ?
+            ORDER BY
+                student.student_lname ASC
+        ");
+            $query->bind_param("is", $year, $gradeLevel);
+        }
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return false;
+        }
+    }
+
+
 
     public function facultyFetchScores($studentId, $teacherId)
     {
@@ -1626,6 +1848,144 @@ class fetchClass extends db_connect
             return null;
         }
     }
+
+    public function studentFetchScoresByMonthWithFilter($studentId, $year, $gradeLevel)
+    {
+        $months = [];
+        $currentYear = date('Y');
+
+        // Prepare months array with labels from June to April
+        $currentDate = strtotime("$currentYear-06-01");
+        $endDate = strtotime(($currentYear + 1) . "-04-30");
+        while ($currentDate <= $endDate) {
+            $monthLabel = date('F', $currentDate);
+            $months[date('Y-m', $currentDate)] = [
+                'month' => $monthLabel,
+                'avg_score' => 0
+            ];
+            $currentDate = strtotime("+1 month", $currentDate);
+        }
+
+        // Adjust queries based on year and grade level parameters
+        if ($year === 'All' && $gradeLevel === 'All') {
+            // Case 1: All years and all grade levels
+            $query = $this->conn->prepare("
+            SELECT 
+                DATE_FORMAT(score.time, '%Y-%m') AS month,  
+                AVG(score.score) AS avg_score
+            FROM
+                score_tbl score
+            WHERE 
+                score.student_id = ?
+                AND score.score IS NOT NULL
+            GROUP BY 
+                month
+            ORDER BY 
+                month ASC
+        ");
+            $query->bind_param("s", $studentId);
+
+        } elseif ($year === 'All') {
+            // Case 2: All years for a specific grade level
+            $query = $this->conn->prepare("
+            SELECT 
+                DATE_FORMAT(score.time, '%Y-%m') AS month,  
+                AVG(score.score) AS avg_score
+            FROM
+                score_tbl score
+            INNER JOIN
+                student_tbl students ON students.student_id = score.student_id
+            INNER JOIN
+                section_tbl section ON students.section_id = section.section_id
+            INNER JOIN
+                level_tbl level ON section.level_id = level.level_id
+            WHERE 
+                score.student_id = ?
+                AND level.grade_level = ?
+                AND score.score IS NOT NULL
+            GROUP BY 
+                month
+            ORDER BY 
+                month ASC
+        ");
+            $query->bind_param("ss", $studentId, $gradeLevel);
+
+        } elseif ($gradeLevel === 'All') {
+            // Case 3: A specific year for all grade levels
+            $query = $this->conn->prepare("
+            SELECT 
+                DATE_FORMAT(score.time, '%Y-%m') AS month,  
+                AVG(score.score) AS avg_score
+            FROM
+                quiz_tbl quiz
+            INNER JOIN
+                score_tbl score ON score.quiz_id = quiz.quiz_id
+            INNER JOIN
+                subject_tbl subject ON quiz.subject_id = subject.subject_id
+            WHERE 
+                score.student_id = ?
+                AND subject.year = ?
+                AND score.score IS NOT NULL
+            GROUP BY 
+                month
+            ORDER BY 
+                month ASC
+        ");
+            $query->bind_param("si", $studentId, $year);
+
+        } else {
+            // Case 4: A specific year and a specific grade level
+            $query = $this->conn->prepare("
+            SELECT 
+                DATE_FORMAT(score.time, '%Y-%m') AS month,  
+                AVG(score.score) AS avg_score
+            FROM
+                quiz_tbl quiz
+            INNER JOIN
+                score_tbl score ON score.quiz_id = quiz.quiz_id
+            INNER JOIN
+                student_tbl students ON students.student_id = score.student_id
+            INNER JOIN
+                section_tbl section ON students.section_id = section.section_id
+            INNER JOIN
+                level_tbl level ON section.level_id = level.level_id
+            INNER JOIN
+                subject_tbl subject ON quiz.subject_id = subject.subject_id
+            WHERE 
+                score.student_id = ?
+                AND level.grade_level = ?
+                AND subject.year = ?
+                AND score.score IS NOT NULL
+            GROUP BY 
+                month
+            ORDER BY 
+                month ASC
+        ");
+            $query->bind_param("ssi", $studentId, $gradeLevel, $year);
+        }
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $monthKey = $row['month'];
+                if (isset($months[$monthKey])) {
+                    $months[$monthKey]['avg_score'] = (float) $row['avg_score'];
+                }
+            }
+
+            return [
+                'months' => array_column($months, 'month'),
+                'scores' => array_column($months, 'avg_score')
+            ];
+        } else {
+            return null;
+        }
+    }
+
+
+
+
     public function studentFetchScoresByGradeLevel($studentId)
     {
         // Step 1: Retrieve all grade levels from level_tbl
@@ -1680,6 +2040,86 @@ class fetchClass extends db_connect
             return null;
         }
     }
+
+    public function studentFetchScoresByGradeLevelWithFilter($studentId, $year, $gradeLevel)
+    {
+        // Step 1: Retrieve all grade levels from level_tbl for initializing scores
+        $allLevelsQuery = $this->conn->prepare("SELECT grade_level FROM level_tbl ORDER BY grade_level ASC");
+        $allLevelsQuery->execute();
+        $allLevelsResult = $allLevelsQuery->get_result();
+
+        // Initialize grades and scores arrays with default scores of 0
+        $grades = [];
+        while ($row = $allLevelsResult->fetch_assoc()) {
+            $grades[$row['grade_level']] = 0;  // Initialize each grade level with a score of 0
+        }
+
+        // Step 2: Build the SQL query based on filter conditions
+        $sql = "
+    SELECT 
+        level.grade_level AS grade_level,  
+        AVG(score.score) AS avg_score
+    FROM
+        quiz_tbl quiz
+    INNER JOIN
+        score_tbl score ON score.quiz_id = quiz.quiz_id
+    INNER JOIN
+        subject_tbl subject ON quiz.subject_id = subject.subject_id
+    INNER JOIN
+        level_tbl level ON subject.level_id = level.level_id
+    WHERE 
+        score.student_id = ? AND score.score IS NOT NULL";
+
+        // Add conditional filters based on the year and grade level
+        $params = ["s", $studentId]; // Parameter types and values
+        if ($year !== 'All') {
+            $sql .= " AND subject.year = ?";
+            $params[0] .= "i"; // Append "i" for integer year
+            $params[] = $year;
+        }
+
+        // If grade level is not "All," filter by the selected grade level
+        if ($gradeLevel !== 'All') {
+            $sql .= " AND level.grade_level = ?";
+            $params[0] .= "s"; // Append "s" for string grade level
+            $params[] = $gradeLevel;
+        }
+
+        // Group by grade level to get average scores per grade level
+        $sql .= " GROUP BY level.grade_level ORDER BY level.grade_level ASC";
+
+        // Prepare and bind the parameters dynamically
+        $query = $this->conn->prepare($sql);
+        $query->bind_param(...$params);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            // Create a mapping of grade levels to scores
+            $filteredGrades = [];
+            while ($row = $result->fetch_assoc()) {
+                $filteredGrades[$row['grade_level']] = (float) $row['avg_score']; // Map grade level to average score
+            }
+
+            // Create the final grades and scores to return
+            $displayGrades = ($gradeLevel === 'All') ? array_keys($grades) : [$gradeLevel]; // Show all or just the selected
+            $displayScores = [];
+
+            // Map scores to display grades
+            foreach ($displayGrades as $grade) {
+                $displayScores[] = isset($filteredGrades[$grade]) ? $filteredGrades[$grade] : 0; // Set score to 0 if no score found
+            }
+
+            return [
+                'grades' => $displayGrades,  // Return only selected or all grade levels
+                'scores' => $displayScores    // Corresponding scores
+            ];
+        } else {
+            return null;
+        }
+    }
+
+
 
     public function getStudentQuizRecords($sectionId, $subjectId)
     {
