@@ -889,6 +889,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData = $fetchDb->rankingStudentsByYear();
 
         echo json_encode($panelData);
+    } else if ($submitType === 'rankingStudentsByYearWithFilter') {
+        $year = $_POST['year'];
+        $gradeLevel = $_POST['gradeLevel'];
+
+        $panelData = $fetchDb->rankingStudentsByYearWithFilter($year, $gradeLevel);
+
+        echo json_encode($panelData);
+    } else if ($submitType === 'gwaRankingStudentsByYearWithFilter') {
+        $year = $_POST['year'];
+        $gradeLevel = $_POST['gradeLevel'];
+
+        $panelData = $fetchDb->gwaRankingStudentsByYearWithFilter($year, $gradeLevel);
+
+        echo json_encode($panelData);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

@@ -249,72 +249,104 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function initializeRankingTable(year, grade) {
+    // Clear and destroy existing table to avoid reinitialization issues
     if ($.fn.dataTable.isDataTable("#rankingTable")) {
-    } else {
-      var studentsTable = $("#rankingTable").DataTable({
-        responsive: {
-          details: {
-            type: "inline",
-            display: $.fn.dataTable.Responsive.display.childRowImmediate,
-            renderer: function (api, rowIdx, columns) {
-              var data = $.map(columns, function (col, i) {
-                return col.hidden
-                  ? '<tr data-dt-row="' +
-                      col.rowIdx +
-                      '" data-dt-column="' +
-                      col.columnIdx +
-                      '">' +
-                      "<td><strong>" +
-                      col.title +
-                      ":" +
-                      "</strong></td> " +
-                      "<td>" +
-                      col.data +
-                      "</td>" +
-                      "</tr>"
-                  : "";
-              }).join("");
-              return data ? $("<table/>").append(data) : false;
-            },
-          },
-        },
-        ajax: {
-          url: "/SCES/backend/fetch-class.php",
-          type: "POST",
-          data: function (d) {
-            d.submitType = "rankingStudentsByYear";
-            year = year;
-            gradeLevel = grade;
-            return d;
-          },
-          dataSrc: "",
-        },
-        columns: [
-          { data: "rank", className: "text-center" },
-          { data: "lrn", className: "text-center" },
-          { data: "student_id", className: "text-center" },
-          { data: "full_name", className: "text-center" },
-          { data: "average_score", className: "text-center" },
-          {
-            data: null,
-            render: function (data, type, row) {
-              return `<div class="center-image">
-          <button class="more-btn" data-student-id="${row.student_id}"><i class="fa-solid fa-chevron-right"></i></button>
-          </div>`;
-            },
-            orderable: false,
-            searchable: false,
-            className: "text-center",
-          },
-        ],
-        language: {
-          emptyTable: "No data available in table",
-        },
-        initComplete: function () {
-          studentsTable.draw();
-        },
-      });
+      $("#rankingTable").DataTable().clear().destroy();
     }
+
+    // Set the appropriate submit type and column configuration based on filters
+    const ajaxSubmitType =
+      year !== "All" && year <= 2023
+        ? "gwaRankingStudentsByYearWithFilter"
+        : "rankingStudentsByYearWithFilter";
+    const ajaxColumns =
+      year !== "All" && year <= 2023
+        ? [
+            { data: "rank", title: "Rank", className: "text-center" },
+            { data: "lrn", title: "LRN", className: "text-center" },
+            { data: "full_name", title: "Full Name", className: "text-center" },
+            { data: "gwa", title: "GWA", className: "text-center" },
+            {
+              data: "grade_level",
+              title: "Grade Level",
+              className: "text-center",
+            },
+            { data: "section", title: "Section", className: "text-center" },
+          ]
+        : [
+            { data: "rank", title: "Rank", className: "text-center" },
+            { data: "lrn", title: "LRN", className: "text-center" },
+            {
+              data: "student_id",
+              title: "Student ID",
+              className: "text-center",
+            },
+            {
+              data: "full_name",
+              title: "Student Name",
+              className: "text-center",
+            },
+            {
+              data: "average_score",
+              title: "Average Score",
+              className: "text-center",
+            },
+            {
+              data: "grade_level",
+              title: "Grade Level",
+              className: "text-center",
+            },
+            { data: "section", title: "Section", className: "text-center" },
+            {
+              data: null,
+              title: "View Student",
+              render: function (data, type, row) {
+                return `<div class="center-image">
+                    <button class="more-btn" data-student-id="${row.student_id}"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>`;
+              },
+              orderable: false,
+              searchable: false,
+              className: "text-center",
+            },
+          ];
+
+    // Initialize DataTable with updated data based on current filters
+    $("#rankingTable").DataTable({
+      destroy: true,
+      responsive: {
+        details: {
+          type: "inline",
+          display: $.fn.dataTable.Responsive.display.childRowImmediate,
+          renderer: function (api, rowIdx, columns) {
+            var data = $.map(columns, function (col) {
+              return col.hidden
+                ? `<tr data-dt-row="${col.rowIdx}" data-dt-column="${col.columnIdx}">
+                                  <td><strong>${col.title}:</strong></td>
+                                  <td>${col.data}</td>
+                               </tr>`
+                : "";
+            }).join("");
+            return data ? $("<table/>").append(data) : false;
+          },
+        },
+      },
+      ajax: {
+        url: "/SCES/backend/fetch-class.php",
+        type: "POST",
+        data: function (d) {
+          d.submitType = ajaxSubmitType;
+          d.year = year;
+          d.gradeLevel = grade;
+          return d;
+        },
+        dataSrc: "",
+      },
+      columns: ajaxColumns,
+      language: {
+        emptyTable: "No data available in table",
+      },
+    });
   }
 
   document

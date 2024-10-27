@@ -2624,4 +2624,220 @@ class fetchClass extends db_connect
     }
 
 
+    public function gwaRankingStudentsByYearWithFilter($year, $gradeLevel)
+    {
+        if ($gradeLevel == "All") {
+
+            $query = $this->conn->prepare("
+            SELECT 
+                lrn,
+                ROW_NUMBER() OVER (ORDER BY AVG(gwa) DESC) AS rank,
+                CONCAT(student_fname, ' ', student_lname) AS full_name,
+                gwa,
+                grade_level,
+                section
+            FROM 
+                record_tbl
+            WHERE 
+                year = ?
+            GROUP BY 
+                full_name
+            ORDER BY 
+                gwa DESC
+        ");
+            $query->bind_param("i", $year);
+        } else {
+            $query = $this->conn->prepare("
+            SELECT 
+                lrn,
+                ROW_NUMBER() OVER (ORDER BY gwa DESC) AS rank,
+                CONCAT(student_fname, ' ', student_lname) AS full_name,
+                gwa,
+                grade_level,
+                section
+            FROM 
+                record_tbl
+            WHERE 
+                year = ?
+            AND
+                grade_level = ?
+            GROUP BY 
+                full_name
+            ORDER BY 
+                gwa DESC
+        ");
+            $query->bind_param("is", $year, $gradeLevel);
+        }
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $students = [];
+
+            while ($row = $result->fetch_assoc()) {
+                $students[] = [
+                    'lrn' => $row['lrn'],
+                    'rank' => $row['rank'],
+                    'full_name' => $row['full_name'],
+                    'gwa' => $row['gwa'],
+                    'grade_level' => $row['grade_level'],
+                    'section' => $row['section'],
+                ];
+            }
+
+            return $students;
+        }
+        return null;
+    }
+
+    public function rankingStudentsByYearWithFilter($year, $gradeLevel)
+    {
+        if ($year == 'All' && $gradeLevel == 'All') {
+            $query = $this->conn->prepare("
+            SELECT 
+                student.student_id,
+                student.lrn,
+                ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
+                CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
+                AVG(score.score) AS average_score,
+                level.grade_level,
+                section.section
+            FROM 
+                student_tbl student
+            INNER JOIN
+                level_tbl level ON student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON student.section_id = section.section_id
+            INNER JOIN 
+                subject_tbl subject ON student.section_id = subject.section_id
+            INNER JOIN 
+                quiz_tbl quiz ON quiz.subject_id = subject.subject_id
+            LEFT JOIN 
+                score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+            WHERE 
+                score.score IS NOT NULL
+            GROUP BY 
+                full_name
+            ORDER BY 
+                average_score DESC
+        ");
+
+        } elseif ($year === 'All') {
+            $query = $this->conn->prepare("
+            SELECT 
+                student.student_id,
+                student.lrn,
+                ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
+                CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
+                AVG(score.score) AS average_score,
+                level.grade_level,
+                section.section
+            FROM 
+                student_tbl student
+            INNER JOIN
+                level_tbl level ON student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON student.section_id = section.section_id
+            INNER JOIN 
+                subject_tbl subject ON student.section_id = subject.section_id
+            INNER JOIN 
+                quiz_tbl quiz ON quiz.subject_id = subject.subject_id
+            LEFT JOIN 
+                score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+            WHERE 
+                score.score IS NOT NULL
+            AND
+                level.grade_level = ?
+            GROUP BY 
+                full_name
+            ORDER BY 
+                average_score DESC
+        ");
+            $query->bind_param("s", $gradeLevel);
+        } elseif ($gradeLevel === 'All') {
+            $query = $this->conn->prepare("
+            SELECT 
+                student.student_id,
+                student.lrn,
+                ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
+                CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
+                AVG(score.score) AS average_score,
+                level.grade_level,
+                section.section
+            FROM 
+                student_tbl student
+            INNER JOIN
+                level_tbl level ON student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON student.section_id = section.section_id
+            INNER JOIN 
+                subject_tbl subject ON student.section_id = subject.section_id
+            INNER JOIN 
+                quiz_tbl quiz ON quiz.subject_id = subject.subject_id
+            LEFT JOIN 
+                score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+            WHERE 
+                score.score IS NOT NULL
+            AND
+                section.year = ?
+            GROUP BY 
+                full_name
+            ORDER BY 
+                average_score DESC
+        ");
+            $query->bind_param("i", $year);
+        } else {
+            $query = $this->conn->prepare("
+            SELECT 
+                student.student_id,
+                student.lrn,
+                ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
+                CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
+                AVG(score.score) AS average_score,
+                level.grade_level,
+                section.section 
+            FROM 
+                student_tbl student
+            INNER JOIN
+                level_tbl level ON student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON student.section_id = section.section_id
+            INNER JOIN 
+                subject_tbl subject ON student.section_id = subject.section_id
+            INNER JOIN 
+                quiz_tbl quiz ON quiz.subject_id = subject.subject_id
+            LEFT JOIN 
+                score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+            WHERE 
+                score.score IS NOT NULL
+            AND
+                section.year = ?
+            AND
+                level.grade_level = ?
+            GROUP BY 
+                full_name
+            ORDER BY 
+                average_score DESC
+        ");
+            $query->bind_param("is", $year, $gradeLevel);
+        }
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $students = [];
+
+            while ($row = $result->fetch_assoc()) {
+                $students[] = [
+                    'student_id' => $row['student_id'],
+                    'lrn' => $row['lrn'],
+                    'rank' => $row['rank'],
+                    'full_name' => $row['full_name'],
+                    'average_score' => round($row['average_score'], 2),
+                    'grade_level' => $row['grade_level'],
+                    'section' => $row['section'],
+                ];
+            }
+
+            return $students;
+        }
+    }
 }
+
+
