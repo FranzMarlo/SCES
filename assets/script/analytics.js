@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeBarChart(year, grade);
     initializeFullBarChart(year, grade);
     initializeRankingTable(year, grade);
+    populateAnalyticsData(year, grade);
   }
 
   yearFilter.addEventListener("change", initializeData);
@@ -27,6 +28,33 @@ document.addEventListener("DOMContentLoaded", function () {
   const remarksImg = document.getElementById("studentPredictedRemarksIcon");
   const studentRemarks = document.getElementById("studentPredictedRemarks");
   const studentGWA = document.getElementById("studentPredictedGWA");
+
+
+  function populateAnalyticsData(year,  grade) {
+    const data = new FormData();
+    data.append("submitType", "analyticsPanelData");
+    data.append("year", year);
+    data.append("gradeLevel", grade);
+
+    fetch("/SCES/backend/fetch-class.php", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById("totalStudents").textContent =
+          data.totalStudents|| 0;
+        document.getElementById("totalTeachers").textContent =
+          data.totalTeachers || 0;
+        document.getElementById("totalLessons").textContent =
+          data.totalLessons || "N/A";
+        document.getElementById("totalQuizzes").textContent =
+          data.totalQuizzes || "N/A";
+      })
+      .catch((error) => {
+        console.error("Error fetching panel data:", error);
+      });
+  }
 
   function initializeLineChart(year, grade) {
     var ctxLine = document.getElementById("lineChart").getContext("2d");

@@ -2837,6 +2837,78 @@ class fetchClass extends db_connect
             return $students;
         }
     }
+
+    public function fetchTotalStudentsWithFilter($year, $gradeLevel)
+    {
+        if ($year != 'All' && $year <= 2023) {
+            if ($gradeLevel === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT record.lrn) AS student_count
+                FROM record_tbl record
+                WHERE year = ?
+                ");
+                $query->bind_param("i", $year);
+            } else {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT record.lrn) AS student_count
+                FROM record_tbl record
+                WHERE record.year = ?
+                AND record.grade_level = ?
+                ");
+                $query->bind_param("is", $year, $gradeLevel);
+            }
+        } else {
+            if ($year === 'All' && $gradeLevel === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT student.student_id) AS student_count
+                FROM student_tbl student
+                INNER JOIN section_tbl section ON student.section_id = section.section_id
+                INNER JOIN level_tbl level ON student.level_id = level.level_id
+                ");
+            } elseif ($year === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT student.student_id) AS student_count
+                FROM student_tbl student
+                INNER JOIN section_tbl section ON student.section_id = section.section_id
+                INNER JOIN level_tbl level ON student.level_id = level.level_id
+                WHERE level.grade_level = ?
+            ");
+                $query->bind_param("s", $gradeLevel);
+            } elseif ($gradeLevel === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT student.student_id) AS student_count
+                FROM student_tbl student
+                INNER JOIN section_tbl section ON student.section_id = section.section_id
+                INNER JOIN level_tbl level ON student.level_id = level.level_id
+                WHERE section.year = ?
+            ");
+                $query->bind_param("i", $year);
+            } else {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT student.student_id) AS student_count
+                FROM student_tbl student
+                INNER JOIN section_tbl section ON student.section_id = section.section_id
+                INNER JOIN level_tbl level ON student.level_id = level.level_id
+                WHERE section.year = ?
+                AND level.grade_level = ?
+        ");
+                $query->bind_param("is", $year, $gradeLevel);
+            }
+        }
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $studentCount = $result->fetch_assoc();
+            return $studentCount['student_count'];
+        } else {
+            return 0;
+        }
+    }
 }
 
 

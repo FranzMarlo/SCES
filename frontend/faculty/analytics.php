@@ -54,28 +54,28 @@ $page = '';
                     <div class="stats-box pastel-pink">
                         <img src="/SCES/assets/images/quiz-grade-section.png" alt="quiz-grade-section.png">
                         <div class="stats-col">
-                            <span id="totalStudents">1206</span>
+                            <span id="totalStudents"></span>
                             <p>Total Students</p>
                         </div>
                     </div>
                     <div class="stats-box pastel-green">
                         <img src="/SCES/assets/images/school-info.png" alt="school-info.png">
                         <div class="stats-col">
-                            <span id="totalTeachers">20</span>
+                            <span id="totalTeachers"></span>
                             <p>Total Teachers</p>
                         </div>
                     </div>
                     <div class="stats-box pastel-yellow">
                         <img src="/SCES/assets/images/quiz-lesson.png" alt="quiz-lesson.png">
                         <div class="stats-col">
-                            <span id="totalLessons">10</span>
+                            <span id="totalLessons"></span>
                             <p>Total Lessons</p>
                         </div>
                     </div>
                     <div class="stats-box pastel-blue">
                         <img src="/SCES/assets/images/quiz-question.png" alt="quiz-question.png">
                         <div class="stats-col">
-                            <span id="totalQuizzes">100</span>
+                            <span id="totalQuizzes"></span>
                             <p>Total Quizzes</p>
                         </div>
                     </div>

@@ -903,6 +903,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData = $fetchDb->gwaRankingStudentsByYearWithFilter($year, $gradeLevel);
 
         echo json_encode($panelData);
+    } else if ($submitType === 'analyticsPanelData') {
+        $year = $_POST['year'];
+        $gradeLevel = $_POST['gradeLevel'];
+
+        $totalStudents = $fetchDb->fetchTotalStudentsWithFilter($year, $gradeLevel);
+
+        $panelData['totalStudents'] = $totalStudents;
+        $panelData['totalTeachers'] = 0;
+        $panelData['totalLessons'] = 0;
+        $panelData['totalQuizzes'] = 0;
+        echo json_encode($panelData);
+
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
