@@ -2909,6 +2909,179 @@ class fetchClass extends db_connect
             return 0;
         }
     }
+
+    public function fetchTotalTeachersWithFilter($year, $gradeLevel)
+    {
+        if ($year != 'All' && $year <= 2023) {
+            return 'No Data';
+        } else {
+            if ($year === 'All' && $gradeLevel === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT teacher.teacher_id) AS teacher_count
+                FROM teacher_tbl teacher
+                INNER JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
+                INNER JOIN level_tbl level ON section.level_id = level.level_id
+                ");
+            } elseif ($year === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT teacher.teacher_id) AS teacher_count
+                FROM teacher_tbl teacher
+                INNER JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
+                INNER JOIN level_tbl level ON section.level_id = level.level_id
+                WHERE level.grade_level = ? 
+            ");
+                $query->bind_param("s", $gradeLevel);
+            } elseif ($gradeLevel === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT teacher.teacher_id) AS teacher_count
+                FROM teacher_tbl teacher
+                INNER JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
+                INNER JOIN level_tbl level ON section.level_id = level.level_id
+                WHERE section.year = ?
+            ");
+                $query->bind_param("i", $year);
+            } else {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT teacher.teacher_id) AS teacher_count
+                FROM teacher_tbl teacher
+                INNER JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
+                INNER JOIN level_tbl level ON section.level_id = level.level_id
+                WHERE section.year = ?
+                AND level.grade_level = ?
+        ");
+                $query->bind_param("is", $year, $gradeLevel);
+            }
+        }
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $teacherCount = $result->fetch_assoc();
+            return $teacherCount['teacher_count'];
+        } else {
+            return 0;
+        }
+    }
+
+    public function fetchTotalLessonsWithFilter($year, $gradeLevel)
+    {
+        if ($year != 'All' && $year <= 2023) {
+            return 'No Data';
+        } else {
+            if ($year === 'All' && $gradeLevel === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT lesson.lesson_id) AS lesson_count
+                FROM lesson_tbl lesson
+                INNER JOIN subject_tbl subject ON subject.subject_id = lesson.subject_id
+                INNER JOIN section_tbl section ON section.section_id = lesson.section_id
+                INNER JOIN level_tbl level ON lesson.level_id = level.level_id
+                ");
+            } elseif ($year === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT lesson.lesson_id) AS lesson_count
+                FROM lesson_tbl lesson
+                INNER JOIN subject_tbl subject ON subject.subject_id = lesson.subject_id
+                INNER JOIN section_tbl section ON section.section_id = lesson.section_id
+                INNER JOIN level_tbl level ON lesson.level_id = level.level_id
+                WHERE level.grade_level = ? 
+            ");
+                $query->bind_param("s", $gradeLevel);
+            } elseif ($gradeLevel === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT lesson.lesson_id) AS lesson_count
+                FROM lesson_tbl lesson
+                INNER JOIN subject_tbl subject ON subject.subject_id = lesson.subject_id
+                INNER JOIN section_tbl section ON section.section_id = lesson.section_id
+                INNER JOIN level_tbl level ON lesson.level_id = level.level_id
+                WHERE subject.year = ?
+            ");
+                $query->bind_param("i", $year);
+            } else {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT lesson.lesson_id) AS lesson_count
+                FROM lesson_tbl lesson
+                INNER JOIN subject_tbl subject ON subject.subject_id = lesson.subject_id
+                INNER JOIN section_tbl section ON section.section_id = lesson.section_id
+                INNER JOIN level_tbl level ON lesson.level_id = level.level_id
+                WHERE subject.year = ?
+                AND level.grade_level = ?
+        ");
+                $query->bind_param("is", $year, $gradeLevel);
+            }
+        }
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $lessonCount = $result->fetch_assoc();
+            return $lessonCount['lesson_count'];
+        } else {
+            return 0;
+        }
+    }
+
+    public function fetchTotalQuizzesWithFilter($year, $gradeLevel)
+    {
+        if ($year != 'All' && $year <= 2023) {
+            return 'No Data';
+        } else {
+            if ($year === 'All' && $gradeLevel === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT quiz.quiz_id) AS quiz_count
+                FROM quiz_tbl quiz
+                INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+                INNER JOIN section_tbl section ON section.section_id = subject.section_id
+                INNER JOIN level_tbl level ON subject.level_id = level.level_id
+                ");
+            } elseif ($year === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT quiz.quiz_id) AS quiz_count
+                FROM quiz_tbl quiz
+                INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+                INNER JOIN section_tbl section ON section.section_id = subject.section_id
+                INNER JOIN level_tbl level ON subject.level_id = level.level_id
+                WHERE level.grade_level = ? 
+            ");
+                $query->bind_param("s", $gradeLevel);
+            } elseif ($gradeLevel === 'All') {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT quiz.quiz_id) AS quiz_count
+                FROM quiz_tbl quiz
+                INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+                INNER JOIN section_tbl section ON section.section_id = subject.section_id
+                INNER JOIN level_tbl level ON subject.level_id = level.level_id
+                WHERE subject.year = ?
+            ");
+                $query->bind_param("i", $year);
+            } else {
+                $query = $this->conn->prepare("
+                SELECT
+                    COUNT(DISTINCT quiz.quiz_id) AS quiz_count
+                FROM quiz_tbl quiz
+                INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+                INNER JOIN section_tbl section ON section.section_id = subject.section_id
+                INNER JOIN level_tbl level ON subject.level_id = level.level_id
+                WHERE subject.year = ?
+                AND level.grade_level = ?
+        ");
+                $query->bind_param("is", $year, $gradeLevel);
+            }
+        }
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $quizCount = $result->fetch_assoc();
+            return $quizCount['quiz_count'];
+        } else {
+            return 0;
+        }
+    }
 }
 
 

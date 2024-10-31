@@ -530,10 +530,10 @@ table.dataTable tbody td.dataTables_empty {
     font-size: 1.3rem;
   }
   .stats-col p {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   .stats-col span {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
   #rankingTable th:nth-child(3),
   #rankingTable td:nth-child(3) {
@@ -671,10 +671,10 @@ table.dataTable tbody td.dataTables_empty {
     width: 100%;
   }
   .stats-col p {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   .stats-col span {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 }
 @media (width < 500px) {
@@ -698,10 +698,10 @@ table.dataTable tbody td.dataTables_empty {
     gap: 10px;
   }
   .stats-col p {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
   .stats-col span {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 }
 @media (width < 375px) {

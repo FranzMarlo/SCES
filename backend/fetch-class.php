@@ -908,11 +908,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $gradeLevel = $_POST['gradeLevel'];
 
         $totalStudents = $fetchDb->fetchTotalStudentsWithFilter($year, $gradeLevel);
-
+        $totalTeachers = $fetchDb->fetchTotalTeachersWithFilter($year, $gradeLevel);
+        $totalLessons = $fetchDb->fetchTotalLessonsWithFilter($year, $gradeLevel);
+        $totalQuizzes = $fetchDb->fetchTotalQuizzesWithFilter($year, $gradeLevel);
+        
         $panelData['totalStudents'] = $totalStudents;
-        $panelData['totalTeachers'] = 0;
-        $panelData['totalLessons'] = 0;
-        $panelData['totalQuizzes'] = 0;
+        $panelData['totalTeachers'] = $totalTeachers;
+        $panelData['totalLessons'] = $totalLessons;
+        $panelData['totalQuizzes'] = $totalQuizzes;
         echo json_encode($panelData);
 
     } else {
