@@ -1956,8 +1956,34 @@ class globalClass extends db_connect
         }
     }
 
+    public function addGrade($studentId, $subjectId, $studentGrade, $remarks, $quarter)
+    {
+        $year = date("Y");
+        $gradeId = 'G' . $year . sprintf('%05d', rand(0, 99999));
+        $checkIdResult = $this->checkGradeId($gradeId);
 
+        while ($checkIdResult->num_rows > 0) {
+            $gradeId = 'G' . $year . sprintf('%05d', rand(0, 99999));
+            $checkIdResult = $this->checkGradeId($gradeId);
+        }
+        $query = $this->conn->prepare("INSERT INTO `grade_tbl` (`grade_id`, `student_id`, `subject_id`, `grade`, `remarks`, `quarter`) VALUES (?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssss", $gradeId, $studentId, $subjectId, $studentGrade, $remarks, $quarter);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    public function checkGradeId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM grade_tbl WHERE grade_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
 
 
 

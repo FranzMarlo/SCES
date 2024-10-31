@@ -592,7 +592,7 @@ document.addEventListener("DOMContentLoaded", function () {
             width: "100px",
             className: "text-center",
           },
-          { data: "quarter" },
+          { data: "quarter", className: "text-center" },
         ],
         language: {
           emptyTable: "No data available in table",

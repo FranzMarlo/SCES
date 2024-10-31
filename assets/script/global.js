@@ -2594,6 +2594,7 @@ $("#addGradeForm").on("submit", function (e) {
   e.preventDefault();
   var bodyElement = document.querySelector("body");
   var subject_id = bodyElement.getAttribute("data-subject");
+  var studentId = document.getElementById("gradeStudentId").value;
 
   var formData = new FormData(this);
   formData.append("submitType", "addGrade");
@@ -2618,7 +2619,11 @@ $("#addGradeForm").on("submit", function (e) {
               allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.reload();
+                document.getElementById("studentModal").style.display = "flex";
+                addGradeModal.style.display = "none";
+                if ($.fn.DataTable.isDataTable("#gradesTable")) {
+                  $("#gradesTable").DataTable().ajax.reload(null, false); // Keep the current page
+                }
               }
             });
           }
@@ -2684,7 +2689,7 @@ $("#addGradeForm").on("submit", function (e) {
           function () {
             Swal.fire({
               icon: "error",
-              title: "Lesson Upload Failed",
+              title: "Grade Upload Failed",
               text: "Please Try Again",
               confirmButtonColor: "#4CAF50",
             });
@@ -3277,4 +3282,4 @@ setInterval(function () {
   fetch("/SCES/backend/update-quiz.php").catch((error) =>
     console.error("Error in updating quiz status:", error)
   );
-}, 10000); 
+}, 10000);

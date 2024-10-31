@@ -251,15 +251,15 @@
 <div id="addGradeModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h2>Add Grade To Student</h2>
+      <h2>Add Subject Grade For Student</h2>
       <span class="close-btn" id="closeGradeModal">&times;</span>
     </div>
     <div class="modal-body">
       <form id="addGradeForm">
-        <input type="hidden" id="gradeStudentId">
+        <input type="hidden" name="gradeStudentId" id="gradeStudentId">
         <div class="form-group">
           <label for="studentGrade">Student Grade:</label>
-          <input type="number" id="studentGrade" name="studentGrade" placeholder="Enter Lesson Number">
+          <input type="number" id="studentGrade" name="studentGrade" placeholder="Enter Grade">
         </div>
         <div class="form-group">
           <label for="gradeQuarter">Select Quarter:</label>
