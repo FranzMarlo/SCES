@@ -74,7 +74,7 @@
                     </div>
                     <div class="tab-col">
                         <p>Student ID</p>
-                        <span id="studentId">20240001</span>
+                        <span id="studentId"></span>
                     </div>
                 </div>
                 <div class="tab-row">

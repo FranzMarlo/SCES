@@ -74,7 +74,7 @@
                     </div>
                     <div class="tab-col">
                         <p>Student ID</p>
-                        <span id="studentId">20240001</span>
+                        <span id="studentId"></span>
                     </div>
                 </div>
                 <div class="tab-row">
@@ -204,14 +204,14 @@
                     <img id="studentPredictedPerformanceIcon" src="/SCES/assets/images/passed.png" alt="performance.png">
                     <div class="stats-col">
                         <p>Predicted Performance</p>
-                        <span id="studentPredictedPerformance">Passed</span>
+                        <span id="studentPredictedPerformance"></span>
                     </div>
                 </div>
                 <div class="modal-stats-box pending">
                     <img src="/SCES/assets/images/success-rate.png" alt="success-rate.png">
                     <div class="stats-col">
                         <p>Predicted Success Rate</p>
-                        <span id="studentPredictedSuccess">Passed</span>
+                        <span id="studentPredictedSuccess"></span>
                     </div>
                 </div>
             </div>

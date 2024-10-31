@@ -29,8 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const studentRemarks = document.getElementById("studentPredictedRemarks");
   const studentGWA = document.getElementById("studentPredictedGWA");
 
-
-  function populateAnalyticsData(year,  grade) {
+  function populateAnalyticsData(year, grade) {
     const data = new FormData();
     data.append("submitType", "analyticsPanelData");
     data.append("year", year);
@@ -43,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((response) => response.json())
       .then((data) => {
         document.getElementById("totalStudents").textContent =
-          data.totalStudents|| 0;
+          data.totalStudents || 0;
         document.getElementById("totalTeachers").textContent =
           data.totalTeachers || 0;
         document.getElementById("totalLessons").textContent =
@@ -288,12 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const headers =
       year !== "All" && year <= 2023
         ? ["Full Name", "GWA", "Grade & Section"]
-        : [
-            "Full Name",
-            "Average Score",
-            "Grade & Section",
-            "View Student",
-          ];
+        : ["Full Name", "Average Score", "Grade & Section", "View Student"];
 
     // Generate table head dynamically
     headers.forEach((headerText) => {
@@ -769,7 +763,13 @@ document.addEventListener("DOMContentLoaded", function () {
                   performanceImg.src = getPerformanceIcon(performance);
                 })
                 .catch((error) => {
-                  console.error("Error fetching predictions:", error);
+                  studentPerformance.innerText = "No Data";
+                  studentSuccess.innerText = "No Data";
+                  studentRemarks.innerText = "No Data";
+                  studentGWA.innerText = "No Data";
+
+                  remarksImg.src = "/SCES/assets/images/not-found.png";
+                  performanceImg.src = "/SCES/assets/images/not-found.png";
                 });
             })
             .catch((error) => {
