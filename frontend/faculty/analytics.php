@@ -51,28 +51,28 @@ $page = '';
                     </div>
                 </div>
                 <div class="stats-container">
-                    <div class="stats-box">
+                    <div class="stats-box pastel-pink">
                         <img src="/SCES/assets/images/quiz-grade-section.png" alt="quiz-grade-section.png">
                         <div class="stats-col">
                             <span id="totalStudents">1206</span>
                             <p>Total Students</p>
                         </div>
                     </div>
-                    <div class="stats-box">
+                    <div class="stats-box pastel-green">
                         <img src="/SCES/assets/images/school-info.png" alt="school-info.png">
                         <div class="stats-col">
                             <span id="totalTeachers">20</span>
                             <p>Total Teachers</p>
                         </div>
                     </div>
-                    <div class="stats-box">
+                    <div class="stats-box pastel-yellow">
                         <img src="/SCES/assets/images/quiz-lesson.png" alt="quiz-lesson.png">
                         <div class="stats-col">
                             <span id="totalLessons">10</span>
                             <p>Total Lessons</p>
                         </div>
                     </div>
-                    <div class="stats-box">
+                    <div class="stats-box pastel-blue">
                         <img src="/SCES/assets/images/quiz-question.png" alt="quiz-question.png">
                         <div class="stats-col">
                             <span id="totalQuizzes">100</span>
@@ -95,15 +95,15 @@ $page = '';
                 </div>
                 <div class="title-box">
                     <img src="/SCES/assets/images/quiz-score.png" alt="quiz-score.png">
-                    <h1>Students Ranking</h1>
+                    <h1>Top Performing Students</h1>
                 </div>
-                <div class="table-responsive">
-                    <table id="rankingTable" class="display data-table">
+                <div class="table-container">
+                    <table id="rankingTable" class="table">
                         <thead>
-                            <tr class="pink">
+                            <tr class="pink">                              
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="rankingTableBody">
                         </tbody>
                     </table>
                 </div>

@@ -249,102 +249,85 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function initializeRankingTable(year, grade) {
-    // Clear and destroy existing table to avoid reinitialization issues
-    if ($.fn.dataTable.isDataTable("#rankingTable")) {
-      $("#rankingTable").DataTable().clear().destroy();
-    }
+    const tableHead = document.querySelector("#rankingTable thead tr");
+    const tableBody = document.getElementById("rankingTableBody");
 
-    // Set the appropriate submit type and column configuration based on filters
+    // Clear existing table head and body content
+    tableHead.innerHTML = "";
+    tableBody.innerHTML = "";
+
+    // Define headers based on filter conditions
+    const headers =
+      year !== "All" && year <= 2023
+        ? ["Full Name", "GWA", "Grade & Section"]
+        : [
+            "Full Name",
+            "Average Score",
+            "Grade & Section",
+            "View Student",
+          ];
+
+    // Generate table head dynamically
+    headers.forEach((headerText) => {
+      const th = document.createElement("th");
+      th.className = "text-center";
+      th.textContent = headerText;
+      tableHead.appendChild(th);
+    });
+
+    // Fetch data from the server
     const ajaxSubmitType =
       year !== "All" && year <= 2023
         ? "gwaRankingStudentsByYearWithFilter"
         : "rankingStudentsByYearWithFilter";
-    const ajaxColumns =
-      year !== "All" && year <= 2023
-        ? [
-            { data: "rank", title: "Rank", className: "text-center" },
-            { data: "lrn", title: "LRN", className: "text-center" },
-            { data: "full_name", title: "Full Name", className: "text-center" },
-            { data: "gwa", title: "GWA", className: "text-center" },
-            {
-              data: "grade_level",
-              title: "Grade Level",
-              className: "text-center",
-            },
-            { data: "section", title: "Section", className: "text-center" },
-          ]
-        : [
-            { data: "rank", title: "Rank", className: "text-center" },
-            { data: "lrn", title: "LRN", className: "text-center" },
-            {
-              data: "student_id",
-              title: "Student ID",
-              className: "text-center",
-            },
-            {
-              data: "full_name",
-              title: "Student Name",
-              className: "text-center",
-            },
-            {
-              data: "average_score",
-              title: "Average Score",
-              className: "text-center",
-            },
-            {
-              data: "grade_level",
-              title: "Grade Level",
-              className: "text-center",
-            },
-            { data: "section", title: "Section", className: "text-center" },
-            {
-              data: null,
-              title: "View Student",
-              render: function (data, type, row) {
-                return `<div class="center-image">
-                    <button class="more-btn" data-student-id="${row.student_id}"><i class="fa-solid fa-chevron-right"></i></button>
-                </div>`;
-              },
-              orderable: false,
-              searchable: false,
-              className: "text-center",
-            },
-          ];
 
-    // Initialize DataTable with updated data based on current filters
-    $("#rankingTable").DataTable({
-      destroy: true,
-      responsive: {
-        details: {
-          type: "inline",
-          display: $.fn.dataTable.Responsive.display.childRowImmediate,
-          renderer: function (api, rowIdx, columns) {
-            var data = $.map(columns, function (col) {
-              return col.hidden
-                ? `<tr data-dt-row="${col.rowIdx}" data-dt-column="${col.columnIdx}">
-                                  <td><strong>${col.title}:</strong></td>
-                                  <td>${col.data}</td>
-                               </tr>`
-                : "";
-            }).join("");
-            return data ? $("<table/>").append(data) : false;
-          },
-        },
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        submitType: ajaxSubmitType,
+        year: year,
+        gradeLevel: grade,
       },
-      ajax: {
-        url: "/SCES/backend/fetch-class.php",
-        type: "POST",
-        data: function (d) {
-          d.submitType = ajaxSubmitType;
-          d.year = year;
-          d.gradeLevel = grade;
-          return d;
-        },
-        dataSrc: "",
+      success: function (data) {
+        // Populate table body based on filter conditions
+        data.forEach((row) => {
+          const tr = document.createElement("tr");
+
+          if (year !== "All" && year <= 2023) {
+            tr.innerHTML = `
+                        <td class="text-center" data-label="Full Name">${row.full_name}</td>
+                        <td class="text-center" data-label="GWA">${row.gwa}</td>
+                        <td class="text-center" data-label="Grade & Section">${row.grade_level} - ${row.section}</td>
+                    `;
+          } else {
+            tr.innerHTML = `
+                        <td class="text-center" data-label="Full Name">${row.full_name}</td>
+                        <td class="text-center" data-label="Average Score">${row.average_score}</td>
+                        <td class="text-center" data-label="Grade & Section">${row.grade_level} - ${row.section}</td>
+                        <td class="text-center" data-label="View Student">
+                            <div class="center-image">
+                                <button class="more-btn" data-student-id="${row.student_id}">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+          }
+
+          tableBody.appendChild(tr);
+        });
+
+        // Display a message if no data is available
+        if (data.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td colspan="${headers.length}" class="text-center">No data available in table</td>`;
+          tableBody.appendChild(tr);
+        }
       },
-      columns: ajaxColumns,
-      language: {
-        emptyTable: "No data available in table",
+      error: function () {
+        console.error("Failed to fetch data.");
       },
     });
   }

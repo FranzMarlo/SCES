@@ -107,13 +107,13 @@
 #barChart {
   width: 100%;
 }
-#fullLineChart {
+#fullBarChart {
   width: 100%;
 }
-.text-center{
-  text-align: center!important;
+.text-center {
+  text-align: center !important;
 }
-.pink{
+.pink {
   background-color: #fbe1f0;
 }
 .table-responsive {
@@ -292,7 +292,7 @@ table.dataTable tbody td.dataTables_empty {
   font-weight: bold;
   font-size: 1.2rem;
 }
-.main-tab-controller{
+.main-tab-controller {
   display: flex;
   width: 100%;
   align-items: center;
@@ -339,7 +339,7 @@ table.dataTable tbody td.dataTables_empty {
   font-weight: bold;
   background-color: #c5e3ff;
 }
-.tab-panel .title-box{
+.tab-panel .title-box {
   margin-bottom: 10px;
 }
 .tab-container {
@@ -385,14 +385,14 @@ table.dataTable tbody td.dataTables_empty {
   align-items: center;
   justify-content: space-between;
 }
-.modal-stats-container{
+.modal-stats-container {
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
   align-items: center;
 }
-.modal-stats-box{
+.modal-stats-box {
   width: 49%;
   border-radius: 30px;
   border: 2px solid #000;
@@ -401,7 +401,7 @@ table.dataTable tbody td.dataTables_empty {
   align-items: center;
   padding: 10px 20px;
 }
-.modal-stats-box img{
+.modal-stats-box img {
   height: 2rem;
   width: 2rem;
   margin-right: 10px;
@@ -437,7 +437,35 @@ table.dataTable tbody td.dataTables_empty {
   font-size: 1.5rem;
   font-weight: bold;
 }
-
+.table-container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  border: 2px solid #000;
+  border-radius: 20px;
+  overflow: hidden;
+}
+#rankingTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.table thead th {
+  text-align: center !important;
+  font-weight: bold;
+  padding: 12px;
+  border-bottom: 3px solid #ddd;
+  height: 50px;
+}
+.table tbody td {
+  padding: 10px;
+  text-align: left;
+  border: none; 
+}
+.table tbody tr {
+  border: none;
+}
 @media (width < 1199px) {
   .title-box img {
     height: 2.1rem;
@@ -501,11 +529,15 @@ table.dataTable tbody td.dataTables_empty {
   .panel-col span {
     font-size: 1.3rem;
   }
-  .stats-col p{
+  .stats-col p {
     font-size: 1.1rem;
   }
-  .stats-col span{
+  .stats-col span {
     font-size: 1rem;
+  }
+  #rankingTable th:nth-child(3),
+  #rankingTable td:nth-child(3) {
+    display: none;
   }
 }
 @media (width < 768px) {
@@ -551,10 +583,10 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 600px) {
-  .modal-stats-box{
+  .modal-stats-box {
     width: 100%;
   }
-  .modal-stats-container{
+  .modal-stats-container {
     flex-direction: column;
     row-gap: 15px;
   }
@@ -635,13 +667,13 @@ table.dataTable tbody td.dataTables_empty {
     padding: 5px 8px;
     font-size: 0.8rem;
   }
-  .stats-box{
+  .stats-box {
     width: 100%;
   }
-  .stats-col p{
+  .stats-col p {
     font-size: 1rem;
   }
-  .stats-col span{
+  .stats-col span {
     font-size: 0.9rem;
   }
 }
@@ -660,17 +692,17 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 425px) {
-    .filter-container{
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    .stats-col p{
-      font-size: 0.9rem;
-    }
-    .stats-col span{
-      font-size: 0.8rem;
-    }
+  .filter-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .stats-col p {
+    font-size: 0.9rem;
+  }
+  .stats-col span {
+    font-size: 0.8rem;
+  }
 }
 @media (width < 375px) {
   .table-responsive {
@@ -699,7 +731,7 @@ table.dataTable tbody td.dataTables_empty {
   .panel-col span {
     font-size: 0.9rem;
   }
-  .panel-box img{
+  .panel-box img {
     height: 25px;
     width: 25px;
   }
@@ -713,9 +745,9 @@ table.dataTable tbody td.dataTables_empty {
 .passed,
 .failed,
 .fair {
-  display: inline-block; /* Ensures the elements are treated as block */
-  width: 100px; /* Set a fixed width for both */
-  text-align: center; /* Center align text */
+  display: inline-block;
+  width: 100px;
+  text-align: center;
   color: #fff;
   border-radius: 20px;
   padding: 5px;
@@ -739,6 +771,18 @@ table.dataTable tbody td.dataTables_empty {
   background-color: #c5e3ff;
 }
 .average {
+  background-color: #fcfd95;
+}
+.pastel-green {
+  background-color: #d2ebc4;
+}
+.pastel-pink {
+  background-color: #ffd6e6;
+}
+.pastel-blue {
+  background-color: #c5e3ff;
+}
+.pastel-yellow {
   background-color: #fcfd95;
 }
 #studentLineChart {

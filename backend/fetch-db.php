@@ -2627,11 +2627,9 @@ class fetchClass extends db_connect
     public function gwaRankingStudentsByYearWithFilter($year, $gradeLevel)
     {
         if ($gradeLevel == "All") {
-
             $query = $this->conn->prepare("
             SELECT 
                 lrn,
-                ROW_NUMBER() OVER (ORDER BY AVG(gwa) DESC) AS rank,
                 CONCAT(student_fname, ' ', student_lname) AS full_name,
                 gwa,
                 grade_level,
@@ -2644,13 +2642,13 @@ class fetchClass extends db_connect
                 full_name
             ORDER BY 
                 gwa DESC
+            LIMIT 10
         ");
             $query->bind_param("i", $year);
         } else {
             $query = $this->conn->prepare("
             SELECT 
                 lrn,
-                ROW_NUMBER() OVER (ORDER BY gwa DESC) AS rank,
                 CONCAT(student_fname, ' ', student_lname) AS full_name,
                 gwa,
                 grade_level,
@@ -2665,9 +2663,11 @@ class fetchClass extends db_connect
                 full_name
             ORDER BY 
                 gwa DESC
+            LIMIT 10
         ");
             $query->bind_param("is", $year, $gradeLevel);
         }
+
         if ($query->execute()) {
             $result = $query->get_result();
             $students = [];
@@ -2675,11 +2675,10 @@ class fetchClass extends db_connect
             while ($row = $result->fetch_assoc()) {
                 $students[] = [
                     'lrn' => $row['lrn'],
-                    'rank' => $row['rank'],
-                    'full_name' => $row['full_name'],
+                    'full_name' => ucwords(strtolower($row['full_name'])),
                     'gwa' => $row['gwa'],
-                    'grade_level' => $row['grade_level'],
-                    'section' => $row['section'],
+                    'grade_level' => ucwords(strtolower($row['grade_level'])),
+                    'section' => ucwords(strtolower($row['section'])),
                 ];
             }
 
@@ -2688,6 +2687,7 @@ class fetchClass extends db_connect
         return null;
     }
 
+
     public function rankingStudentsByYearWithFilter($year, $gradeLevel)
     {
         if ($year == 'All' && $gradeLevel == 'All') {
@@ -2695,7 +2695,6 @@ class fetchClass extends db_connect
             SELECT 
                 student.student_id,
                 student.lrn,
-                ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
                 CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
                 AVG(score.score) AS average_score,
                 level.grade_level,
@@ -2718,6 +2717,7 @@ class fetchClass extends db_connect
                 full_name
             ORDER BY 
                 average_score DESC
+            LIMIT 10
         ");
 
         } elseif ($year === 'All') {
@@ -2725,7 +2725,6 @@ class fetchClass extends db_connect
             SELECT 
                 student.student_id,
                 student.lrn,
-                ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
                 CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
                 AVG(score.score) AS average_score,
                 level.grade_level,
@@ -2750,6 +2749,7 @@ class fetchClass extends db_connect
                 full_name
             ORDER BY 
                 average_score DESC
+            LIMIT 10
         ");
             $query->bind_param("s", $gradeLevel);
         } elseif ($gradeLevel === 'All') {
@@ -2757,7 +2757,6 @@ class fetchClass extends db_connect
             SELECT 
                 student.student_id,
                 student.lrn,
-                ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
                 CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
                 AVG(score.score) AS average_score,
                 level.grade_level,
@@ -2782,6 +2781,7 @@ class fetchClass extends db_connect
                 full_name
             ORDER BY 
                 average_score DESC
+            LIMIT 10
         ");
             $query->bind_param("i", $year);
         } else {
@@ -2789,7 +2789,6 @@ class fetchClass extends db_connect
             SELECT 
                 student.student_id,
                 student.lrn,
-                ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
                 CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
                 AVG(score.score) AS average_score,
                 level.grade_level,
@@ -2816,6 +2815,7 @@ class fetchClass extends db_connect
                 full_name
             ORDER BY 
                 average_score DESC
+            LIMIT 10
         ");
             $query->bind_param("is", $year, $gradeLevel);
         }
@@ -2827,7 +2827,6 @@ class fetchClass extends db_connect
                 $students[] = [
                     'student_id' => $row['student_id'],
                     'lrn' => $row['lrn'],
-                    'rank' => $row['rank'],
                     'full_name' => $row['full_name'],
                     'average_score' => round($row['average_score'], 2),
                     'grade_level' => $row['grade_level'],
