@@ -464,6 +464,18 @@ select option {
 .save-btn:hover {
   background-color: #45a049;
 }
+.add-btn {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 30px;
+  border: 2px solid #000;
+}
+.add-btn:hover{
+  color: #fff;
+  border: 2px solid #fff;
+}
 .form-group label {
   display: block;
   margin-bottom: 5px;
@@ -728,6 +740,11 @@ table.dataTable tbody td.dataTables_empty {
   align-items: center;
   width: 100%;
   margin-bottom: 10px;
+}
+.title-part{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .tab-title img {
   height: 2.3rem;
@@ -1083,6 +1100,9 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 992px) {
+  .add-btn {
+    font-size: 0.9rem;
+  }
   .question-box span {
     font-size: 1rem;
   }
@@ -1240,6 +1260,10 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 600px) {
+  .add-btn {
+    padding: 7px 15px;
+    font-size: 0.8rem;
+  }
   .modal-content-quiz {
     width: 90%;
   }
@@ -1559,4 +1583,7 @@ table.dataTable tbody td.dataTables_empty {
 }
 .average {
   background-color: #fcfd95;
+}
+.justified{
+  justify-content: space-between!important;
 }

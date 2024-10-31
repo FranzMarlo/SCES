@@ -1946,6 +1946,15 @@ class globalClass extends db_connect
         return [];
     }
 
+    public function checkGrade( $studentId, $subjectId, $quarter)
+    {
+        $query = $this->conn->prepare("SELECT * FROM grade_tbl WHERE student_id = ? AND subject_id = ? AND quarter = ?");
+        $query->bind_param("sss", $studentId, $subjectId, $quarter);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
 
 
 

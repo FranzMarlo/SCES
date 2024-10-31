@@ -6,6 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
   var addLessonBtn = document.getElementById("addLesson");
   var closeBtn = document.getElementById("closeLessonModal");
   var addLessonForm = document.getElementById("facultyAddLesson");
+  var addGradeBtn = document.getElementById("addGradeBtn");
+  var addGradeModal = document.getElementById("addGradeModal");
+  var addGradeForm = document.getElementById("addGradeForm");
+  var closeGradeModal = document.getElementById("closeGradeModal");
 
   addLessonBtn.onclick = function () {
     addLessonModal.style.display = "flex";
@@ -101,31 +105,37 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("analyticsTab").classList.add("active");
     });
 
-  document.getElementById("moduleLessons").addEventListener("click", function () {
-    updateTabDisplay("lessonTab", 1);
-    document.getElementById("lessonTab").classList.add("active");
-    document.getElementById("studentTab").classList.remove("active");
-    document.getElementById("recordsTab").classList.remove("active");
-    document.getElementById("analyticsTab").classList.remove("active");
-  });
+  document
+    .getElementById("moduleLessons")
+    .addEventListener("click", function () {
+      updateTabDisplay("lessonTab", 1);
+      document.getElementById("lessonTab").classList.add("active");
+      document.getElementById("studentTab").classList.remove("active");
+      document.getElementById("recordsTab").classList.remove("active");
+      document.getElementById("analyticsTab").classList.remove("active");
+    });
 
-  document.getElementById("moduleStudents").addEventListener("click", function () {
-    updateTabDisplay("studentTab", 2);
-    initializeStudentsTable();
-    document.getElementById("lessonTab").classList.remove("active");
-    document.getElementById("studentTab").classList.add("active");
-    document.getElementById("recordsTab").classList.remove("active");
-    document.getElementById("analyticsTab").classList.remove("active");
-  });
+  document
+    .getElementById("moduleStudents")
+    .addEventListener("click", function () {
+      updateTabDisplay("studentTab", 2);
+      initializeStudentsTable();
+      document.getElementById("lessonTab").classList.remove("active");
+      document.getElementById("studentTab").classList.add("active");
+      document.getElementById("recordsTab").classList.remove("active");
+      document.getElementById("analyticsTab").classList.remove("active");
+    });
 
-  document.getElementById("moduleRecords").addEventListener("click", function () {
-    updateTabDisplay("recordsTab", 3);
-    initializeRecordsTable();
-    document.getElementById("lessonTab").classList.remove("active");
-    document.getElementById("studentTab").classList.remove("active");
-    document.getElementById("recordsTab").classList.add("active");
-    document.getElementById("analyticsTab").classList.remove("active");
-  });
+  document
+    .getElementById("moduleRecords")
+    .addEventListener("click", function () {
+      updateTabDisplay("recordsTab", 3);
+      initializeRecordsTable();
+      document.getElementById("lessonTab").classList.remove("active");
+      document.getElementById("studentTab").classList.remove("active");
+      document.getElementById("recordsTab").classList.add("active");
+      document.getElementById("analyticsTab").classList.remove("active");
+    });
 
   document
     .getElementById("moduleAnalytics")
@@ -1088,7 +1098,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Error fetching panel data:", error);
       });
   }
-  
+
   function initializeSubjectLineChart() {
     var ctxLine = document.getElementById("subjectLineChart").getContext("2d");
 
@@ -1449,4 +1459,25 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
     });
+
+  addGradeBtn.onclick = function () {
+    var studentId = document
+      .getElementById("studentRecordsTab")
+      .getAttribute("data-student-id");
+    document.getElementById("gradeStudentId").value = studentId;
+    document.getElementById("studentModal").style.display = "none";
+    addGradeModal.style.display = "flex";
+  };
+  closeGradeModal.onclick = function () {
+    document.getElementById("studentModal").style.display = "flex";
+    addGradeModal.style.display = "none";
+    addGradeForm.reset();
+  };
+  window.onclick = function (event) {
+    if (event.target == addGradeModal) {
+      document.getElementById("studentModal").style.display = "flex";
+      addGradeModal.style.display = "none";
+      addGradeForm.reset();
+    }
+  };
 });

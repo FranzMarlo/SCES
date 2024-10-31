@@ -1320,6 +1320,25 @@ if (isset($_POST['submitType'])) {
         } else {
             echo json_encode(['success' => false, 'message' => 'Error recording score.']);
         }
+    } else if ($_POST['submitType'] === 'addGrade') {
+        $studentId = $_POST['student_id'];
+        $subjectId = $_POST['subject_id'];
+        $studentGrade = validate($_POST['studentGrade']);
+        $quarter = validate($_POST['gradeQuarter']);
+        $checkGrade = $db->checkGrade($studentId, $subjectId, $quarter);
+        if ($checkGrade->num_rows > 0) {
+            echo '491';
+        } else if (empty($studentGrade)) {
+            echo '492';
+        } else if ($studentGrade < 0) {
+            echo '493';
+        } else if ($studentGrade > 100) {
+            echo '494';
+        } else if (empty($quarter) || $quarter == 'Not Set') {
+            echo '495';
+        } else {
+
+        }
     } else {
         echo '400';
     }
