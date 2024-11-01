@@ -38,7 +38,7 @@
                     </ul>
                 </li>
                 <li
-                    class="<?= in_array($current_page, ['section.php', 'student-list.php', 'student-grade.php', 'student-section.php']) ? 'active' : '' ?>">
+                    class="<?= in_array($current_page, ['section.php', 'student-list.php', 'student-section.php']) ? 'active' : '' ?>">
                     <a href="javascript:void(0)">
                         <i class="fa-solid fa-user-graduate icon"></i>
                         <span class="text">Students</span>
@@ -55,12 +55,6 @@
                             <a href="/SCES/frontend/faculty/student-list.php">
                                 <i class="fa-solid fa-list icon"></i>
                                 <span class="text">Student List</span>
-                            </a>
-                        </li>
-                        <li class="<?= $current_page == 'student-grade.php' ? 'active' : '' ?>">
-                            <a href="/SCES/frontend/faculty/student-grade.php">
-                                <i class="fa-solid fa-chart-pie icon"></i>
-                                <span class="text">Student Grade</span>
                             </a>
                         </li>
                     </ul>

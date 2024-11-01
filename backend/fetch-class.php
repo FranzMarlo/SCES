@@ -172,6 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'icon' => $quizDetails['icon'],
                 'subject_code' => $quizDetails['subject_code'],
                 'questions' => $questions,
+                'status' => $quizDetails['status'],
             ];
 
             // Return the data as JSON
@@ -405,19 +406,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['error' => 'No student found']);
         }
     } else if ($submitType === 'facultyGetQuizRecords') {
-        session_start();
-        $teacherId = $_SESSION['teacher_id'];
         $studentId = $_POST['student_id'];
 
-        $studentRecords = $fetchDb->facultyFetchScores($studentId, $teacherId);
+        $studentRecords = $fetchDb->facultyFetchScores($studentId);
         echo json_encode($studentRecords);
     } else if ($submitType === 'facultyGetQuizRecordsBySubject') {
-        session_start();
-        $teacherId = $_SESSION['teacher_id'];
         $subjectId = $_POST['subject_id'];
         $studentId = $_POST['student_id'];
 
-        $studentRecords = $fetchDb->facultyFetchScoresBySubject($studentId, $teacherId, $subjectId);
+        $studentRecords = $fetchDb->facultyFetchScoresBySubject($studentId, $subjectId);
         echo json_encode($studentRecords);
     } else if ($submitType === 'facultyGetGrades') {
         $studentId = $_POST['student_id'];

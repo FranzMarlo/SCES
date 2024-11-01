@@ -153,6 +153,10 @@ document.addEventListener("DOMContentLoaded", function () {
               showAlert("error", "Student has not answered the quiz yet");
               return;
             }
+            if (data.status !== 'Completed'){
+              showAlert("warning", "Quiz cannot be viewed", "Active quizzes cannot be viewed and will only be available for viewing when its mark as completed by instructor");
+              return;
+            }
 
             const viewQuizModal = document.getElementById("viewQuizModal");
 

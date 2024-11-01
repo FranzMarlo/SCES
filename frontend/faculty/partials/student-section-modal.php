@@ -143,6 +143,7 @@
                             <th>Total Question</th>
                             <th>Remarks</th>
                             <th>Date Taken</th>
+                            <th>View Quiz</th>
                         </tr>
                     </thead>
                 </table>

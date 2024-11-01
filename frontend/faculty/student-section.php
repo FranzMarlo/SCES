@@ -30,7 +30,7 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
             </div>
             <div class="panel">
                 <div class="main-tab-controller">
-                    <div class="main-tab-item <?php echo htmlspecialchars($sectionData['short']); ?> active"
+                    <div class="main-tab-item <?php echo htmlspecialchars($sectionData['short']); ?>"
                         id="sectionStudentsTab">
                         Students</div>
                     <div class="main-tab-item <?php echo htmlspecialchars($sectionData['short']); ?>" id="sectionRecordsTab">
