@@ -380,11 +380,11 @@ document.addEventListener("DOMContentLoaded", function () {
           dataSrc: "",
         },
         columns: [
-          { data: "quiz_number" },
-          { data: "subject" },
-          { data: "title" },
-          { data: "score" },
-          { data: "item_number" },
+          { data: "quiz_number", className: "text-center"},
+          { data: "subject", className: "text-center" },
+          { data: "title", className: "text-center" },
+          { data: "score", className: "text-center" },
+          { data: "item_number", className: "text-center" },
           {
             data: "remarks",
             render: function (data) {
@@ -397,7 +397,7 @@ document.addEventListener("DOMContentLoaded", function () {
               return `<span class="${className}">${data}</span>`;
             },
           },
-          { data: "time" },
+          { data: "time", className: "text-center" },
         ],
         language: {
           emptyTable: "No data available in table",
@@ -459,8 +459,8 @@ document.addEventListener("DOMContentLoaded", function () {
           dataSrc: "",
         },
         columns: [
-          { data: "subject" },
-          { data: "grade" },
+          { data: "subject", className: "text-center" },
+          { data: "grade", className: "text-center" },
           {
             data: "remarks",
             render: function (data) {
@@ -477,7 +477,7 @@ document.addEventListener("DOMContentLoaded", function () {
             width: "100px",
             className: "text-center",
           },
-          { data: "quarter" },
+          { data: "quarter", className: "text-center" },
         ],
         language: {
           emptyTable: "No data available in table",
