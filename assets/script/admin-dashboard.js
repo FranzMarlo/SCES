@@ -114,8 +114,8 @@ function initializeBarChart(labels, counts) {
         {
           data: counts,
           backgroundColor: colors,
-          borderColor: "#c964f9",
-          borderWidth: 1,
+          borderColor: "#00000",
+          borderWidth: 2,
         },
       ],
     },

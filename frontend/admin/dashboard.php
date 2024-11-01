@@ -82,7 +82,8 @@ $page = 'Home';
       </div>
     </div>
   </div>
-  <script src="/SCES/assets/script/admin-dashboard.js"></script>
+  
   <?php
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
   ?>
+  <script src="/SCES/assets/script/admin-dashboard.js"></script>

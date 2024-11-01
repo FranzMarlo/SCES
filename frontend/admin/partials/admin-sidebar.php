@@ -16,6 +16,12 @@
                         <span class="text">Home</span>
                     </a>
                 </li>
+                <li class="<?= $current_page == 'profile.php' ? 'active' : '' ?>">
+                    <a href="/SCES/frontend/admin/profile.php">
+                        <i class="fa-solid fa-user icon"></i>
+                        <span class="text">My Profile</span>
+                    </a>
+                </li>
                 <li class="<?= in_array($current_page, ['subject.php', 'quizzes.php']) ? 'active' : '' ?>">
                     <a href="javascript:void(0)">
                         <i class="fa-solid fa-briefcase icon"></i>
@@ -38,29 +44,24 @@
                     </ul>
                 </li>
                 <li
-                    class="<?= in_array($current_page, ['student-list.php', 'student-score.php', 'student-grade.php']) ? 'active' : '' ?>">
+                    class="<?= in_array($current_page, ['section.php', 'student-list.php', 'student-section.php']) ? 'active' : '' ?>">
                     <a href="javascript:void(0)">
                         <i class="fa-solid fa-user-graduate icon"></i>
                         <span class="text">Students</span>
                         <i class="fa-solid fa-chevron-down arrow"></i>
                     </a>
                     <ul class="sub-menu">
+                        <li
+                            class="<?= in_array($current_page, ['section.php', 'student-section.php']) ? 'active' : '' ?>">
+                            <a href="/SCES/frontend/admin/section.php">
+                                <i class="fa-solid fa-users-rectangle icon"></i>
+                                <span class="text">Sections</span>
+                            </a>
+                        </li>
                         <li class="<?= $current_page == 'student-list.php' ? 'active' : '' ?>">
                             <a href="/SCES/frontend/admin/student-list.php">
                                 <i class="fa-solid fa-list icon"></i>
                                 <span class="text">Student List</span>
-                            </a>
-                        </li>
-                        <li class="<?= $current_page == 'student-score.php' ? 'active' : '' ?>">
-                            <a href="/SCES/frontend/admin/student-score.php">
-                                <i class="fa-solid fa-list-ol icon"></i>
-                                <span class="text">Student Score</span>
-                            </a>
-                        </li>
-                        <li class="<?= $current_page == 'student-grade.php' ? 'active' : '' ?>">
-                            <a href="/SCES/frontend/admin/student-grade.php">
-                                <i class="fa-solid fa-chart-pie icon"></i>
-                                <span class="text">Student Grade</span>
                             </a>
                         </li>
                     </ul>
