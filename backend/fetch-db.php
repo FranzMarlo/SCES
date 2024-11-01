@@ -656,7 +656,8 @@ class fetchClass extends db_connect
         grade.grade_id,
         grade.grade,
         grade.remarks,
-        grade.quarter
+        grade.quarter,
+        grade.student_id
     FROM
         grade_tbl grade
     INNER JOIN
@@ -665,10 +666,8 @@ class fetchClass extends db_connect
         section_tbl section ON section.section_id = subject.section_id
     INNER JOIN 
         level_tbl level ON level.level_id = section.level_id
-    LEFT JOIN 
-        student_tbl student ON student.section_id = section.section_id
     WHERE 
-        student.student_id = ?
+        grade.student_id = ?
     AND
         subject.subject_id = ?
     ORDER BY
@@ -3080,6 +3079,32 @@ class fetchClass extends db_connect
             return $quizCount['quiz_count'];
         } else {
             return 0;
+        }
+    }
+
+    public function getGradeDetails($gradeId)
+    {
+        $query = $this->conn->prepare(
+            "SELECT
+                *
+            FROM
+                grade_tbl
+            WHERE
+                grade_id = ?
+            "
+        );
+        $query->bind_param("s", $gradeId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($result->num_rows > 0) {
+                $grade = $result->fetch_assoc();
+
+                return $grade;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 }

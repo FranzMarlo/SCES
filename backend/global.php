@@ -1351,8 +1351,44 @@ if (isset($_POST['submitType'])) {
             $addGrade = $db->addGrade($studentId, $subjectId, $studentGrade, $remarks, $quarter);
             if ($addGrade != false) {
                 echo '200';
+            } else {
+                echo '400';
             }
-            else{
+        }
+    } else if ($_POST['submitType'] === 'editGrade') {
+        $gradeId = $_POST['editGradeId'];
+        $studentId = $_POST['editStudentGradeId'];
+        $subjectId = $_POST['editSubjectGradeId'];
+        $editQuarter = $_POST['editQuarterHolder'];
+        $editGrade = validate($_POST['editGrade']);
+        $quarter = validate($_POST['editGradeQuarter']);
+        $checkGrade = $db->checkGrade($studentId, $subjectId, $quarter);
+        if ($checkGrade->num_rows > 0 && $editQuarter != $quarter) {
+            echo '491';
+        } else if (empty($editGrade)) {
+            echo '492';
+        } else if ($editGrade < 0) {
+            echo '493';
+        } else if ($editGrade > 100) {
+            echo '494';
+        } else if (empty($quarter) || $quarter == 'Not Set') {
+            echo '495';
+        } else {
+            if ($editGrade >= 90) {
+                $remarks = 'Outstanding';
+            } else if ($editGrade >= 85) {
+                $remarks = 'Very Good';
+            } else if ($editGrade >= 80) {
+                $remarks = 'Good';
+            } else if ($editGrade >= 75) {
+                $remarks = 'Fair';
+            } else {
+                $remarks = 'Failed';
+            }
+            $updateGrade = $db->editGrade($gradeId, $editGrade, $remarks, $quarter);
+            if ($updateGrade != false) {
+                echo '200';
+            } else {
                 echo '400';
             }
         }

@@ -2700,6 +2700,112 @@ $("#addGradeForm").on("submit", function (e) {
   });
 });
 
+$("#editGradeForm").on("submit", function (e) {
+  e.preventDefault();
+
+  var formData = new FormData(this);
+  formData.append("submitType", "editGrade");
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Subject Grade Updated For Student",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                document.getElementById("studentModal").style.display = "flex";
+                addGradeModal.style.display = "none";
+                if ($.fn.DataTable.isDataTable("#gradesTable")) {
+                  $("#gradesTable").DataTable().ajax.reload(null, false); // Keep the current page
+                }
+              }
+            });
+          }
+        );
+      } else if (response == "491") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Subject Grade For Selected Quarter Already Uploaded",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "492") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Subject Grade For Student Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "493") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Subject Grade For Student Cannot Be Lower Than 0",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "494") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Subject Grade For Student Cannot Be Higher Than 100",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "495") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Quarter For Subject Grade",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Grade Upload Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
 $("#addQuiz").on("submit", function (e) {
   e.preventDefault();
   var quizNumber = $("#quizNumber").val();

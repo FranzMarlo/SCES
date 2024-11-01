@@ -911,13 +911,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $totalTeachers = $fetchDb->fetchTotalTeachersWithFilter($year, $gradeLevel);
         $totalLessons = $fetchDb->fetchTotalLessonsWithFilter($year, $gradeLevel);
         $totalQuizzes = $fetchDb->fetchTotalQuizzesWithFilter($year, $gradeLevel);
-        
+
         $panelData['totalStudents'] = $totalStudents;
         $panelData['totalTeachers'] = $totalTeachers;
         $panelData['totalLessons'] = $totalLessons;
         $panelData['totalQuizzes'] = $totalQuizzes;
         echo json_encode($panelData);
 
+    } elseif ($submitType === 'fetchGradeDetails') {
+        $gradeId = $_POST['grade_id'];
+        $grade = $fetchDb->getGradeDetails($gradeId);
+        if ($grade) {
+            echo json_encode($grade);
+        } else {
+            echo json_encode(['error' => 'No student found']);
+        }
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

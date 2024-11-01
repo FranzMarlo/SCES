@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var addGradeModal = document.getElementById("addGradeModal");
   var addGradeForm = document.getElementById("addGradeForm");
   var closeGradeModal = document.getElementById("closeGradeModal");
+  var editGradeModal = document.getElementById('editGradeModal');
+  var closeEditGradeModal = document.getElementById('closeEditGradeModal');
+  var editGradeForm = document.getElementById('editGradeForm');
 
   addLessonBtn.onclick = function () {
     addLessonModal.style.display = "flex";
@@ -593,6 +596,17 @@ document.addEventListener("DOMContentLoaded", function () {
             className: "text-center",
           },
           { data: "quarter", className: "text-center" },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="center-image">
+            <button class="more-btn" data-grade-id="${row.grade_id}"><i class="fa-solid fa-pen"></i></button>
+            </div>`;
+            },
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+          },
         ],
         language: {
           emptyTable: "No data available in table",
@@ -603,6 +617,72 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   }
+
+  document
+    .getElementById("gradesTable")
+    .addEventListener("click", function (event) {
+      if (event.target.closest(".more-btn")) {
+        const btn = event.target.closest(".more-btn");
+        const gradeId = btn.getAttribute("data-grade-id");
+
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=fetchGradeDetails&grade_id=${gradeId}`,
+        })
+          .then((response) => response.json())
+          .then((grade) => {
+            if (!grade || Object.keys(grade).length === 0) {
+              showAlert("error", "Server Error", "Grade Data Not Found");
+              return;
+            }
+
+            Object.keys(grade).forEach((key) => {
+              if (grade[key] === null || grade[key] === "") {
+                grade[key] = "Not Set";
+              }
+            });
+
+            const editGradeId = document.getElementById('editGradeId');
+            const editStudentGradeId = document.getElementById('editStudentGradeId');
+            const editSubjectGradeId = document.getElementById('editSubjectGradeId');
+            const editQuarterHolder = document.getElementById('editQuarterHolder');
+            const editGrade = document.getElementById('editGrade');
+            const editGradeQuarter = document.getElementById('editGradeQuarter');
+            
+            
+            editGradeId.value = grade.grade_id;
+            editStudentGradeId.value = grade.student_id;
+            editSubjectGradeId.value = grade.subject_id;
+            editGrade.value = grade.grade;
+            editQuarterHolder.value = grade.quarter;
+            editGradeQuarter.value = grade.quarter;
+
+           document.getElementById("studentModal").style.display = "none";
+           editGradeModal.style.display = "flex"
+          })
+          .catch((error) => {
+            showAlert("error", "Server Error", error);
+          });
+      }
+    });
+
+    closeEditGradeModal.onclick = function () {
+      document.getElementById("studentModal").style.display = "flex";
+      editGradeModal.style.display = "none";
+      editGradeForm.reset();
+    };
+    window.onclick = function (event) {
+      if (event.target == editGradeModal) {
+        document.getElementById("studentModal").style.display = "flex";
+        editGradeModal.style.display = "none";
+        editGradeForm.reset();
+      }
+    };
+
+
 
   function populatePanelData(studentId) {
     const data = new FormData();

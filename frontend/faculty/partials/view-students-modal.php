@@ -162,6 +162,7 @@
                             <th>Grade</th>
                             <th>Remarks</th>
                             <th>Quarter</th>
+                            <th>Edit Grade</th>
                         </tr>
                     </thead>
                 </table>
@@ -274,6 +275,41 @@
         </div>
         <div class="form-group">
           <button type="submit" class="save-btn">Upload Grade</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="editGradeModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Edit Subject Grade For Student</h2>
+      <span class="close-btn" id="closeEditGradeModal">&times;</span>
+    </div>
+    <div class="modal-body">
+      <form id="editGradeForm">
+        <input type="hidden" name="editGradeId" id="editGradeId">
+        <input type="hidden" name="editStudentGradeId" id="editStudentGradeId">
+        <input type="hidden" name="editSubjectGradeId" id="editSubjectGradeId">
+        <input type="hidden" name="editQuarterHolder" id="editQuarterHolder">
+        <div class="form-group">
+          <label for="editGrade">Student Grade:</label>
+          <input type="number" id="editGrade" name="editGrade" placeholder="Enter Grade">
+        </div>
+        <div class="form-group">
+          <label for="editGradeQuarter">Select Quarter:</label>
+            <select name="editGradeQuarter" id="editGradeQuarter">
+              <option value="Not Set" selected>Select Quarter</option>
+              <option value="1st">1st Quarter</option>
+              <option value="2nd">2nd Quarter</option>
+              <option value="3rd">3rd Quarter</option>
+              <option value="4th">4th Quarter</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="save-btn">Save Changes</button>
         </div>
       </form>
     </div>

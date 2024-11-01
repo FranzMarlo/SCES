@@ -1985,6 +1985,17 @@ class globalClass extends db_connect
         }
     }
 
+    public function editGrade($gradeId, $editGrade, $remarks, $quarter)
+    {
+        $query = $this->conn->prepare("UPDATE grade_tbl SET grade = ?, remarks = ?, quarter = ? WHERE grade_id = ?");
+        $query->bind_param("ssss", $editGrade, $remarks, $quarter, $gradeId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 
 
