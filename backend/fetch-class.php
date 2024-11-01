@@ -916,6 +916,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode(['error' => 'No student found']);
         }
+    } else if ($submitType === 'fetchAllStudentsDataTable') {
+
+        $students = $fetchDb->getStudentMasterlist();
+
+        echo json_encode($students);
+    } else if ($submitType === 'masterlistPanelData') {
+        $sectionId = $_POST['section_id'];
+        $studentId = $_POST['student_id'];
+
+        $lrn = $fetchDb->getStudentLRN($studentId);
+        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId, $sectionId);
+        $totalPending = $fetchDb->facultyGetPendingQuizzesCount($sectionId, $studentId);
+        $averageScore = $fetchDb->facultyGetAverageScore($studentId);
+        $generalAverage = $fetchDb->computeStudentGWAByLRN($lrn);
+
+        $panelData['totalCompleted'] = $totalCompleted;
+        $panelData['totalPending'] = $totalPending;
+        $panelData['averageScore'] = $averageScore;
+        $panelData['generalAverage'] = $generalAverage;
+        echo json_encode($panelData);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

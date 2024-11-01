@@ -3097,6 +3097,53 @@ class fetchClass extends db_connect
             return false;
         }
     }
+
+    public function getStudentMasterlist()
+{
+    $query = $this->conn->prepare("
+        SELECT
+            master.lrn,
+            student.student_id,
+            master.student_lname,
+            master.student_fname,
+            master.student_mname,
+            master.age,
+            master.gender,
+            student.profile_image,
+            master.grade_level,
+            master.section,
+            student.section_id
+        FROM
+            student_masterlist master
+        LEFT JOIN
+            student_tbl student ON master.lrn = student.lrn
+        ORDER BY
+            master.student_lname ASC
+    ");
+
+    if ($query->execute()) {
+        $result = $query->get_result();
+        $students = $result->fetch_all(MYSQLI_ASSOC);
+
+        foreach ($students as &$student) {
+            $student['student_lname'] = ucwords(strtolower(trim($student['student_lname'])));
+            $student['student_fname'] = ucwords(strtolower(trim($student['student_fname'])));
+            $student['student_mname'] = ucwords(strtolower(trim($student['student_mname'])));
+            $student['gender'] = ucwords(strtolower(trim($student['gender'])));
+            $student['grade_level'] = ucwords(strtolower(trim($student['grade_level'])));
+            $student['section'] = ucwords(strtolower(trim($student['section'])));
+            
+            if (is_null($student['profile_image']) || $student['profile_image'] === '') {
+                $student['profile_image'] = 'default-profile.png';
+            }
+        }
+
+        return $students;
+    } else {
+        return false;
+    }
+}
+
 }
 
 

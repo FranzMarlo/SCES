@@ -1041,3 +1041,9 @@ table.dataTable tbody td.dataTables_empty {
 .text-center{
   text-align: center!important;
 }
+#allStudentsPanel{
+  display: flex;
+}
+.blue {
+  background-color: #c5e3ff;
+}

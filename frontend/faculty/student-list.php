@@ -19,22 +19,18 @@ $page = '';
             <?php
             include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-header.php';
             ?>
-            <div class="panel-title">
-                <h1>Students Masterlist</h1>
+            <div class="title-box">
+                        <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
+                        <h1>Student Master List</h1>
             </div>
             <div class="panel">
-                <div class="panel-tab" id="sectionStudentsPanel">
-                    <div class="title-box">
-                        <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
-                        <h1>Student List</h1>
-                    </div>
+                <div class="panel-tab" id="allStudentsPanel">
                     <div class="table-responsive">
                         <table id="studentsTable" class="display data-table">
                             <thead>
-                                <tr>
+                                <tr class="blue">
                                     <th>Student Icon</th>
                                     <th>LRN</th>
-                                    <th>Student ID</th>
                                     <th>Last Name</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
