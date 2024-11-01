@@ -571,11 +571,11 @@ document.addEventListener("DOMContentLoaded", function () {
           dataSrc: "",
         },
         columns: [
-          { data: "quiz_number" },
-          { data: "subject" },
-          { data: "title" },
-          { data: "score" },
-          { data: "item_number" },
+          { data: "quiz_number", className: "text-center" },
+          { data: "subject", className: "text-center" },
+          { data: "title", className: "text-center" },
+          { data: "score", className: "text-center" },
+          { data: "item_number", className: "text-center" },
           {
             data: "remarks",
             render: function (data) {
@@ -588,7 +588,7 @@ document.addEventListener("DOMContentLoaded", function () {
               return `<span class="${className}">${data}</span>`;
             },
           },
-          { data: "time" },
+          { data: "time", className: "text-center" },
         ],
         language: {
           emptyTable: "No data available in table",
@@ -650,8 +650,8 @@ document.addEventListener("DOMContentLoaded", function () {
           dataSrc: "",
         },
         columns: [
-          { data: "subject" },
-          { data: "grade" },
+          { data: "subject", className: "text-center" },
+          { data: "grade", className: "text-center" },
           {
             data: "remarks",
             render: function (data) {
@@ -668,7 +668,7 @@ document.addEventListener("DOMContentLoaded", function () {
             width: "100px",
             className: "text-center",
           },
-          { data: "quarter" },
+          { data: "quarter", className: "text-center" },
         ],
         language: {
           emptyTable: "No data available in table",
@@ -705,77 +705,6 @@ document.addEventListener("DOMContentLoaded", function () {
           data.generalAverage || "N/A";
       })
       .catch((error) => {
-        function getStudentGWA(studentId) {
-          const data = new FormData();
-          data.append("submitType", "facultyGetGWA");
-          data.append("student_id", studentId);
-
-          fetch("/SCES/backend/fetch-class.php", {
-            method: "POST",
-            body: data,
-          })
-            .then((response) => response.json())
-            .then((studentData) => {
-              // Check if studentData contains N/A values
-              const hasNoData = studentData.some(
-                (record) =>
-                  record.gwa === "N/A" &&
-                  record.grade_section === "N/A" &&
-                  record.remarks === "N/A"
-              );
-
-              if (hasNoData) {
-                studentPerformance.innerText = "No Data";
-                studentSuccess.innerText = "No Data";
-                studentRemarks.innerText = "No Data";
-                studentGWA.innerText = "No Data";
-
-                remarksImg.src = "/SCES/assets/images/not-found.png";
-                performanceImg.src = "/SCES/assets/images/not-found.png";
-                return;
-              }
-
-              const predictiveData = {
-                gwa_records: studentData, // Send the entire studentData array
-              };
-
-              // Send the predictive data to Python API
-              fetch("http://127.0.0.1:5000/predict", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(predictiveData),
-              })
-                .then((response) => response.json())
-                .then((predictionData) => {
-                  const remarks = predictionData.predicted_remarks;
-                  const performance = predictionData.predicted_performance;
-
-                  studentPerformance.innerText =
-                    predictionData.predicted_performance;
-                  studentSuccess.innerText =
-                    predictionData.predicted_academic_success_rate;
-                  studentRemarks.innerText = predictionData.predicted_remarks;
-                  studentGWA.innerText = predictionData.predicted_next_gwa;
-
-                  remarksImg.src = getRemarksIcon(remarks);
-                  performanceImg.src = getPerformanceIcon(performance);
-                })
-                .catch((error) => {
-                  studentPerformance.innerText = "No Data";
-                  studentSuccess.innerText = "No Data";
-                  studentRemarks.innerText = "No Data";
-                  studentGWA.innerText = "No Data";
-
-                  remarksImg.src = "/SCES/assets/images/not-found.png";
-                  performanceImg.src = "/SCES/assets/images/not-found.png";
-                });
-            })
-            .catch((error) => {
-              console.error("Error fetching student data:", error);
-            });
-        }
         console.error("Error fetching panel data:", error);
       });
   }
