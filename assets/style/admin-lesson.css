@@ -633,6 +633,9 @@ table.dataTable tbody td.dataTables_empty {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+#viewQuizWindow {
+  overflow-y: auto; /* Enable vertical scrolling */
+}
 .modal-content-student {
   display: flex;
   flex-direction: column;

@@ -10,9 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var addGradeModal = document.getElementById("addGradeModal");
   var addGradeForm = document.getElementById("addGradeForm");
   var closeGradeModal = document.getElementById("closeGradeModal");
-  var editGradeModal = document.getElementById('editGradeModal');
-  var closeEditGradeModal = document.getElementById('closeEditGradeModal');
-  var editGradeForm = document.getElementById('editGradeForm');
+  var editGradeModal = document.getElementById("editGradeModal");
+  var closeEditGradeModal = document.getElementById("closeEditGradeModal");
+  var editGradeForm = document.getElementById("editGradeForm");
 
   addLessonBtn.onclick = function () {
     addLessonModal.style.display = "flex";
@@ -515,6 +515,17 @@ document.addEventListener("DOMContentLoaded", function () {
             },
           },
           { data: "time" },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="center-image">
+            <button class="more-btn" data-student-id="${studentId}" data-quiz-id="${row.quiz_id}" data-quiz-taker="${row.full_name}"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>`;
+            },
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+          },
         ],
         language: {
           emptyTable: "No data available in table",
@@ -525,6 +536,115 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   }
+
+  document
+    .getElementById("quizScoresTable")
+    .addEventListener("click", function (event) {
+      if (event.target.closest(".more-btn")) {
+        const btn = event.target.closest(".more-btn");
+        const studentId = btn.getAttribute("data-student-id");
+        const quizId = btn.getAttribute("data-quiz-id");
+        const quizTaker = btn.getAttribute("data-quiz-taker");
+
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=fetchStudentQuizHistory&student_id=${studentId}&quiz_id=${quizId}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              showAlert("error", "Student has not answered the quiz yet");
+              return;
+            }
+            const quizTakerSpan = document.getElementById("quizTaker");
+            quizTakerSpan.textContent = quizTaker;
+
+            const viewQuizModal = document.getElementById("viewQuizModal");
+
+            viewQuizModal.querySelector(
+              ".modal-header-text h1"
+            ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
+
+            viewQuizModal.querySelector(
+              ".modal-icon-container img"
+            ).src = `/SCES/assets/images/${data.icon}`;
+
+            const modalHeaderBg =
+              viewQuizModal.querySelector(".modal-header-bg");
+            modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
+
+            const questionsContainer = viewQuizModal.querySelector(
+              "#viewQuestionsContainer"
+            );
+            questionsContainer.innerHTML = "";
+
+            data.questions.forEach((question, index) => {
+              const quizItem = document.createElement("div");
+              quizItem.classList.add("quiz-item");
+
+              const questionBox = document.createElement("div");
+              questionBox.classList.add("question-box");
+              questionBox.setAttribute(
+                "data-question-id",
+                question.question_id
+              );
+              questionBox.innerHTML = `<span><strong>${index + 1}.</strong> ${
+                question.question
+              }</span>`;
+              quizItem.appendChild(questionBox);
+
+              question.choices.forEach((choice, i) => {
+                const choiceLetter = String.fromCharCode(65 + i);
+                const choiceElement = document.createElement("div");
+                choiceElement.classList.add("quiz-ans-fixed");
+
+                if (choice.is_correct === 1) {
+                  choiceElement.classList.add("correct");
+                } else {
+                  choiceElement.classList.add("wrong");
+                }
+
+                if (choice.isSelected) {
+                  choiceElement.classList.add(data.subject_code.toLowerCase());
+                }
+
+                choiceElement.innerHTML = `
+              <strong>${choiceLetter}.</strong>&nbsp;${choice.choice}
+            `;
+
+                quizItem.appendChild(choiceElement);
+              });
+
+              questionsContainer.appendChild(quizItem);
+            });
+
+            const closeButton = document.getElementById("close-quiz");
+            const closeViewQuizModal =
+              document.getElementById("closeViewQuizModal");
+
+            closeButton.onclick = () => {
+              viewQuizModal.style.display = "none";
+              viewQuizModal.scrollTop = 0;
+              document.getElementById("studentModal").style.display = "flex";
+            };
+
+            closeViewQuizModal.onclick = () => {
+              viewQuizModal.style.display = "none";
+              viewQuizModal.scrollTop = 0;
+              document.getElementById("studentModal").style.display = "flex";
+            };
+
+            document.getElementById("studentModal").style.display = "none";
+            viewQuizModal.style.display = "block";
+          })
+          .catch((error) => {
+            showAlert("error", "Server Error", error);
+          });
+      }
+    });
 
   function initializeGradesTable(studentId) {
     if ($.fn.dataTable.isDataTable("#gradesTable")) {
@@ -645,14 +765,17 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             });
 
-            const editGradeId = document.getElementById('editGradeId');
-            const editStudentGradeId = document.getElementById('editStudentGradeId');
-            const editSubjectGradeId = document.getElementById('editSubjectGradeId');
-            const editQuarterHolder = document.getElementById('editQuarterHolder');
-            const editGrade = document.getElementById('editGrade');
-            const editGradeQuarter = document.getElementById('editGradeQuarter');
-            
-            
+            const editGradeId = document.getElementById("editGradeId");
+            const editStudentGradeId =
+              document.getElementById("editStudentGradeId");
+            const editSubjectGradeId =
+              document.getElementById("editSubjectGradeId");
+            const editQuarterHolder =
+              document.getElementById("editQuarterHolder");
+            const editGrade = document.getElementById("editGrade");
+            const editGradeQuarter =
+              document.getElementById("editGradeQuarter");
+
             editGradeId.value = grade.grade_id;
             editStudentGradeId.value = grade.student_id;
             editSubjectGradeId.value = grade.subject_id;
@@ -660,8 +783,8 @@ document.addEventListener("DOMContentLoaded", function () {
             editQuarterHolder.value = grade.quarter;
             editGradeQuarter.value = grade.quarter;
 
-           document.getElementById("studentModal").style.display = "none";
-           editGradeModal.style.display = "flex"
+            document.getElementById("studentModal").style.display = "none";
+            editGradeModal.style.display = "flex";
           })
           .catch((error) => {
             showAlert("error", "Server Error", error);
@@ -669,20 +792,18 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    closeEditGradeModal.onclick = function () {
+  closeEditGradeModal.onclick = function () {
+    document.getElementById("studentModal").style.display = "flex";
+    editGradeModal.style.display = "none";
+    editGradeForm.reset();
+  };
+  window.onclick = function (event) {
+    if (event.target == editGradeModal) {
       document.getElementById("studentModal").style.display = "flex";
       editGradeModal.style.display = "none";
       editGradeForm.reset();
-    };
-    window.onclick = function (event) {
-      if (event.target == editGradeModal) {
-        document.getElementById("studentModal").style.display = "flex";
-        editGradeModal.style.display = "none";
-        editGradeForm.reset();
-      }
-    };
-
-
+    }
+  };
 
   function populatePanelData(studentId) {
     const data = new FormData();
@@ -1130,9 +1251,17 @@ document.addEventListener("DOMContentLoaded", function () {
               questionsContainer.appendChild(quizItem);
             });
             const closeButton = document.getElementById("close-quiz");
+            const closeViewQuizModal =
+              document.getElementById("closeViewQuizModal");
+            const viewQuizWindow = document.getElementById("viewQuizWindow");
 
-            closeButton.onclick = () => closeQuiz(viewQuizModal);
-
+            closeButton.onclick = () => {
+              closeQuiz(viewQuizModal);
+            };
+            closeViewQuizModal.onclick = () => {
+              closeQuiz(viewQuizModal);
+            };
+            viewQuizWindow.scrollTop = 0;
             viewQuizModal.style.display = "block";
             document.body.style.overflow = "hidden";
           })
@@ -1141,12 +1270,6 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
     });
-
-  const closeViewQuizModal = document.getElementById("closeViewQuizModal");
-  const viewQuizModal = document.getElementById("viewQuizModal");
-  closeViewQuizModal.addEventListener("click", function () {
-    closeQuiz(viewQuizModal);
-  });
 
   function closeQuiz(modal) {
     modal.style.display = "none";
