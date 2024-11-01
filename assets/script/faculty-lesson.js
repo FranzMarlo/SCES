@@ -519,7 +519,7 @@ document.addEventListener("DOMContentLoaded", function () {
             data: null,
             render: function (data, type, row) {
               return `<div class="center-image">
-            <button class="more-btn" data-student-id="${studentId}" data-quiz-id="${row.quiz_id}" data-quiz-taker="${row.full_name}"><i class="fa-solid fa-chevron-right"></i></button>
+            <button class="more-btn" data-student-id="${row.student_id}" data-quiz-id="${row.quiz_id}" data-quiz-taker="${row.full_name}"><i class="fa-solid fa-chevron-right"></i></button>
             </div>`;
             },
             orderable: false,

@@ -1214,6 +1214,7 @@ class fetchClass extends db_connect
         quiz.quiz_number,
         quiz.title,
         score.score,
+        student.student_id,
         CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
         score.item_number,
         score.remarks,
