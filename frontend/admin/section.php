@@ -1,6 +1,6 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-head.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/data-tables.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/helper.php';
 $page = '';
 ?>
@@ -10,15 +10,15 @@ $page = '';
 
 <body>
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-popup.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-popup.php';
     ?>
     <div class="container">
         <?php
-        include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-sidebar.php';
+        include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-sidebar.php';
         ?>
         <div class="content">
             <?php
-            include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-header.php';
+            include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-header.php';
             ?>
             <div class="section-panel">
                 <div class="panel-title">
@@ -29,7 +29,7 @@ $page = '';
                 <div class="section-container <?php echo empty($sections) ? 'no-data-box-centered' : ''; ?>">
                     <?php if ($sections): ?>
                         <?php foreach ($sections as $section): ?>
-                            <a href="/SCES/frontend/faculty/student-section.php?section=<?php echo $section['section_id']; ?>" class="section-item">
+                            <a href="/SCES/frontend/admin/student-section.php?section=<?php echo $section['section_id']; ?>" class="section-item">
                                 <div class="icon-box <?php echo $section['short']; ?>">
                                     <div class="icon-text-in">
                                         <span><?php echo htmlspecialchars($section['grade_level'] . ' - ' . $section['section']); ?></span>
@@ -55,5 +55,5 @@ $page = '';
         </div>
     </div>
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
     ?>
