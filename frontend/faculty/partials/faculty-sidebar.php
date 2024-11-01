@@ -16,6 +16,12 @@
                         <span class="text">Home</span>
                     </a>
                 </li>
+                <li class="<?= $current_page == 'profile.php' ? 'active' : '' ?>">
+                    <a href="/SCES/frontend/faculty/profile.php">
+                        <i class="fa-solid fa-user icon"></i>
+                        <span class="text">My Profile</span>
+                    </a>
+                </li>
                 <li class="<?= in_array($current_page, ['subject.php', 'quizzes.php']) ? 'active' : '' ?>">
                     <a href="javascript:void(0)">
                         <i class="fa-solid fa-briefcase icon"></i>
@@ -45,7 +51,8 @@
                         <i class="fa-solid fa-chevron-down arrow"></i>
                     </a>
                     <ul class="sub-menu">
-                        <li class="<?= in_array($current_page, ['section.php', 'student-section.php']) ? 'active' : '' ?>">
+                        <li
+                            class="<?= in_array($current_page, ['section.php', 'student-section.php']) ? 'active' : '' ?>">
                             <a href="/SCES/frontend/faculty/section.php">
                                 <i class="fa-solid fa-users-rectangle icon"></i>
                                 <span class="text">Sections</span>

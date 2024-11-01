@@ -4,7 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
 $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/student-section.css" />
-<title>Student Score | SCES Online Learning Platform</title>
+<title>Student List | SCES Online Learning Platform</title>
 </head>
 
 <body>
@@ -21,7 +21,7 @@ $page = '';
             ?>
             <div class="title-box">
                         <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
-                        <h1>Student Master List</h1>
+                        <h1>Student Masterlist</h1>
             </div>
             <div class="panel">
                 <div class="panel-tab" id="allStudentsPanel">
