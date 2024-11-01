@@ -972,7 +972,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData = $fetchDb->facultyQuizCompletion($teacherId);
 
         echo json_encode($panelData);
-    }else {
+    } else if ($submitType === 'mainDashboardDonutChartData') {
+
+        $panelData = $fetchDb->mainQuizCompletion();
+
+        echo json_encode($panelData);
+    } else if ($submitType === 'mainDashboardBarChartData') {
+        $panelData = $fetchDb->getStudentsByYear(); // or any function that fetches the required data
+
+        // Assuming $panelData is an array of student counts grouped by grade level
+        $labels = [];
+        $counts = [];
+
+        // Prepare labels and counts for the bar chart
+        foreach ($panelData as $data) {
+            $labels[] = $data['grade_level']; // Adjust this key based on your actual array structure
+            $counts[] = $data['student_count']; // Adjust this key based on your actual array structure
+        }
+
+        echo json_encode(['labels' => $labels, 'counts' => $counts]);
+    } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
 } else {
