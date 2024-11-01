@@ -719,6 +719,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function closeQuiz(modal) {
+    modal.scrollTop = 0;
     modal.style.display = "none";
     document.body.style.overflow = "auto";
   }
