@@ -965,7 +965,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'subjectCodes' => []
             ]);
         }
-    } else {
+    } else if ($submitType === 'facultyQuizCompletion') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+
+        $panelData = $fetchDb->facultyQuizCompletion($teacherId);
+
+        echo json_encode($panelData);
+    }else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
 } else {

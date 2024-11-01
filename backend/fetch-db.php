@@ -3264,6 +3264,41 @@ class fetchClass extends db_connect
         }
     }
 
+    public function facultyQuizCompletion($teacherId)
+    {
+        $emptyValue = [
+            'active' => 0,
+            'inactive' => 0,
+            'completed' => 0
+        ];
+
+        $quizzesQuery = $this->conn->prepare("
+        SELECT 
+            SUM(CASE WHEN quiz.status = 'Active' THEN 1 ELSE 0 END) AS active_count,
+            SUM(CASE WHEN quiz.status = 'Inactive' THEN 1 ELSE 0 END) AS inactive_count,
+            SUM(CASE WHEN quiz.status = 'Completed' THEN 1 ELSE 0 END) AS completed_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject ON quiz.subject_id = subject.subject_id
+        WHERE 
+            subject.teacher_id = ?
+    ");
+        $quizzesQuery->bind_param("s", $teacherId);
+
+        // Execute the query
+        if ($quizzesQuery->execute()) {
+            $result = $quizzesQuery->get_result();
+            $quizData = $result->fetch_assoc();
+
+            // Return the count of quizzes based on their status
+            return [
+                'active' => (int) $quizData['active_count'],
+                'inactive' => (int) $quizData['inactive_count'],
+                'completed' => (int) $quizData['completed_count']
+            ];
+        } else {
+            return $emptyValue;  // Return default values in case of failure
+        }
+    }
 
 }
 

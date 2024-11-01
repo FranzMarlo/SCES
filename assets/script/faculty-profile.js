@@ -200,6 +200,88 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Error fetching data for bar chart:", status, error);
     },
   });
+
+  $.ajax({
+    url: "/SCES/backend/fetch-class.php",
+    type: "POST",
+    data: {
+      submitType: "facultyQuizCompletion",
+    },
+    dataType: "json",
+    success: function (response) {
+      var totalCompleted = response.completed;
+      var totalInactive = response.inactive;
+      var totalActive = response.active;
+
+      initializeSubjectPieChart(totalCompleted, totalInactive, totalActive);
+    },
+    error: function (xhr, status, error) {
+      console.error("Error fetching data: " + error);
+    },
+  });
+  function initializeSubjectPieChart(
+    totalCompleted,
+    totalInactive,
+    totalActive
+  ) {
+    var ctxPie = document.getElementById("pieChart").getContext("2d");
+
+    // Destroy existing chart if it exists
+    if (ctxPie.chart) {
+      ctxPie.chart.destroy();
+    }
+
+    // Handle case where there's no data
+    if (totalCompleted == 0 && totalInactive == 0 && totalActive == 0) {
+      showAlert("info", "No Data Available For Subject");
+      return;
+    }
+
+    const pieChart = new Chart(ctxPie, {
+      type: "pie", // Changed from 'doughnut' to 'pie'
+      data: {
+        labels: ["Completed", "Inactive", "Active"],
+        datasets: [
+          {
+            data: [totalCompleted, totalInactive, totalActive],
+            backgroundColor: ["#d2ebc4", "#fcfd95", "#c5e3ff"],
+            borderWidth: 2,
+            borderColor: "#000",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "bottom",
+          },
+          title: {
+            display: true,
+            text: "Quizzes By Status",
+            font: {
+              size: 17,
+              weight: "bold",
+            },
+            padding: {
+              top: 5,
+              bottom: 10,
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                return "Quizzes: " + tooltipItem.raw;
+              },
+            },
+          },
+        },
+      },
+    });
+
+    ctxPie.chart = pieChart; // Save chart instance to the context
+  }
 });
 
 function showAlert(icon, title, message) {

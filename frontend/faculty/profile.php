@@ -185,7 +185,6 @@ $page = '';
                                             <ul>
                                                 <li><a href="#">Edit</a></li>
                                                 <li><a href="#">Archive</a></li>
-                                                <li><a href="#">View Details</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -208,7 +207,7 @@ $page = '';
                                 <?php $totalTeacherLesson = $db->getTotalTeacherLesson($teacherId); ?>
                                 <img src="/SCES/assets/images/quiz-lesson.png" alt="quiz-lesson.png">
                                 <div class="panel-col">
-                                    <p>Total Lessons</p>
+                                    <p>Uploaded Lessons</p>
                                     <span><?php echo htmlspecialchars($totalTeacherLesson); ?></span>
                                 </div>
                             </div>
@@ -216,7 +215,7 @@ $page = '';
                                 <?php $totalTeacherStudent = $db->getTotalTeacherStudent($teacherId); ?>
                                 <img src="/SCES/assets/images/quiz-grade-section.png" alt="quiz-grade-section.png">
                                 <div class="panel-col">
-                                    <p>Total Students</p>
+                                    <p>Handled Students</p>
                                     <span><?php echo htmlspecialchars($totalTeacherStudent); ?></span>
                                 </div>
                             </div>
