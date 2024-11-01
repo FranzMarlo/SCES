@@ -216,7 +216,7 @@
 </div>
 
 <div id="viewQuizModal" class="modal-student">
-    <div class="modal-content-quiz" id="viewQuizWindow">
+    <div class="modal-content-quiz">
         <div class="modal-head-quiz">
             <div class="student-info">
                 <span><strong id="quizTaker"></strong></span>

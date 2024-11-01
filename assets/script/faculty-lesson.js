@@ -626,14 +626,14 @@ document.addEventListener("DOMContentLoaded", function () {
               document.getElementById("closeViewQuizModal");
 
             closeButton.onclick = () => {
-              viewQuizModal.style.display = "none";
               viewQuizModal.scrollTop = 0;
+              viewQuizModal.style.display = "none";
               document.getElementById("studentModal").style.display = "flex";
             };
 
             closeViewQuizModal.onclick = () => {
-              viewQuizModal.style.display = "none";
               viewQuizModal.scrollTop = 0;
+              viewQuizModal.style.display = "none";
               document.getElementById("studentModal").style.display = "flex";
             };
 
@@ -1253,7 +1253,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const closeButton = document.getElementById("close-quiz");
             const closeViewQuizModal =
               document.getElementById("closeViewQuizModal");
-            const viewQuizWindow = document.getElementById("viewQuizWindow");
 
             closeButton.onclick = () => {
               closeQuiz(viewQuizModal);
@@ -1261,7 +1260,6 @@ document.addEventListener("DOMContentLoaded", function () {
             closeViewQuizModal.onclick = () => {
               closeQuiz(viewQuizModal);
             };
-            viewQuizWindow.scrollTop = 0;
             viewQuizModal.style.display = "block";
             document.body.style.overflow = "hidden";
           })
@@ -1270,8 +1268,8 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
     });
-
   function closeQuiz(modal) {
+    modal.scrollTop = 0;
     modal.style.display = "none";
     document.body.style.overflow = "auto";
   }
