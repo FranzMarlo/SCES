@@ -1997,6 +1997,69 @@ class globalClass extends db_connect
     }
 
 
+    public function teacherGetQuizzesCount($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        WHERE 
+            teacher.teacher_id = ?
+        AND 
+            quiz.status = 'Completed'
+    ");
+
+        // Bind parameters for sectionId, studentId, and status (pending)
+        $query->bind_param("s", $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc(); // Fetch as associative array
+            return $subjectDetails['quiz_count']; // Return the count of pending quizzes
+        }
+
+        return 0; // Return 0 if no result
+    }
+
+    public function teacherGetPendingQuizzesCount($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        WHERE 
+            teacher.teacher_id = ?
+        AND 
+            quiz.status = 'Inactive'
+    ");
+
+        // Bind parameters for sectionId, studentId, and status (pending)
+        $query->bind_param("s", $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc(); // Fetch as associative array
+            return $subjectDetails['quiz_count']; // Return the count of pending quizzes
+        }
+
+        return 0; // Return 0 if no result
+    }
 
 
 }

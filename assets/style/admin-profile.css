@@ -12,7 +12,7 @@
 }
 .profile-panel .title-box img {
   height: 2.5rem;
-  margin-right: 15px;
+  margin-right: 10px;
 }
 .profile-panel .title-box h1 {
   font-size: 1.5rem;
@@ -265,7 +265,7 @@
 }
 .profile-tab {
   width: 100%;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   padding: 20px;
@@ -446,6 +446,14 @@ table.dataTable tbody td.dataTables_empty {
   width: 50%;
   height: 400px;
   padding: 10px;
+}
+.full-graph {
+  width: 100%;
+  height: 400px;
+  padding: 10px;
+}
+#pieChart {
+  width: 100%;
 }
 #lineChart {
   width: 100%;
@@ -636,7 +644,134 @@ table.dataTable tbody td.dataTables_empty {
 .question-box span {
   font-size: 1.1rem;
 }
+.subject-container {
+  margin-top: 10px;
+  background-color: #f5f5f5;
+  border-radius: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 50px;
+  gap: 40px;
+  border: 2px solid #000;
+  flex-direction: row;
+  width: 100%;
+}
+.subject-item {
+  width: 200px;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+  position: relative;
+}
+.subject-icon {
+  display: flex;
+  border-radius: 30px;
+  border: 2px solid #000;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.subject-icon img {
+  padding: 20px;
+  height: 150px;
+}
+.subject-btn {
+  border-radius: 30px;
+  background-color: #f5f5f5;
+  width: 35px;
+  padding: 5px;
+  border: 2px solid #000;
+  position: absolute;
+  cursor: pointer;
+  top: 10px;
+  right: 10px;
+}
+.hidden-link{
+  display: none;
+}
+.popup-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 0 3px 0 #9c9c9c;
+  border-radius: 10px;
+  list-style: none;
+  padding: 10px;
+  z-index: 5;
+  top: 40px;
+  right: 20px;
+}
+.popup-menu.show {
+  display: block;
+}
+.popup-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.popup-menu li {
+  margin: 5px 0;
+}
+.popup-menu li a {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: black;
+  padding: 5px;
+  display: block;
+}
+.popup-menu li a:hover {
+  background-color: #f0f0f0;
+}
+.subject-title {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px;
+}
+.subject-in-title {
+  display: none;
+}
+.subject-title h1 {
+  font-size: 1.2rem;
+}
+.subject-title span {
+  font-size: 1rem;
+}
+.no-data-box-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 600px;
+}
+.no-data-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.no-data-box img {
+  height: 200px;
+}
+.no-data-box h1 {
+  font-size: 1.2rem;
+}
 @media (width < 1199px) {
+  .item-text {
+    padding: 5px;
+  }
+  .item-text span {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+  }
+  .item-text h6 {
+    font-size: 1.5rem;
+  }
+  .subject-item {
+    width: 28%;
+  }
   .modal-header-text h1 {
     font-size: 1.3rem;
   }
@@ -680,8 +815,30 @@ table.dataTable tbody td.dataTables_empty {
   .graph {
     height: 350px;
   }
+  .full-graph {
+    height: 350px;
+  }
 }
 @media (width < 992px) {
+  .subject-container {
+    padding: 30px;
+    gap: 30px;
+  }
+  .item {
+    gap: 10px;
+  }
+  .item-text {
+    padding: 0;
+  }
+  .item-text span {
+    font-size: 1.1rem;
+  }
+  .item-text h6 {
+    font-size: 1.3rem;
+  }
+  .subject-item {
+    width: 30%;
+  }
   .modal-content {
     width: 80%;
   }
@@ -719,11 +876,39 @@ table.dataTable tbody td.dataTables_empty {
   .graph {
     height: 300px;
   }
+  .full-graph {
+    height: 300px;
+  }
   .side-controller .tab-item {
     font-size: 1rem;
   }
 }
 @media (width < 768px) {
+  .subject-container {
+    gap: 25px;
+    padding: 20px;
+  }
+  .subject-title h1 {
+    font-size: 1.1rem;
+  }
+  .subject-title span {
+    font-size: 0.9rem;
+  }
+  .item {
+    height: 80px;
+  }
+  .item-icon img {
+    height: 50px;
+  }
+  .item-text span {
+    font-size: 1rem;
+  }
+  .item-text h6 {
+    font-size: 1.1rem;
+  }
+  .subject-icon img {
+    height: 8rem;
+  }
   .modal-content {
     width: 85%;
   }
@@ -772,6 +957,58 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 600px) {
+  .item {
+    width: 31%;
+    padding: 5px 10px;
+    flex-direction: column;
+    height: 130px;
+  }
+  .item-icon img {
+    height: 40px;
+  }
+  .item-text span {
+    font-size: 1rem;
+  }
+  .item-text h6 {
+    font-size: 1.2rem;
+  }
+  .subject-icon img {
+    height: 8rem;
+  }
+  .subject-container {
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+  }
+  .subject-title {
+    display: none;
+  }
+  .subject-item {
+    width: 100%;
+  }
+  .subject-icon img {
+    height: 7rem;
+  }
+  .subject-icon {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .subject-in-title {
+    display: flex;
+    row-gap: 40px;
+    padding: 10px 20px;
+    flex-direction: column;
+  }
+  .subject-in-title h1 {
+    font-size: 1.1rem;
+    color: #fff;
+  }
+  .subject-in-title span {
+    font-size: 0.8rem;
+    color: #fff;
+    font-weight: bold;
+  }
   .student-info span {
     font-size: 1.1rem;
   }
@@ -877,6 +1114,9 @@ table.dataTable tbody td.dataTables_empty {
     width: 100%;
     height: 350px;
   }
+  .full-graph {
+    height: 350px;
+  }
   .panel-box {
     min-height: 0;
     max-height: 120px;
@@ -942,6 +1182,9 @@ table.dataTable tbody td.dataTables_empty {
     max-width: 330px;
   }
   .graph {
+    height: 300px;
+  }
+  .full-graph {
     height: 300px;
   }
   .side-controller .tab-item {
@@ -1017,6 +1260,10 @@ table.dataTable tbody td.dataTables_empty {
     width: 25px;
   }
   .graph {
+    width: 100%;
+    height: 300px;
+  }
+  .full-graph {
     width: 100%;
     height: 300px;
   }

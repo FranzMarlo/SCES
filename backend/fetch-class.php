@@ -936,6 +936,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData['averageScore'] = $averageScore;
         $panelData['generalAverage'] = $generalAverage;
         echo json_encode($panelData);
+    } else if ($submitType === 'facultyFetchLineChartData') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+
+        $data = $fetchDb->facultyLessonsPerMonth($teacherId);
+
+        echo json_encode([
+            'labels' => $data['months'],
+            'lineData' => $data['lesson_count']
+        ]);
+    } else if ($submitType === 'facultyFetchBarChart') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+
+        $data = $fetchDb->facultyLessonBySubject($teacherId);
+
+        if ($data) {
+            echo json_encode([
+                'labels' => $data['subjects'],
+                'barData' => $data['count'],
+                'subjectCodes' => $data['subjectCodes']
+            ]);
+        } else {
+            echo json_encode([
+                'labels' => [],
+                'barData' => [],
+                'subjectCodes' => []
+            ]);
+        }
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

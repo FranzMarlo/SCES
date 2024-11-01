@@ -66,8 +66,8 @@ $page = '';
                     </div>
                     <div class="side-controller">
                         <div class="tab-item" id="profileTab">My Profile</div>
-                        <div class="tab-item" id="recordsTab">My Records</div>
-                        <div class="tab-item" id="statsTab">My Stats</div>
+                        <div class="tab-item" id="subjectsTab">Subjects</div>
+                        <div class="tab-item" id="analyticsTab">Analytics</div>
                     </div>
                     <div class="profile-tab" id="profileContainer">
                         <div class="info-panel">
@@ -153,8 +153,107 @@ $page = '';
                             </div>
                         </div>
                     </div>
+                    <div class="profile-tab" id="subjectsContainer">
+                        <div class="title-box">
+                            <img src="/SCES/assets/images/quiz-subject.png" alt="quiz-subject.png">
+                            <h1>Subjects</h1>
+                        </div>
+                        <?php $subjects = $db->getFacultySubjects($teacherId); ?>
+                        <div class="subject-container <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>">
+                            <?php if ($subjects): ?>
+                                <?php foreach ($subjects as $subject): ?>
+                                    <div class="subject-item">
+                                        <a href="/SCES/frontend/faculty/subjects/subject-module.php?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject_id']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>"
+                                            class="hidden-link"></a>
+                                        <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>"
+                                            onclick="hiddenLink(this)">
+                                            <button class="subject-btn" onclick="subjectBtn(event, this)">
+                                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                                            </button>
+                                            <div class="subject-in-title" onclick="hiddenLink(this)">
+                                                <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
+                                                <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                                            </div>
+                                            <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>"
+                                                alt="<?php echo htmlspecialchars($subject['icon']); ?>">
+                                        </div>
+                                        <div class="subject-title" onclick="hiddenLink(this)">
+                                            <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
+                                            <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                                        </div>
+                                        <div class="popup-menu">
+                                            <ul>
+                                                <li><a href="#">Edit</a></li>
+                                                <li><a href="#">Archive</a></li>
+                                                <li><a href="#">View Details</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="no-data-box">
+                                    <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                                    <h1>No subject found.</h1>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="profile-tab" id="analyticsContainer">
+                        <div class="title-box">
+                            <img src="/SCES/assets/images/profile-analytics.png" alt="profile-analytics.png">
+                            <h1>Analytics</h1>
+                        </div>
+                        <div class="stats-panel">
+                            <div class="panel-box pending">
+                                <?php $totalTeacherLesson = $db->getTotalTeacherLesson($teacherId); ?>
+                                <img src="/SCES/assets/images/quiz-lesson.png" alt="quiz-lesson.png">
+                                <div class="panel-col">
+                                    <p>Total Lessons</p>
+                                    <span><?php echo htmlspecialchars($totalTeacherLesson); ?></span>
+                                </div>
+                            </div>
+                            <div class="panel-box quiz-score">
+                                <?php $totalTeacherStudent = $db->getTotalTeacherStudent($teacherId); ?>
+                                <img src="/SCES/assets/images/quiz-grade-section.png" alt="quiz-grade-section.png">
+                                <div class="panel-col">
+                                    <p>Total Students</p>
+                                    <span><?php echo htmlspecialchars($totalTeacherStudent); ?></span>
+                                </div>
+                            </div>
+                            <div class="panel-box completed">
+                                <?php $totalQuizzes = $db->teacherGetQuizzesCount($teacherId); ?>
+                                <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
+                                <div class="panel-col">
+                                    <p>Completed Quizzes</p>
+                                    <span><?php echo htmlspecialchars($totalQuizzes); ?></span>
+                                </div>
+                            </div>
+                            <div class="panel-box average">
+                                <?php $totalPending = $db->teacherGetPendingQuizzesCount($teacherId); ?>
+                                <img src="/SCES/assets/images/quiz-pending.png" alt="quiz-pending.png">
+                                <div class="panel-col">
+                                    <p>Pending Quizzes</p>
+                                    <span><?php echo htmlspecialchars($totalPending); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="graph-container">
+                            <div class="graph">
+                                <canvas id="pieChart"></canvas>
+                            </div>
+                            <div class="graph">
+                                <canvas id="barChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-container">
+                            <div class="full-graph">
+                                <canvas id="lineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <?php
             include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
             ?>
+            <script src="/SCES/assets/script/faculty-profile.js"></script>

@@ -3099,8 +3099,8 @@ class fetchClass extends db_connect
     }
 
     public function getStudentMasterlist()
-{
-    $query = $this->conn->prepare("
+    {
+        $query = $this->conn->prepare("
         SELECT
             master.lrn,
             student.student_id,
@@ -3121,28 +3121,149 @@ class fetchClass extends db_connect
             master.student_lname ASC
     ");
 
-    if ($query->execute()) {
-        $result = $query->get_result();
-        $students = $result->fetch_all(MYSQLI_ASSOC);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $students = $result->fetch_all(MYSQLI_ASSOC);
 
-        foreach ($students as &$student) {
-            $student['student_lname'] = ucwords(strtolower(trim($student['student_lname'])));
-            $student['student_fname'] = ucwords(strtolower(trim($student['student_fname'])));
-            $student['student_mname'] = ucwords(strtolower(trim($student['student_mname'])));
-            $student['gender'] = ucwords(strtolower(trim($student['gender'])));
-            $student['grade_level'] = ucwords(strtolower(trim($student['grade_level'])));
-            $student['section'] = ucwords(strtolower(trim($student['section'])));
-            
-            if (is_null($student['profile_image']) || $student['profile_image'] === '') {
-                $student['profile_image'] = 'default-profile.png';
+            foreach ($students as &$student) {
+                $student['student_lname'] = ucwords(strtolower(trim($student['student_lname'])));
+                $student['student_fname'] = ucwords(strtolower(trim($student['student_fname'])));
+                $student['student_mname'] = ucwords(strtolower(trim($student['student_mname'])));
+                $student['gender'] = ucwords(strtolower(trim($student['gender'])));
+                $student['grade_level'] = ucwords(strtolower(trim($student['grade_level'])));
+                $student['section'] = ucwords(strtolower(trim($student['section'])));
+
+                if (is_null($student['profile_image']) || $student['profile_image'] === '') {
+                    $student['profile_image'] = 'default-profile.png';
+                }
             }
+
+            return $students;
+        } else {
+            return false;
+        }
+    }
+
+    public function facultyLessonsPerMonth($teacherId)
+    {
+        $currentMonth = date('n');
+        $currentYear = date('Y');
+
+        if ($currentMonth >= 6) {
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;  // End in April of next year
+        } else {
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
         }
 
-        return $students;
-    } else {
-        return false;
+        // Initialize an array with the month-year keys in sequential order
+        $months = [];
+        $currentDate = strtotime("$startYear-06-01");  // Start of academic year
+        $endDate = strtotime("$endYear-04-30");        // End of academic year
+
+        while ($currentDate <= $endDate) {
+            $monthKey = date('Y-m', $currentDate);  // Year-Month format
+            $monthLabel = date('F', $currentDate);  // Full month name
+            $months[$monthKey] = [
+                'month' => $monthLabel,
+                'lesson_count' => 0  // Initialize count to 0 for every month
+            ];
+            $currentDate = strtotime("+1 month", $currentDate);
+        }
+
+        // Query for lesson counts within the academic year range
+        $query = $this->conn->prepare("
+        SELECT 
+            DATE_FORMAT(add_time, '%Y-%m') AS month,  
+            COUNT(lesson_id) AS lesson_count  
+        FROM
+            lesson_tbl
+        WHERE 
+            teacher_id = ?
+        AND 
+            add_time BETWEEN ? AND ?
+        GROUP BY 
+            month
+        ORDER BY 
+            month ASC
+    ");
+
+        $startDate = "$startYear-06-01";
+        $endDate = "$endYear-04-30";
+        $query->bind_param("sss", $teacherId, $startDate, $endDate);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $monthKey = $row['month'];  // 'Y-m' format
+
+                // Ensure we update the correct month-year key in $months
+                if (isset($months[$monthKey])) {
+                    $months[$monthKey]['lesson_count'] = (int) $row['lesson_count'];
+                }
+            }
+
+            // Prepare data for return
+            $data = [
+                'months' => array_column($months, 'month'),  // Month names in order
+                'lesson_count' => array_column($months, 'lesson_count')  // Counts for each month
+            ];
+
+            return $data;
+        } else {
+            return null;
+        }
     }
-}
+
+    public function facultyLessonBySubject($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            subject.subject AS subject_label,
+            COUNT(lesson.lesson_id) AS lesson_count,
+            subject.subject_code
+        FROM
+            lesson_tbl lesson
+        INNER JOIN
+            subject_tbl subject ON lesson.subject_id = subject.subject_id
+        WHERE
+            subject.teacher_id = ?
+        GROUP BY 
+            subject.subject, subject.subject_code
+        ORDER BY 
+            subject.subject ASC
+    ");
+
+        // Bind the teacherId parameter
+        $query->bind_param("s", $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            $subjects = [];
+            $count = [];
+            $subjectCodes = [];
+
+            while ($row = $result->fetch_assoc()) {
+                $subjects[] = $row['subject_label'];
+                $count[] = (float) $row['lesson_count'];
+                $subjectCodes[] = strtolower($row['subject_code']);
+            }
+
+            $data = [
+                'subjects' => $subjects,
+                'count' => $count,
+                'subjectCodes' => $subjectCodes
+            ];
+
+            return $data;
+        } else {
+            return null;
+        }
+    }
+
 
 }
 
