@@ -65,33 +65,63 @@ document.addEventListener("DOMContentLoaded", function () {
     urlParams.set("active", activeIndex);
 
     const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
-    window.history.pushState(null, "", newUrl);
+    window.history.pushState({ activeTab, activeIndex }, "", newUrl);
   }
 
-  document.getElementById("lessonTab").addEventListener("click", function () {
-    updateTabDisplay("lessonTab", 1);
-    document.getElementById("lessonTab").classList.add("active");
+  function activateTabFromParams() {
+    const params = new URLSearchParams(window.location.search);
+    const activeTab = params.get("active") || "1"; // Default to '1' if no param
+
+    switch (activeTab) {
+      case "2":
+        updateTabDisplay("studentTab", 2);
+        initializeStudentsTable();
+        setActiveClass("studentTab");
+        break;
+      case "3":
+        updateTabDisplay("recordsTab", 3);
+        initializeRecordsTable();
+        setActiveClass("recordsTab");
+        break;
+      case "4":
+        updateTabDisplay("analyticsTab", 4);
+        populateSubjectPanelData();
+        fetchSubjectPieChartData();
+        initializeSubjectLineChart();
+        initializeRankingTable();
+        setActiveClass("analyticsTab");
+        break;
+      default:
+        updateTabDisplay("lessonTab", 1);
+        setActiveClass("lessonTab");
+        break;
+    }
+  }
+
+  function setActiveClass(activeId) {
+    document.getElementById("lessonTab").classList.remove("active");
     document.getElementById("studentTab").classList.remove("active");
     document.getElementById("recordsTab").classList.remove("active");
     document.getElementById("analyticsTab").classList.remove("active");
+    document.getElementById(activeId).classList.add("active");
+  }
+
+  // Event listeners for tabs
+  document.getElementById("lessonTab").addEventListener("click", function () {
+    updateTabDisplay("lessonTab", 1);
+    setActiveClass("lessonTab");
   });
 
   document.getElementById("studentTab").addEventListener("click", function () {
     updateTabDisplay("studentTab", 2);
     initializeStudentsTable();
-    document.getElementById("lessonTab").classList.remove("active");
-    document.getElementById("studentTab").classList.add("active");
-    document.getElementById("recordsTab").classList.remove("active");
-    document.getElementById("analyticsTab").classList.remove("active");
+    setActiveClass("studentTab");
   });
 
   document.getElementById("recordsTab").addEventListener("click", function () {
     updateTabDisplay("recordsTab", 3);
     initializeRecordsTable();
-    document.getElementById("lessonTab").classList.remove("active");
-    document.getElementById("studentTab").classList.remove("active");
-    document.getElementById("recordsTab").classList.add("active");
-    document.getElementById("analyticsTab").classList.remove("active");
+    setActiveClass("recordsTab");
   });
 
   document
@@ -102,97 +132,19 @@ document.addEventListener("DOMContentLoaded", function () {
       fetchSubjectPieChartData();
       initializeSubjectLineChart();
       initializeRankingTable();
-      document.getElementById("lessonTab").classList.remove("active");
-      document.getElementById("studentTab").classList.remove("active");
-      document.getElementById("recordsTab").classList.remove("active");
-      document.getElementById("analyticsTab").classList.add("active");
+      setActiveClass("analyticsTab");
     });
 
-  document
-    .getElementById("moduleLessons")
-    .addEventListener("click", function () {
-      updateTabDisplay("lessonTab", 1);
-      document.getElementById("lessonTab").classList.add("active");
-      document.getElementById("studentTab").classList.remove("active");
-      document.getElementById("recordsTab").classList.remove("active");
-      document.getElementById("analyticsTab").classList.remove("active");
-    });
+  // Initialize the active tab on page load
+  window.addEventListener("load", activateTabFromParams);
 
-  document
-    .getElementById("moduleStudents")
-    .addEventListener("click", function () {
-      updateTabDisplay("studentTab", 2);
-      initializeStudentsTable();
-      document.getElementById("lessonTab").classList.remove("active");
-      document.getElementById("studentTab").classList.add("active");
-      document.getElementById("recordsTab").classList.remove("active");
-      document.getElementById("analyticsTab").classList.remove("active");
-    });
-
-  document
-    .getElementById("moduleRecords")
-    .addEventListener("click", function () {
-      updateTabDisplay("recordsTab", 3);
-      initializeRecordsTable();
-      document.getElementById("lessonTab").classList.remove("active");
-      document.getElementById("studentTab").classList.remove("active");
-      document.getElementById("recordsTab").classList.add("active");
-      document.getElementById("analyticsTab").classList.remove("active");
-    });
-
-  document
-    .getElementById("moduleAnalytics")
-    .addEventListener("click", function () {
-      updateTabDisplay("analyticsTab", 4);
-      populateSubjectPanelData();
-      fetchSubjectPieChartData();
-      initializeSubjectLineChart();
-      initializeRankingTable();
-      document.getElementById("lessonTab").classList.remove("active");
-      document.getElementById("studentTab").classList.remove("active");
-      document.getElementById("recordsTab").classList.remove("active");
-      document.getElementById("analyticsTab").classList.add("active");
-    });
-
-  window.addEventListener("load", function () {
-    const params = new URLSearchParams(window.location.search);
-    const activeTab = params.get("active") || "1"; // Default to '1' if no param
-
-    switch (activeTab) {
-      case "2":
-        updateTabDisplay("studentTab", 2);
-        initializeStudentsTable();
-        document.getElementById("lessonTab").classList.remove("active");
-        document.getElementById("studentTab").classList.add("active");
-        document.getElementById("recordsTab").classList.remove("active");
-        document.getElementById("analyticsTab").classList.remove("active");
-        break;
-      case "3":
-        updateTabDisplay("recordsTab", 3);
-        initializeRecordsTable();
-        document.getElementById("lessonTab").classList.remove("active");
-        document.getElementById("studentTab").classList.remove("active");
-        document.getElementById("recordsTab").classList.add("active");
-        document.getElementById("analyticsTab").classList.remove("active");
-        break;
-      case "4":
-        updateTabDisplay("analyticsTab", 4);
-        populateSubjectPanelData();
-        fetchSubjectPieChartData();
-        initializeSubjectLineChart();
-        initializeRankingTable();
-        document.getElementById("lessonTab").classList.remove("active");
-        document.getElementById("studentTab").classList.remove("active");
-        document.getElementById("recordsTab").classList.remove("active");
-        document.getElementById("analyticsTab").classList.add("active");
-        break;
-      default:
-        updateTabDisplay("lessonTab", 1);
-        document.getElementById("lessonTab").classList.add("active");
-        document.getElementById("studentTab").classList.remove("active");
-        document.getElementById("recordsTab").classList.remove("active");
-        document.getElementById("analyticsTab").classList.remove("active");
-        break;
+  // Listen for popstate to handle back and forward navigation
+  window.addEventListener("popstate", (event) => {
+    if (event.state) {
+      updateTabDisplay(event.state.activeTab, event.state.activeIndex);
+      setActiveClass(event.state.activeTab);
+    } else {
+      activateTabFromParams(); // Fallback to URL params if state is missing
     }
   });
 

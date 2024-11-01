@@ -63,9 +63,6 @@ $page = '';
                                     class="hidden-link"></a>
                                 <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>"
                                     onclick="hiddenLink(this)">
-                                    <button class="subject-btn" onclick="subjectBtn(event, this)">
-                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    </button>
                                     <div class="subject-in-title" onclick="hiddenLink(this)">
                                         <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
                                         <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
@@ -76,13 +73,6 @@ $page = '';
                                 <div class="subject-title" onclick="hiddenLink(this)">
                                     <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
                                     <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
-                                </div>
-                                <div class="popup-menu">
-                                    <ul>
-                                        <li><a href="#">Edit</a></li>
-                                        <li><a href="#">Archive</a></li>
-                                        <li><a href="#">View Details</a></li>
-                                    </ul>
                                 </div>
                             </div>
                         <?php endforeach; ?>
