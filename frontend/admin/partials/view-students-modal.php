@@ -143,13 +143,18 @@
                             <th>Total Question</th>
                             <th>Remarks</th>
                             <th>Date Taken</th>
+                            <th>View Quiz</th>
                         </tr>
                     </thead>
                 </table>
             </div>
-            <div class="tab-title">
-                <img src="/SCES/assets/images/profile-grades.png" alt="profile-grades.png">
-                <h1>Grades</h1>
+            <div class="tab-title justified">
+                <div class="title-part">
+                    <img src="/SCES/assets/images/profile-grades.png" alt="profile-grades.png">
+                    <h1>Grades</h1>
+                </div>
+                <button class="add-btn <?php echo strtolower($subject['subject_code']); ?>" id="addGradeBtn">Add
+                    Grade</button>
             </div>
             <div class="table-responsive">
                 <table id="gradesTable" class="display data-table">
@@ -159,6 +164,7 @@
                             <th>Grade</th>
                             <th>Remarks</th>
                             <th>Quarter</th>
+                            <th>Edit Grade</th>
                         </tr>
                     </thead>
                 </table>
@@ -198,7 +204,7 @@
                         <span id="generalAverage"></span>
                     </div>
                 </div>
-            </div>        
+            </div>
             <div class="graph-container">
                 <div class="pie-chart">
                     <canvas id="pieChart"></canvas>
@@ -216,7 +222,7 @@
         <div class="modal-head-quiz">
             <div class="student-info">
                 <span><strong id="quizTaker"></strong></span>
-                <span><?php echo htmlspecialchars($subject['subject'] . ' - ' . $subject['section']);?></span>
+                <span><?php echo htmlspecialchars($subject['subject'] . ' - ' . $subject['section']); ?></span>
             </div>
             <span id="closeViewQuizModal" class="close-btn">&times;</span>
         </div>
@@ -245,3 +251,69 @@
     </div>
 </div>
 
+<div id="addGradeModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add Subject Grade For Student</h2>
+      <span class="close-btn" id="closeGradeModal">&times;</span>
+    </div>
+    <div class="modal-body">
+      <form id="addGradeForm">
+        <input type="hidden" name="gradeStudentId" id="gradeStudentId">
+        <div class="form-group">
+          <label for="studentGrade">Student Grade:</label>
+          <input type="number" id="studentGrade" name="studentGrade" placeholder="Enter Grade">
+        </div>
+        <div class="form-group">
+          <label for="gradeQuarter">Select Quarter:</label>
+            <select name="gradeQuarter" id="gradeQuarter">
+              <option value="Not Set" selected>Select Quarter</option>
+              <option value="1st">1st Quarter</option>
+              <option value="2nd">2nd Quarter</option>
+              <option value="3rd">3rd Quarter</option>
+              <option value="4th">4th Quarter</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="save-btn">Upload Grade</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="editGradeModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Edit Subject Grade For Student</h2>
+      <span class="close-btn" id="closeEditGradeModal">&times;</span>
+    </div>
+    <div class="modal-body">
+      <form id="editGradeForm">
+        <input type="hidden" name="editGradeId" id="editGradeId">
+        <input type="hidden" name="editStudentGradeId" id="editStudentGradeId">
+        <input type="hidden" name="editSubjectGradeId" id="editSubjectGradeId">
+        <input type="hidden" name="editQuarterHolder" id="editQuarterHolder">
+        <div class="form-group">
+          <label for="editGrade">Student Grade:</label>
+          <input type="number" id="editGrade" name="editGrade" placeholder="Enter Grade">
+        </div>
+        <div class="form-group">
+          <label for="editGradeQuarter">Select Quarter:</label>
+            <select name="editGradeQuarter" id="editGradeQuarter">
+              <option value="Not Set" selected>Select Quarter</option>
+              <option value="1st">1st Quarter</option>
+              <option value="2nd">2nd Quarter</option>
+              <option value="3rd">3rd Quarter</option>
+              <option value="4th">4th Quarter</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="save-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

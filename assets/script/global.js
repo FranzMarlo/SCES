@@ -2725,10 +2725,11 @@ $("#editGradeForm").on("submit", function (e) {
               allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
+                document.getElementById("editGradeModal").style.display = "none";
+                document.getElementById("editGradeForm").reset();
                 document.getElementById("studentModal").style.display = "flex";
-                addGradeModal.style.display = "none";
                 if ($.fn.DataTable.isDataTable("#gradesTable")) {
-                  $("#gradesTable").DataTable().ajax.reload(null, false); // Keep the current page
+                  $("#gradesTable").DataTable().ajax.reload(null, false);
                 }
               }
             });
