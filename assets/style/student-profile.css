@@ -211,9 +211,53 @@
 .epp {
   background-color: #d9ae9d;
 }
+.quiz-ans-fixed {
+  margin-top: 5px;
+  width: 100%;
+  padding: 5px 10px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  border: 2px solid #000;
+  background-color: #f9f9f9;
+  font-size: 1.1rem;
+}
+.correct {
+  background-color: #addca5;
+}
+.wrong {
+  background-color: #ffa5a5;
+}
+.quiz-ans-fixed.fil {
+  border:4px solid #ff8080;
+}
+.quiz-ans-fixed.eng {
+  border:4px solid #ffb480;
+}
+.quiz-ans-fixed.math {
+  border:4px solid #f8f28d;
+}
+.quiz-ans-fixed.sci {
+  border:4px solid #42d6a4;
+}
+.quiz-ans-fixed.esp {
+  border:4px solid #08cad1;
+}
+.quiz-ans-fixed.mt {
+  border:4px solid #59adf6;
+}
+.quiz-ans-fixed.ap {
+  border:4px solid #f0bad1;
+}
+.quiz-ans-fixed.mapeh {
+  border:4px solid #a3adff;
+}
+.quiz-ans-fixed.epp {
+  border:4px solid #d9ae9d;
+}
 .profile-tab {
   width: 100%;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   padding: 20px;
@@ -262,7 +306,7 @@
 .data-table thead th {
   color: white;
   font-weight: bold;
-  text-align: left;
+  text-align: center !important;
   padding: 12px;
   border-bottom: 3px solid #ddd;
 }
@@ -400,7 +444,202 @@ table.dataTable tbody td.dataTables_empty {
 #barChart {
   width: 100%;
 }
+.more-btn {
+  color: #fff;
+  background-color: #4caf50;
+  border-radius: 50%;
+  padding: 5px 10px;
+  font-size: 1rem;
+  border: 2px solid #000;
+  cursor: pointer;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal::-webkit-scrollbar {
+  display: none;
+}
+.modal {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #fefefe;
+  margin: 10px auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+  border-radius: 30px;
+  gap: 15px;
+  max-width: 1200px;
+  animation: slideIn 0.3s ease-out;
+}
+.modal-quiz-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+.modal-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close-btn:hover,
+.close-btn:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.save-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 30px;
+  border: 2px solid #000;
+}
+.save-btn:hover {
+  background-color: #45a049;
+}
+.modal-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.modal-head {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.student-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.student-info span {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.modal-direction {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border: 2px solid #000;
+  border-radius: 30px;
+  padding: 10px 20px;
+}
+.modal-direction span {
+  font-size: 1.2rem;
+}
+.modal-quiz-header {
+  width: 100%;
+  box-shadow: 0 0 2px 0 #9c9c9c;
+  border-radius: 30px;
+  border: 2px solid #000;
+}
+.modal-header-bg {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  z-index: 2;
+}
+.modal-icon-container {
+  position: absolute;
+  z-index: 4;
+  left: 85%;
+  top: 50%;
+}
+.modal-icon-container img {
+  height: 6rem;
+}
+.modal-header-text {
+  position: relative;
+  height: 80px;
+  z-index: 1;
+  background-color: #fff;
+  width: 100%;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
+}
+.modal-header-text h1 {
+  font-size: 1.5rem;
+}
+.modal-header-text img {
+  height: 2.3rem;
+  margin-right: 10px;
+}
+.quiz-item {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 2px 0 #9c9c9c;
+  padding: 20px;
+  border: 2px solid #000;
+}
+.question-box {
+  text-align: justify;
+  margin-bottom: 10px;
+}
+.question-box span {
+  font-size: 1.1rem;
+}
 @media (width < 1199px) {
+  .modal-header-text h1 {
+    font-size: 1.3rem;
+  }
+  .header-text img {
+    height: 2rem;
+  }
+  .modal-header-text img {
+    height: 2rem;
+  }
+  .modal-icon-container {
+    left: 80%;
+  }
   .profile-panel .title-box img {
     height: 2.3rem;
   }
@@ -434,6 +673,24 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 992px) {
+  .modal-content {
+    width: 80%;
+  }
+  .student-info span {
+    font-size: 1.1rem;
+  }
+  .modal-direction span {
+    font-size: 1.1rem;
+  }
+  .question-box span {
+    font-size: 1rem;
+  }
+  .quiz-ans {
+    font-size: 1rem;
+  }
+  .quiz-ans-fixed {
+    font-size: 1rem;
+  }
   .table-responsive {
     max-width: 700px;
   }
@@ -458,6 +715,15 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 768px) {
+  .modal-content {
+    width: 85%;
+  }
+  .modal-icon-container img {
+    height: 4.8rem;
+  }
+  .modal-icon-container {
+    left: 80%;
+  }
   .profile-panel .title-box img {
     height: 2.1rem;
   }
@@ -496,8 +762,32 @@ table.dataTable tbody td.dataTables_empty {
     max-width: 550px;
   }
 }
-
 @media (width < 600px) {
+  .student-info span {
+    font-size: 1.1rem;
+  }
+  .modal-direction span {
+    font-size: 1rem;
+  }
+  .modal-icon-container {
+    left: 70%;
+  }
+  .modal-header-text {
+    padding: 10px;
+  }
+  .modal-header-text h1 {
+    font-size: 1.1rem;
+  }
+  .modal-header-text img {
+    height: 1.5rem;
+  }
+  .modal-content {
+    width: 90%;
+  }
+  .more-btn {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+  }
   .profile-bg {
     height: 320px;
   }
@@ -650,6 +940,28 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 375px) {
+  .student-info span {
+    font-size: 0.9rem;
+  }
+  .modal-direction span {
+    font-size: 0.9rem;
+  }
+  .modal-icon-container img {
+    height: 4.5rem;
+  }
+  .modal-content {
+    width: 95%;
+  }
+  .modal-icon-container {
+    left: 65%;
+    top: 55%;
+  }
+  .quiz-ans {
+    font-size: 0.8rem;
+  }
+  .quiz-ans-fixed {
+    font-size: 0.8rem;
+  }
   .profile-bg {
     height: 250px;
   }
@@ -691,7 +1003,7 @@ table.dataTable tbody td.dataTables_empty {
   .panel-col span {
     font-size: 0.9rem;
   }
-  .panel-box img{
+  .panel-box img {
     height: 25px;
     width: 25px;
   }
@@ -708,4 +1020,21 @@ table.dataTable tbody td.dataTables_empty {
   .side-controller .tab-item {
     font-size: 0.7rem;
   }
+  .question-box span {
+    font-size: 0.8rem;
+  }
+}
+.text-center {
+  text-align: center !important;
+}
+.center-image {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.center-image img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
 }

@@ -100,11 +100,11 @@ document.addEventListener("DOMContentLoaded", function () {
       dataSrc: "",
     },
     columns: [
-      { data: "quiz_number" },
-      { data: "subject" },
-      { data: "title" },
-      { data: "score" },
-      { data: "item_number" },
+      { data: "quiz_number", className: "text-center" },
+      { data: "subject", className: "text-center" },
+      { data: "title", className: "text-center" },
+      { data: "score", className: "text-center" },
+      { data: "item_number", className: "text-center" },
       {
         data: "remarks",
         render: function (data) {
@@ -114,6 +114,17 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
       { data: "time" },
+      {
+        data: null,
+        render: function (data, type, row) {
+          return `<div class="center-image">
+        <button class="more-btn" data-quiz-id="${row.quiz_id}"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>`;
+        },
+        orderable: false,
+        searchable: false,
+        className: "text-center",
+      },
     ],
     language: {
       emptyTable: "No data available in table", // Message when there's no data
@@ -122,6 +133,110 @@ document.addEventListener("DOMContentLoaded", function () {
       quizScoresTable.draw(); // Force a redraw to apply styles properly
     },
   });
+
+  document
+    .getElementById("quizScoresTable")
+    .addEventListener("click", function (event) {
+      if (event.target.closest(".more-btn")) {
+        const btn = event.target.closest(".more-btn");
+        const quizId = btn.getAttribute("data-quiz-id");
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=viewQuizHistory&quiz_id=${quizId}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              showAlert("error", "Student has not answered the quiz yet");
+              return;
+            }
+
+            const viewQuizModal = document.getElementById("viewQuizModal");
+
+            viewQuizModal.querySelector(
+              ".modal-header-text h1"
+            ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
+
+            viewQuizModal.querySelector(
+              ".modal-icon-container img"
+            ).src = `/SCES/assets/images/${data.icon}`;
+
+            const modalHeaderBg =
+              viewQuizModal.querySelector(".modal-header-bg");
+            modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
+
+            const questionsContainer = viewQuizModal.querySelector(
+              "#viewQuestionsContainer"
+            );
+            questionsContainer.innerHTML = "";
+
+            data.questions.forEach((question, index) => {
+              const quizItem = document.createElement("div");
+              quizItem.classList.add("quiz-item");
+
+              const questionBox = document.createElement("div");
+              questionBox.classList.add("question-box");
+              questionBox.setAttribute(
+                "data-question-id",
+                question.question_id
+              );
+              questionBox.innerHTML = `<span><strong>${index + 1}.</strong> ${
+                question.question
+              }</span>`;
+              quizItem.appendChild(questionBox);
+
+              question.choices.forEach((choice, i) => {
+                const choiceLetter = String.fromCharCode(65 + i);
+                const choiceElement = document.createElement("div");
+                choiceElement.classList.add("quiz-ans-fixed");
+
+                if (choice.is_correct === 1) {
+                  choiceElement.classList.add("correct");
+                } else {
+                  choiceElement.classList.add("wrong");
+                }
+
+                if (choice.isSelected) {
+                  choiceElement.classList.add(data.subject_code.toLowerCase());
+                }
+
+                choiceElement.innerHTML = `
+              <strong>${choiceLetter}.</strong>&nbsp;${choice.choice}
+            `;
+
+                quizItem.appendChild(choiceElement);
+              });
+
+              questionsContainer.appendChild(quizItem);
+            });
+
+            const closeButton = document.getElementById("close-quiz");
+            const closeViewQuizModal =
+              document.getElementById("closeViewQuizModal");
+
+            closeButton.onclick = () => {
+              viewQuizModal.scrollTop = 0;
+              viewQuizModal.style.display = "none";
+              document.body.style.overflow = "auto";
+            };
+
+            closeViewQuizModal.onclick = () => {
+              viewQuizModal.scrollTop = 0;
+              viewQuizModal.style.display = "none";
+              document.body.style.overflow = "auto";
+            };
+
+            viewQuizModal.style.display = "block";
+            document.body.style.overflow = "hidden";
+          })
+          .catch((error) => {
+            showAlert("error", "Server Error", error);
+          });
+      }
+    });
 
   var gradesTable = $("#gradesTable").DataTable({
     responsive: {
@@ -161,8 +276,8 @@ document.addEventListener("DOMContentLoaded", function () {
       dataSrc: "",
     },
     columns: [
-      { data: "subject" },
-      { data: "grade" },
+      { data: "subject", className: "text-center" },
+      { data: "grade", className: "text-center" },
       {
         data: "remarks",
         render: function (data) {
@@ -179,7 +294,7 @@ document.addEventListener("DOMContentLoaded", function () {
         width: "100px",
         className: "text-center",
       },
-      { data: "quarter" },
+      { data: "quarter", className: "text-center" },
     ],
     language: {
       emptyTable: "No data available in table", // Message when there's no data
@@ -197,8 +312,6 @@ document.addEventListener("DOMContentLoaded", function () {
       submitType: "fetchLineChartData",
     },
     success: function (data) {
-      console.log(data);
-
       if (data && data.labels && data.lineData) {
         var ctxLine = document.getElementById("lineChart").getContext("2d");
         var lineChart = new Chart(ctxLine, {
@@ -319,3 +432,12 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   });
 });
+
+function showAlert(icon, title, message) {
+  Swal.fire({
+    icon: icon,
+    title: title,
+    text: message,
+    confirmButtonColor: "#4CAF50",
+  });
+}

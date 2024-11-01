@@ -561,9 +561,6 @@ class fetchClass extends db_connect
         quiz.quiz_number,
         quiz.title,
         score.score,
-        student.student_lname,
-        student.student_fname,
-        student.student_mname,
         score.item_number,
         score.remarks,
         score.time,
@@ -625,10 +622,8 @@ class fetchClass extends db_connect
         section_tbl section ON section.section_id = subject.section_id
     INNER JOIN 
         level_tbl level ON level.level_id = section.level_id
-    LEFT JOIN 
-        student_tbl student ON student.section_id = section.section_id
     WHERE 
-        student.student_id = ?
+        grade.student_id = ?
     ORDER BY
         level.grade_level DESC");
 
@@ -646,32 +641,32 @@ class fetchClass extends db_connect
     public function studentFetchGradesBySubject($studentId, $subjectId)
     {
         $query = $this->conn->prepare("
-    SELECT 
-        subject.subject_id,
-        subject.subject,
-        level.level_id,
-        level.grade_level,
-        section.section,
-        section.section_id,
-        grade.grade_id,
-        grade.grade,
-        grade.remarks,
-        grade.quarter,
-        grade.student_id
-    FROM
-        grade_tbl grade
-    INNER JOIN
-        subject_tbl subject ON subject.subject_id = grade.subject_id
-    INNER JOIN 
-        section_tbl section ON section.section_id = subject.section_id
-    INNER JOIN 
-        level_tbl level ON level.level_id = section.level_id
-    WHERE 
-        grade.student_id = ?
-    AND
-        subject.subject_id = ?
-    ORDER BY
-        level.grade_level DESC");
+        SELECT 
+            subject.subject_id,
+            subject.subject,
+            level.level_id,
+            level.grade_level,
+            section.section,
+            section.section_id,
+            grade.grade_id,
+            grade.grade,
+            grade.remarks,
+            grade.quarter,
+            grade.student_id
+        FROM
+            grade_tbl grade
+        INNER JOIN
+            subject_tbl subject ON subject.subject_id = grade.subject_id
+        INNER JOIN 
+            section_tbl section ON section.section_id = subject.section_id
+        INNER JOIN 
+            level_tbl level ON level.level_id = section.level_id
+        WHERE 
+            grade.student_id = ?
+        AND
+            subject.subject_id = ?
+        ORDER BY
+            level.grade_level DESC");
 
         $query->bind_param("ss", $studentId, $subjectId);
 
