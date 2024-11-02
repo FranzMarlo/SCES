@@ -166,6 +166,9 @@ img#change-avatar-icon {
 .info-part .info-data p {
   font-size: 1.1rem;
   font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .security-panel {
   width: 100%;
@@ -242,6 +245,17 @@ img#change-avatar-icon {
   max-height: 80vh;
   overflow-y: auto;
   box-sizing: border-box;
+  animation: slideIn 0.3s ease-out;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .close-btn {
   color: #aaa;

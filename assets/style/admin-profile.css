@@ -151,6 +151,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .id-col-full p {
   font-size: 0.8rem;
@@ -299,6 +302,9 @@
 }
 .info-col span {
   font-size: 1.2rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .table-responsive {
   display: flex;
