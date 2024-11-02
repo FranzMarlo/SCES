@@ -2046,7 +2046,7 @@ class globalClass extends db_connect
         WHERE 
             teacher.teacher_id = ?
         AND 
-            quiz.status = 'Inactive'
+            quiz.status IN ('Inactive', 'Active')
     ");
 
         // Bind parameters for sectionId, studentId, and status (pending)

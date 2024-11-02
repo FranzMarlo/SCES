@@ -1,16 +1,16 @@
-<div id="studentModal" class="modal">
+<div id="facultyModal" class="modal">
     <div class="modal-content">
-        <div class="modal-head" id="studentHeader">
+        <div class="modal-head" id="facultyHeader">
             <div class="modal-header">
-                <h2>Student Info</h2>
-                <span class="close-btn" id="closeStudentModal">&times;</span>
+                <h2>Teacher Info</h2>
+                <span class="close-btn" id="closeFacultyModal">&times;</span>
             </div>
             <div class="head-row">
-                <img src="/SCES/storage/student/images/default-profile.png" alt="default-profile.png" id="profileImage">
+                <img src="/SCES/storage/faculty/images/default-profile.png" alt="default-profile.png" id="profileImage">
                 <div class="head-col">
                     <span id="fullName"></span>
-                    <span id="studId"></span>
-                    <span id="gradeSection"></span>
+                    <span id="teachId"></span>
+                    <span id="roleSpan"></span>
                 </div>
             </div>
         </div>
@@ -54,12 +54,6 @@
                         <span id="age"></span>
                     </div>
                 </div>
-                <div class="tab-row">
-                    <div class="tab-col">
-                        <p>Birthday</p>
-                        <span id="birthday"></span>
-                    </div>
-                </div>
             </div>
             <div class="tab-panel">
                 <div class="title-box">
@@ -68,25 +62,19 @@
                 </div>
                 <div class="tab-row">
                     <div class="tab-col">
-                        <p>LRN</p>
-                        <span id="lrn"></span>
+                        <p>TRN</p>
+                        <span id="trn"></span>
                     </div>
                     <div class="tab-col">
-                        <p>Student ID</p>
-                        <span id="studentId"></span>
+                        <p>Teacher ID</p>
+                        <span id="teacherId"></span>
                     </div>
                 </div>
                 <div class="tab-row">
                     <div class="tab-col">
-                        <p>Grade Level</p>
-                        <span id="gradeLevel"></span>
+                        <p>Role</p>
+                        <span id="role"></span>
                     </div>
-                    <div class="tab-col">
-                        <p>Section</p>
-                        <span id="section"></span>
-                    </div>
-                </div>
-                <div class="tab-row">
                     <div class="tab-col">
                         <p>Email</p>
                         <span id="email"></span>
@@ -114,13 +102,7 @@
                         <span id="street"></span>
                     </div>
                     <div class="tab-col">
-                        <p>Guardian Name</p>
-                        <span id="guardian"></span>
-                    </div>
-                </div>
-                <div class="tab-row">
-                    <div class="tab-col">
-                        <p>Guardian Contact</p>
+                        <p>Contact Number</p>
                         <span id="contact"></span>
                     </div>
                 </div>
@@ -132,80 +114,85 @@
                 <h1>Analytics</h1>
             </div>
             <div class="stats-panel">
-                <div class="panel-box completed">
-                    <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
-                    <div class="panel-col">
-                        <p>Quiz Completed</p>
-                        <span id="totalCompletion"></span>
-                    </div>
-                </div>
                 <div class="panel-box pending">
-                    <img src="/SCES/assets/images/hourglass.png" alt="hourglass.png">
+                    <img src="/SCES/assets/images/quiz-lesson.png" alt="quiz-lesson.png">
                     <div class="panel-col">
-                        <p>Pending Quiz</p>
-                        <span id="totalQuizzes"></span>
+                        <p>Uploaded Lessons</p>
+                        <span id="totalLessons"></span>
                     </div>
                 </div>
                 <div class="panel-box quiz-score">
-                    <img src="/SCES/assets/images/gpa.png" alt="gpa.png">
+                    <img src="/SCES/assets/images/quiz-grade-section.png" alt="quiz-grade-section.png">
                     <div class="panel-col">
-                        <p>Average Score</p>
-                        <span id="averageScore"></span>
+                        <p>Handled Students</p>
+                        <span id="totalStudents"></span>
+                    </div>
+                </div>
+                <div class="panel-box completed">
+                <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
+                    <div class="panel-col">
+                        <p>Completed Quizzes</p>
+                        <span id="totalCompleted"></span>
                     </div>
                 </div>
                 <div class="panel-box average">
-                    <img src="/SCES/assets/images/profile-gwa.png" alt="profile-gwa.png">
+                <img src="/SCES/assets/images/quiz-pending.png" alt="quiz-pending.png">
                     <div class="panel-col">
-                        <p>General Average</p>
-                        <span id="generalAverage"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="stats-container">
-                <div class="stats-box completed">
-                    <img id="studentPredictedPerformanceIcon" src="/SCES/assets/images/passed.png" alt="performance.png">
-                    <div class="stats-col">
-                        <p>Predicted Performance</p>
-                        <span id="studentPredictedPerformance"></span>
-                    </div>
-                </div>
-                <div class="stats-box pending">
-                    <img src="/SCES/assets/images/success-rate.png" alt="success-rate.png">
-                    <div class="stats-col">
-                        <p>Predicted Success Rate</p>
-                        <span id="studentPredictedSuccess"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="stats-container">
-            <div class="stats-box average">
-                    <img src="/SCES/assets/images/gwa.png" alt="gwa.png">
-                    <div class="stats-col">
-                        <p>Predicted GWA</p>
-                        <span id="studentPredictedGWA"></span>
-                    </div>
-                </div>
-                <div class="stats-box quiz-score">
-                    <img id="studentPredictedRemarksIcon" src="/SCES/assets/images/outstanding.png" alt="remarks.png">
-                    <div class="stats-col">
-                        <p>Predicted Remarks</p>
-                        <span id="studentPredictedRemarks"></span>
+                        <p>Pending Quizzes</p>
+                        <span id="totalPending"></span>
                     </div>
                 </div>
             </div>
             <div class="graph-container">
                 <div class="graph">
-                    <canvas id="studentLineChart"></canvas>
+                    <canvas id="pieChart"></canvas>
                 </div>
                 <div class="graph">
-                    <canvas id="studentBarChart"></canvas>
+                    <canvas id="barChart"></canvas>
                 </div>
             </div>
             <div class="graph-container">
                 <div class="full-graph">
-                    <canvas id="studentFullBarChart"></canvas>
+                    <canvas id="lineChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div id="addTeacherModal" class="modal-small">
+  <div class="modal-content-small">
+    <div class="modal-header-small">
+      <h2>Add Teacher</h2>
+      <span class="close-btn" id="closeAddTeacherModal">&times;</span>
+    </div>
+    <div class="modal-body">
+      <form id="addTeacherForm">
+        <div class="form-group">
+          <label for="teacherLname">Teacher Last Name:</label>
+          <input type="text" id="teacherLname" name="teacherLname" placeholder="Enter Last Name">
+        </div>
+        <div class="form-group">
+          <label for="teacherFname">Teacher First Name:</label>
+          <input type="text" id="teacherFname" name="teacherFname" placeholder="Enter First Name">
+        </div>
+        <div class="form-group">
+          <label for="teacherMname">Teacher Middle Name:</label>
+          <input type="text" id="teacherMname" name="teacherMname" placeholder="Enter Middle Name">
+        </div>
+        <div class="form-group">
+          <label for="teacherRole">Role:</label>
+            <select name="teacherRole" id="teacherRole">
+              <option value="Not Set" selected>Select Role</option>
+              <option value="FACULTY">Faculty</option>
+              <option value="ADMIN">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="save-btn">Add Lesson</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

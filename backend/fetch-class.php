@@ -996,6 +996,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $faculty = $fetchDb->getFacultyMasterlist();
 
         echo json_encode($faculty);
+    } elseif ($submitType === 'fetchFacultyDetails') {
+        $teacherId = $_POST['teacher_id'];
+        $teacher = $fetchDb->getFacultyDetails($teacherId);
+        if ($teacher) {
+            echo json_encode($teacher);
+        } else {
+            echo json_encode(['error' => 'No data found']);
+        }
+    } elseif ($submitType === 'fetchAdminDetails') {
+        $teacherId = $_POST['teacher_id'];
+        $teacher = $fetchDb->getAdminDetails($teacherId);
+        if ($teacher) {
+            echo json_encode($teacher);
+        } else {
+            echo json_encode(['error' => 'No data found']);
+        }
+    } else if ($submitType === 'adminFetchPanelData') {
+        $teacherId = $_POST['teacher_id'];
+
+        $totalLessons = $fetchDb->getTotalTeacherLesson($teacherId);
+        $totalStudents = $fetchDb->getTotalTeacherStudent($teacherId);
+        $totalCompleted = $fetchDb->teacherGetQuizzesCount($teacherId);
+        $totalPending = $fetchDb->teacherGetPendingQuizzesCount($teacherId);
+
+        $panelData['totalLessons'] = $totalLessons;
+        $panelData['totalStudents'] = $totalStudents;
+        $panelData['totalCompleted'] = $totalCompleted;
+        $panelData['totalPending'] = $totalPending;
+        echo json_encode($panelData);
+    } else if ($submitType === 'adminFetchLineChartData') {
+        $teacherId = $_POST['teacher_id'];
+
+        $data = $fetchDb->facultyLessonsPerMonth($teacherId);
+
+        echo json_encode([
+            'labels' => $data['months'],
+            'lineData' => $data['lesson_count']
+        ]);
+    } else if ($submitType === 'adminFetchBarChart') {
+        $teacherId = $_POST['teacher_id'];
+
+        $data = $fetchDb->facultyLessonBySubject($teacherId);
+
+        if ($data) {
+            echo json_encode([
+                'labels' => $data['subjects'],
+                'barData' => $data['count'],
+                'subjectCodes' => $data['subjectCodes']
+            ]);
+        } else {
+            echo json_encode([
+                'labels' => [],
+                'barData' => [],
+                'subjectCodes' => []
+            ]);
+        }
+    } else if ($submitType === 'adminQuizCompletion') {
+        $teacherId = $_POST['teacher_id'];
+
+        $panelData = $fetchDb->facultyQuizCompletion($teacherId);
+
+        echo json_encode($panelData);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

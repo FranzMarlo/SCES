@@ -1,4 +1,28 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const addTeacherBtn = document.getElementById("addTeacherBtn");
+  const addTeacherModal = document.getElementById("addTeacherModal");
+  const addTeacherForm = document.getElementById("addTeacherForm");
+  const closeAddTeacherModal = document.getElementById("closeAddTeacherModal");
+
+  addTeacherBtn.addEventListener("click", function () {
+    addTeacherModal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  });
+
+  closeAddTeacherModal.addEventListener("click", function () {
+    addTeacherForm.reset();
+    addTeacherModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target == addTeacherModal) {
+      addTeacherForm.reset();
+      addTeacherModal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+  });
+
   initializeFacultyTable();
 
   function initializeFacultyTable() {
@@ -44,14 +68,20 @@ document.addEventListener("DOMContentLoaded", function () {
           {
             data: "image_profile",
             render: function (data, type, row) {
+              const imagePath =
+                row.role === "Admin"
+                  ? `/SCES/storage/admin/images/${data}`
+                  : `/SCES/storage/faculty/images/${data}`;
+
               return `<div class="center-image">
-                          <img src="/SCES/storage/faculty/images/${data}" alt="Profile Image" onerror="this.onerror=null; this.src='/SCES/storage/faculty/images/default.jpg';">
-                        </div>`;
+                            <img src="${imagePath}" alt="Profile Image" onerror="this.onerror=null; this.src='/SCES/storage/faculty/images/default.jpg';">
+                          </div>`;
             },
             orderable: false,
             searchable: false,
             className: "text-center",
           },
+
           { data: "trn", className: "text-center" },
           { data: "teacher_lname", className: "text-center" },
           { data: "teacher_fname", className: "text-center" },
@@ -60,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
             data: null,
             render: function (data, type, row) {
               return `<div class="center-image">
-              <button class="more-btn" data-teacher-id="${row.teacher_id}"><i class="fa-solid fa-chevron-right"></i></button>
+              <button class="more-btn" data-teacher-id="${row.teacher_id}" data-role="${row.role}"><i class="fa-solid fa-chevron-right"></i></button>
               </div>`;
             },
             orderable: false,
@@ -72,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
           emptyTable: "No data available in table",
         },
         initComplete: function () {
-          studentsTable.draw();
+          facultyTable.draw();
         },
       });
     }
@@ -84,117 +114,195 @@ document.addEventListener("DOMContentLoaded", function () {
       if (event.target.closest(".more-btn")) {
         const btn = event.target.closest(".more-btn");
         const teacherId = btn.getAttribute("data-teacher-id");
+        const role = btn.getAttribute("data-role");
         if (teacherId == "null") {
-          showAlert("error", "Selected Teacher is not registered in the platform");
+          showAlert(
+            "error",
+            "Selected Teacher is not registered in the platform"
+          );
           return;
         } else {
-          fetch("/SCES/backend/fetch-class.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `submitType=fetchStudentDetails&student_id=${studentId}`,
-          })
-            .then((response) => response.json())
-            .then((student) => {
-              if (!student || Object.keys(student).length === 0) {
-                showAlert("error", "Server Error", "Teacher Data Not Found");
-                return;
-              }
-
-              Object.keys(student).forEach((key) => {
-                if (student[key] === null || student[key] === "") {
-                  student[key] = "Not Set";
-                }
-              });
-              const modal = document.getElementById("studentModal");
-              const modalHeader = document.getElementById("studentHeader");
-              const genderClass =
-                student.gender === "Female" ? "female" : "male";
-              const tabItemClass =
-                student.gender === "Female" ? "pink" : "blue";
-              const coloredRow = document.querySelectorAll(".colored-row");
-
-              modalHeader.classList.remove("female", "male");
-              coloredRow.forEach((row) => {
-                row.classList.remove("female", "male");
-              });
-
-              const tabItems = modal.querySelectorAll(".tab-item");
-              tabItems.forEach((tab) => {
-                tab.classList.remove("pink", "blue");
-              });
-
-              modalHeader.classList.add(genderClass);
-              coloredRow.forEach((row) => {
-                row.classList.add(genderClass);
-              });
-              tabItems.forEach((tab) => {
-                tab.classList.add(tabItemClass);
-              });
-
-              const imageElement = document.getElementById("profileImage");
-              imageElement.src = `/SCES/storage/student/images/${student.profile_image}`;
-              imageElement.onerror = function () {
-                this.src = "/SCES/storage/student/images/default-profile.png";
-              };
-              document.getElementById("studId").textContent =
-                student.student_id;
-              document
-                .getElementById("recordsTab")
-                .setAttribute("data-student-id", student.student_id);
-              document
-                .getElementById("recordsTab")
-                .setAttribute("data-section-id", student.section_id);
-              document
-                .getElementById("analyticsTab")
-                .setAttribute("data-lrn", student.lrn);
-              document.getElementById("fullName").textContent =
-                student.student_fname + " " + student.student_lname;
-              document.getElementById("gradeSection").textContent =
-                student.grade_level + " - " + student.section;
-              document.getElementById("lastName").textContent =
-                student.student_lname;
-              document.getElementById("firstName").textContent =
-                student.student_fname;
-              document.getElementById("middleName").textContent =
-                student.student_mname;
-              document.getElementById("lastName").textContent =
-                student.student_lname;
-              document.getElementById("gender").textContent = student.gender;
-              document.getElementById("age").textContent = student.age;
-              document.getElementById("lrn").textContent = student.lrn;
-              document.getElementById("studentId").textContent =
-                student.student_id;
-              document.getElementById("gradeLevel").textContent =
-                student.grade_level;
-              document.getElementById("section").textContent = student.section;
-              document.getElementById("email").textContent = student.email;
-              document.getElementById("city").textContent = student.city;
-              document.getElementById("barangay").textContent =
-                student.barangay;
-              document.getElementById("street").textContent = student.street;
-              document.getElementById("guardian").textContent =
-                student.guardian_name;
-              document.getElementById("contact").textContent =
-                student.guardian_contact;
-
-              document.body.style.overflow = "hidden";
-              modal.style.display = "flex";
-              populatePanelData(student.student_id, student.section_id);
-              getStudentGWA(student.student_id);
+          if (role == "Faculty") {
+            fetch("/SCES/backend/fetch-class.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: `submitType=fetchFacultyDetails&teacher_id=${teacherId}`,
             })
-            .catch((error) => {
-              showAlert("error", "Server Error", error);
-            });
+              .then((response) => response.json())
+              .then((data) => {
+                if (!data || Object.keys(data).length === 0) {
+                  showAlert("error", "Server Error", "Teacher Data Not Found");
+                  return;
+                }
+
+                Object.keys(data).forEach((key) => {
+                  if (data[key] === null || data[key] === "") {
+                    data[key] = "Not Set";
+                  }
+                });
+                const modal = document.getElementById("facultyModal");
+                const modalHeader = document.getElementById("facultyHeader");
+                const genderClass =
+                  data.gender === "Female" ? "female" : "male";
+                const tabItemClass = data.gender === "Female" ? "pink" : "blue";
+                const coloredRow = document.querySelectorAll(".colored-row");
+
+                modalHeader.classList.remove("female", "male");
+                coloredRow.forEach((row) => {
+                  row.classList.remove("female", "male");
+                });
+
+                const tabItems = modal.querySelectorAll(".tab-item");
+                tabItems.forEach((tab) => {
+                  tab.classList.remove("pink", "blue");
+                });
+
+                modalHeader.classList.add(genderClass);
+                coloredRow.forEach((row) => {
+                  row.classList.add(genderClass);
+                });
+                tabItems.forEach((tab) => {
+                  tab.classList.add(tabItemClass);
+                });
+
+                const imageElement = document.getElementById("profileImage");
+                imageElement.src = `/SCES/storage/faculty/images/${data.image_profile}`;
+                imageElement.onerror = function () {
+                  this.src = "/SCES/storage/faculty/images/default-profile.png";
+                };
+                document.getElementById("teachId").textContent =
+                  data.teacher_id;
+                document
+                  .getElementById("profileTab")
+                  .setAttribute("data-teacher-id", data.teacher_id);
+                document.getElementById("fullName").textContent =
+                  data.teacher_fname + " " + data.teacher_lname;
+                document.getElementById("roleSpan").textContent =
+                  "SCES " + data.role;
+                document.getElementById("lastName").textContent =
+                  data.teacher_lname;
+                document.getElementById("firstName").textContent =
+                  data.teacher_fname;
+                document.getElementById("middleName").textContent =
+                  data.teacher_mname;
+                document.getElementById("lastName").textContent =
+                  data.teacher_lname;
+                document.getElementById("gender").textContent = data.gender;
+                document.getElementById("age").textContent = data.age;
+                document.getElementById("trn").textContent = data.trn;
+                document.getElementById("teacherId").textContent =
+                  data.teacher_id;
+                document.getElementById("role").textContent = data.role;
+                document.getElementById("email").textContent = data.email;
+                document.getElementById("city").textContent = data.city;
+                document.getElementById("barangay").textContent = data.barangay;
+                document.getElementById("street").textContent = data.street;
+                document.getElementById("contact").textContent =
+                  data.contact_number;
+
+                document.body.style.overflow = "hidden";
+                modal.style.display = "flex";
+              })
+              .catch((error) => {
+                showAlert("error", "Server Error", error);
+              });
+          } else {
+            fetch("/SCES/backend/fetch-class.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: `submitType=fetchAdminDetails&teacher_id=${teacherId}`,
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (!data || Object.keys(data).length === 0) {
+                  showAlert("error", "Server Error", "Teacher Data Not Found");
+                  return;
+                }
+
+                Object.keys(data).forEach((key) => {
+                  if (data[key] === null || data[key] === "") {
+                    data[key] = "Not Set";
+                  }
+                });
+                const modal = document.getElementById("facultyModal");
+                const modalHeader = document.getElementById("facultyHeader");
+                const genderClass =
+                  data.gender === "Female" ? "female" : "male";
+                const tabItemClass = data.gender === "Female" ? "pink" : "blue";
+                const coloredRow = document.querySelectorAll(".colored-row");
+
+                modalHeader.classList.remove("female", "male");
+                coloredRow.forEach((row) => {
+                  row.classList.remove("female", "male");
+                });
+
+                const tabItems = modal.querySelectorAll(".tab-item");
+                tabItems.forEach((tab) => {
+                  tab.classList.remove("pink", "blue");
+                });
+
+                modalHeader.classList.add(genderClass);
+                coloredRow.forEach((row) => {
+                  row.classList.add(genderClass);
+                });
+                tabItems.forEach((tab) => {
+                  tab.classList.add(tabItemClass);
+                });
+
+                const imageElement = document.getElementById("profileImage");
+                imageElement.src = `/SCES/storage/admin/images/${data.image_profile}`;
+                imageElement.onerror = function () {
+                  this.src = "/SCES/storage/admin/images/default-profile.png";
+                };
+                document.getElementById("teachId").textContent =
+                  data.teacher_id;
+                document
+                  .getElementById("profileTab")
+                  .setAttribute("data-teacher-id", data.teacher_id);
+                document.getElementById("fullName").textContent =
+                  data.teacher_fname + " " + data.teacher_lname;
+                document.getElementById("roleSpan").textContent =
+                  "SCES " + data.role;
+                document.getElementById("lastName").textContent =
+                  data.teacher_lname;
+                document.getElementById("firstName").textContent =
+                  data.teacher_fname;
+                document.getElementById("middleName").textContent =
+                  data.teacher_mname;
+                document.getElementById("lastName").textContent =
+                  data.teacher_lname;
+                document.getElementById("gender").textContent = data.gender;
+                document.getElementById("age").textContent = data.age;
+                document.getElementById("trn").textContent = data.trn;
+                document.getElementById("teacherId").textContent =
+                  data.teacher_id;
+                document.getElementById("role").textContent = data.role;
+                document.getElementById("email").textContent = data.email;
+                document.getElementById("city").textContent = data.city;
+                document.getElementById("barangay").textContent = data.barangay;
+                document.getElementById("street").textContent = data.street;
+                document.getElementById("contact").textContent =
+                  data.contact_number;
+
+                document.body.style.overflow = "hidden";
+                modal.style.display = "flex";
+              })
+              .catch((error) => {
+                showAlert("error", "Server Error", error);
+              });
+          }
         }
       }
     });
 
   document
-    .getElementById("closeStudentModal")
+    .getElementById("closeFacultyModal")
     .addEventListener("click", function () {
-      document.getElementById("studentModal").style.display = "none";
+      document.getElementById("facultyModal").style.display = "none";
       document.body.style.overflow = "auto";
       showTabContent("profileContainer");
       setActiveTab("profileTab");
@@ -205,34 +313,17 @@ document.addEventListener("DOMContentLoaded", function () {
     setActiveTab("profileTab");
   });
 
-  document.getElementById("recordsTab").addEventListener("click", function () {
-    var studentId = document
-      .getElementById("recordsTab")
-      .getAttribute("data-student-id");
-    showTabContent("recordsContainer");
-    setActiveTab("recordsTab");
-    initializeQuizScoresTable(studentId);
-    initializeGradesTable(studentId);
-  });
-
   document
     .getElementById("analyticsTab")
     .addEventListener("click", function () {
-      var studentId = document
-        .getElementById("recordsTab")
-        .getAttribute("data-student-id");
-      var sectionId = document
-        .getElementById("recordsTab")
-        .getAttribute("data-section-id");
-      var lrn = document
-        .getElementById("analyticsTab")
-        .getAttribute("data-lrn");
+      var teacherId = document
+        .getElementById("profileTab")
+        .getAttribute("data-teacher-id");
 
-      populatePanelData(studentId, sectionId);
-      getStudentGWA(studentId);
-      initializeStudentLineChart(studentId, sectionId);
-      initializeStudentBarChart(lrn);
-      initializeStudentFullBarChart(studentId, sectionId);
+      populatePanelData(teacherId);
+      initializeFacultyLineChart(teacherId);
+      initializeFacultyBarChart(teacherId);
+      initializeQuizPieChart(teacherId);
       showTabContent("analyticsContainer");
       setActiveTab("analyticsTab");
     });
@@ -257,293 +348,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById(tabId).classList.add("active"); // Add 'active' to the selected tab
   }
 
-  function initializeQuizScoresTable(studentId) {
-    if ($.fn.dataTable.isDataTable("#quizScoresTable")) {
-      var quizScoresTable = $("#quizScoresTable").DataTable();
-      quizScoresTable.settings()[0].ajax.data = function (d) {
-        d.submitType = "facultyGetQuizRecords";
-        d.student_id = studentId;
-        return d;
-      };
-
-      quizScoresTable.ajax.reload();
-    } else {
-      var quizScoresTable = $("#quizScoresTable").DataTable({
-        responsive: {
-          details: {
-            type: "inline",
-            display: $.fn.dataTable.Responsive.display.childRowImmediate,
-            renderer: function (api, rowIdx, columns) {
-              var data = $.map(columns, function (col, i) {
-                return col.hidden
-                  ? '<tr data-dt-row="' +
-                      col.rowIdx +
-                      '" data-dt-column="' +
-                      col.columnIdx +
-                      '">' +
-                      "<td>" +
-                      col.title +
-                      ":" +
-                      "</td> " +
-                      "<td>" +
-                      col.data +
-                      "</td>" +
-                      "</tr>"
-                  : "";
-              }).join("");
-
-              return data ? $("<table/>").append(data) : false;
-            },
-          },
-        },
-        ajax: {
-          url: "/SCES/backend/fetch-class.php",
-          type: "POST",
-          data: function (d) {
-            d.submitType = "facultyGetQuizRecords";
-            d.student_id = studentId; // Pass the student ID here
-            return d;
-          },
-          dataSrc: "",
-        },
-        columns: [
-          { data: "quiz_number", className: "text-center" },
-          { data: "subject", className: "text-center" },
-          { data: "title", className: "text-center" },
-          { data: "score", className: "text-center" },
-          { data: "item_number", className: "text-center" },
-          {
-            data: "remarks",
-            render: function (data) {
-              var className =
-                data === "Passed"
-                  ? "passed"
-                  : data === "Failed"
-                  ? "failed"
-                  : "";
-              return `<span class="${className}">${data}</span>`;
-            },
-          },
-          { data: "time", className: "text-center" },
-          {
-            data: null,
-            render: function (data, type, row) {
-              return `<div class="center-image">
-              <button class="more-btn" data-student-id="${row.student_id}" data-quiz-id="${row.quiz_id}" data-quiz-taker="${row.full_name}" data-quiz-subject="${row.subject}"><i class="fa-solid fa-chevron-right"></i></button>
-              </div>`;
-            },
-            orderable: false,
-            searchable: false,
-            className: "text-center",
-          },
-        ],
-        language: {
-          emptyTable: "No data available in table",
-        },
-        initComplete: function () {
-          quizScoresTable.draw();
-        },
-      });
-    }
-  }
-
-  document
-    .getElementById("quizScoresTable")
-    .addEventListener("click", function (event) {
-      if (event.target.closest(".more-btn")) {
-        const btn = event.target.closest(".more-btn");
-        const studentId = btn.getAttribute("data-student-id");
-        const quizId = btn.getAttribute("data-quiz-id");
-        const quizTaker = btn.getAttribute("data-quiz-taker");
-        const quizSubject = btn.getAttribute("data-quiz-subject");
-
-        fetch("/SCES/backend/fetch-class.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: `submitType=fetchStudentQuizHistory&student_id=${studentId}&quiz_id=${quizId}`,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.error) {
-              showAlert("error", "Student has not answered the quiz yet");
-              return;
-            }
-            const quizTakerSpan = document.getElementById("quizTaker");
-            const quizSubjectSpan = document.getElementById("quizSubject");
-            quizTakerSpan.textContent = quizTaker;
-            quizSubjectSpan.textContent = `${quizSubject} - Quiz ${data.quiz_number}`;
-
-            const viewQuizModal = document.getElementById("viewQuizModal");
-
-            viewQuizModal.querySelector(
-              ".modal-header-text h1"
-            ).innerText = `Quiz ${data.quiz_number} - ${data.title}`;
-
-            viewQuizModal.querySelector(
-              ".modal-icon-container img"
-            ).src = `/SCES/assets/images/${data.icon}`;
-
-            const modalHeaderBg =
-              viewQuizModal.querySelector(".modal-header-bg");
-            modalHeaderBg.className = `modal-header-bg ${data.subject_code.toLowerCase()}`;
-
-            const questionsContainer = viewQuizModal.querySelector(
-              "#viewQuestionsContainer"
-            );
-            questionsContainer.innerHTML = "";
-
-            data.questions.forEach((question, index) => {
-              const quizItem = document.createElement("div");
-              quizItem.classList.add("quiz-item");
-
-              const questionBox = document.createElement("div");
-              questionBox.classList.add("question-box");
-              questionBox.setAttribute(
-                "data-question-id",
-                question.question_id
-              );
-              questionBox.innerHTML = `<span><strong>${index + 1}.</strong> ${
-                question.question
-              }</span>`;
-              quizItem.appendChild(questionBox);
-
-              question.choices.forEach((choice, i) => {
-                const choiceLetter = String.fromCharCode(65 + i);
-                const choiceElement = document.createElement("div");
-                choiceElement.classList.add("quiz-ans-fixed");
-
-                if (choice.is_correct === 1) {
-                  choiceElement.classList.add("correct");
-                } else {
-                  choiceElement.classList.add("wrong");
-                }
-
-                if (choice.isSelected) {
-                  choiceElement.classList.add(data.subject_code.toLowerCase());
-                }
-
-                choiceElement.innerHTML = `
-                <strong>${choiceLetter}.</strong>&nbsp;${choice.choice}
-              `;
-
-                quizItem.appendChild(choiceElement);
-              });
-
-              questionsContainer.appendChild(quizItem);
-            });
-
-            const closeButton = document.getElementById("close-quiz");
-            const closeViewQuizModal =
-              document.getElementById("closeViewQuizModal");
-
-            closeButton.onclick = () => {
-              viewQuizModal.scrollTop = 0;
-              viewQuizModal.style.display = "none";
-              document.getElementById("studentModal").style.display = "flex";
-            };
-
-            closeViewQuizModal.onclick = () => {
-              viewQuizModal.scrollTop = 0;
-              viewQuizModal.style.display = "none";
-              document.getElementById("studentModal").style.display = "flex";
-            };
-
-            document.getElementById("studentModal").style.display = "none";
-            viewQuizModal.style.display = "block";
-          })
-          .catch((error) => {
-            showAlert("error", "Server Error", "Error fetching student data");
-          });
-      }
-    });
-
-  function initializeGradesTable(studentId) {
-    if ($.fn.dataTable.isDataTable("#gradesTable")) {
-      var gradesTable = $("#gradesTable").DataTable();
-      gradesTable.settings()[0].ajax.data = function (d) {
-        d.submitType = "facultyGetGrades";
-        d.student_id = studentId;
-        return d;
-      };
-
-      gradesTable.ajax.reload();
-    } else {
-      var gradesTable = $("#gradesTable").DataTable({
-        responsive: {
-          details: {
-            type: "inline",
-            display: $.fn.dataTable.Responsive.display.childRowImmediate,
-            renderer: function (api, rowIdx, columns) {
-              var data = $.map(columns, function (col, i) {
-                return col.hidden
-                  ? '<tr data-dt-row="' +
-                      col.rowIdx +
-                      '" data-dt-column="' +
-                      col.columnIdx +
-                      '">' +
-                      "<td>" +
-                      col.title +
-                      ":" +
-                      "</td> " +
-                      "<td>" +
-                      col.data +
-                      "</td>" +
-                      "</tr>"
-                  : "";
-              }).join("");
-
-              return data ? $("<table/>").append(data) : false;
-            },
-          },
-        },
-        ajax: {
-          url: "/SCES/backend/fetch-class.php",
-          type: "POST",
-          data: function (d) {
-            d.submitType = "facultyGetGrades";
-            d.student_id = studentId;
-            return d;
-          },
-          dataSrc: "",
-        },
-        columns: [
-          { data: "subject", className: "text-center" },
-          { data: "grade", className: "text-center" },
-          {
-            data: "remarks",
-            render: function (data) {
-              var className = "";
-              if (["Outstanding", "Very Good", "Good"].includes(data)) {
-                className = "passed";
-              } else if (data === "Fair") {
-                className = "fair";
-              } else if (data === "Failed") {
-                className = "failed";
-              }
-              return `<span class="${className}">${data}</span>`;
-            },
-            width: "100px",
-            className: "text-center",
-          },
-          { data: "quarter", className: "text-center" },
-        ],
-        language: {
-          emptyTable: "No data available in table",
-        },
-        initComplete: function () {
-          gradesTable.draw();
-        },
-      });
-    }
-  }
-
-  function populatePanelData(studentId, section_id) {
+  function populatePanelData(teacherId) {
     const data = new FormData();
-    data.append("submitType", "masterlistPanelData");
-    data.append("student_id", studentId);
-    data.append("section_id", section_id);
+    data.append("submitType", "adminFetchPanelData");
+    data.append("teacher_id", teacherId);
 
     fetch("/SCES/backend/fetch-class.php", {
       method: "POST",
@@ -551,150 +359,50 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => response.json())
       .then((data) => {
-        document.getElementById("totalCompletion").textContent =
+        document.getElementById("totalLessons").textContent =
+          data.totalLessons || 0;
+        document.getElementById("totalStudents").textContent =
+          data.totalStudents || 0;
+        document.getElementById("totalCompleted").textContent =
           data.totalCompleted || 0;
-        document.getElementById("totalQuizzes").textContent =
+        document.getElementById("totalPending").textContent =
           data.totalPending || 0;
-        document.getElementById("averageScore").textContent =
-          data.averageScore || "N/A";
-        document.getElementById("generalAverage").textContent =
-          data.generalAverage || "N/A";
       })
       .catch((error) => {
         console.error("Error fetching panel data:", error);
       });
   }
 
-  function getStudentGWA(studentId) {
-    const data = new FormData();
-    data.append("submitType", "facultyGetGWA");
-    data.append("student_id", studentId);
-
-    fetch("/SCES/backend/fetch-class.php", {
-      method: "POST",
-      body: data,
-    })
-      .then((response) => response.json())
-      .then((studentData) => {
-        // Check if studentData contains N/A values
-        const hasNoData = studentData.some(
-          (record) =>
-            record.gwa === "N/A" &&
-            record.grade_section === "N/A" &&
-            record.remarks === "N/A"
-        );
-
-        if (hasNoData) {
-          studentPerformance.innerText = "No Data";
-          studentSuccess.innerText = "No Data";
-          studentRemarks.innerText = "No Data";
-          studentGWA.innerText = "No Data";
-
-          remarksImg.src = "/SCES/assets/images/not-found.png";
-          performanceImg.src = "/SCES/assets/images/not-found.png";
-          return;
-        }
-
-        const predictiveData = {
-          gwa_records: studentData, // Send the entire studentData array
-        };
-
-        // Send the predictive data to Python API
-        fetch("http://127.0.0.1:5000/predict", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(predictiveData),
-        })
-          .then((response) => response.json())
-          .then((predictionData) => {
-            const remarks = predictionData.predicted_remarks;
-            const performance = predictionData.predicted_performance;
-
-            studentPerformance.innerText = predictionData.predicted_performance;
-            studentSuccess.innerText =
-              predictionData.predicted_academic_success_rate;
-            studentRemarks.innerText = predictionData.predicted_remarks;
-            studentGWA.innerText = predictionData.predicted_next_gwa;
-
-            remarksImg.src = getRemarksIcon(remarks);
-            performanceImg.src = getPerformanceIcon(performance);
-          })
-          .catch((error) => {
-            console.error("Error fetching predictions:", error);
-          });
-      })
-      .catch((error) => {
-        console.error("Error fetching student data:", error);
-      });
-  }
-
-  function initializeStudentLineChart(studentId) {
-    var ctxLine = document.getElementById("studentLineChart").getContext("2d");
-
-    if (Chart.getChart("studentLineChart")) {
-      Chart.getChart("studentLineChart").destroy();
-    }
-
+  function initializeFacultyLineChart(teacherId) {
     $.ajax({
       url: "/SCES/backend/fetch-class.php",
       type: "POST",
+      dataType: "json",
       data: {
-        submitType: "studentAverageScoreByMonth",
-        student_id: studentId,
+        submitType: "adminFetchLineChartData",
+        teacher_id: teacherId,
       },
-      success: function (response) {
-        const chartData = JSON.parse(response);
-        const months = chartData.labels || [];
-        const scores = chartData.lineData || [];
+      success: function (data) {
+        var ctxLine = document.getElementById("lineChart").getContext("2d");
 
-        if (scores.length === 0) {
-          showAlert("info", "No Data Available For Student");
-          ctxLine.chart = new Chart(ctxLine, {
+        if (Chart.getChart("lineChart")) {
+          Chart.getChart("lineChart").destroy();
+        }
+
+        if (data && data.labels && data.lineData && data.lineData.length > 0) {
+          new Chart(ctxLine, {
             type: "line",
             data: {
-              labels: ["No Data"],
+              labels: data.labels,
               datasets: [
                 {
-                  data: [0], // No data
-                  borderColor: "#ccc",
-                  backgroundColor: "rgba(200, 200, 200, 0.5)",
+                  label: "Average Score",
+                  data: data.lineData,
+                  backgroundColor: "rgba(221, 209, 255, 0.5)", // Light purple fill
+                  borderColor: "#ddd1ff",
+                  borderWidth: 3,
                   fill: true,
                   tension: 0.4,
-                },
-              ],
-            },
-            options: {
-              maintainAspectRatio: false,
-              responsive: true,
-              plugins: {
-                legend: false, // Disable the legend
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  title: false, // Remove title for y-axis
-                },
-                x: {
-                  title: false, // Remove title for x-axis
-                },
-              },
-            },
-          });
-        } else {
-          ctxLine.chart = new Chart(ctxLine, {
-            type: "line",
-            data: {
-              labels: months,
-              datasets: [
-                {
-                  label: "", // Remove label from the dataset
-                  data: scores,
-                  borderColor: "#ddd1ff", // Use #ddd1ff color for the line
-                  backgroundColor: "rgba(221, 209, 255, 0.5)",
-                  fill: true,
-                  tension: 0.4, // Curve the line
                   pointBackgroundColor: "#fff",
                   pointBorderColor: "#ddd1ff",
                   pointHoverRadius: 5,
@@ -702,30 +410,75 @@ document.addEventListener("DOMContentLoaded", function () {
               ],
             },
             options: {
-              maintainAspectRatio: false,
               responsive: true,
+              maintainAspectRatio: false,
               plugins: {
-                legend: false, // Disable the legend
                 title: {
                   display: true,
-                  text: "Average Score Per Month", // Add chart title
+                  text: "Average Score Per Month",
                   font: {
-                    size: 17,
-                    weight: "bold",
+                    size: 18,
                   },
                   padding: {
-                    top: 5,
+                    top: 10,
                     bottom: 10,
                   },
+                },
+                legend: {
+                  display: true,
+                  position: "bottom",
+                  padding: 20,
                 },
               },
               scales: {
                 y: {
                   beginAtZero: true,
-                  title: false, // Remove title for y-axis
+                },
+              },
+            },
+          });
+        } else {
+          new Chart(ctxLine, {
+            type: "line",
+            data: {
+              labels: ["No Data"], // Placeholder label
+              datasets: [
+                {
+                  label: "Average Score",
+                  data: [0], // Placeholder data
+                  backgroundColor: "rgba(200, 200, 200, 0.5)", // Gray fill
+                  borderColor: "#ccc", // Gray line
+                  borderWidth: 1,
+                  fill: true,
+                  tension: 0.4,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "No Data Available",
+                  font: {
+                    size: 18,
+                  },
+                  padding: {
+                    top: 10,
+                    bottom: 10,
+                  },
+                },
+                legend: {
+                  display: false,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
                 },
                 x: {
-                  title: false, // Remove title for x-axis
+                  display: false,
                 },
               },
             },
@@ -733,169 +486,170 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       },
       error: function (xhr, status, error) {
-        console.error("Error fetching data: ", error);
+        console.error("Error in AJAX request:", status, error);
       },
     });
   }
 
-  function initializeStudentBarChart(lrn) {
-    var ctxBar = document.getElementById("studentBarChart").getContext("2d");
-
-    if (Chart.getChart("studentBarChart")) {
-      Chart.getChart("studentBarChart").destroy();
-    }
+  function initializeFacultyBarChart(teacherId) {
     $.ajax({
       url: "/SCES/backend/fetch-class.php",
       type: "POST",
       dataType: "json",
       data: {
-        submitType: "studentBarChartGWA",
-        lrn: lrn,
+        submitType: "adminFetchBarChart",
+        teacher_id: teacherId,
       },
       success: function (data) {
-        var ctxBar = document
-          .getElementById("studentBarChart")
-          .getContext("2d");
+        if (data && data.labels && data.barData && data.subjectCodes) {
+          const colorMapping = {
+            fil: "#ff8080",
+            eng: "#ffb480",
+            math: "#e1e149",
+            sci: "#42d6a4",
+            esp: "#08cad1",
+            mt: "#59adf6",
+            ap: "#f0bad1",
+            mapeh: "#a3adff",
+            epp: "#d9ae9d",
+          };
 
-        var colors = [
-          "#ffd6e6",
-          "#d2ebc4",
-          "#fcfd95",
-          "#c5e3ff",
-          "#ddd1ff",
-          "#fec590",
-        ];
+          const backgroundColors = data.subjectCodes.map(
+            (code) => colorMapping[code] || "#cccccc"
+          );
 
-        var backgroundColors = data.labels.map((label, index) => {
-          return colors[index % colors.length];
-        });
+          // Get the canvas context and check if the chart already exists
+          const ctxBar = document.getElementById("barChart").getContext("2d");
+          if (Chart.getChart("barChart")) {
+            Chart.getChart("barChart").destroy();
+          }
 
-        var barChart = new Chart(ctxBar, {
-          type: "bar",
-          data: {
-            labels: data.labels,
-            datasets: [
-              {
-                label: "GWA",
-                data: data.barData,
-                backgroundColor: backgroundColors,
-                borderColor: "#000",
-                borderWidth: 2,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              title: {
-                display: true,
-                text: "GWA by Grade Level",
-                font: {
-                  size: 18,
+          // Initialize the bar chart
+          new Chart(ctxBar, {
+            type: "bar",
+            data: {
+              labels: data.labels,
+              datasets: [
+                {
+                  label: "Total Lessons",
+                  data: data.barData,
+                  backgroundColor: backgroundColors,
+                  borderColor: "#000",
+                  borderWidth: 2,
                 },
-                padding: {
-                  top: 10,
-                  bottom: 10,
-                },
-              },
-              legend: {
-                display: false,
-              },
+              ],
             },
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      },
-    });
-  }
-
-  function initializeStudentFullBarChart(studentId, section_id) {
-    const ctxBar = document
-      .getElementById("studentFullBarChart")
-      .getContext("2d");
-
-    // Destroy previous instance if it exists
-    if (Chart.getChart("studentFullBarChart")) {
-      Chart.getChart("studentFullBarChart").destroy();
-    }
-
-    // AJAX request to fetch data
-    $.ajax({
-      url: "/SCES/backend/fetch-class.php",
-      type: "POST",
-      dataType: "json",
-      data: {
-        submitType: "studentFullBarChart",
-        student_id: studentId,
-        section_id: section_id,
-      },
-      success: function (data) {
-        // Define color mapping for subject codes
-        const colorMapping = {
-          fil: "#ff8080",
-          eng: "#ffb480",
-          math: "#e1e149",
-          sci: "#42d6a4",
-          esp: "#08cad1",
-          mt: "#59adf6",
-          ap: "#f0bad1",
-          mapeh: "#a3adff",
-          epp: "#d9ae9d",
-        };
-
-        // Map background colors based on subject codes
-        const backgroundColors = data.subjectCodes.map(
-          (code) => colorMapping[code] || "#cccccc" // Default color if code is missing
-        );
-
-        new Chart(ctxBar, {
-          type: "bar",
-          data: {
-            labels: data.labels,
-            datasets: [
-              {
-                label: "Average Score",
-                data: data.barData,
-                backgroundColor: backgroundColors,
-                borderColor: "#000",
-                borderWidth: 2,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              title: {
-                display: true,
-                text: "Average Score Per Subject",
-                font: {
-                  size: 18,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Total Lesson Per Subject",
+                  font: {
+                    size: 18,
+                  },
+                  padding: {
+                    top: 10,
+                    bottom: 10,
+                  },
                 },
-                padding: {
-                  top: 10,
-                  bottom: 10,
+                legend: {
+                  display: false,
                 },
               },
-              legend: {
-                display: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
               },
             },
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
+          });
+        } else {
+          console.log("No data received or data is in an unexpected format.");
+        }
       },
       error: function (xhr, status, error) {
-        console.error("Error fetching data for faculty full bar chart:", error);
+        console.error("Error fetching data for bar chart:", status, error);
+      },
+    });
+  }
+
+  function initializeQuizPieChart(teacherId) {
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      data: {
+        submitType: "adminQuizCompletion",
+        teacher_id: teacherId,
+      },
+      dataType: "json",
+      success: function (response) {
+        const totalCompleted = response.completed;
+        const totalInactive = response.inactive;
+        const totalActive = response.active;
+
+        var ctxPie = document.getElementById("pieChart").getContext("2d");
+
+        // Destroy existing chart if it exists
+        if (ctxPie.chart) {
+          ctxPie.chart.destroy();
+        }
+
+        // Handle case where there's no data
+        if (totalCompleted === 0 && totalInactive === 0 && totalActive === 0) {
+          showAlert("info", "No Data Available For Subject");
+          return;
+        }
+
+        // Initialize the pie chart
+        const pieChart = new Chart(ctxPie, {
+          type: "pie",
+          data: {
+            labels: ["Completed", "Inactive", "Active"],
+            datasets: [
+              {
+                data: [totalCompleted, totalInactive, totalActive],
+                backgroundColor: ["#d2ebc4", "#fcfd95", "#c5e3ff"],
+                borderWidth: 2,
+                borderColor: "#000",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+              title: {
+                display: true,
+                text: "Quizzes By Status",
+                font: {
+                  size: 17,
+                  weight: "bold",
+                },
+                padding: {
+                  top: 5,
+                  bottom: 10,
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    return "Quizzes: " + tooltipItem.raw;
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        ctxPie.chart = pieChart; // Save chart instance to the context
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data: " + error);
       },
     });
   }

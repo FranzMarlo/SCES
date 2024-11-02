@@ -213,13 +213,13 @@ document.addEventListener("DOMContentLoaded", function () {
       var totalInactive = response.inactive;
       var totalActive = response.active;
 
-      initializeSubjectPieChart(totalCompleted, totalInactive, totalActive);
+      initializeQuizPieChart(totalCompleted, totalInactive, totalActive);
     },
     error: function (xhr, status, error) {
       console.error("Error fetching data: " + error);
     },
   });
-  function initializeSubjectPieChart(
+  function initializeQuizPieChart(
     totalCompleted,
     totalInactive,
     totalActive

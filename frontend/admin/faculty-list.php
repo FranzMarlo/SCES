@@ -19,9 +19,12 @@ $page = '';
             <?php
             include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-header.php';
             ?>
-            <div class="title-box">
-                <img src="/SCES/assets/images/school-info.png" alt="school-info.png">
-                <h1>Faculty List</h1>
+            <div class="title-box justified">
+                <div class="title-part">
+                    <img src="/SCES/assets/images/school-info.png" alt="school-info.png">
+                    <h1>Faculty List</h1>
+                </div>
+                <button class="add-btn" id=addTeacherBtn><i class="fa-solid fa-user-plus"></i>Add Teacher</button>
             </div>
             <div class="panel">
                 <div class="panel-tab" id="allFacultyPanel">

@@ -3405,6 +3405,210 @@ class fetchClass extends db_connect
         }
     }
 
+    public function getFacultyDetails($teacherId)
+    {
+        $query = $this->conn->prepare(
+            "SELECT
+                teacher.image_profile,
+                teacher.trn,
+                teacher.teacher_id,
+                teacher.teacher_lname,
+                teacher.teacher_fname,
+                teacher.teacher_mname,
+                teacher.age,
+                teacher.gender,
+                teacher.city,
+                teacher.barangay,
+                teacher.street,
+                teacher.contact_number,
+                teacher.role,
+                faculty.email
+            FROM
+                teacher_tbl teacher
+            INNER JOIN
+                faculty_tbl faculty
+            ON
+                teacher.teacher_id = faculty.teacher_id
+            WHERE
+                teacher.teacher_id = ?
+            "
+        );
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($result->num_rows > 0) {
+                $teacher = $result->fetch_assoc();
+
+                return $teacher;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function getAdminDetails($teacherId)
+    {
+        $query = $this->conn->prepare(
+            "SELECT
+                teacher.image_profile,
+                teacher.trn,
+                teacher.teacher_id,
+                teacher.teacher_lname,
+                teacher.teacher_fname,
+                teacher.teacher_mname,
+                teacher.age,
+                teacher.gender,
+                teacher.city,
+                teacher.barangay,
+                teacher.street,
+                teacher.contact_number,
+                teacher.role,
+                admin.email
+            FROM
+                teacher_tbl teacher
+            INNER JOIN
+                admin_tbl admin
+            ON
+                teacher.teacher_id = admin.teacher_id
+            WHERE
+                teacher.teacher_id = ?
+            "
+        );
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($result->num_rows > 0) {
+                $teacher = $result->fetch_assoc();
+
+                return $teacher;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function getTotalTeacherLesson($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT `lesson_id`) as total
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        INNER JOIN
+            lesson_tbl c
+        ON
+            s.subject_id = c.subject_id
+        WHERE
+            t.teacher_id = ?
+            ");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return false;
+        }
+    }
+
+    public function getTotalTeacherStudent($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT `student_id`) as total
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        INNER JOIN
+            student_tbl c
+        ON
+            s.section_id = c.section_id
+        WHERE
+            t.teacher_id = ?
+            ");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return false;
+        }
+    }
+
+    public function teacherGetQuizzesCount($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        WHERE 
+            teacher.teacher_id = ?
+        AND 
+            quiz.status = 'Completed'
+    ");
+
+        // Bind parameters for sectionId, studentId, and status (pending)
+        $query->bind_param("s", $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc(); // Fetch as associative array
+            return $subjectDetails['quiz_count']; // Return the count of pending quizzes
+        }
+
+        return 0; // Return 0 if no result
+    }
+
+    public function teacherGetPendingQuizzesCount($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(quiz.quiz_id) AS quiz_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+        ON subject.subject_id = quiz.subject_id
+        INNER JOIN section_tbl section
+        ON subject.section_id = section.section_id
+        INNER JOIN lesson_tbl lesson
+        ON quiz.lesson_id = lesson.lesson_id
+        INNER JOIN teacher_tbl teacher
+        ON teacher.teacher_id = subject.teacher_id
+        WHERE 
+            teacher.teacher_id = ?
+        AND 
+            quiz.status IN ('Inactive', 'Active')
+    ");
+
+        // Bind parameters for sectionId, studentId, and status (pending)
+        $query->bind_param("s", $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc(); // Fetch as associative array
+            return $subjectDetails['quiz_count']; // Return the count of pending quizzes
+        }
+
+        return 0; // Return 0 if no result
+    }
+
 }
 
 
