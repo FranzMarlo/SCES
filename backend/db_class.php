@@ -2123,6 +2123,52 @@ class globalClass extends db_connect
         }
     }
 
+    public function getSubjectData($subject)
+    {
+        $query = $this->conn->prepare("
+        SELECT * FROM subject_masterlist WHERE subject = ?
+    ");
+        $query->bind_param("s", $subject);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectData = $result->fetch_assoc();
+            return $subjectData;
+        }
+
+        return false;
+    }
+
+    public function addSubject($teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $code)
+    {
+        $year = date("Y");
+        $subjectId = 'S' . $code . $year . sprintf('%04d', rand(0, 9999));
+        $checkIdResult = $this->checkSubjectId($subjectId);
+
+        while ($checkIdResult->num_rows > 0) {
+            $subjectId = 'S' . $code . $year . sprintf('%04d', rand(0, 9999));
+            $checkIdResult = $this->checkSubjectId($subjectId);
+        }
+        $query = $this->conn->prepare("INSERT INTO `subject_tbl` (`subject_id`, `teacher_id`, `level_id`, `subject`, `subject_title`, `section_id`, `icon`, `subject_code`, `year`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssssssi", $subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $year);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function checkSubjectId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM subject_tbl WHERE subject_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+
 }
 
 

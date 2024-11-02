@@ -1452,16 +1452,46 @@ if (isset($_POST['submitType'])) {
         } else if (empty($studSection)) {
             echo '500';
         } else {
-            if($studSuffix != 'N/A'){
+            if ($studSuffix != 'N/A') {
                 $studFname = $studFname . ' ' . $studSuffix;
-            }
-            else{
+            } else {
                 //pass
             }
             $addStudent = $db->addStudentList($studLRN, $studLname, $studFname, $studMname, $studAge, $studGender, $studGradeLevel, $studSection);
             if ($addStudent != false) {
                 echo '200';
             } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'addSubjectData') {
+        $addGradeLevel = validate($_POST['addGradeLevel']);
+        $addSubject = validate($_POST['addSubject']);
+        $addSection = validate($_POST['addSection']);
+        $addTeacher = validate($_POST['addTeacher']);
+        if (empty($addGradeLevel)) {
+            echo '491';
+        } else if (empty($addSubject)) {
+            echo '492';
+        } else if (empty($addSection)) {
+            echo '493';
+        } else if (empty($addTeacher)) {
+            echo '494';
+        } else {
+            $subjectData = $db->getSubjectData($addSubject);
+            if ($subjectData != false) {
+                $subject_title = $subjectData['subject_title'];
+                $icon = $subjectData['icon'];
+                $subject_code = $subjectData['subject_code'];
+                $code = substr($subjectData['subject'], -1);
+                $addSubject = $db->addSubject($addTeacher, $addGradeLevel, $addSubject, $subject_title, $addSection, $icon, $subject_code, $code);
+                if ($addSubject != false) {
+                    echo '200';
+                } else {
+                    echo '400';
+                }
+            }
+            else{
                 echo '400';
             }
         }

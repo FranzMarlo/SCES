@@ -3627,10 +3627,20 @@ class fetchClass extends db_connect
 
     public function getSectionByLevel($levelId)
     {
+        $currentYear = date("Y");
+        $currentMonth = date("m");
+
+        // Determine the school year start based on the month
+        if ($currentMonth >= 6) {
+            $schoolYearStart = $currentYear;
+        } else {
+            $schoolYearStart = $currentYear - 1;
+        }
+
         $query = $this->conn->prepare("
-        SELECT * FROM section_tbl WHERE level_id = ?
+        SELECT * FROM section_tbl WHERE level_id = ? AND year = ?
     ");
-        $query->bind_param("s", $levelId);
+        $query->bind_param("ss", $levelId, $schoolYearStart);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -3640,6 +3650,7 @@ class fetchClass extends db_connect
 
         return null;
     }
+
 
 
 }

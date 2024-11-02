@@ -3616,6 +3616,95 @@ $("#editQuiz").on("submit", function (e) {
   });
 });
 
+$("#addSubjectForm").on("submit", function (e) {
+  e.preventDefault();
+
+  var formData = new FormData(this);
+  formData.append("submitType", "addSubjectData");
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Subject Added Succesfully",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              window.location.reload();
+            });
+          }
+        );
+      } else if (response == "491") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Grade Level For Subject",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "492") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select A Subject",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "493") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Section For Subject",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "494") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Teacher For Subject",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Subject Adding Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
 function logoutFunc() {
   Swal.fire({
     icon: "question",
