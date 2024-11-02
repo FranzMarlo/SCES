@@ -264,7 +264,6 @@ class globalClass extends db_connect
             s.subject,
             s.level_id,
             s.icon,
-            s.link,
             s.subject_title,
             s.subject_code,
             t.teacher_fname,
@@ -300,7 +299,6 @@ class globalClass extends db_connect
             s.subject,
             s.level_id,
             s.icon,
-            s.link,
             s.section_id,
             s.subject_title,
             s.subject_code,
@@ -346,7 +344,6 @@ class globalClass extends db_connect
             s.subject,
             s.level_id,
             s.icon,
-            s.link,
             s.section_id,
             s.subject_title,
             s.subject_code,
@@ -389,7 +386,6 @@ class globalClass extends db_connect
             s.subject,
             s.level_id,
             s.icon,
-            s.link,
             s.subject_title,
             s.subject_code,
             t.teacher_fname,
@@ -426,7 +422,6 @@ class globalClass extends db_connect
             s.level_id,
             s.icon,
             s.subject_code,
-            s.link,
             s.subject_title,
             s.subject_code,
             t.teacher_fname,
@@ -2109,6 +2104,22 @@ class globalClass extends db_connect
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function subjectTeacherOptions()
+    {
+        $query = $this->conn->prepare("
+        SELECT
+            teacher_id,
+            CONCAT(teacher_fname, ' ', teacher_lname) AS full_name,
+            gender
+        FROM teacher_tbl 
+        ");
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $options = $result->fetch_all(MYSQLI_ASSOC); // Fetch all rows as an associative array
+            return $options;
         }
     }
 

@@ -53,6 +53,7 @@ $page = '';
             <div class="subject-panel">
                 <div class="panel-title">
                     <h1>Subjects</h1>
+                    <button class="add-btn" id="addSubjectBtn"><i class="fa-solid fa-plus"></i>Add Subject</button>
                 </div>
                 <?php $subjects = $db->getAdminSubjects(); ?>
                 <div class="subject-container <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>">
@@ -78,9 +79,8 @@ $page = '';
                                 </div>
                                 <div class="popup-menu">
                                     <ul>
-                                        <li><a href="#">Edit</a></li>
-                                        <li><a href="#">Archive</a></li>
-                                        <li><a href="#">View Details</a></li>
+                                        <li><a href="javascript:void(0)" data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Edit</a></li>
+                                        <li><a href="javascript:void(0)" data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Archive</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -95,5 +95,7 @@ $page = '';
                 </div>
             </div>
             <?php
+            include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-modal.php';
             include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
             ?>
+            <script src="/SCES/assets/script/admin-subject.js"></script>

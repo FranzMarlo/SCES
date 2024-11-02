@@ -92,10 +92,10 @@ class fetchClass extends db_connect
             return false;
         }
     }
-    public function facultyGetLessons($levelId, $subjectID, $teacherId, $sectionId)
+    public function facultyGetLessons($levelId, $subjectID, $sectionId)
     {
-        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND teacher_id = ? AND section_id = ? ORDER BY lesson_number ASC");
-        $query->bind_param("ssss", $levelId, $subjectID, $teacherId, $sectionId);
+        $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND section_id = ? ORDER BY lesson_number ASC");
+        $query->bind_param("sss", $levelId, $subjectID, $sectionId);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -3608,6 +3608,39 @@ class fetchClass extends db_connect
 
         return 0; // Return 0 if no result
     }
+
+    public function getSubjectMasterlist($levelId)
+    {
+        $query = $this->conn->prepare("
+        SELECT * FROM subject_masterlist WHERE level_id = ?
+    ");
+        $query->bind_param("s", $levelId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjects = $result->fetch_all(MYSQLI_ASSOC); // Fetch all rows as an associative array
+            return $subjects;
+        }
+
+        return null;
+    }
+
+    public function getSectionByLevel($levelId)
+    {
+        $query = $this->conn->prepare("
+        SELECT * FROM section_tbl WHERE level_id = ?
+    ");
+        $query->bind_param("s", $levelId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $sections = $result->fetch_all(MYSQLI_ASSOC); // Fetch all rows as an associative array
+            return $sections;
+        }
+
+        return null;
+    }
+
 
 }
 

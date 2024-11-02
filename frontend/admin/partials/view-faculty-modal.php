@@ -199,9 +199,9 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="teacherRole">Role:</label>
+                    <label for="teacherRole">Select Role:</label>
                     <select name="teacherRole" id="teacherRole">
-                        <option value="" selected>Select Role:</option>
+                        <option value="" selected>Select Role</option>
                         <option value="FACULTY">Faculty</option>
                         <option value="ADMIN">Admin</option>
                     </select>
