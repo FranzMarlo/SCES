@@ -2157,11 +2157,21 @@ class globalClass extends db_connect
             return false;
         }
     }
-    
+
     public function checkSubjectId($id)
     {
         $query = $this->conn->prepare("SELECT * FROM subject_tbl WHERE subject_id = ?");
         $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+    public function checkSubjectBySection($sectionId, $subject)
+    {
+        $query = $this->conn->prepare("SELECT * FROM subject_tbl WHERE section_id = ? AND subject = ?");
+        $query->bind_param("ss", $sectionId, $subject);
         if ($query->execute()) {
             $result = $query->get_result();
             return $result;

@@ -3644,6 +3644,17 @@ $("#addSubjectForm").on("submit", function (e) {
             });
           }
         );
+      } else if (response == "490") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Subject Already Exists For Section",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
       } else if (response == "491") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",

@@ -79,7 +79,7 @@ $page = '';
                                 </div>
                                 <div class="popup-menu">
                                     <ul>
-                                        <li><a href="javascript:void(0)" data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Edit</a></li>
+                                        <li><a href="javascript:void(0)" class="edit-btn" data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Edit</a></li>
                                         <li><a href="javascript:void(0)" data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Archive</a></li>
                                     </ul>
                                 </div>

@@ -1469,7 +1469,10 @@ if (isset($_POST['submitType'])) {
         $addSubject = validate($_POST['addSubject']);
         $addSection = validate($_POST['addSection']);
         $addTeacher = validate($_POST['addTeacher']);
-        if (empty($addGradeLevel)) {
+        $checkSubject = $db->checkSubjectBySection($addSection, $addSubject);
+        if ($checkSubject->num_rows > 0) {
+            echo '490';
+        } else if (empty($addGradeLevel)) {
             echo '491';
         } else if (empty($addSubject)) {
             echo '492';

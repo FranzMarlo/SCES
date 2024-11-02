@@ -3,6 +3,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const addSubjectModal = document.getElementById("addSubjectModal");
   const addSubjectForm = document.getElementById("addSubjectForm");
   const closeAddSubjectModal = document.getElementById("closeAddSubjectModal");
+  const editSubjectModal = document.getElementById("editSubjectModal");
+  const editSubjectForm = document.getElementById("editSubjectForm");
+  const closeEditSubjectModal = document.getElementById(
+    "closeEditSubjectModal"
+  );
 
   addSubjectBtn.addEventListener("click", function () {
     addSubjectModal.style.display = "flex";
@@ -19,6 +24,30 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.target == addSubjectModal) {
       addSubjectForm.reset();
       addSubjectModal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+  });
+
+  document
+    .querySelectorAll(".edit-btn")
+    .forEach((editLink) => {
+      editLink.addEventListener("click", function () {
+        const subjectId = this.getAttribute("data-subject-id");
+        editSubjectModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+      });
+    });
+
+  closeEditSubjectModal.addEventListener("click", function () {
+    editSubjectForm.reset();
+    editSubjectModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target == editSubjectModal) {
+      editSubjectForm.reset();
+      editSubjectModal.style.display = "none";
       document.body.style.overflow = "auto";
     }
   });
