@@ -129,14 +129,14 @@
                     </div>
                 </div>
                 <div class="panel-box completed">
-                <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
+                    <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
                     <div class="panel-col">
                         <p>Completed Quizzes</p>
                         <span id="totalCompleted"></span>
                     </div>
                 </div>
                 <div class="panel-box average">
-                <img src="/SCES/assets/images/quiz-pending.png" alt="quiz-pending.png">
+                    <img src="/SCES/assets/images/quiz-pending.png" alt="quiz-pending.png">
                     <div class="panel-col">
                         <p>Pending Quizzes</p>
                         <span id="totalPending"></span>
@@ -161,38 +161,56 @@
 </div>
 
 <div id="addTeacherModal" class="modal-small">
-  <div class="modal-content-small">
-    <div class="modal-header-small">
-      <h2>Add Teacher</h2>
-      <span class="close-btn" id="closeAddTeacherModal">&times;</span>
+    <div class="modal-content-small">
+        <div class="modal-header-small">
+            <h2>Add Teacher</h2>
+            <span class="close-btn" id="closeAddTeacherModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="addTeacherForm">
+                <div class="form-group">
+                    <label for="teacherLname">Teacher Last Name:</label>
+                    <input type="text" id="teacherLname" name="teacherLname" placeholder="Enter Last Name">
+                </div>
+                <div class="form-group">
+                    <label for="teacherFname">Teacher First Name:</label>
+                    <input type="text" id="teacherFname" name="teacherFname" placeholder="Enter First Name">
+                </div>
+                <div class="form-group">
+                    <label for="teacherMname">Teacher Middle Name:</label>
+                    <input type="text" id="teacherMname" name="teacherMname" placeholder="Enter Middle Name">
+                </div>
+                <div class="form-group">
+                    <label for="teacherSuffix">Suffix:</label>
+                    <select name="teacherSuffix" id="teacherSuffix">
+                        <option value="" selected>Select Suffix:</option>
+                        <option value="N/A">None</option>
+                        <option value="Sr.">Sr.</option>
+                        <option value="Jr.">Jr.</option>
+                        <option value="II">II</option>
+                        <option value="III">III</option>
+                        <option value="IV">IV</option>
+                        <option value="V">V</option>
+                        <option value="VI">VI</option>
+                        <option value="VII">VII</option>
+                        <option value="VIII">VIII</option>
+                        <option value="IX">IX</option>
+                        <option value="X">X</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="teacherRole">Role:</label>
+                    <select name="teacherRole" id="teacherRole">
+                        <option value="" selected>Select Role:</option>
+                        <option value="FACULTY">Faculty</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="save-btn">Add Lesson</button>
+        </div>
+        </form>
     </div>
-    <div class="modal-body">
-      <form id="addTeacherForm">
-        <div class="form-group">
-          <label for="teacherLname">Teacher Last Name:</label>
-          <input type="text" id="teacherLname" name="teacherLname" placeholder="Enter Last Name">
-        </div>
-        <div class="form-group">
-          <label for="teacherFname">Teacher First Name:</label>
-          <input type="text" id="teacherFname" name="teacherFname" placeholder="Enter First Name">
-        </div>
-        <div class="form-group">
-          <label for="teacherMname">Teacher Middle Name:</label>
-          <input type="text" id="teacherMname" name="teacherMname" placeholder="Enter Middle Name">
-        </div>
-        <div class="form-group">
-          <label for="teacherRole">Role:</label>
-            <select name="teacherRole" id="teacherRole">
-              <option value="Not Set" selected>Select Role</option>
-              <option value="FACULTY">Faculty</option>
-              <option value="ADMIN">Admin</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <button type="submit" class="save-btn">Add Lesson</button>
-        </div>
-      </form>
-    </div>
-  </div>
+</div>
 </div>

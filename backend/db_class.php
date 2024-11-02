@@ -2061,6 +2061,34 @@ class globalClass extends db_connect
         return 0; // Return 0 if no result
     }
 
+    public function addFacultyList($teacherLname, $teacherFname, $teacherMname, $teacherSuffix, $role)
+    {
+        $year = date("Y");
+        $trn = '109625' . $year . sprintf('%05d', rand(0, 99999));
+        $checkIdResult = $this->checkTRN($trn);
+
+        while ($checkIdResult->num_rows > 0) {
+            $trn = '109625' . $year . sprintf('%05d', rand(0, 99999));
+            $checkIdResult = $this->checkTRN($trn);
+        }
+        $query = $this->conn->prepare("INSERT INTO `faculty_masterlist` (`trn`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `teacher_suffix`, `role`, `year`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("sssssss", $trn, $teacherFname, $teacherMname, $teacherLname, $teacherSuffix, $role, $year);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkTRN($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM faculty_masterlist WHERE trn = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
 
 }
 

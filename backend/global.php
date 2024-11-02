@@ -1392,6 +1392,30 @@ if (isset($_POST['submitType'])) {
                 echo '400';
             }
         }
+    } else if ($_POST['submitType'] === 'addFacultyList') {
+        $teacherLname = ucwords(validate($_POST['teacherLname']));
+        $teacherFname = ucwords(validate($_POST['teacherFname']));
+        $teacherMname = ucwords(validate($_POST['teacherMname']));
+        $teacherSuffix = ucwords(validate($_POST['teacherSuffix']));
+        $role = ucwords(validate($_POST['teacherRole'])); 
+        if (empty($teacherLname)) {
+            echo '491';
+        } else if (empty($teacherFname)) {
+            echo '492';
+        } else if (empty($teacherMname)) {
+            echo '493';
+        } else if (empty($teacherSuffix)) {
+            echo '494';
+        }else if (empty($role)) {
+            echo '495';
+        } else {
+            $addFaculty = $db->addFacultyList($teacherLname, $teacherFname, $teacherMname, $teacherSuffix, $role);
+            if ($addFaculty != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
     } else {
         echo '400';
     }
