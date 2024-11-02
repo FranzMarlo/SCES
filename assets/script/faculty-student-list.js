@@ -1,4 +1,29 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const addStudentBtn = document.getElementById("addStudentBtn");
+  const addStudentModal = document.getElementById("addStudentModal");
+  const addStudentForm = document.getElementById("addStudentForm");
+  const closeAddStudentModal = document.getElementById("closeAddStudentModal");
+
+  addStudentBtn.addEventListener("click", function () {
+    addStudentModal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  });
+
+  closeAddStudentModal.addEventListener("click", function () {
+    addStudentForm.reset();
+    addStudentModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target == addStudentModal) {
+      addStudentForm.reset();
+      addStudentModal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+  });
+
+
   const performanceImg = document.getElementById(
     "studentPredictedPerformanceIcon"
   );

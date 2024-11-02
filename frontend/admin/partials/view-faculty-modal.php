@@ -206,11 +206,10 @@
                         <option value="ADMIN">Admin</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <button type="submit" class="save-btn">Add Lesson</button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <button type="submit" class="save-btn">Add Lesson</button>
-        </div>
-        </form>
     </div>
-</div>
 </div>

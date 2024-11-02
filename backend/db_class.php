@@ -2090,6 +2090,28 @@ class globalClass extends db_connect
         }
     }
 
+    public function checkLRN($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM student_masterlist WHERE lrn = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+    public function addStudentList($studLRN, $studLname, $studFname, $studMname, $studAge, $studGender, $studGradeLevel, $studSection)
+    {   
+        $year = date("Y");
+        $query = $this->conn->prepare("INSERT INTO `student_masterlist` (`lrn`, `student_lname`, `student_fname`, `student_mname`, `gender`, `age`, `grade_level`, `section`, `year`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("sssssisss", $studLRN, $studLname, $studFname, $studMname, $studGender, $studAge, $studGradeLevel, $studSection, $year);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
 
 

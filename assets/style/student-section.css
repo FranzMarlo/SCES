@@ -181,9 +181,6 @@ table.dataTable tbody td.dataTables_empty {
     transform: translateY(0);
   }
 }
-.modal-content::-webkit-scrollbar {
-  display: none;
-}
 .modal-head {
   width: 100%;
   display: flex;
@@ -193,6 +190,9 @@ table.dataTable tbody td.dataTables_empty {
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
   border-bottom: 2px solid #000;
+}
+.modal-content::-webkit-scrollbar {
+  display: none;
 }
 .modal-content {
   -ms-overflow-style: none;
@@ -701,6 +701,13 @@ table.dataTable tbody td.dataTables_empty {
   overflow-y: auto;
   box-sizing: border-box;
   animation: slideIn 0.3s ease-out;
+}
+.modal-content-small::-webkit-scrollbar {
+  display: none;
+}
+.modal-content-small {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .modal-header-small {
   display: flex;

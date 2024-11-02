@@ -1393,11 +1393,11 @@ if (isset($_POST['submitType'])) {
             }
         }
     } else if ($_POST['submitType'] === 'addFacultyList') {
-        $teacherLname = ucwords(validate($_POST['teacherLname']));
-        $teacherFname = ucwords(validate($_POST['teacherFname']));
-        $teacherMname = ucwords(validate($_POST['teacherMname']));
-        $teacherSuffix = ucwords(validate($_POST['teacherSuffix']));
-        $role = ucwords(validate($_POST['teacherRole'])); 
+        $teacherLname = strtoupper(validate($_POST['teacherLname']));
+        $teacherFname = strtoupper(validate($_POST['teacherFname']));
+        $teacherMname = strtoupper(validate($_POST['teacherMname']));
+        $teacherSuffix = strtoupper(validate($_POST['teacherSuffix']));
+        $role = strtoupper(validate($_POST['teacherRole']));
         if (empty($teacherLname)) {
             echo '491';
         } else if (empty($teacherFname)) {
@@ -1406,11 +1406,60 @@ if (isset($_POST['submitType'])) {
             echo '493';
         } else if (empty($teacherSuffix)) {
             echo '494';
-        }else if (empty($role)) {
+        } else if (empty($role)) {
             echo '495';
         } else {
             $addFaculty = $db->addFacultyList($teacherLname, $teacherFname, $teacherMname, $teacherSuffix, $role);
             if ($addFaculty != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'addStudentList') {
+        $studLRN = strtoupper(validate($_POST['studLRN']));
+        $studLname = strtoupper(validate($_POST['studLname']));
+        $studFname = strtoupper(validate($_POST['studFname']));
+        $studMname = strtoupper(validate($_POST['studMname']));
+        $studSuffix = strtoupper(validate($_POST['studSuffix']));
+        $studAge = strtoupper(validate($_POST['studAge']));
+        $studGender = strtoupper(validate($_POST['studGender']));
+        $studGradeLevel = strtoupper(validate($_POST['studGradeLevel']));
+        $studSection = strtoupper(validate($_POST['studSection']));
+        $checkLRN = $db->checkLRN($studLRN);
+        if ($checkLRN->num_rows > 0) {
+            echo '489';
+        } else if (empty($studLRN)) {
+            echo '490';
+        } else if (empty($studLname)) {
+            echo '491';
+        } else if (empty($studFname)) {
+            echo '492';
+        } else if (empty($studMname)) {
+            echo '493';
+        } else if (empty($studSuffix)) {
+            echo '494';
+        } else if (empty($studAge) || $studAge == 0) {
+            echo '495';
+        } else if ($studAge <= 0) {
+            echo '496';
+        } else if ($studAge > 100) {
+            echo '497';
+        } else if (empty($studGender)) {
+            echo '498';
+        } else if (empty($studGradeLevel)) {
+            echo '499';
+        } else if (empty($studSection)) {
+            echo '500';
+        } else {
+            if($studSuffix != 'N/A'){
+                $studFname = $studFname . ' ' . $studSuffix;
+            }
+            else{
+                //pass
+            }
+            $addStudent = $db->addStudentList($studLRN, $studLname, $studFname, $studMname, $studAge, $studGender, $studGradeLevel, $studSection);
+            if ($addStudent != false) {
                 echo '200';
             } else {
                 echo '400';

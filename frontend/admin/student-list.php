@@ -19,9 +19,12 @@ $page = '';
             <?php
             include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-header.php';
             ?>
-            <div class="title-box">
-                <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
-                <h1>Student Masterlist</h1>
+            <div class="title-box justified">
+                <div class="title-part">
+                    <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
+                    <h1>Student Masterlist</h1>
+                </div>
+                <button class="add-btn" id=addStudentBtn><i class="fa-solid fa-user-plus"></i>Add Student</button>
             </div>
             <div class="panel">
                 <div class="panel-tab" id="allStudentsPanel">
@@ -48,7 +51,7 @@ $page = '';
         </div>
     </div>
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/student-section-modal.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/student-list-modal.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
     ?>
     <script src="/SCES/assets/script/datatables.min.js"></script>

@@ -2725,7 +2725,8 @@ $("#editGradeForm").on("submit", function (e) {
               allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
-                document.getElementById("editGradeModal").style.display = "none";
+                document.getElementById("editGradeModal").style.display =
+                  "none";
                 document.getElementById("editGradeForm").reset();
                 document.getElementById("studentModal").style.display = "flex";
                 if ($.fn.DataTable.isDataTable("#gradesTable")) {
@@ -2909,6 +2910,184 @@ $("#addTeacherForm").on("submit", function (e) {
   });
 });
 
+$("#addStudentForm").on("submit", function (e) {
+  e.preventDefault();
+
+  var formData = new FormData(this);
+  formData.append("submitType", "addStudentList");
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Student Inserted To Masterlist",
+              text: "Student can now register in the system by referencing their LRN",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              window.location.reload();
+            });
+          }
+        );
+      } else if (response == "489") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Student LRN Already Exists In The Masterlist",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "490") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "LRN Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "491") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Last Name For Student Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "492") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "First Name For Student Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "493") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Middle Name For Student Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "494") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Suffix",
+              text: "Select 'None' if not applicable",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "495") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Student Age Cannot Be Empty Or Zero",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "496") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Student Age Cannot Be Lower Than Zero",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "497") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Student Age Cannot Be Higher Than 100",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "498") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Gender Of Student",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "499") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Grade Level Of Student",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "500") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter The Section Of The Student",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Student Adding Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
 
 $("#addQuiz").on("submit", function (e) {
   e.preventDefault();
