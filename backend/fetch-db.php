@@ -3367,6 +3367,43 @@ class fetchClass extends db_connect
         }
     }
 
+    public function getFacultyMasterlist()
+    {
+        $query = $this->conn->prepare("
+        SELECT
+            master.trn,
+            teacher.teacher_id,
+            master.teacher_lname,
+            master.teacher_fname,
+            master.role,
+            teacher.image_profile
+        FROM
+            faculty_masterlist master
+        LEFT JOIN
+            teacher_tbl teacher ON master.trn = teacher.trn
+        ORDER BY
+            master.teacher_lname ASC
+    ");
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $faculties = $result->fetch_all(MYSQLI_ASSOC);
+
+            foreach ($faculties as &$faculty) {
+                $faculty['teacher_lname'] = ucwords(strtolower(trim($faculty['teacher_lname'])));
+                $faculty['teacher_fname'] = ucwords(strtolower(trim($faculty['teacher_fname'])));
+                $faculty['role'] = ucwords(strtolower(trim($faculty['role'])));
+
+                if (is_null($faculty['image_profile']) || $faculty['image_profile'] === '') {
+                    $faculty['image_profile'] = 'default-profile.png';
+                }
+            }
+
+            return $faculties;
+        } else {
+            return false;
+        }
+    }
 
 }
 

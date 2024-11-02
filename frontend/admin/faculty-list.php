@@ -4,7 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/data-tables.p
 $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/student-section.css" />
-<title>Student List | SCES Online Learning Platform</title>
+<title>Faculty List | SCES Online Learning Platform</title>
 </head>
 
 <body>
@@ -20,22 +20,20 @@ $page = '';
             include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-header.php';
             ?>
             <div class="title-box">
-                <img src="/SCES/assets/images/profile-scores.png" alt="profile-scores.png">
-                <h1>Student Masterlist</h1>
+                <img src="/SCES/assets/images/school-info.png" alt="school-info.png">
+                <h1>Faculty List</h1>
             </div>
             <div class="panel">
-                <div class="panel-tab" id="allStudentsPanel">
+                <div class="panel-tab" id="allFacultyPanel">
                     <div class="table-responsive">
-                        <table id="studentsTable" class="display data-table">
+                        <table id="facultyTable" class="display data-table">
                             <thead>
                                 <tr class="blue">
-                                    <th>Student Icon</th>
-                                    <th>LRN</th>
+                                    <th>Faculty Icon</th>
+                                    <th>Control Number</th>
                                     <th>Last Name</th>
                                     <th>First Name</th>
-                                    <th>Middle Name</th>
-                                    <th>Age</th>
-                                    <th>Gender</th>
+                                    <th>Role</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
@@ -48,9 +46,9 @@ $page = '';
         </div>
     </div>
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/student-section-modal.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/view-faculty-modal.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
     ?>
     <script src="/SCES/assets/script/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
-    <script src="/SCES/assets/script/faculty-student-list.js"></script>
+    <script src="/SCES/assets/script/faculty-list.js"></script>

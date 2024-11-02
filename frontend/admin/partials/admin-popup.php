@@ -66,6 +66,12 @@
                         </li>
                     </ul>
                 </li>
+                <li class="<?= $current_page == 'faculty-list.php' ? 'active' : '' ?>">
+                    <a href="/SCES/frontend/admin/faculty-list.php">
+                        <i class="fa-solid fa-chalkboard-user icon"></i>
+                        <span class="text">Faculty List</span>
+                    </a>
+                </li>
                 <li class="<?= $current_page == 'analytics.php' ? 'active' : '' ?>">
                     <a href="/SCES/frontend/admin/analytics.php">
                         <i class="fa-solid fa-chart-simple icon"></i>

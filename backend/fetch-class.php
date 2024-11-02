@@ -991,6 +991,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         echo json_encode(['labels' => $labels, 'counts' => $counts]);
+    } else if ($submitType === 'fetchAllFacultyDataTable') {
+
+        $faculty = $fetchDb->getFacultyMasterlist();
+
+        echo json_encode($faculty);
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
