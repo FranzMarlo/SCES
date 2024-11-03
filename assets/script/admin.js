@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 let openPopupMenu = null;
+let openPopupSection = null;
 
 function subjectBtn(event, button) {
   event.preventDefault();
@@ -126,4 +127,41 @@ function hiddenLink(element) {
   if (hiddenLink) {
     hiddenLink.click(); // Trigger the hidden link click
   }
+}
+
+function sectionLink(element) {
+  var sectionItem = element.closest(".section-item");
+  var hiddenLink = sectionItem.querySelector(".hidden-link");
+
+  if (hiddenLink) {
+    hiddenLink.click(); // Trigger the hidden link click
+  }
+}
+
+function sectionBtn(event, button) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  var sectionItem = button.closest(".section-item");
+  var popupMenu = sectionItem.querySelector(".popup-menu");
+
+  if (openPopupMenu && openPopupMenu !== popupMenu) {
+    openPopupSection.classList.remove("show");
+  }
+
+  if (popupMenu) {
+    popupMenu.classList.toggle("show");
+    openPopupSection = popupMenu.classList.contains("show") ? popupMenu : null;
+  }
+
+  document.addEventListener(
+    "click",
+    function (e) {
+      if (!sectionItem.contains(e.target) && openPopupSection) {
+        openPopupSection.classList.remove("show");
+        openPopupSection = null;
+      }
+    },
+    { once: true }
+  );
 }

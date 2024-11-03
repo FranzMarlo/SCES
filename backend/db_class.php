@@ -1909,6 +1909,7 @@ class globalClass extends db_connect
             level.short,
             section.section,
             section.section_id,
+            section.year,
             teacher.teacher_lname,
             teacher.teacher_fname,
             teacher.gender
@@ -1922,10 +1923,51 @@ class globalClass extends db_connect
             teacher_tbl teacher
         ON
             section.teacher_id = teacher.teacher_id
+        WHERE
+            section.archived = 'False'
         GROUP BY
             section.section_id
         ORDER BY
-                section.section ASC
+            section.section ASC
+        ");
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjectDetails;
+        }
+
+        return [];
+    }
+
+    public function facultyGetArchivedSection()
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            level.level_id,
+            level.grade_level,
+            level.short,
+            section.section,
+            section.section_id,
+            section.year,
+            teacher.teacher_lname,
+            teacher.teacher_fname,
+            teacher.gender
+        FROM
+            section_tbl section
+        INNER JOIN
+            level_tbl level
+        ON
+            section.level_id = level.level_id
+        LEFT JOIN
+            teacher_tbl teacher
+        ON
+            section.teacher_id = teacher.teacher_id
+        WHERE
+            section.archived = 'True'
+        GROUP BY
+            section.section_id
+        ORDER BY
+            section.section ASC
         ");
         if ($query->execute()) {
             $result = $query->get_result();

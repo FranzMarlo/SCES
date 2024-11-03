@@ -388,6 +388,9 @@
     }
   }
   @media (width < 992px) {
+    .tab-item{
+      font-size: 0.9rem;
+    }
     .add-btn{
       font-size: 0.9rem;
     }
@@ -442,6 +445,10 @@
     }
   }
   @media (width < 600px) {
+    .tab-item{
+      font-size: 0.8rem;
+      padding: 10px 15px;
+    }
     .add-btn{
       font-size: 0.7rem;
     }
