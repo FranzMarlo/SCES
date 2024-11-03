@@ -763,7 +763,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const data = new FormData();
     data.append("submitType", "facultyGetPanelDataBySubject");
     data.append("student_id", studentId);
-    data.append("section_id", section_id);
     data.append("subject_id", subject_id);
 
     fetch("/SCES/backend/fetch-class.php", {
@@ -1046,7 +1045,6 @@ document.addEventListener("DOMContentLoaded", function () {
         data: function (d) {
           d.submitType = "fetchStudentsRecordTable";
           d.subject_id = subject_id;
-          d.section_id = section_id;
           return d;
         },
         dataSrc: "",

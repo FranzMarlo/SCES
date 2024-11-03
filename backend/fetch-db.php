@@ -948,7 +948,7 @@ class fetchClass extends db_connect
         $query = $this->conn->prepare("
             SELECT
                 student.lrn,
-                student.student_id,
+                record.student_id,
                 student.student_lname,
                 student.student_fname,
                 student.student_mname,
@@ -958,17 +958,21 @@ class fetchClass extends db_connect
                 level.grade_level,
                 section.section
             FROM
+                student_record record
+            INNER JOIN
                 student_tbl student
+            ON
+                student.student_id = record.student_id
             INNER JOIN
                 level_tbl level
             ON
-                student.level_id = level.level_id
+                record.level_id = level.level_id
             INNER JOIN
                 section_tbl section
             ON
-                student.section_id = section.section_id
+                record.section_id = section.section_id
             WHERE 
-                student.section_id = ?
+                record.section_id = ?
             ORDER BY
                 student.student_lname ASC
         ");
@@ -1207,7 +1211,7 @@ class fetchClass extends db_connect
         quiz.quiz_number,
         quiz.title,
         score.score,
-        student.student_id,
+        record.student_id,
         CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
         score.item_number,
         score.remarks,
@@ -1222,9 +1226,11 @@ class fetchClass extends db_connect
     INNER JOIN 
         level_tbl level ON level.level_id = section.level_id
     INNER JOIN 
-        student_tbl student ON student.section_id = section.section_id
+        student_record record ON record.section_id = section.section_id
+    INNER JOIN
+        student_tbl student ON student.student_id = record.student_id
     INNER JOIN 
-        score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
+        score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = record.student_id
     WHERE 
         score.student_id = ?
     AND
@@ -1328,7 +1334,7 @@ class fetchClass extends db_connect
         FROM quiz_tbl quiz
         INNER JOIN subject_tbl subject
         ON subject.subject_id = quiz.subject_id
-        INNER JOIN student_tbl student
+        INNER JOIN student_record student
         ON student.section_id = subject.section_id
         INNER JOIN section_tbl section
         ON subject.section_id = section.section_id
@@ -1432,7 +1438,7 @@ class fetchClass extends db_connect
         return 0; // Return 0 if no result
     }
 
-    public function facultyGetPendingQuizzesCountBySubject($sectionId, $studentId, $subjectId)
+    public function facultyGetPendingQuizzesCountBySubject($studentId, $subjectId)
     {
         $query = $this->conn->prepare("
         SELECT 
@@ -1440,7 +1446,7 @@ class fetchClass extends db_connect
         FROM quiz_tbl quiz
         INNER JOIN subject_tbl subject
         ON subject.subject_id = quiz.subject_id
-        INNER JOIN student_tbl student
+        INNER JOIN student_record student
         ON student.section_id = subject.section_id
         INNER JOIN section_tbl section
         ON subject.section_id = section.section_id
@@ -1453,8 +1459,6 @@ class fetchClass extends db_connect
         INNER JOIN teacher_tbl teacher
         ON teacher.teacher_id = subject.teacher_id
         WHERE 
-            student.section_id = ?
-        AND 
             student.student_id = ?
         AND
             (quiz.status = 'Active' OR quiz.status = 'Completed')
@@ -1465,7 +1469,7 @@ class fetchClass extends db_connect
     ");
 
         // Bind parameters for sectionId, studentId, and status (pending)
-        $query->bind_param("sss", $sectionId, $studentId, $subjectId);
+        $query->bind_param("ss", $studentId, $subjectId);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -1634,7 +1638,7 @@ class fetchClass extends db_connect
             FROM quiz_tbl quiz
             INNER JOIN subject_tbl subject
             ON subject.subject_id = quiz.subject_id
-            INNER JOIN student_tbl student
+            INNER JOIN student_record student
             ON student.section_id = subject.section_id
             WHERE 
                 student.student_id = ?
@@ -2110,7 +2114,7 @@ class fetchClass extends db_connect
 
 
 
-    public function getStudentQuizRecords($sectionId, $subjectId)
+    public function getStudentQuizRecords( $subjectId)
     {
         $query = $this->conn->prepare("
         SELECT
@@ -2122,18 +2126,15 @@ class fetchClass extends db_connect
             score_tbl.remarks,
             score_tbl.time
         FROM student_tbl student
-        INNER JOIN level_tbl level ON student.level_id = level.level_id
-        INNER JOIN section_tbl section ON student.section_id = section.section_id
         LEFT JOIN score_tbl ON student.student_id = score_tbl.student_id
         LEFT JOIN quiz_tbl quiz ON score_tbl.quiz_id = quiz.quiz_id
         INNER JOIN subject_tbl subject ON quiz.subject_id = subject.subject_id
-        WHERE student.section_id = ?
-        AND subject.subject_id = ?
+        WHERE subject.subject_id = ?
         AND quiz.status IN ('Active', 'Completed')
         ORDER BY score_tbl.time DESC
     ");
 
-        $query->bind_param("ss", $sectionId, $subjectId);
+        $query->bind_param("s", $subjectId);
         if ($query->execute()) {
             $result = $query->get_result();
             $studentQuizRecords = $result->fetch_all(MYSQLI_ASSOC);
@@ -2469,21 +2470,23 @@ class fetchClass extends db_connect
     {
         $query = $this->conn->prepare("
         SELECT 
-            student.student_id,
-            student.lrn,
+            record.student_id,
+            record.lrn,
             ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
             CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
             AVG(score.score) AS average_score 
         FROM 
-            student_tbl student
+            student_record record
+        INNER JOIN
+            student_tbl student ON student.student_id = record.student_id
         INNER JOIN 
-            subject_tbl subject ON student.section_id = subject.section_id
+            subject_tbl subject ON record.section_id = subject.section_id
         INNER JOIN 
             quiz_tbl quiz ON quiz.subject_id = subject.subject_id
         LEFT JOIN 
             score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
         WHERE 
-            student.section_id = ?
+            record.section_id = ?
         AND 
             quiz.subject_id = ?
         AND 

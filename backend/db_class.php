@@ -264,6 +264,7 @@ class globalClass extends db_connect
             s.subject,
             s.level_id,
             s.icon,
+            s.link,
             s.subject_title,
             s.subject_code,
             t.teacher_fname,
@@ -2175,7 +2176,7 @@ class globalClass extends db_connect
         return false;
     }
 
-    public function addSubject($teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $code)
+    public function addSubject($teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $code, $link)
     {
         $year = date("Y");
         $subjectId = 'S' . $code . $year . sprintf('%04d', rand(0, 9999));
@@ -2185,8 +2186,8 @@ class globalClass extends db_connect
             $subjectId = 'S' . $code . $year . sprintf('%04d', rand(0, 9999));
             $checkIdResult = $this->checkSubjectId($subjectId);
         }
-        $query = $this->conn->prepare("INSERT INTO `subject_tbl` (`subject_id`, `teacher_id`, `level_id`, `subject`, `subject_title`, `section_id`, `icon`, `subject_code`, `year`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $query->bind_param("ssssssssi", $subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $year);
+        $query = $this->conn->prepare("INSERT INTO `subject_tbl` (`subject_id`, `teacher_id`, `level_id`, `subject`, `subject_title`, `section_id`, `icon`, `subject_code`, `year`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssssssis", $subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $year, $link);
         if ($query->execute()) {
             return true;
         } else {
@@ -2214,10 +2215,10 @@ class globalClass extends db_connect
         }
     }
 
-    public function updateSubject($subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $code)
+    public function updateSubject($subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $link)
     {
-        $query = $this->conn->prepare("UPDATE subject_tbl SET teacher_id = ?, level_id = ?, subject = ?, subject_title = ?, section_id = ?, icon = ?, subject_code = ?, year = ? WHERE subject_id = ?");
-        $query->bind_param("sssssssis", $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $year, $subjectId,);
+        $query = $this->conn->prepare("UPDATE subject_tbl SET teacher_id = ?, level_id = ?, subject = ?, subject_title = ?, section_id = ?, icon = ?, subject_code = ?, link = ? WHERE subject_id = ?");
+        $query->bind_param("sssssssss", $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $link, $subjectId,);
         if ($query->execute()) {
             return true;
         } else {
