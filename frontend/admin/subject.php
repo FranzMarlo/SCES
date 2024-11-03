@@ -56,34 +56,88 @@ $page = '';
                     <button class="add-btn" id="addSubjectBtn"><i class="fa-solid fa-plus"></i>Add Subject</button>
                 </div>
                 <?php $subjects = $db->getAdminSubjects(); ?>
-                <div class="subject-container <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>">
-                    <?php if ($subjects): ?>
-                        <?php foreach ($subjects as $subject): ?>
-                            <div class="subject-item">
-                                <a href="/SCES/frontend/admin/subjects/subject-module.php?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject_id']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>&teacher=<?php echo urlencode($subject['teacher_id']); ?>"
-                                    class="hidden-link"></a>
-                                <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>" onclick="hiddenLink(this)">
-                                    <button class="subject-btn" onclick="subjectBtn(event, this)">
-                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    </button>
-                                    <div class="subject-in-title" onclick="hiddenLink(this)">
+                <?php $archived = $db->getAdminArchivedSubjects(); ?>
+                <div class="subject-container">
+                    <div class="tab-controller">
+                        <div class="tab-item" id=subjectTab>Subjects</div>
+                        <div class="tab-item" id="archivedTab">Archived</div>
+                    </div>
+                    <div class="item-container <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>"
+                        id="subjectContainer">
+                        <?php if ($subjects): ?>
+                            <?php foreach ($subjects as $subject): ?>
+                                <div class="subject-item">
+                                    <a href="/SCES/frontend/admin/subjects/subject-module.php?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject_id']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>&teacher=<?php echo urlencode($subject['teacher_id']); ?>"
+                                        class="hidden-link"></a>
+                                    <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>"
+                                        onclick="hiddenLink(this)">
+                                        <button class="subject-btn" onclick="subjectBtn(event, this)">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <div class="subject-in-title" onclick="hiddenLink(this)">
+                                            <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
+                                            <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                                        </div>
+                                        <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>"
+                                            alt="<?php echo htmlspecialchars($subject['icon']); ?>">
+                                    </div>
+                                    <div class="subject-title" onclick="hiddenLink(this)">
                                         <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
                                         <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
                                     </div>
-                                    <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>"
-                                        alt="<?php echo htmlspecialchars($subject['icon']); ?>">
+                                    <div class="popup-menu">
+                                        <ul>
+                                            <li><a href="javascript:void(0)" class="edit-btn"
+                                                    data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Edit</a>
+                                            </li>
+                                            <li><a href="javascript:void(0)" class="archive-btn"
+                                                    data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Archive</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div class="subject-title" onclick="hiddenLink(this)">
-                                    <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
-                                    <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
-                                </div>
-                                <div class="popup-menu">
-                                    <ul>
-                                        <li><a href="javascript:void(0)" class="edit-btn" data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Edit</a></li>
-                                        <li><a href="javascript:void(0)" data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Archive</a></li>
-                                    </ul>
-                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="no-data-box">
+                                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                                <h1>No subject found.</h1>
                             </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="item-container <?php echo empty($archived) ? 'no-data-box-centered' : ''; ?>"
+                        id="archivedContainer">
+                        <?php if ($archived): ?>
+                            <?php foreach ($archived as $archive): ?>
+                                <div class="subject-item">
+                                    <a href="/SCES/frontend/admin/subjects/subject-module.php?section=<?php echo urlencode($archive['section_id']); ?>&subject=<?php echo urlencode($archive['subject_id']); ?>&gradelevel=<?php echo urlencode($archive['level_id']); ?>&teacher=<?php echo urlencode($archive['teacher_id']); ?>"
+                                        class="hidden-link"></a>
+                                    <div class="subject-icon <?php echo strtolower($archive['subject_code']); ?>"
+                                        onclick="hiddenLink(this)">
+                                        <button class="subject-btn" onclick="subjectBtn(event, this)">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <div class="subject-in-title" onclick="hiddenLink(this)">
+                                            <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
+                                            <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
+                                        </div>
+                                        <img src="/SCES/assets/images/<?php echo htmlspecialchars($archive['icon']); ?>"
+                                            alt="<?php echo htmlspecialchars($archive['icon']); ?>">
+                                    </div>
+                                    <div class="subject-title" onclick="hiddenLink(this)">
+                                        <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
+                                        <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
+                                    </div>
+                                    <div class="popup-menu">
+                                        <ul>
+                                            <li><a href="javascript:void(0)" class="edit-btn"
+                                                    data-subject-id="<?php echo htmlspecialchars($archive['subject_id']); ?>">Edit</a>
+                                            </li>
+                                            <li><a href="javascript:void(0)" class="not-archive-btn"
+                                                    data-subject-id="<?php echo htmlspecialchars($archive['subject_id']); ?>">Enable</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="no-data-box">
@@ -94,8 +148,9 @@ $page = '';
                     </div>
                 </div>
             </div>
-            <?php
-            include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-modal.php';
-            include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
-            ?>
-            <script src="/SCES/assets/script/admin-subject.js"></script>
+        </div>
+        <?php
+        include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-modal.php';
+        include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
+        ?>
+        <script src="/SCES/assets/script/admin-subject.js"></script>

@@ -1119,6 +1119,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 confirmButton: "swal2-yes-button",
                 cancelButton: "swal2-cancel-button",
               },
+              allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
                 selectedQuizId = quizId;
@@ -1163,6 +1164,7 @@ document.addEventListener("DOMContentLoaded", function () {
           confirmButton: "swal2-yes-button",
           cancelButton: "swal2-cancel-button",
         },
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           disableQuiz(quizId);
@@ -1198,6 +1200,7 @@ document.addEventListener("DOMContentLoaded", function () {
           confirmButton: "swal2-yes-button",
           cancelButton: "swal2-cancel-button",
         },
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           removeQuestion(questionId);
@@ -1242,6 +1245,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   confirmButton: "swal2-yes-button",
                   cancelButton: "swal2-cancel-button",
                 },
+                allowOutsideClick: false,
               }).then((result) => {
                 if (result.isConfirmed) {
                   selectedQuizId = quizId;
@@ -1278,6 +1282,7 @@ document.addEventListener("DOMContentLoaded", function () {
             confirmButton: "swal2-yes-button",
             cancelButton: "swal2-cancel-button",
           },
+          allowOutsideClick: false,
         }).then((result) => {
           if (result.isConfirmed) {
             disableQuiz(quizId);
@@ -1313,6 +1318,7 @@ document.addEventListener("DOMContentLoaded", function () {
               title: "Quiz Activated Successfully",
               text: "Students can now take this assessment",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
                 window.location.href = `?active=1&quiz_id=${quizId}`;
@@ -1354,8 +1360,9 @@ document.addEventListener("DOMContentLoaded", function () {
             Swal.fire({
               icon: "info",
               title: "Quiz Deactivated",
-              text: "Students will now be unable to take the assessment",
+              text: "Students will not be able to take the assessment",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
                 window.location.href = `?active=2&quiz_id=${quizId}`;
@@ -1399,6 +1406,7 @@ document.addEventListener("DOMContentLoaded", function () {
               title: "Question Removed",
               text: "Tip: Quizzes should have at least 10 question to be activated",
               confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
                 window.location.reload();

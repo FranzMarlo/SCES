@@ -378,6 +378,49 @@ class globalClass extends db_connect
         }
     }
 
+    public function getAdminArchivedSubjects()
+    {
+
+        $query = $this->conn->prepare("
+        SELECT 
+            s.subject_id,
+            s.subject,
+            s.level_id,
+            s.icon,
+            s.section_id,
+            s.subject_title,
+            s.subject_code,
+            t.teacher_id,
+            t.teacher_fname,
+            t.teacher_lname,
+            t.gender,
+            l.level_id,
+            l.grade_level,
+            c.section
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        INNER JOIN
+            level_tbl l
+        ON
+            s.level_id = l.level_id
+        INNER JOIN
+            section_tbl c
+        ON
+            s.section_id = c.section_id
+        WHERE 
+            s.archived = 'Yes'");
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjects = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjects;
+        } else {
+            return false;
+        }
+    }
+
     public function getSubjectDetails($subject, $sectionId, $level_id)
     {
         $query = $this->conn->prepare("
@@ -2111,7 +2154,7 @@ class globalClass extends db_connect
         ");
         if ($query->execute()) {
             $result = $query->get_result();
-            $options = $result->fetch_all(MYSQLI_ASSOC); // Fetch all rows as an associative array
+            $options = $result->fetch_all(MYSQLI_ASSOC);
             return $options;
         }
     }
@@ -2182,6 +2225,30 @@ class globalClass extends db_connect
         }
     }
 
+    public function checkSubjectInfo($subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT * FROM subject_tbl WHERE subject_id = ?
+    ");
+        $query->bind_param("s", $subjectId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectData = $result->fetch_assoc();
+            return $subjectData;
+        }
+
+        return false;
+    }
+
+    public function archiveSubject($subjectId, $archived)
+    {
+        $query = $this->conn->prepare("UPDATE subject_tbl SET archived = ? WHERE subject_id = ?");
+        $query->bind_param("ss", $archived, $subjectId);
+        if ($query->execute()) {
+            return true;
+        }
+        return false;
+    }
 
 }
 

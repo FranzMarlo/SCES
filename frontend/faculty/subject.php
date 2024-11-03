@@ -5,7 +5,7 @@ $teacherLesson = $db->getTotalTeacherLesson($teacherId);
 $teacherArchived = $db->getTotalTeacherArchived($teacherId);
 $page = '';
 ?>
-<link rel="stylesheet" href="/SCES/assets/style/admin-subject.css" />
+<link rel="stylesheet" href="/SCES/assets/style/faculty-subject.css" />
 <title>Subjects | SCES Online Learning Platform</title>
 </head>
 

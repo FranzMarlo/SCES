@@ -1201,7 +1201,6 @@ if (isset($_POST['submitType'])) {
             }
         }
     } else if ($_POST['submitType'] === 'enableQuiz') {
-        session_start();
         $quizId = validate($_POST['quiz_id']);
         $dueDate = validate($_POST['due_date']);
         $quiz = $db->checkQuizInfo($quizId);
@@ -1515,8 +1514,7 @@ if (isset($_POST['submitType'])) {
             $editSectionIdHolder == $editSection
         ) {
             echo '201';
-        }
-        else if ($checkSubject->num_rows > 0 && ($editSection != $editSectionIdHolder || $editSubjectHolder != $editSubject)) {
+        } else if ($checkSubject->num_rows > 0 && ($editSection != $editSectionIdHolder || $editSubjectHolder != $editSubject)) {
             echo '490';
         } else if (empty($editGradeLevel)) {
             echo '491';
@@ -1539,6 +1537,34 @@ if (isset($_POST['submitType'])) {
                 } else {
                     echo '400';
                 }
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'archiveSubject') {
+        $subjectId = validate($_POST['subject_id']);
+        $subject = $db->checkSubjectInfo($subjectId);
+        $subjectStatus = $subject['archived'];
+        if ($subjectStatus == 'Yes') {
+            echo '482';
+        } else {
+            $toggleSubject = $db->archiveSubject($subjectId, 'Yes');
+            if ($toggleSubject != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'toggleArchivedSubject') {
+        $subjectId = validate($_POST['subject_id']);
+        $subject = $db->checkSubjectInfo($subjectId);
+        $subjectStatus = $subject['archived'];
+        if ($subjectStatus == 'No') {
+            echo '482';
+        } else {
+            $toggleSubject = $db->archiveSubject($subjectId, 'No');
+            if ($toggleSubject != false) {
+                echo '200';
             } else {
                 echo '400';
             }
