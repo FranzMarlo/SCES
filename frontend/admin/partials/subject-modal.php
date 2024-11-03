@@ -59,6 +59,11 @@
         </div>
         <div class="modal-body">
             <form id="editSubjectForm">
+                <input type="hidden" name="editSubjectIdHolder" id="editSubjectIdHolder">
+                <input type="hidden" name="editSubjectHolder" id="editSubjectHolder">
+                <input type="hidden" name="editLevelIdHolder" id="editLevelIdHolder">
+                <input type="hidden" name="editSectionIdHolder" id="editSectionIdHolder">
+                <input type="hidden" name="editTeacherIdHolder" id="editTeacherIdHolder">
                 <div class="form-group">
                     <label for="editGradeLevel">Select Grade Level:</label>
                     <select name="editGradeLevel" id="editGradeLevel">

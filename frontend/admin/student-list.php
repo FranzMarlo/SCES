@@ -56,4 +56,4 @@ $page = '';
     ?>
     <script src="/SCES/assets/script/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
-    <script src="/SCES/assets/script/faculty-student-list.js"></script>
+    <script src="/SCES/assets/script/admin-student-list.js"></script>

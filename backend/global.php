@@ -1493,8 +1493,53 @@ if (isset($_POST['submitType'])) {
                 } else {
                     echo '400';
                 }
+            } else {
+                echo '400';
             }
-            else{
+        }
+    } else if ($_POST['submitType'] === 'editSubjectData') {
+        $editSubjectIdHolder = $_POST['editSubjectIdHolder'];
+        $editSubjectHolder = $_POST['editSubjectHolder'];
+        $editLevelIdHolder = $_POST['editLevelIdHolder'];
+        $editSectionIdHolder = $_POST['editSectionIdHolder'];
+        $editTeacherIdHolder = $_POST['editTeacherIdHolder'];
+        $editGradeLevel = validate($_POST['editGradeLevel']);
+        $editSubject = validate($_POST['editSubject']);
+        $editSection = validate($_POST['editSection']);
+        $editTeacher = validate($_POST['editTeacher']);
+        $checkSubject = $db->checkSubjectBySection($editSection, $editSubject);
+        if (
+            $editSubjectHolder == $editSubject &&
+            $editLevelIdHolder == $editGradeLevel &&
+            $editTeacherIdHolder == $editTeacher &&
+            $editSectionIdHolder == $editSection
+        ) {
+            echo '201';
+        }
+        else if ($checkSubject->num_rows > 0 && ($editSection != $editSectionIdHolder || $editSubjectHolder != $editSubject)) {
+            echo '490';
+        } else if (empty($editGradeLevel)) {
+            echo '491';
+        } else if (empty($editSubject)) {
+            echo '492';
+        } else if (empty($editSection)) {
+            echo '493';
+        } else if (empty($editTeacher)) {
+            echo '494';
+        } else {
+            $subjectData = $db->getSubjectData($editSubject);
+            if ($subjectData != false) {
+                $subject_title = $subjectData['subject_title'];
+                $icon = $subjectData['icon'];
+                $subject_code = $subjectData['subject_code'];
+                $code = substr($subjectData['subject'], -1);
+                $addSubject = $db->updateSubject($editSubjectIdHolder, $editTeacher, $editGradeLevel, $editSubject, $subject_title, $editSection, $icon, $subject_code, $code);
+                if ($addSubject != false) {
+                    echo '200';
+                } else {
+                    echo '400';
+                }
+            } else {
                 echo '400';
             }
         }

@@ -2171,6 +2171,17 @@ class globalClass extends db_connect
         }
     }
 
+    public function updateSubject($subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $code)
+    {
+        $query = $this->conn->prepare("UPDATE subject_tbl SET teacher_id = ?, level_id = ?, subject = ?, subject_title = ?, section_id = ?, icon = ?, subject_code = ?, year = ? WHERE subject_id = ?");
+        $query->bind_param("sssssssis", $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $year, $subjectId,);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 }
 

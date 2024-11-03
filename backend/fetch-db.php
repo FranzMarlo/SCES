@@ -3642,6 +3642,22 @@ class fetchClass extends db_connect
         return null;
     }
 
+    public function getSubjectDetails($subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT * FROM subject_tbl WHERE subject_id = ?
+    ");
+        $query->bind_param("s", $subjectId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_assoc();
+            return $subjectDetails;
+        }
+
+        return null;
+    }
+
 
 
 }

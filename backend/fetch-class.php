@@ -1056,19 +1056,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $panelData = $fetchDb->facultyQuizCompletion($teacherId);
 
         echo json_encode($panelData);
-    } else if ($_POST['submitType'] === 'getSubjects') {
+    } else if ($submitType === 'getSubjects') {
         $levelId = $_POST['levelId'];
-        $subjects = $fetchDb->getSubjectMasterlist($levelId);    
+        $subjects = $fetchDb->getSubjectMasterlist($levelId);
         foreach ($subjects as $subject) {
             echo "<option value='{$subject['subject']}'>{$subject['subject']}</option>";
         }
-    } else if ($_POST['submitType'] === 'getSections') {
+    } else if ($submitType === 'getSections') {
         $levelId = $_POST['levelId'];
         $sections = $fetchDb->getSectionByLevel($levelId);
         foreach ($sections as $section) {
             echo "<option value='{$section['section_id']}'>{$section['section']}</option>";
         }
-    }else {
+    } else if ($submitType === 'fetchSubjectDetails') {
+        $subjectId = $_POST['subject_id'];
+        $subjectData = $fetchDb->getSubjectDetails($subjectId);
+        echo json_encode($subjectData);
+    } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
 } else {
