@@ -578,18 +578,11 @@ class globalClass extends db_connect
         $query = $this->conn->prepare("
         SELECT 
             COUNT(DISTINCT `lesson_id`) as total
-        FROM subject_tbl s
-        INNER JOIN
-            teacher_tbl t
-        ON
-            s.teacher_id = t.teacher_id
-        INNER JOIN
-            lesson_tbl c
-        ON
-            s.subject_id = c.subject_id
+        FROM 
+            lesson_tbl
         WHERE
-            t.teacher_id = ?
-            ");
+            teacher_id = ?
+        ");
         $query->bind_param("s", $teacherId);
         if ($query->execute()) {
             $result = $query->get_result();
@@ -1941,7 +1934,7 @@ class globalClass extends db_connect
         return [];
     }
 
-    public function checkGrade( $studentId, $subjectId, $quarter)
+    public function checkGrade($studentId, $subjectId, $quarter)
     {
         $query = $this->conn->prepare("SELECT * FROM grade_tbl WHERE student_id = ? AND subject_id = ? AND quarter = ?");
         $query->bind_param("sss", $studentId, $subjectId, $quarter);
@@ -2096,7 +2089,7 @@ class globalClass extends db_connect
     }
 
     public function addStudentList($studLRN, $studLname, $studFname, $studMname, $studAge, $studGender, $studGradeLevel, $studSection)
-    {   
+    {
         $year = date("Y");
         $query = $this->conn->prepare("INSERT INTO `student_masterlist` (`lrn`, `student_lname`, `student_fname`, `student_mname`, `gender`, `age`, `grade_level`, `section`, `year`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $query->bind_param("sssssisss", $studLRN, $studLname, $studFname, $studMname, $studGender, $studAge, $studGradeLevel, $studSection, $year);

@@ -396,7 +396,7 @@ document.addEventListener("DOMContentLoaded", function () {
               labels: data.labels,
               datasets: [
                 {
-                  label: "Average Score",
+                  label: "Lessons Upload",
                   data: data.lineData,
                   backgroundColor: "rgba(221, 209, 255, 0.5)", // Light purple fill
                   borderColor: "#ddd1ff",
@@ -415,7 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
               plugins: {
                 title: {
                   display: true,
-                  text: "Average Score Per Month",
+                  text: "Lessons Upload Per Month",
                   font: {
                     size: 18,
                   },

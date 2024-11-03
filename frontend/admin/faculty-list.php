@@ -31,7 +31,7 @@ $page = '';
                     <div class="table-responsive">
                         <table id="facultyTable" class="display data-table">
                             <thead>
-                                <tr class="blue">
+                                <tr class="tr-blue">
                                     <th>Faculty Icon</th>
                                     <th>Control Number</th>
                                     <th>Last Name</th>

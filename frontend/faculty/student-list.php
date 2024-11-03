@@ -28,7 +28,7 @@ $page = '';
                     <div class="table-responsive">
                         <table id="studentsTable" class="display data-table">
                             <thead>
-                                <tr class="blue">
+                                <tr class="tr-blue">
                                     <th>Student Icon</th>
                                     <th>LRN</th>
                                     <th>Last Name</th>

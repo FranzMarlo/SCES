@@ -3176,7 +3176,7 @@ class fetchClass extends db_connect
         $query = $this->conn->prepare("
         SELECT 
             DATE_FORMAT(add_time, '%Y-%m') AS month,  
-            COUNT(lesson_id) AS lesson_count  
+            COUNT(DISTINCT lesson_id) AS lesson_count  
         FROM
             lesson_tbl
         WHERE 
@@ -3496,17 +3496,8 @@ class fetchClass extends db_connect
         $query = $this->conn->prepare("
         SELECT 
             COUNT(DISTINCT `lesson_id`) as total
-        FROM subject_tbl s
-        INNER JOIN
-            teacher_tbl t
-        ON
-            s.teacher_id = t.teacher_id
-        INNER JOIN
-            lesson_tbl c
-        ON
-            s.subject_id = c.subject_id
-        WHERE
-            t.teacher_id = ?
+        FROM lesson_tbl
+        WHERE teacher_id = ?
             ");
         $query->bind_param("s", $teacherId);
         if ($query->execute()) {

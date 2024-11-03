@@ -1176,6 +1176,6 @@ select option {
 #allFacultyPanel{
   display: flex;
 }
-.blue {
+.tr-blue {
   background-color: #c5e3ff;
 }
