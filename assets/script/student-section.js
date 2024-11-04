@@ -490,8 +490,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if ($.fn.dataTable.isDataTable("#quizScoresTable")) {
       var quizScoresTable = $("#quizScoresTable").DataTable();
       quizScoresTable.settings()[0].ajax.data = function (d) {
-        d.submitType = "facultyGetQuizRecords";
+        d.submitType = "facultyGetQuizRecordsBySection";
         d.student_id = studentId;
+        d.section_id = section_id;
         return d;
       };
 
@@ -529,8 +530,9 @@ document.addEventListener("DOMContentLoaded", function () {
           url: "/SCES/backend/fetch-class.php",
           type: "POST",
           data: function (d) {
-            d.submitType = "facultyGetQuizRecords";
-            d.student_id = studentId; // Pass the student ID here
+            d.submitType = "facultyGetQuizRecordsBySection";
+            d.student_id = studentId;
+            d.section_id = section_id;
             return d;
           },
           dataSrc: "",
@@ -692,8 +694,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if ($.fn.dataTable.isDataTable("#gradesTable")) {
       var gradesTable = $("#gradesTable").DataTable();
       gradesTable.settings()[0].ajax.data = function (d) {
-        d.submitType = "facultyGetGrades";
+        d.submitType = "facultyGetGradesBySection";
         d.student_id = studentId;
+        d.section_id = section_id;
         return d;
       };
 
@@ -731,8 +734,9 @@ document.addEventListener("DOMContentLoaded", function () {
           url: "/SCES/backend/fetch-class.php",
           type: "POST",
           data: function (d) {
-            d.submitType = "facultyGetGrades";
+            d.submitType = "facultyGetGradesBySection";
             d.student_id = studentId;
+            d.section_id = section_id;
             return d;
           },
           dataSrc: "",
@@ -770,7 +774,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function populatePanelData(studentId) {
     const data = new FormData();
-    data.append("submitType", "facultyGetPanelData");
+    data.append("submitType", "facultyGetPanelDataBySection");
     data.append("student_id", studentId);
     data.append("section_id", section_id);
 
@@ -1803,18 +1807,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/SCES/backend/fetch-class.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  
+
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         const targetDropdown = document.getElementById(targetElementId);
-  
-        targetDropdown.innerHTML = `<option value="">Select ${value}</option>` + xhr.responseText;
+
+        targetDropdown.innerHTML =
+          `<option value="">Select ${value}</option>` + xhr.responseText;
       }
     };
-  
+
     xhr.send(`levelId=${levelId}&submitType=${submitType}`);
   }
-  
 
   function promoteStudent(studentId, newLevel) {
     fetch("/SCES/backend/fetch-class.php", {
@@ -1830,7 +1834,7 @@ document.addEventListener("DOMContentLoaded", function () {
           showAlert("error", "Server Error", "Student Data Not Found");
           return;
         }
-        fetchOptions(newLevel, "promoteSection", "getSections", 'Section');
+        fetchOptions(newLevel, "promoteSection", "getSections", "Section");
         var nextGradeLevel = getNextGradeLevel(student.grade_level);
         const currentSection = document.getElementById("currentSection");
         const promoteSectionLabel = document.getElementById(
@@ -1870,21 +1874,20 @@ document.addEventListener("DOMContentLoaded", function () {
           showAlert("error", "Server Error", "Student Data Not Found");
           return;
         }
-        fetchOptions(levelId, "retainSection", "getSections", 'Section');
-        const currentSection = document.getElementById("currentSection");
-        const retainSectionLabel = document.getElementById(
-          "retainSectionLabel"
-        );
+        fetchOptions(levelId, "retainSection", "getSections", "Section");
+        const retainedSection = document.getElementById("retainedSection");
+        const retainSectionLabel =
+          document.getElementById("retainSectionLabel");
         const retainStudentId = document.getElementById("retainStudentId");
-        const studentLRN = document.getElementById("studentLRN");
-        const currentSectionId = document.getElementById("currentSectionId");
+        const retainedLRN = document.getElementById("retainedLRN");
+        const retainSectionId = document.getElementById("retainSectionId");
         const retainLevel = document.getElementById("retainLevel");
 
         retainStudentId.value = studentId;
-        currentSection.innerText = `${student.grade_level} - ${student.section}`;
+        retainedSection.innerText = `${student.grade_level} - ${student.section}`;
         retainSectionLabel.innerText = `Select New Section For Student`;
-        studentLRN.value = student.lrn;
-        currentSectionId.value = student.section_id;
+        retainedLRN.value = student.lrn;
+        retainSectionId.value = student.section_id;
         retainLevel.value = levelId;
 
         retainStudentModal.style.display = "flex";

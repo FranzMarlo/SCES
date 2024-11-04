@@ -324,11 +324,11 @@
             <form id="retainStudentForm">
                 <div class="form-group">
                     <h2 class="current-section">Current Grade Level:</h2>
-                    <span class="current-section" id="currentSection"></span>
+                    <span class="current-section" id="retainedSection"></span>
                 </div>
                 <input type="hidden" name="retainStudentId" id="retainStudentId">
-                <input type="hidden" name="studentLRN" id="studentLRN">
-                <input type="hidden" name="currentSectionId" id="currentSectionId">
+                <input type="hidden" name="retainedLRN" id="retainedLRN">
+                <input type="hidden" name="retainSectionId" id="retainSectionId">
                 <input type="hidden" name="retainLevel" id="retainLevel">
                 <div class="form-group">
                     <label for="retainSection" id="retainSectionLabel"></label>

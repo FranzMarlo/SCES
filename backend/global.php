@@ -1680,10 +1680,45 @@ if (isset($_POST['submitType'])) {
                 $updateSection = $db->updateStudentSection($studentId, $promoteLevel, $promoteSection);
                 if ($updateSection != false) {
                     $addStudentRecord = $db->addStudentRecord($studentId, $studentLRN, $promoteSection, $promoteLevel);
-                    if($addStudentRecord != false){
+                    if ($addStudentRecord != false) {
                         echo '200';
+                    } else {
+                        echo '400';
                     }
-                    else{
+                } else {
+                    echo '485';
+                }
+            } else {
+                echo '484';
+            }
+        }
+    } else if ($_POST['submitType'] === 'retainStudent') {
+        $studentId = $_POST['retainStudentId'];
+        $retainLevel = $_POST['retainLevel'];
+        $studentLRN = $_POST['retainedLRN'];
+        $retainSection = $_POST['retainSection'];
+        $sectionId = $_POST['retainSectionId'];
+        if (empty($retainSection)) {
+            echo '483';
+        } else {
+            $studentData = $db->getStudentJoinedDetails($studentId);
+            $studentLname = strtoupper($studentData['student_lname']);
+            $studentFname = strtoupper($studentData['student_fname']);
+            $studentMname = strtoupper($studentData['student_mname']);
+            $gender = strtoupper($studentData['gender']);
+            $gradeLevel = strtoupper($studentData['grade_level']);
+            $section = strtoupper($studentData['section']);
+            $generalAverage = $db->getStudentGeneralAverage($studentId, $sectionId);
+            $remarks = getGWARemarks($generalAverage);
+            $status = getGWAStatus($generalAverage);
+            $recordStudentGWA = $db->addGWARecord($studentLRN, $studentLname, $studentFname, $studentMname, $gender, $gradeLevel, $section, $generalAverage, $remarks, $status);
+            if ($recordStudentGWA != false) {
+                $updateSection = $db->updateStudentSection($studentId, $retainLevel, $retainSection);
+                if ($updateSection != false) {
+                    $addStudentRecord = $db->addStudentRecord($studentId, $studentLRN, $retainSection, $retainLevel);
+                    if ($addStudentRecord != false) {
+                        echo '200';
+                    } else {
                         echo '400';
                     }
                 } else {

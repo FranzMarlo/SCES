@@ -408,6 +408,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $studentRecords = $fetchDb->facultyFetchScores($studentId);
         echo json_encode($studentRecords);
+    } else if ($submitType === 'facultyGetQuizRecordsBySection') {
+        $studentId = $_POST['student_id'];
+        $sectionId = $_POST['section_id'];
+
+        $studentRecords = $fetchDb->facultyFetchScoresBySection($studentId, $sectionId);
+        echo json_encode($studentRecords);
     } else if ($submitType === 'facultyGetQuizRecordsBySubject') {
         $subjectId = $_POST['subject_id'];
         $studentId = $_POST['student_id'];
@@ -419,6 +425,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $studentGrades = $fetchDb->studentFetchGrades($studentId);
         echo json_encode($studentGrades);
+    } else if ($submitType === 'facultyGetGradesBySection') {
+        $studentId = $_POST['student_id'];
+        $sectionId = $_POST['section_id'];
+
+        $studentGrades = $fetchDb->studentFetchGradesBySection($studentId, $sectionId);
+        echo json_encode($studentGrades);
     } else if ($submitType === 'facultyGetGradesBySubject') {
         $subjectId = $_POST['subject_id'];
         $studentId = $_POST['student_id'];
@@ -426,13 +438,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $studentGrades = $fetchDb->studentFetchGradesBySubject($studentId, $subjectId);
         echo json_encode($studentGrades);
     } else if ($submitType === 'facultyGetPanelData') {
+        $studentId = $_POST['student_id'];
+
+        $lrn = $fetchDb->getStudentLRN($studentId);
+        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId);
+        $totalPending = $fetchDb->facultyGetPendingQuizzesCount($studentId);
+        $averageScore = $fetchDb->facultyGetAverageScore($studentId);
+        $generalAverage = $fetchDb->computeStudentGWAByLRN($lrn);
+
+        $panelData['totalCompleted'] = $totalCompleted;
+        $panelData['totalPending'] = $totalPending;
+        $panelData['averageScore'] = $averageScore;
+        $panelData['generalAverage'] = $generalAverage;
+        echo json_encode($panelData);
+    } else if ($submitType === 'facultyGetPanelDataBySection') {
         $sectionId = $_POST['section_id'];
         $studentId = $_POST['student_id'];
 
         $lrn = $fetchDb->getStudentLRN($studentId);
-        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId, $sectionId);
-        $totalPending = $fetchDb->facultyGetPendingQuizzesCount($sectionId, $studentId);
-        $averageScore = $fetchDb->facultyGetAverageScore($studentId);
+        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCountBySection($studentId, $sectionId);
+        $totalPending = $fetchDb->facultyGetPendingQuizzesCountBySection($sectionId, $studentId);
+        $averageScore = $fetchDb->facultyGetAverageScoreBySection($studentId, $sectionId);
         $generalAverage = $fetchDb->computeStudentGWAByLRN($lrn);
 
         $panelData['totalCompleted'] = $totalCompleted;
@@ -477,7 +503,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $lrn = $student['lrn'];
 
             // Fetch the individual average score and GWA for the student
-            $averageScore = $fetchDb->facultyGetAverageScore($studentId);
+            $averageScore = $fetchDb->facultyGetAverageScoreBySection($studentId, $sectionId);
             $generalAverageGWA = $fetchDb->computeStudentGWAByLRN($lrn);
 
             // Add to running totals
@@ -485,11 +511,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $totalGeneralAverageGWA += $generalAverageGWA;
         }
 
-        // Calculate section averages
-        $averageScore = $studentCount > 0 ? $totalAverageScore / $studentCount : 0;
-        $generalAverageGWA = $studentCount > 0 ? $totalGeneralAverageGWA / $studentCount : 0;
 
-        // Prepare data for the panel
+        $averageScore = $studentCount > 0 ? round($totalAverageScore / $studentCount, 2) : 0;
+        $generalAverageGWA = $studentCount > 0 ? round($totalGeneralAverageGWA / $studentCount, 2) : 0;
+
         $panelData = [
             'totalCompleted' => $totalCompleted,
             'totalPending' => $totalPending,

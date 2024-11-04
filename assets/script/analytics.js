@@ -279,17 +279,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const tableHead = document.querySelector("#rankingTable thead tr");
     const tableBody = document.getElementById("rankingTableBody");
 
-    // Clear existing table head and body content
     tableHead.innerHTML = "";
     tableBody.innerHTML = "";
 
-    // Define headers based on filter conditions
     const headers =
       year !== "All" && year <= 2023
         ? ["Full Name", "GWA", "Grade & Section"]
         : ["Full Name", "Average Score", "Grade & Section", "View Student"];
 
-    // Generate table head dynamically
     headers.forEach((headerText) => {
       const th = document.createElement("th");
       th.className = "text-center";
@@ -297,7 +294,6 @@ document.addEventListener("DOMContentLoaded", function () {
       tableHead.appendChild(th);
     });
 
-    // Fetch data from the server
     const ajaxSubmitType =
       year !== "All" && year <= 2023
         ? "gwaRankingStudentsByYearWithFilter"
@@ -681,13 +677,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function populatePanelData(studentId) {
-    var section_id = document
-      .getElementById("studentModal")
-      .getAttribute("data-section");
     const data = new FormData();
     data.append("submitType", "facultyGetPanelData");
     data.append("student_id", studentId);
-    data.append("section_id", section_id);
 
     fetch("/SCES/backend/fetch-class.php", {
       method: "POST",
