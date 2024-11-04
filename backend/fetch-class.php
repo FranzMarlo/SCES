@@ -759,7 +759,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($submitType === 'fetchStudentsRecordTable') {
         $subjectId = $_POST['subject_id'];
 
-        $studentQuizRecords = $fetchDb->getStudentQuizRecords( $subjectId);
+        $studentQuizRecords = $fetchDb->getStudentQuizRecords($subjectId);
         echo json_encode($studentQuizRecords);
     } else if ($submitType === 'fetchStudentQuizHistory') {
         $quizId = $_POST['quiz_id'];
@@ -1074,7 +1074,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sectionId = $_POST['section_id'];
         $sectionData = $fetchDb->getSectionDetails($sectionId);
         echo json_encode($sectionData);
-    }else {
+    } elseif ($submitType === 'fetchStudentLevelDetails') {
+        $studentId = $_POST['student_id'];
+        $student = $fetchDb->getStudentDetails($studentId);
+        if ($student) {
+            echo json_encode($student);
+        } else {
+            echo json_encode(['error' => 'No student found']);
+        }
+    } elseif ($submitType === 'checkStudentGrades') {
+        $studentId = $_POST['student_id'];
+        $sectionId = $_POST['section_id'];
+
+        $checkStudentGrade = $fetchDb->checkStudentGrades($studentId, $sectionId);
+
+        $response = ["hasCompleteGrades" => $checkStudentGrade];
+
+        if ($checkStudentGrade == true) {
+            $studentGWA = $fetchDb->getStudentGeneralAverage($studentId, $sectionId);
+            $response["generalAverage"] = $studentGWA;
+        }
+
+        echo json_encode($response);
+
+    } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
 } else {

@@ -2384,6 +2384,176 @@ class globalClass extends db_connect
         }
         return false;
     }
+
+    public function checkStudentGrades($studentId, $sectionId)
+    {
+        $query = "
+        SELECT 
+            grade.subject_id,
+            COUNT(*) as grade_count
+        FROM 
+            grade_tbl grade
+        INNER JOIN 
+            subject_tbl subject
+        ON 
+            subject.subject_id = grade.subject_id
+        WHERE 
+            grade.student_id = ?
+        AND 
+            subject.section_id = ?
+        GROUP BY 
+            grade.subject_id
+    ";
+        $queryResult = $this->conn->prepare($query);
+        $queryResult->bind_param("ss", $studentId, $sectionId);
+        $queryResult->execute();
+        $result = $queryResult->get_result();
+
+        while ($row = $result->fetch_assoc()) {
+            if ($row['grade_count'] < 4) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getStudentGeneralAverage($studentId, $sectionId)
+    {
+        $query = "
+        SELECT 
+            AVG(subject_average) as general_average
+        FROM (
+            SELECT 
+                AVG(grade.grade) as subject_average
+            FROM 
+                grade_tbl grade
+            INNER JOIN 
+                subject_tbl subject
+            ON 
+                subject.subject_id = grade.subject_id
+            WHERE 
+                grade.student_id = ?
+            AND 
+                subject.section_id = ?
+            GROUP BY 
+                grade.subject_id
+        ) as subject_averages
+    ";
+
+        $queryResult = $this->conn->prepare($query);
+        $queryResult->bind_param("ss", $studentId, $sectionId);
+        $queryResult->execute();
+        $result = $queryResult->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+            return $row['general_average'] !== null ? round($row['general_average']) : null;
+        }
+
+        return null;
+    }
+
+    public function updateStudentSection($studentId, $levelId, $sectionId){
+        $query = $this->conn->prepare("UPDATE student_tbl SET section_id = ?, level_id = ? WHERE student_id = ?");
+        $query->bind_param("sss",  $sectionId, $levelId, $studentId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function addStudentRecord($studentId, $studentLRN, $sectionId, $levelId){
+        $year = date("Y");
+        $recordId = 'R' . $year . sprintf('%04d', rand(0, 9999));
+        $checkIdResult = $this->checkRecordId($recordId);
+
+        while ($checkIdResult->num_rows > 0) {
+            $recordId = 'R' . $year . sprintf('%04d', rand(0, 9999));
+            $checkIdResult = $this->checkRecordId($recordId);
+        }
+        $query = $this->conn->prepare("INSERT INTO `student_record` (`record_id`, `student_id`, `section_id`, `level_id`, `lrn`) VALUES (?, ?, ?, ?, ?)");
+        $query->bind_param("sssss", $recordId, $studentId, $sectionId, $levelId, $studentLRN);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function checkRecordId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM student_record WHERE record_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+    public function addGWARecord($studentLRN, $studentLname, $studentFname, $studentMname, $gender, $gradeLevel, $section, $gwa, $remarks, $status){
+        $year = date("Y");
+        $query = $this->conn->prepare("INSERT INTO `record_tbl` (`lrn`, `student_lname`, `student_fname`, `student_mname`, `gender`, `grade_level`, `section`, `year`, `gwa`, `remarks`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("sssssssiiss", $studentLRN, $studentLname, $studentFname, $studentMname, $gender, $gradeLevel, $section, $year, $gwa, $remarks, $status);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function getStudentJoinedDetails($studentId)
+    {
+        $query = $this->conn->prepare(
+            "SELECT
+                student.profile_image,
+                student.lrn,
+                student.student_id,
+                student.student_lname,
+                student.student_fname,
+                student.student_mname,
+                student.age,
+                student.gender,
+                level.grade_level,
+                section.section,
+                student.section_id,
+                login.email
+            FROM
+                student_tbl student
+            INNER JOIN
+                level_tbl level
+            ON
+                student.level_id = level.level_id
+            INNER JOIN
+                section_tbl section
+            ON
+                student.section_id = section.section_id
+            INNER JOIN
+                login_tbl login
+            ON
+                student.student_id = login.student_id
+            WHERE
+                student.student_id = ?
+            "
+        );
+        $query->bind_param("s", $studentId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            if ($result->num_rows > 0) {
+                $student = $result->fetch_assoc();
+
+                return $student;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
 }
 
 

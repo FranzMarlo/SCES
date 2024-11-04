@@ -1656,6 +1656,43 @@ if (isset($_POST['submitType'])) {
                 echo '400';
             }
         }
+    } else if ($_POST['submitType'] === 'promoteStudent') {
+        $studentId = $_POST['promoteStudentId'];
+        $promoteLevel = $_POST['promoteLevel'];
+        $studentLRN = $_POST['studentLRN'];
+        $promoteSection = $_POST['promoteSection'];
+        $sectionId = $_POST['currentSectionId'];
+        if (empty($promoteSection)) {
+            echo '483';
+        } else {
+            $studentData = $db->getStudentJoinedDetails($studentId);
+            $studentLname = strtoupper($studentData['student_lname']);
+            $studentFname = strtoupper($studentData['student_fname']);
+            $studentMname = strtoupper($studentData['student_mname']);
+            $gender = strtoupper($studentData['gender']);
+            $gradeLevel = strtoupper($studentData['grade_level']);
+            $section = strtoupper($studentData['section']);
+            $generalAverage = $db->getStudentGeneralAverage($studentId, $sectionId);
+            $remarks = getGWARemarks($generalAverage);
+            $status = getGWAStatus($generalAverage);
+            $recordStudentGWA = $db->addGWARecord($studentLRN, $studentLname, $studentFname, $studentMname, $gender, $gradeLevel, $section, $generalAverage, $remarks, $status);
+            if ($recordStudentGWA != false) {
+                $updateSection = $db->updateStudentSection($studentId, $promoteLevel, $promoteSection);
+                if ($updateSection != false) {
+                    $addStudentRecord = $db->addStudentRecord($studentId, $studentLRN, $promoteSection, $promoteLevel);
+                    if($addStudentRecord != false){
+                        echo '200';
+                    }
+                    else{
+                        echo '400';
+                    }
+                } else {
+                    echo '485';
+                }
+            } else {
+                echo '484';
+            }
+        }
     } else {
         echo '400';
     }
@@ -1734,6 +1771,32 @@ function validate($data)
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
     return $data;
+}
+
+function getGWARemarks($gwa)
+{
+    if ($gwa >= 90) {
+        return 'OUTSTANDING';
+    } else if ($gwa >= 85) {
+        return 'VERY GOOD';
+    } else if ($gwa >= 80) {
+        return 'GOOD';
+    } else if ($gwa >= 75) {
+        return 'FAIR';
+    } else {
+        return 'FAILED';
+    }
+}
+
+function getGWAStatus($gwa)
+{
+    if ($gwa >= 90) {
+        return 'PROMOTED WITH HONORS';
+    } else if ($gwa >= 75) {
+        return 'PROMOTED';
+    } else {
+        return 'RETAINED';
+    }
 }
 
 

@@ -104,8 +104,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((response) => response.json())
         .then((data) => {
           // Fetch options and set values after they are populated
-          fetchOptions(data.level_id, "editSubject", "getSubjects");
-          fetchOptions(data.level_id, "editSection", "getSections");
+          fetchOptions(data.level_id, "editSubject", "getSubjects", 'Subject');
+          fetchOptions(data.level_id, "editSection", "getSections", 'Section');
 
           // Wait for dropdowns to be populated before setting values
           setTimeout(() => {
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  function fetchOptions(levelId, targetElementId, submitType) {
+  function fetchOptions(levelId, targetElementId, submitType, value) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/SCES/backend/fetch-class.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -149,7 +149,9 @@ document.addEventListener("DOMContentLoaded", function () {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         const targetDropdown = document.getElementById(targetElementId);
-        targetDropdown.innerHTML = xhr.responseText;
+
+        targetDropdown.innerHTML =
+          `<option value="">Select ${value}</option>` + xhr.responseText;
       }
     };
 
@@ -169,8 +171,8 @@ document.addEventListener("DOMContentLoaded", function () {
           '<option value="" selected>Select Grade Level First</option>';
       } else {
         // Fetch options based on selected grade level
-        fetchOptions(gradeLevelId, "editSubject", "getSubjects");
-        fetchOptions(gradeLevelId, "editSection", "getSections");
+        fetchOptions(gradeLevelId, "editSubject", "getSubjects", 'Subject');
+        fetchOptions(gradeLevelId, "editSection", "getSections", 'Section');
       }
     });
 
@@ -187,8 +189,8 @@ document.addEventListener("DOMContentLoaded", function () {
           '<option value="" selected>Select Grade Level First</option>';
       } else {
         // Fetch options based on selected grade level
-        fetchOptions(gradeLevelId, "addSubject", "getSubjects");
-        fetchOptions(gradeLevelId, "addSection", "getSections");
+        fetchOptions(gradeLevelId, "addSubject", "getSubjects", 'Subject');
+        fetchOptions(gradeLevelId, "addSection", "getSections", 'Section');
       }
     });
 

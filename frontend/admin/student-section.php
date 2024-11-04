@@ -49,12 +49,12 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
                                 <tr class="<?php echo htmlspecialchars($sectionData['short']); ?>">
                                     <th>Student Icon</th>
                                     <th>LRN</th>
-                                    <th>Student ID</th>
                                     <th>Last Name</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Age</th>
                                     <th>Gender</th>
+                                    <th>Promote</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
@@ -162,4 +162,4 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
     ?>
     <script src="/SCES/assets/script/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
-    <script src="/SCES/assets/script/student-section.js"></script>
+    <script src="/SCES/assets/script/admin-student-section.js"></script>

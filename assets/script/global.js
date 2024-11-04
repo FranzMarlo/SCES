@@ -2621,6 +2621,7 @@ $("#addGradeForm").on("submit", function (e) {
               if (result.isConfirmed) {
                 document.getElementById("studentModal").style.display = "flex";
                 addGradeModal.style.display = "none";
+                addGradeForm.reset();
                 if ($.fn.DataTable.isDataTable("#gradesTable")) {
                   $("#gradesTable").DataTable().ajax.reload(null, false); // Keep the current page
                 }
@@ -4021,6 +4022,93 @@ $("#editSectionForm").on("submit", function (e) {
     },
   });
 });
+
+$("#promoteStudentForm").on("submit", function (e) {
+  e.preventDefault();
+
+  var formData = new FormData(this);
+  formData.append("submitType", "promoteStudent");
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Student Promoted To Next Grade Level",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              window.location.reload();
+            });
+          }
+        );
+      } else if (response == "483") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select New Section For Student",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "484") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Updating Student Records Failed",
+              text: "Please Try Again Later",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              window.location.reload();
+            });
+          }
+        );
+      } else if (response == "485") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Updating Student Section Failed",
+              text: "Please Try Again Later",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              window.location.reload();
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Updating Student Section Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
 
 function logoutFunc() {
   Swal.fire({

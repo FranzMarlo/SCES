@@ -49,12 +49,12 @@ $sectionData = $db->facultyGetSectionData($_GET['section']);
                                 <tr class="<?php echo htmlspecialchars($sectionData['short']); ?>">
                                     <th>Student Icon</th>
                                     <th>LRN</th>
-                                    <th>Student ID</th>
                                     <th>Last Name</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Age</th>
                                     <th>Gender</th>
+                                    <th>Promote</th>
                                     <th>More</th>
                                 </tr>
                             </thead>

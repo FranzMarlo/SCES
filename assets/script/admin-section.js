@@ -1,54 +1,55 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const sectionTab = document.getElementById("sectionTab");
-    const archivedTab = document.getElementById("archivedTab");
-    const sectionContainer = document.getElementById("sectionContainer");
-    const archivedContainer = document.getElementById("archivedContainer");
+  const sectionTab = document.getElementById("sectionTab");
+  const archivedTab = document.getElementById("archivedTab");
+  const sectionContainer = document.getElementById("sectionContainer");
+  const archivedContainer = document.getElementById("archivedContainer");
   
-    // Function to update URL parameter
-    function updateURL(activeTab) {
-      const url = new URL(window.location);
-      url.searchParams.set("active", activeTab);
-      window.history.pushState({}, "", url);
-    }
+  // Function to update URL parameter
+  function updateURL(activeTab) {
+    const url = new URL(window.location);
+    url.searchParams.set("active", activeTab);
+    window.history.pushState({ activeTab }, "", url);
+  }
   
-    // Function to set the active tab and container based on the active parameter
-    function setActiveTab() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const active = urlParams.get("active") || "1";
-  
-      // Set the initial active tab and container
-      if (active === "1") {
-        sectionTab.classList.add("active");
-        archivedTab.classList.remove("active");
-        sectionContainer.style.display = "flex";
-        archivedContainer.style.display = "none";
-      } else {
-        archivedTab.classList.add("active");
-        sectionTab.classList.remove("active");
-        archivedContainer.style.display = "flex";
-        sectionContainer.style.display = "none";
-      }
-    }
-  
-    // Event listeners for tab clicks
-    sectionTab.addEventListener("click", () => {
+  // Function to set the active tab and container based on the active parameter
+  function setActiveTab(active) {
+    if (active === "1") {
       sectionTab.classList.add("active");
       archivedTab.classList.remove("active");
       sectionContainer.style.display = "flex";
       archivedContainer.style.display = "none";
-      updateURL("1");
-    });
-  
-    archivedTab.addEventListener("click", () => {
+    } else {
       archivedTab.classList.add("active");
       sectionTab.classList.remove("active");
       archivedContainer.style.display = "flex";
       sectionContainer.style.display = "none";
-      updateURL("2");
-    });
+    }
+  }
   
-    // Initialize on page load
-    setActiveTab();
+  // Event listeners for tab clicks
+  sectionTab.addEventListener("click", () => {
+    setActiveTab("1");
+    updateURL("1");
+  });
+  
+  archivedTab.addEventListener("click", () => {
+    setActiveTab("2");
+    updateURL("2");
+  });
+  
+  // Initialize on page load
+  window.addEventListener("load", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const active = urlParams.get("active") || "1";
+    setActiveTab(active);
+  });
+  
+  // Handle back/forward navigation with popstate event
+  window.addEventListener("popstate", (event) => {
+    const activeTab = event.state?.activeTab || "1";
+    setActiveTab(activeTab);
+  });
+  
   
     const addSectionBtn = document.getElementById("addSectionBtn");
     const addSectionModal = document.getElementById("addSectionModal");

@@ -34,14 +34,17 @@ document.addEventListener("DOMContentLoaded", function () {
     sectionRecordsPanel.style.display = "none";
     sectionAnalyticsPanel.style.display = "none";
 
+    // Activate the selected tab and panel
     activeTab.classList.add("active");
     activePanel.style.display = "flex";
 
+    // Update the URL without reloading the page
     const url = new URL(window.location);
     url.searchParams.set("active", activeValue);
-    window.history.pushState({}, "", url);
+    window.history.pushState({ activeValue }, "", url);
   }
 
+  // Event listeners for tab clicks
   sectionStudentsTab.addEventListener("click", function () {
     switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
     initializeStudentsTable();
@@ -60,11 +63,36 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeRankingTable();
   });
 
+  // Initialize the active tab based on URL parameter on page load
   window.addEventListener("load", function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const active = urlParams.get("active") || 1;
+    const active = urlParams.get("active") || "1";
 
     switch (active) {
+      case "2":
+        switchTab(sectionRecordsTab, sectionRecordsPanel, 2);
+        initializeRecordsTable();
+        break;
+      case "3":
+        switchTab(sectionAnalyticsTab, sectionAnalyticsPanel, 3);
+        populateSectionPanelData();
+        initializeSectionLineChart();
+        initializeSectionFullBarChart();
+        initializeRankingTable();
+        break;
+      default:
+        switchTab(sectionStudentsTab, sectionStudentsPanel, 1);
+        initializeStudentsTable();
+        break;
+    }
+  });
+
+  // Handle back/forward navigation with popstate event
+  window.addEventListener("popstate", (event) => {
+    const activeValue = event.state?.activeValue || "1";
+
+    // Set the active tab based on the previous state
+    switch (activeValue) {
       case "2":
         switchTab(sectionRecordsTab, sectionRecordsPanel, 2);
         initializeRecordsTable();
@@ -135,13 +163,23 @@ document.addEventListener("DOMContentLoaded", function () {
             searchable: false,
             className: "text-center",
           },
-          { data: "lrn" },
-          { data: "student_id" },
-          { data: "student_lname" },
-          { data: "student_fname" },
-          { data: "student_mname" },
-          { data: "age" },
-          { data: "gender" },
+          { data: "lrn", className: "text-center" },
+          { data: "student_lname", className: "text-center" },
+          { data: "student_fname", className: "text-center" },
+          { data: "student_mname", className: "text-center" },
+          { data: "age", className: "text-center" },
+          { data: "gender", className: "text-center" },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="center-image">
+          <button class="promote-btn" data-student-id="${row.student_id}" data-present-id="${row.present_id}" data-level-id="${row.level_id}"><i class="fa-solid fa-user-gear"></i></button>
+          </div>`;
+            },
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+          },
           {
             data: null,
             render: function (data, type, row) {
@@ -163,6 +201,124 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   }
+
+  const promoteStudentModal = document.getElementById("promoteStudentModal");
+  const promoteStudentForm = document.getElementById("promoteStudentForm");
+  const closePromoteStudentModal = document.getElementById(
+    "closePromoteStudentModal"
+  );
+
+  closePromoteStudentModal.addEventListener("click", function () {
+    promoteStudentForm.reset();
+    promoteStudentModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target == promoteStudentModal) {
+      promoteStudentForm.reset();
+      promoteStudentModal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+  });
+
+  const retainStudentModal = document.getElementById("retainStudentModal");
+  const retainStudentForm = document.getElementById("retainStudentForm");
+  const closeRetainStudentModal = document.getElementById(
+    "closeRetainStudentModal"
+  );
+
+  closeRetainStudentModal.addEventListener("click", function () {
+    retainStudentForm.reset();
+    retainStudentModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target == retainStudentModal) {
+      retainStudentForm.reset();
+      retainStudentModal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+  });
+
+  document
+    .getElementById("studentsTable")
+    .addEventListener("click", function (event) {
+      if (event.target.closest(".promote-btn")) {
+        const btn = event.target.closest(".promote-btn");
+        const studentId = btn.getAttribute("data-student-id");
+        const levelId = btn.getAttribute("data-level-id");
+        const presentId = btn.getAttribute("data-present-id");
+        const newLevel = getNextLevelId(levelId);
+
+        if (levelId != presentId) {
+          showAlert(
+            "error",
+            "Operation Denied",
+            "Student is already promoted to the next grade level"
+          );
+          return;
+        }
+
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=checkStudentGrades&student_id=${studentId}&section_id=${section_id}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.hasCompleteGrades == true) {
+              const generalAverage = data.generalAverage;
+
+              if (generalAverage >= 75) {
+                Swal.fire({
+                  icon: "question",
+                  title: "Promote student to next grade level?",
+                  text: "Student is eligible for promotion to next grade level",
+                  showCancelButton: true,
+                  confirmButtonText: "Yes",
+                  confirmButtonColor: "#4CAF50",
+                  cancelButtonColor: "#f44336",
+                  allowOutsideClick: false,
+                  cancelButtonText: "No",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    promoteStudent(studentId, newLevel);
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: "question",
+                  title: "Retain student for the same grade level?",
+                  text: "Student failed and needs to be retained",
+                  showCancelButton: true,
+                  confirmButtonText: "Yes",
+                  confirmButtonColor: "#4CAF50",
+                  cancelButtonColor: "#f44336",
+                  allowOutsideClick: false,
+                  cancelButtonText: "No",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    retainStudent(studentId, levelId);
+                  }
+                });
+              }
+            } else {
+              showAlert(
+                "error",
+                "Operation Denied",
+                "Student's Grade Is Incomplete"
+              );
+            }
+          })
+          .catch((error) => {
+            showAlert("error", "Server Error", "Please Try Again Later");
+          });
+      }
+    });
 
   document
     .getElementById("studentsTable")
@@ -1609,5 +1765,133 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       return "/SCES/assets/images/at-risk.png";
     }
+  }
+
+  function getNextLevelId(level) {
+    if (level === "G0001") {
+      return "G0002";
+    } else if (level === "G0002") {
+      return "G0003";
+    } else if (level === "G0003") {
+      return "G0004";
+    } else if (level === "G0004") {
+      return "G0005";
+    } else if (level === "G0005") {
+      return "G0006";
+    } else {
+      return "G0001";
+    }
+  }
+
+  function getNextGradeLevel(level) {
+    if (level === "Grade 1") {
+      return "Grade 2";
+    } else if (level === "Grade 2") {
+      return "Grade 3";
+    } else if (level === "Grade 3") {
+      return "Grade 4";
+    } else if (level === "Grade 4") {
+      return "Grade 5";
+    } else if (level === "Grade 5") {
+      return "Grade 6";
+    } else {
+      return "Grade 1";
+    }
+  }
+
+  function fetchOptions(levelId, targetElementId, submitType, value) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/SCES/backend/fetch-class.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        const targetDropdown = document.getElementById(targetElementId);
+  
+        targetDropdown.innerHTML = `<option value="">Select ${value}</option>` + xhr.responseText;
+      }
+    };
+  
+    xhr.send(`levelId=${levelId}&submitType=${submitType}`);
+  }
+  
+
+  function promoteStudent(studentId, newLevel) {
+    fetch("/SCES/backend/fetch-class.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `submitType=fetchStudentLevelDetails&student_id=${studentId}`,
+    })
+      .then((response) => response.json())
+      .then((student) => {
+        if (!student || Object.keys(student).length === 0) {
+          showAlert("error", "Server Error", "Student Data Not Found");
+          return;
+        }
+        fetchOptions(newLevel, "promoteSection", "getSections", 'Section');
+        var nextGradeLevel = getNextGradeLevel(student.grade_level);
+        const currentSection = document.getElementById("currentSection");
+        const promoteSectionLabel = document.getElementById(
+          "promoteSectionLabel"
+        );
+        const promoteStudentId = document.getElementById("promoteStudentId");
+        const studentLRN = document.getElementById("studentLRN");
+        const currentSectionId = document.getElementById("currentSectionId");
+        const promoteLevel = document.getElementById("promoteLevel");
+
+        promoteStudentId.value = studentId;
+        currentSection.innerText = `${student.grade_level} - ${student.section}`;
+        promoteSectionLabel.innerText = `Select ${nextGradeLevel} Section For Student`;
+        studentLRN.value = student.lrn;
+        currentSectionId.value = student.section_id;
+        promoteLevel.value = newLevel;
+
+        promoteStudentModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+      })
+      .catch((error) => {
+        showAlert("error", "Server Error", "Please Try Again Later");
+      });
+  }
+
+  function retainStudent(studentId, levelId) {
+    fetch("/SCES/backend/fetch-class.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `submitType=fetchStudentLevelDetails&student_id=${studentId}`,
+    })
+      .then((response) => response.json())
+      .then((student) => {
+        if (!student || Object.keys(student).length === 0) {
+          showAlert("error", "Server Error", "Student Data Not Found");
+          return;
+        }
+        fetchOptions(levelId, "retainSection", "getSections", 'Section');
+        const currentSection = document.getElementById("currentSection");
+        const retainSectionLabel = document.getElementById(
+          "retainSectionLabel"
+        );
+        const retainStudentId = document.getElementById("retainStudentId");
+        const studentLRN = document.getElementById("studentLRN");
+        const currentSectionId = document.getElementById("currentSectionId");
+        const retainLevel = document.getElementById("retainLevel");
+
+        retainStudentId.value = studentId;
+        currentSection.innerText = `${student.grade_level} - ${student.section}`;
+        retainSectionLabel.innerText = `Select New Section For Student`;
+        studentLRN.value = student.lrn;
+        currentSectionId.value = student.section_id;
+        retainLevel.value = levelId;
+
+        retainStudentModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+      })
+      .catch((error) => {
+        showAlert("error", "Server Error", "Please Try Again Later");
+      });
   }
 });

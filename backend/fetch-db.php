@@ -956,7 +956,11 @@ class fetchClass extends db_connect
                 student.gender,
                 student.profile_image,
                 level.grade_level,
-                section.section
+                record.level_id,
+                student.level_id AS present_id,
+                record.section_id,
+                section.section,
+                section.teacher_id
             FROM
                 student_record record
             INNER JOIN
@@ -2114,7 +2118,7 @@ class fetchClass extends db_connect
 
 
 
-    public function getStudentQuizRecords( $subjectId)
+    public function getStudentQuizRecords($subjectId)
     {
         $query = $this->conn->prepare("
         SELECT
@@ -3677,6 +3681,79 @@ class fetchClass extends db_connect
         return null;
     }
 
+    public function checkStudentGrades($studentId, $sectionId)
+    {
+        // Step 1: Fetch all subjects for the given section
+        $subjectQuery = "
+        SELECT subject_id 
+        FROM subject_tbl 
+        WHERE section_id = ?
+    ";
+        $subjectStmt = $this->conn->prepare($subjectQuery);
+        $subjectStmt->bind_param("s", $sectionId);
+        $subjectStmt->execute();
+        $subjectResult = $subjectStmt->get_result();
+
+        while ($subject = $subjectResult->fetch_assoc()) {
+            $subjectId = $subject['subject_id'];
+
+            $gradeQuery = "
+            SELECT COUNT(grade_id) as grade_count
+            FROM grade_tbl
+            WHERE student_id = ? 
+              AND subject_id = ?
+        ";
+            $gradeStmt = $this->conn->prepare($gradeQuery);
+            $gradeStmt->bind_param("ss", $studentId, $subjectId);
+            $gradeStmt->execute();
+            $gradeResult = $gradeStmt->get_result();
+            $gradeCount = $gradeResult->fetch_assoc()['grade_count'] ?? 0;
+
+            if ($gradeCount < 4) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+
+
+    public function getStudentGeneralAverage($studentId, $sectionId)
+    {
+        $query = "
+        SELECT 
+            AVG(subject_average) as general_average
+        FROM (
+            SELECT 
+                AVG(grade.grade) as subject_average
+            FROM 
+                grade_tbl grade
+            INNER JOIN 
+                subject_tbl subject
+            ON 
+                subject.subject_id = grade.subject_id
+            WHERE 
+                grade.student_id = ?
+            AND 
+                subject.section_id = ?
+            GROUP BY 
+                grade.subject_id
+        ) as subject_averages
+    ";
+
+        $queryResult = $this->conn->prepare($query);
+        $queryResult->bind_param("ss", $studentId, $sectionId);
+        $queryResult->execute();
+        $result = $queryResult->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+            return $row['general_average'] !== null ? round($row['general_average']) : null;
+        }
+
+        return null;
+    }
 
 }
 
