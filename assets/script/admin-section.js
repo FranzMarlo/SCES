@@ -81,9 +81,9 @@ document.addEventListener("DOMContentLoaded", function () {
   
     document.querySelectorAll(".edit-btn").forEach((editLink) => {
       editLink.addEventListener("click", function () {
-        const subjectId = this.getAttribute("data-subject-id");
-        openPopupMenu.classList.remove("show");
-        editSubjectModal.style.display = "flex";
+        const sectionId = this.getAttribute("data-section-id");
+        openPopupSection.classList.remove("show");
+        editSectionModal.style.display = "flex";
         document.body.style.overflow = "hidden";
   
         fetch("/SCES/backend/fetch-class.php", {
@@ -91,106 +91,49 @@ document.addEventListener("DOMContentLoaded", function () {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-          body: `submitType=fetchSubjectDetails&subject_id=${subjectId}`,
+          body: `submitType=fetchSectionDetails&section_id=${sectionId}`,
         })
           .then((response) => response.json())
           .then((data) => {
-            // Fetch options and set values after they are populated
-            fetchOptions(data.level_id, "editSubject", "getSubjects");
-            fetchOptions(data.level_id, "editSection", "getSections");
-  
-            // Wait for dropdowns to be populated before setting values
-            setTimeout(() => {
-              document.getElementById("editSubjectIdHolder").value =
-                data.subject_id;
-              document.getElementById("editSubjectHolder").value = data.subject;
-              document.getElementById("editLevelIdHolder").value = data.level_id;
               document.getElementById("editSectionIdHolder").value =
                 data.section_id;
+              document.getElementById("editSectionHolder").value = data.section;
+              document.getElementById("editLevelIdHolder").value = data.level_id;
               document.getElementById("editTeacherIdHolder").value =
                 data.teacher_id;
               document.getElementById("editGradeLevel").value = data.level_id;
-              document.getElementById("editSubject").value = data.subject;
-              document.getElementById("editSection").value = data.section_id;
+              document.getElementById("editSection").value = data.section;
+              if(data.teacher_id == null){
+                document.getElementById("editTeacher").value = '';
+              }
+              else{
               document.getElementById("editTeacher").value = data.teacher_id;
-            }, 50);
-          })
-          .catch((error) => console.error("Error fetching subject data:", error));
+              }
+          }).catch((error) => console.error("Error fetching section data:", error));
       });
     });
   
-    closeEditSubjectModal.addEventListener("click", function () {
-      editSubjectForm.reset();
-      editSubjectModal.style.display = "none";
+    closeEditSectionModal.addEventListener("click", function () {
+      editSectionForm.reset();
+      editSectionModal.style.display = "none";
       document.body.style.overflow = "auto";
     });
   
     window.addEventListener("click", function (event) {
-      if (event.target == editSubjectModal) {
-        editSubjectForm.reset();
-        editSubjectModal.style.display = "none";
+      if (event.target == editSectionModal) {
+        editSectionForm.reset();
+        editSectionModal.style.display = "none";
         document.body.style.overflow = "auto";
       }
     });
   
-    function fetchOptions(levelId, targetElementId, submitType) {
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "/SCES/backend/fetch-class.php", true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-          const targetDropdown = document.getElementById(targetElementId);
-          targetDropdown.innerHTML = xhr.responseText;
-        }
-      };
-  
-      xhr.send(`levelId=${levelId}&submitType=${submitType}`);
-    }
-  
-    document
-      .getElementById("editGradeLevel")
-      .addEventListener("change", function () {
-        const gradeLevelId = this.value;
-  
-        if (!gradeLevelId) {
-          // Reset the Subject and Section dropdowns to default
-          document.getElementById("editSubject").innerHTML =
-            '<option value="" selected>Select Grade Level First</option>';
-          document.getElementById("editSection").innerHTML =
-            '<option value="" selected>Select Grade Level First</option>';
-        } else {
-          // Fetch options based on selected grade level
-          fetchOptions(gradeLevelId, "editSubject", "getSubjects");
-          fetchOptions(gradeLevelId, "editSection", "getSections");
-        }
-      });
-  
-    document
-      .getElementById("addGradeLevel")
-      .addEventListener("change", function () {
-        const gradeLevelId = this.value;
-  
-        if (!gradeLevelId) {
-          // Reset the Subject and Section dropdowns to default
-          document.getElementById("addSubject").innerHTML =
-            '<option value="" selected>Select Grade Level First</option>';
-          document.getElementById("addSection").innerHTML =
-            '<option value="" selected>Select Grade Level First</option>';
-        } else {
-          // Fetch options based on selected grade level
-          fetchOptions(gradeLevelId, "addSubject", "getSubjects");
-          fetchOptions(gradeLevelId, "addSection", "getSections");
-        }
-      });
-  
     document.querySelectorAll(".archive-btn").forEach((editLink) => {
       editLink.addEventListener("click", function () {
-        const subjectId = this.getAttribute("data-subject-id");
-        openPopupMenu.classList.remove("show");
+        const sectionId = this.getAttribute("data-section-id");
+        openPopupSection.classList.remove("show");
         Swal.fire({
-          title: "Do you want to archive this subject?",
-          text: "Archived subjects won't be visible to instructors and students",
+          title: "Do you want to archive this section?",
+          text: "Archived section won't be visible to instructors",
           icon: "warning",
           showCancelButton: true,
           confirmButtonText: "Yes",
@@ -199,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
           cancelButtonColor: "#f44336",
         }).then((result) => {
           if (result.isConfirmed) {
-            archiveSubject(subjectId);
+            archiveSection(sectionId);
           } else {
             Swal.fire({
               title: "Operation Cancelled",
@@ -214,11 +157,11 @@ document.addEventListener("DOMContentLoaded", function () {
   
     document.querySelectorAll(".not-archive-btn").forEach((editLink) => {
       editLink.addEventListener("click", function () {
-        const subjectId = this.getAttribute("data-subject-id");
-        openPopupMenu.classList.remove("show");
+        const sectionId = this.getAttribute("data-section-id");
+        openPopupSection.classList.remove("show");
         Swal.fire({
-          title: "Do you want to re-enable this subject?",
-          text: "Archived subjects are not visible to instructors and students",
+          title: "Do you want to re-enable this section?",
+          text: "Archived sections are not visible to instructors",
           icon: "warning",
           showCancelButton: true,
           confirmButtonText: "Yes",
@@ -227,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
           cancelButtonColor: "#f44336",
         }).then((result) => {
           if (result.isConfirmed) {
-            toggleArchivedSubject(subjectId);
+            toggleArchivedSection(sectionId);
           } else {
             Swal.fire({
               title: "Operation Cancelled",
@@ -239,13 +182,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       });
     });
-    function archiveSubject(subjectId) {
+    function archiveSection(sectionId) {
       fetch("/SCES/backend/global.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: `submitType=archiveSubject&subject_id=${subjectId}`,
+        body: `submitType=archiveSection&section_id=${sectionId}`,
       })
         .then((response) => response.text())
         .then((data) => {
@@ -253,8 +196,8 @@ document.addEventListener("DOMContentLoaded", function () {
             case "200":
               Swal.fire({
                 icon: "info",
-                title: "Subject Archived",
-                text: "Teachers and Students will not be able to access the subject",
+                title: "Section Archived",
+                text: "Teachers will not be able to access the section",
                 confirmButtonColor: "#4CAF50",
                 allowOutsideClick: false,
               }).then((result) => {
@@ -267,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
               Swal.fire({
                 icon: "warning",
                 title: "Invalid Request",
-                text: "Subject is already archived",
+                text: "Section is already archived",
                 confirmButtonColor: "#4CAF50",
               });
               break;
@@ -281,15 +224,15 @@ document.addEventListener("DOMContentLoaded", function () {
               break;
           }
         })
-        .catch((error) => console.error("Error fetching subject data:", error));
+        .catch((error) => console.error("Error fetching section data:", error));
     }
-    function toggleArchivedSubject(subjectId) {
+    function toggleArchivedSection(sectionId) {
       fetch("/SCES/backend/global.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: `submitType=toggleArchivedSubject&subject_id=${subjectId}`,
+        body: `submitType=toggleArchivedSection&section_id=${sectionId}`,
       })
         .then((response) => response.text())
         .then((data) => {
@@ -297,8 +240,8 @@ document.addEventListener("DOMContentLoaded", function () {
             case "200":
               Swal.fire({
                 icon: "info",
-                title: "Subject Removed From Archived",
-                text: "Teachers and Students will now be able to access the subject",
+                title: "Section Removed From Archived",
+                text: "Teachers and Students will now be able to access the section",
                 confirmButtonColor: "#4CAF50",
                 allowOutsideClick: false,
               }).then((result) => {
@@ -311,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
               Swal.fire({
                 icon: "warning",
                 title: "Invalid Request",
-                text: "Subject is already removed from archived",
+                text: "Section is already removed from archived",
                 confirmButtonColor: "#4CAF50",
               });
               break;
@@ -325,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
               break;
           }
         })
-        .catch((error) => console.error("Error fetching subject data:", error));
+        .catch((error) => console.error("Error fetching section data:", error));
     }
   });
   

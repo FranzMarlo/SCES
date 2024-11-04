@@ -1570,6 +1570,92 @@ if (isset($_POST['submitType'])) {
                 echo '400';
             }
         }
+    } else if ($_POST['submitType'] === 'addSectionData') {
+        $addGradeLevel = validate($_POST['addGradeLevel']);
+        $addSection = ucwords(validate($_POST['addSection']));
+        $addTeacher = validate($_POST['addTeacher']);
+        $checkSection = $db->checkSectionName($addSection, $addGradeLevel);
+        if ($checkSection->num_rows > 0) {
+            echo '490';
+        } else if (empty($addGradeLevel)) {
+            echo '491';
+        } else if (empty($addSection)) {
+            echo '492';
+        } else if (empty($addTeacher)) {
+            echo '493';
+        } else {
+            $levelData = $db->getLevelData($addGradeLevel);
+            if ($levelData != false) {
+                $short = $levelData['short'];
+                $addSection = $db->addSection($addTeacher, $addGradeLevel, $addSection, $short);
+                if ($addSection != false) {
+                    echo '200';
+                } else {
+                    echo '400';
+                }
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'editSectionData') {
+        $editSectionHolder = $_POST['editSectionHolder'];
+        $editLevelIdHolder = $_POST['editLevelIdHolder'];
+        $editSectionIdHolder = $_POST['editSectionIdHolder'];
+        $editTeacherIdHolder = $_POST['editTeacherIdHolder'];
+        $editGradeLevel = validate($_POST['editGradeLevel']);
+        $editSection = ucwords(validate($_POST['editSection']));
+        $editTeacher = validate($_POST['editTeacher']);
+        $checkSection = $db->checkSectionName($editSection, $editGradeLevel);
+        if (
+            $editLevelIdHolder == $editGradeLevel &&
+            $editTeacherIdHolder == $editTeacher &&
+            $editSectionHolder == $editSection
+        ) {
+            echo '201';
+        } else if ($checkSection->num_rows > 0 && ($editSection != $editSectionHolder || $editLevelIdHolder != $editGradeLevel)) {
+            echo '490';
+        } else if (empty($editGradeLevel)) {
+            echo '491';
+        } else if (empty($editSection)) {
+            echo '492';
+        } else if (empty($editTeacher)) {
+            echo '493';
+        } else {
+            $editSection = $db->updateSection($editSectionIdHolder, $editTeacher, $editGradeLevel, $editSection);
+            if ($editSection != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'archiveSection') {
+        $sectionId = validate($_POST['section_id']);
+        $section = $db->checkSectionInfo($sectionId);
+        $sectionStatus = $section['archived'];
+        if ($sectionStatus == 'True') {
+            echo '482';
+        } else {
+            $toggleSection = $db->archiveSection($sectionId, 'True');
+            if ($toggleSection != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
+    } else if ($_POST['submitType'] === 'toggleArchivedSection') {
+        $sectionId = validate($_POST['section_id']);
+        $section = $db->checkSectionInfo($sectionId);
+        $sectionStatus = $section['archived'];
+        if ($sectionStatus == 'False') {
+            echo '482';
+        } else {
+            $toggleSection = $db->archiveSection($sectionId, 'False');
+            if ($toggleSection != false) {
+                echo '200';
+            } else {
+                echo '400';
+            }
+        }
     } else {
         echo '400';
     }

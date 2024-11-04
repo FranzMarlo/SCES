@@ -3744,8 +3744,7 @@ $("#editSubjectForm").on("submit", function (e) {
             });
           }
         );
-      }
-      else if (response == "201") {
+      } else if (response == "201") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -3821,6 +3820,198 @@ $("#editSubjectForm").on("submit", function (e) {
             Swal.fire({
               icon: "error",
               title: "Subject Adding Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+$("#addSectionForm").on("submit", function (e) {
+  e.preventDefault();
+
+  var formData = new FormData(this);
+  formData.append("submitType", "addSectionData");
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Section Added Successfully",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              window.location.reload();
+            });
+          }
+        );
+      } else if (response == "490") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Section Name Already In Use For Grade Level",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "491") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Grade Level For Section",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "492") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Name For New Section",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "493") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Adviser For Section",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Section Adding Failed",
+              text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+$("#editSectionForm").on("submit", function (e) {
+  e.preventDefault();
+
+  var formData = new FormData(this);
+  formData.append("submitType", "editSectionData");
+
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Section Updated",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              window.location.reload();
+            });
+          }
+        );
+      } else if (response == "201") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "info",
+              title: "No Changes Has Been Made",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              window.location.reload();
+            });
+          }
+        );
+      } else if (response == "490") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Section Name Already In Use For Grade Level",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "491") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Grade Level For Section",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "492") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Name For Section",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "493") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Adviser For Section",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Section Adding Failed",
               text: "Please Try Again",
               confirmButtonColor: "#4CAF50",
             });

@@ -2260,7 +2260,7 @@ class globalClass extends db_connect
     public function updateSubject($subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $link)
     {
         $query = $this->conn->prepare("UPDATE subject_tbl SET teacher_id = ?, level_id = ?, subject = ?, subject_title = ?, section_id = ?, icon = ?, subject_code = ?, link = ? WHERE subject_id = ?");
-        $query->bind_param("sssssssss", $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $link, $subjectId,);
+        $query->bind_param("sssssssss", $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $link, $subjectId);
         if ($query->execute()) {
             return true;
         } else {
@@ -2293,6 +2293,97 @@ class globalClass extends db_connect
         return false;
     }
 
+    public function checkSectionName($section, $gradeLevel)
+    {
+        $query = $this->conn->prepare("SELECT * FROM section_tbl WHERE section= ? AND level_id = ?");
+        $query->bind_param("ss", $section, $gradeLevel);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+    public function addSection($teacherId, $levelId, $section, $short)
+    {
+        $year = date("Y");
+        $sectionId = $short . '-' . $year . sprintf('%02d', rand(0, 99));
+        $checkIdResult = $this->checkSectionId($sectionId);
+
+        while ($checkIdResult->num_rows > 0) {
+            $sectionId = $short . '-' . $year . sprintf('%02d', rand(0, 99));
+            $checkIdResult = $this->checkSectionId($sectionId);
+        }
+        $query = $this->conn->prepare("INSERT INTO `section_tbl` (`section_id`, `teacher_id`, `level_id`, `section`, `year`) VALUES (?, ?, ?, ?, ?)");
+        $query->bind_param("ssssi", $sectionId, $teacherId, $levelId, $section, $year);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkSectionId($id)
+    {
+        $query = $this->conn->prepare("SELECT * FROM section_tbl WHERE section_id = ?");
+        $query->bind_param("s", $id);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            return $result;
+        }
+    }
+
+    public function getLevelData($levelId)
+    {
+        $query = $this->conn->prepare("
+        SELECT * FROM level_tbl WHERE level_id = ?
+    ");
+        $query->bind_param("s", $levelId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectData = $result->fetch_assoc();
+            return $subjectData;
+        }
+
+        return false;
+    }
+
+    public function updateSection($sectionId, $teacherId, $levelId, $section)
+    {
+        $query = $this->conn->prepare("UPDATE section_tbl SET teacher_id = ?, level_id = ?, section = ? WHERE section_id = ?");
+        $query->bind_param("ssss", $teacherId, $levelId, $section, $sectionId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function checkSectionInfo($sectionId)
+    {
+        $query = $this->conn->prepare("
+        SELECT * FROM section_tbl WHERE section_id = ?
+    ");
+        $query->bind_param("s", $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $sectionData = $result->fetch_assoc();
+            return $sectionData;
+        }
+
+        return false;
+    }
+
+    public function archiveSection($sectionId, $archived)
+    {
+        $query = $this->conn->prepare("UPDATE section_tbl SET archived = ? WHERE section_id = ?");
+        $query->bind_param("ss", $archived, $sectionId);
+        if ($query->execute()) {
+            return true;
+        }
+        return false;
+    }
 }
 
 

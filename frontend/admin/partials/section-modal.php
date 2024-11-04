@@ -36,26 +36,29 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="save-btn">Add Subject</button>
+                    <button type="submit" class="save-btn">Add Section</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<div id="editSubjectModal" class="modal">
+<div id="editSectionModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2>Edit Subject</h2>
-            <span class="close-btn" id="closeEditSubjectModal">&times;</span>
+            <h2>Edit Section</h2>
+            <span class="close-btn" id="closeEditSectionModal">&times;</span>
         </div>
         <div class="modal-body">
-            <form id="editSubjectForm">
-                <input type="hidden" name="editSubjectIdHolder" id="editSubjectIdHolder">
-                <input type="hidden" name="editSubjectHolder" id="editSubjectHolder">
-                <input type="hidden" name="editLevelIdHolder" id="editLevelIdHolder">
+            <form id="editSectionForm">
                 <input type="hidden" name="editSectionIdHolder" id="editSectionIdHolder">
+                <input type="hidden" name="editSectionHolder" id="editSectionHolder">
+                <input type="hidden" name="editLevelIdHolder" id="editLevelIdHolder">
                 <input type="hidden" name="editTeacherIdHolder" id="editTeacherIdHolder">
+                <div class="form-group">
+                    <label for="editSection">Section Name:</label>
+                    <input type="text" id="editSection" name="editSection" placeholder="Enter Section Name">
+                </div>
                 <div class="form-group">
                     <label for="editGradeLevel">Select Grade Level:</label>
                     <select name="editGradeLevel" id="editGradeLevel">
@@ -69,20 +72,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="editSubject">Select Subject:</label>
-                    <select name="editSubject" id="editSubject">
-                        <option value="" selected>Select Grade Level First</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="editSection">Select Section:</label>
-                    <select name="editSection" id="editSection">
-                        <option value="" selected>Select Grade Level First</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <?php $teacherOptions = $db->subjectTeacherOptions(); ?>
-                    <label for="editTeacher">Select Teacher For Subject:</label>
+                    <label for="editTeacher">Select Adviser For Section:</label>
                     <select name="editTeacher" id="editTeacher">
                         <option value="" selected>Select Teacher</option>
                         <?php foreach ($teacherOptions as $option): ?>

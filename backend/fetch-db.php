@@ -3661,6 +3661,21 @@ class fetchClass extends db_connect
         return null;
     }
 
+    public function getSectionDetails($sectionId)
+    {
+        $query = $this->conn->prepare("
+        SELECT * FROM section_tbl WHERE section_id = ?
+    ");
+        $query->bind_param("s", $sectionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $sectionDetails = $result->fetch_assoc();
+            return $sectionDetails;
+        }
+
+        return null;
+    }
 
 
 }

@@ -1070,7 +1070,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subjectId = $_POST['subject_id'];
         $subjectData = $fetchDb->getSubjectDetails($subjectId);
         echo json_encode($subjectData);
-    } else {
+    } else if ($submitType === 'fetchSectionDetails') {
+        $sectionId = $_POST['section_id'];
+        $sectionData = $fetchDb->getSectionDetails($sectionId);
+        echo json_encode($sectionData);
+    }else {
         echo json_encode(['error' => 'Invalid submit type']);
     }
 } else {
