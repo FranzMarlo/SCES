@@ -3745,7 +3745,7 @@ class fetchClass extends db_connect
         ON
             s.teacher_id = t.teacher_id
         INNER JOIN
-            student_tbl c
+            student_record c
         ON
             s.section_id = c.section_id
         WHERE

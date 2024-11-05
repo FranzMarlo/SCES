@@ -585,7 +585,7 @@ class globalClass extends db_connect
         ON
             s.teacher_id = t.teacher_id
         INNER JOIN
-            student_tbl c
+            student_record c
         ON
             s.section_id = c.section_id
         WHERE
@@ -2021,7 +2021,7 @@ class globalClass extends db_connect
 
     public function getTotalStudentBySection($sectionId)
     {
-        $query = $this->conn->prepare("SELECT COUNT(`student_id`) as total FROM student_record WHERE section_id = ?");
+        $query = $this->conn->prepare("SELECT COUNT(DISTINCT `student_id`) as total FROM student_record WHERE section_id = ?");
 
         $query->bind_param("s", $sectionId);
         if ($query->execute()) {

@@ -9,11 +9,6 @@
         </div>
     </div>
     <div class="user-info">
-        <a href="#">
-            <div class="notif-btn">
-                <i class="fa-solid fa-bell icon"></i>
-            </div>
-        </a>
         <a href="/SCES/frontend/student/profile.php?active=1" class="current-user">
             <img src="/SCES/storage/student/images/<?php echo $image;?>" alt="user icon">
         </a>
