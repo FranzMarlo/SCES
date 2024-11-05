@@ -947,8 +947,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $studentId = $_POST['student_id'];
 
         $lrn = $fetchDb->getStudentLRN($studentId);
-        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId, $sectionId);
-        $totalPending = $fetchDb->facultyGetPendingQuizzesCount($sectionId, $studentId);
+        $totalCompleted = $fetchDb->facultyGetTotalQuizzesCount($studentId);
+        $totalPending = $fetchDb->facultyGetPendingQuizzesCount($studentId);
         $averageScore = $fetchDb->facultyGetAverageScore($studentId);
         $generalAverage = $fetchDb->computeStudentGWAByLRN($lrn);
 

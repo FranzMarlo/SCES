@@ -34,7 +34,7 @@ $page = '';
                         <div class="tab-item" id=sectionTab>Sections</div>
                         <div class="tab-item" id="archivedTab">Archived</div>
                     </div>
-                    <?php $sections = $db->facultyGetSection(); ?>
+                    <?php $sections = $db->adminGetSection(); ?>
                     <?php $archived = $db->facultyGetArchivedSection(); ?>
                     <div class="section-container <?php echo empty($sections) ? 'no-data-box-centered' : ''; ?>" id="sectionContainer">
                         <?php if ($sections): ?>

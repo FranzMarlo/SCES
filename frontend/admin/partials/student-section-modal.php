@@ -283,3 +283,63 @@
     </div>
 </div>
 
+<div id="promoteStudentModal" class="modal-small">
+    <div class="modal-content-small">
+        <div class="modal-header-small">
+            <h2>Promote Student:</h2>
+            <span class="close-btn" id="closePromoteStudentModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="promoteStudentForm">
+                <div class="form-group">
+                    <h2 class="current-section">Current Grade Level:</h2>
+                    <span class="current-section" id="currentSection"></span>
+                </div>
+                <input type="hidden" name="promoteStudentId" id="promoteStudentId">
+                <input type="hidden" name="studentLRN" id="studentLRN">
+                <input type="hidden" name="currentSectionId" id="currentSectionId">
+                <input type="hidden" name="promoteLevel" id="promoteLevel">
+                <div class="form-group">
+                    <label for="promoteSection" id="promoteSectionLabel"></label>
+                    <select name="promoteSection" id="promoteSection">
+                        <option value="" selected>Select Section</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="save-btn">Promote Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="retainStudentModal" class="modal-small">
+    <div class="modal-content-small">
+        <div class="modal-header-small">
+            <h2>Retain Student:</h2>
+            <span class="close-btn" id="closeRetainStudentModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="retainStudentForm">
+                <div class="form-group">
+                    <h2 class="current-section">Current Grade Level:</h2>
+                    <span class="current-section" id="retainedSection"></span>
+                </div>
+                <input type="hidden" name="retainStudentId" id="retainStudentId">
+                <input type="hidden" name="retainedLRN" id="retainedLRN">
+                <input type="hidden" name="retainSectionId" id="retainSectionId">
+                <input type="hidden" name="retainLevel" id="retainLevel">
+                <div class="form-group">
+                    <label for="retainSection" id="retainSectionLabel"></label>
+                    <select name="retainSection" id="retainSection">
+                        <option value="" selected>Select Section</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="save-btn">Retain Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

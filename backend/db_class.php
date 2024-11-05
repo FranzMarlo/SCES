@@ -1900,7 +1900,48 @@ class globalClass extends db_connect
         return [];
     }
 
-    public function facultyGetSection()
+    public function facultyGetSection($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            level.level_id,
+            level.grade_level,
+            level.short,
+            section.section,
+            section.section_id,
+            section.year,
+            teacher.teacher_lname,
+            teacher.teacher_fname,
+            teacher.gender
+        FROM
+            section_tbl section
+        INNER JOIN
+            level_tbl level
+        ON
+            section.level_id = level.level_id
+        LEFT JOIN
+            teacher_tbl teacher
+        ON
+            section.teacher_id = teacher.teacher_id
+        WHERE
+            section.archived = 'False'
+        AND
+            section.teacher_id = ?
+        GROUP BY
+            section.section_id
+        ORDER BY
+            section.section ASC
+        ");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjectDetails;
+        }
+        return [];
+    }
+
+    public function adminGetSection()
     {
         $query = $this->conn->prepare("
         SELECT 
@@ -1980,7 +2021,7 @@ class globalClass extends db_connect
 
     public function getTotalStudentBySection($sectionId)
     {
-        $query = $this->conn->prepare("SELECT COUNT(`student_id`) as total FROM student_tbl WHERE section_id = ?");
+        $query = $this->conn->prepare("SELECT COUNT(`student_id`) as total FROM student_record WHERE section_id = ?");
 
         $query->bind_param("s", $sectionId);
         if ($query->execute()) {

@@ -25,7 +25,7 @@ $page = '';
                     <img src="/SCES/assets/images/quiz-grade-section.png" alt="section icon">
                     <h1>Sections</h1>
                 </div>
-                <?php $sections = $db->facultyGetSection(); ?>
+                <?php $sections = $db->facultyGetSection($teacherId); ?>
                 <div class="section-container <?php echo empty($sections) ? 'no-data-box-centered' : ''; ?>">
                     <?php if ($sections): ?>
                         <?php foreach ($sections as $section): ?>

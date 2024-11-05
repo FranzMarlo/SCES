@@ -1071,7 +1071,6 @@ class fetchClass extends db_connect
     public function getAllStudentsWithFilter($year, $gradeLevel)
     {
         if ($year === 'All' && $gradeLevel === 'All') {
-            // Case 1: All years and all grade levels
             $query = $this->conn->prepare("
             SELECT
                 student.lrn,
@@ -1086,11 +1085,13 @@ class fetchClass extends db_connect
                 section.section,
                 section.year
             FROM
-                student_tbl student
+                student_record record
             INNER JOIN
-                level_tbl level ON student.level_id = level.level_id
+                student_tbl student ON student.student_id = record.student_id
             INNER JOIN
-                section_tbl section ON student.section_id = section.section_id
+                level_tbl level ON record.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON record.section_id = section.section_id
             ORDER BY
                 student.student_lname ASC
         ");
@@ -1110,11 +1111,13 @@ class fetchClass extends db_connect
                 section.section,
                 section.year
             FROM
-                student_tbl student
+                student_record record
             INNER JOIN
-                level_tbl level ON student.level_id = level.level_id
+                student_tbl student ON student.student_id = record.student_id
             INNER JOIN
-                section_tbl section ON student.section_id = section.section_id
+                level_tbl level ON record.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON record.section_id = section.section_id
             WHERE
                 level.grade_level = ?
             ORDER BY
@@ -1134,13 +1137,16 @@ class fetchClass extends db_connect
                 student.gender,
                 student.profile_image,
                 level.grade_level,
-                section.section
+                section.section,
+                section.year
             FROM
-                student_tbl student
+                student_record record
             INNER JOIN
-                level_tbl level ON student.level_id = level.level_id
+                student_tbl student ON student.student_id = record.student_id
             INNER JOIN
-                section_tbl section ON student.section_id = section.section_id
+                level_tbl level ON record.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON record.section_id = section.section_id
             WHERE
                 section.year = ?
             ORDER BY
@@ -1160,13 +1166,16 @@ class fetchClass extends db_connect
                 student.gender,
                 student.profile_image,
                 level.grade_level,
-                section.section
+                section.section,
+                section.year
             FROM
-                student_tbl student
+                student_record record
             INNER JOIN
-                level_tbl level ON student.level_id = level.level_id
+                student_tbl student ON student.student_id = record.student_id
             INNER JOIN
-                section_tbl section ON student.section_id = section.section_id
+                level_tbl level ON record.level_id = level.level_id
+            INNER JOIN
+                section_tbl section ON record.section_id = section.section_id
             WHERE
                 section.year = ?
                 AND level.grade_level = ?
@@ -1529,7 +1538,7 @@ class fetchClass extends db_connect
             (quiz.status = 'Active' OR quiz.status = 'Completed')
     ");
 
-        $query->bind_param("s",$studentId);
+        $query->bind_param("s", $studentId);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -1866,7 +1875,7 @@ class fetchClass extends db_connect
             FROM quiz_tbl quiz
             INNER JOIN subject_tbl subject
             ON subject.subject_id = quiz.subject_id
-            INNER JOIN student_tbl student
+            INNER JOIN student_record student
             ON student.section_id = subject.section_id
             LEFT JOIN score_tbl score
             ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
@@ -2253,20 +2262,19 @@ class fetchClass extends db_connect
 
         // Step 2: Build the SQL query based on filter conditions
         $sql = "
-    SELECT 
-        level.grade_level AS grade_level,  
-        AVG(score.score) AS avg_score
-    FROM
-        quiz_tbl quiz
-    INNER JOIN
-        score_tbl score ON score.quiz_id = quiz.quiz_id
-    INNER JOIN
-        subject_tbl subject ON quiz.subject_id = subject.subject_id
-    INNER JOIN
-        level_tbl level ON subject.level_id = level.level_id
-    WHERE 
-        score.student_id = ? AND score.score IS NOT NULL";
-
+        SELECT 
+            level.grade_level AS grade_level,  
+            AVG(score.score) AS avg_score
+        FROM
+            quiz_tbl quiz
+        INNER JOIN
+            score_tbl score ON score.quiz_id = quiz.quiz_id
+        INNER JOIN
+            subject_tbl subject ON quiz.subject_id = subject.subject_id
+        INNER JOIN
+            level_tbl level ON subject.level_id = level.level_id
+        WHERE 
+            score.student_id = ? AND score.score IS NOT NULL";
         // Add conditional filters based on the year and grade level
         $params = ["s", $studentId]; // Parameter types and values
         if ($year !== 'All') {
@@ -3070,7 +3078,7 @@ class fetchClass extends db_connect
                 $query = $this->conn->prepare("
                 SELECT
                     COUNT(DISTINCT student.student_id) AS student_count
-                FROM student_tbl student
+                FROM student_record student
                 INNER JOIN section_tbl section ON student.section_id = section.section_id
                 INNER JOIN level_tbl level ON student.level_id = level.level_id
                 ");
@@ -3078,7 +3086,7 @@ class fetchClass extends db_connect
                 $query = $this->conn->prepare("
                 SELECT
                     COUNT(DISTINCT student.student_id) AS student_count
-                FROM student_tbl student
+                FROM student_record student
                 INNER JOIN section_tbl section ON student.section_id = section.section_id
                 INNER JOIN level_tbl level ON student.level_id = level.level_id
                 WHERE level.grade_level = ?
@@ -3088,7 +3096,7 @@ class fetchClass extends db_connect
                 $query = $this->conn->prepare("
                 SELECT
                     COUNT(DISTINCT student.student_id) AS student_count
-                FROM student_tbl student
+                FROM student_record student
                 INNER JOIN section_tbl section ON student.section_id = section.section_id
                 INNER JOIN level_tbl level ON student.level_id = level.level_id
                 WHERE section.year = ?
@@ -3098,7 +3106,7 @@ class fetchClass extends db_connect
                 $query = $this->conn->prepare("
                 SELECT
                     COUNT(DISTINCT student.student_id) AS student_count
-                FROM student_tbl student
+                FROM student_record student
                 INNER JOIN section_tbl section ON student.section_id = section.section_id
                 INNER JOIN level_tbl level ON student.level_id = level.level_id
                 WHERE section.year = ?
@@ -3126,16 +3134,16 @@ class fetchClass extends db_connect
                 SELECT
                     COUNT(DISTINCT teacher.teacher_id) AS teacher_count
                 FROM teacher_tbl teacher
-                INNER JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
-                INNER JOIN level_tbl level ON section.level_id = level.level_id
+                LEFT JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
+                LEFT JOIN level_tbl level ON section.level_id = level.level_id
                 ");
             } elseif ($year === 'All') {
                 $query = $this->conn->prepare("
                 SELECT
                     COUNT(DISTINCT teacher.teacher_id) AS teacher_count
                 FROM teacher_tbl teacher
-                INNER JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
-                INNER JOIN level_tbl level ON section.level_id = level.level_id
+                LEFT JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
+                LEFT JOIN level_tbl level ON section.level_id = level.level_id
                 WHERE level.grade_level = ? 
             ");
                 $query->bind_param("s", $gradeLevel);
@@ -3144,8 +3152,8 @@ class fetchClass extends db_connect
                 SELECT
                     COUNT(DISTINCT teacher.teacher_id) AS teacher_count
                 FROM teacher_tbl teacher
-                INNER JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
-                INNER JOIN level_tbl level ON section.level_id = level.level_id
+                LEFT JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
+                LEFT JOIN level_tbl level ON section.level_id = level.level_id
                 WHERE section.year = ?
             ");
                 $query->bind_param("i", $year);
@@ -3154,8 +3162,8 @@ class fetchClass extends db_connect
                 SELECT
                     COUNT(DISTINCT teacher.teacher_id) AS teacher_count
                 FROM teacher_tbl teacher
-                INNER JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
-                INNER JOIN level_tbl level ON section.level_id = level.level_id
+                LEFT JOIN section_tbl section ON teacher.teacher_id = section.teacher_id
+                LEFT JOIN level_tbl level ON section.level_id = level.level_id
                 WHERE section.year = ?
                 AND level.grade_level = ?
         ");
@@ -3904,7 +3912,10 @@ class fetchClass extends db_connect
         $subjectStmt->execute();
         $subjectResult = $subjectStmt->get_result();
 
+        $hasSubjects = false;
+
         while ($subject = $subjectResult->fetch_assoc()) {
+            $hasSubjects = true; // At least one subject found
             $subjectId = $subject['subject_id'];
 
             $gradeQuery = "
@@ -3923,9 +3934,9 @@ class fetchClass extends db_connect
                 return false;
             }
         }
-
-        return true;
+        return $hasSubjects;
     }
+
 
 
 
