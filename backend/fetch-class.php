@@ -561,8 +561,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else if ($submitType === 'studentAverageScoreByMonth') {
         $studentId = $_POST['student_id'];
-
-        $data = $fetchDb->studentFetchScoresByMonth($studentId);
+        $sectionId = $_POST['section_id'];
+        $data = $fetchDb->studentFetchScoresBySectionMonthly($studentId, $sectionId);
 
         if ($data === null) {
             echo json_encode([
@@ -586,7 +586,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($students)) {
             foreach ($students as $student) {
                 $studentId = $student['student_id'];
-                $studentData = $fetchDb->studentFetchScoresByMonth($studentId);
+                $studentData = $fetchDb->studentFetchScoresBySection($studentId, $sectionId);
 
                 if (empty($months)) {
                     $months = $studentData['months'];

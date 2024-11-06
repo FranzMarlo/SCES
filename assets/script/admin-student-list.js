@@ -668,7 +668,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   
-    function initializeStudentLineChart(studentId) {
+    function initializeStudentLineChart(studentId, sectionId) {
       var ctxLine = document.getElementById("studentLineChart").getContext("2d");
   
       if (Chart.getChart("studentLineChart")) {
@@ -681,6 +681,7 @@ document.addEventListener("DOMContentLoaded", function () {
         data: {
           submitType: "studentAverageScoreByMonth",
           student_id: studentId,
+          section_id: sectionId,
         },
         success: function (response) {
           const chartData = JSON.parse(response);

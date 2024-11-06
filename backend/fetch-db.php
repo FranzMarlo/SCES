@@ -1769,6 +1769,7 @@ class fetchClass extends db_connect
         return null;
     }
 
+
     public function facultyGetAverageScoreBySection($studentId, $sectionId)
     {
         // Query 1: Count all quizzes in the section
@@ -2072,9 +2073,101 @@ class fetchClass extends db_connect
         }
     }
 
+    public function studentFetchScoresBySection($studentId, $sectionId)
+    {
+        $currentMonth = date('n');  // Current month number (1-12)
+        $currentYear = date('Y');   // Current year
 
+        // Determine the academic year based on the current month
+        if ($currentMonth >= 6) {
+            $startYear = $currentYear;       // Academic year starts this year
+            $endYear = $currentYear + 1;     // Academic year ends next year
+        } else {
+            $startYear = $currentYear - 1;   // Academic year started last year
+            $endYear = $currentYear;         // Academic year ends this year
+        }
 
+        // Initialize months array with all months in the academic year (June-April)
+        $months = [];
+        $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
+        $endDate = strtotime("$endYear-04-30");        // End of academic year (April 30)
 
+        while ($currentDate <= $endDate) {
+            $monthKey = date('Y-m', $currentDate);
+            $monthLabel = date('F', $currentDate);      // e.g., "June", "July"
+            $months[$monthKey] = [
+                'month' => $monthLabel,
+                'avg_score' => 0,                      // Initialize average score to 0 for each month
+                'quiz_ids' => []
+            ];
+            $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
+        }
+
+        // Query to get all quizzes within the academic year range
+        $query = $this->conn->prepare("
+        SELECT 
+            quiz.quiz_id, DATE_FORMAT(quiz.add_time, '%Y-%m') AS month
+        FROM
+            quiz_tbl quiz
+        INNER JOIN
+            subject_tbl subject ON quiz.subject_id = subject.subject_id
+        INNER JOIN
+            section_tbl section ON subject.section_id = section.section_id
+        WHERE 
+            quiz.add_time BETWEEN ? AND ?
+        AND 
+            quiz.status IN ('Active', 'Completed')
+        AND
+            subject.section_id = ?
+        ORDER BY 
+            month ASC
+    ");
+
+        $startDate = "$startYear-06-01";
+        $endDate = "$endYear-04-30";
+        $query->bind_param("sss", $startDate, $endDate, $sectionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            // Populate quiz IDs for each month
+            while ($row = $result->fetch_assoc()) {
+                $monthKey = $row['month'];
+                if (isset($months[$monthKey])) {
+                    $months[$monthKey]['quiz_ids'][] = $row['quiz_id'];
+                }
+            }
+
+            // Calculate average score per month based on quizzes attempted by the student
+            foreach ($months as $monthKey => &$monthData) {
+                $totalScore = 0;
+                $quizCount = count($monthData['quiz_ids']);  // Total quizzes in the month
+
+                foreach ($monthData['quiz_ids'] as $quizId) {
+                    $score = $this->fetchScoreByQuizId($quizId, $studentId);
+
+                    if ($score !== null) { // Only add to total score if the student attempted it
+                        $totalScore += $score;
+                    }
+                }
+
+                // Calculate average score for the month, including unattempted quizzes in the count
+                if ($quizCount > 0) {
+                    $monthData['avg_score'] = round($totalScore / $quizCount, 2);
+                }
+            }
+
+            // Prepare data for output
+            $data = [
+                'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
+                'scores' => array_column($months, 'avg_score')  // Average scores
+            ];
+
+            return $data;
+        } else {
+            return null;  // Return null in case of failure
+        }
+    }
 
     public function studentFetchScoresByMonth($studentId)
     {
@@ -2147,6 +2240,100 @@ class fetchClass extends db_connect
             return null;
         }
     }
+    public function studentFetchScoresBySectionMonthly($studentId, $sectionId)
+{
+    $currentMonth = date('n');  // Current month number (1-12)
+    $currentYear = date('Y');   // Current year
+
+    // Determine the academic year based on the current month
+    if ($currentMonth >= 6) {
+        $startYear = $currentYear;       // Academic year starts this year
+        $endYear = $currentYear + 1;     // Academic year ends next year
+    } else {
+        $startYear = $currentYear - 1;   // Academic year started last year
+        $endYear = $currentYear;         // Academic year ends this year
+    }
+
+    // Initialize months array with all months in the academic year (June-April)
+    $months = [];
+    $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
+    $endDate = strtotime("$endYear-04-30");        // End of academic year (April 30)
+
+    while ($currentDate <= $endDate) {
+        $monthKey = date('Y-m', $currentDate);
+        $monthLabel = date('F', $currentDate);      // e.g., "June", "July"
+        $months[$monthKey] = [
+            'month' => $monthLabel,
+            'avg_score' => 0,                      // Initialize average score to 0 for each month
+            'quiz_ids' => []
+        ];
+        $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
+    }
+
+    // Query to get all quizzes within the academic year range
+    $query = $this->conn->prepare("
+        SELECT 
+            quiz.quiz_id, DATE_FORMAT(quiz.add_time, '%Y-%m') AS month
+        FROM
+            quiz_tbl quiz
+        INNER JOIN
+            subject_tbl subject ON quiz.subject_id = subject.subject_id
+        WHERE 
+            quiz.add_time BETWEEN ? AND ?
+        AND 
+            quiz.status IN ('Active', 'Completed')
+        AND
+            subject.section_id = ?
+        ORDER BY 
+            month ASC
+    ");
+
+    $startDate = "$startYear-06-01";
+    $endDate = "$endYear-04-30";
+    $query->bind_param("sss", $startDate, $endDate, $sectionId);
+
+    if ($query->execute()) {
+        $result = $query->get_result();
+
+        // Populate quiz IDs for each month
+        while ($row = $result->fetch_assoc()) {
+            $monthKey = $row['month'];
+            if (isset($months[$monthKey])) {
+                $months[$monthKey]['quiz_ids'][] = $row['quiz_id'];
+            }
+        }
+
+        // Calculate average score per month based on quizzes attempted by the student
+        foreach ($months as $monthKey => &$monthData) {
+            $totalScore = 0;
+            $quizCount = count($monthData['quiz_ids']);  // Total quizzes in the month
+
+            foreach ($monthData['quiz_ids'] as $quizId) {
+                $score = $this->fetchScoreByQuizId($quizId, $studentId);
+
+                if ($score !== null) { // Only add to total score if the student attempted it
+                    $totalScore += $score;
+                }
+            }
+
+            // Calculate average score for the month, including unattempted quizzes in the count
+            if ($quizCount > 0) {
+                $monthData['avg_score'] = round($totalScore / $quizCount, 2);
+            }
+        }
+
+        // Prepare data for output
+        $data = [
+            'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
+            'scores' => array_column($months, 'avg_score')  // Average scores
+        ];
+
+        return $data;
+    } else {
+        return null;  // Return null in case of failure
+    }
+}
+
 
     public function studentFetchScoresByMonthWithFilter($studentId, $year, $gradeLevel)
     {
@@ -2451,57 +2638,109 @@ class fetchClass extends db_connect
 
     public function studentAverageScoreBySubject($studentId, $sectionId)
     {
-        // Query to get the average score per subject, including subjects with no scores
+        $currentMonth = date('n');
+        $currentYear = date('Y');
+
+        // Determine the academic year based on the current month
+        if ($currentMonth >= 6) {
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else {
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        }
+
+        // Define the academic year start and end dates
+        $startDate = "$startYear-06-01";
+        $endDate = "$endYear-04-30";
+
+        // Query to get all subjects for the section, and quiz IDs within the academic year
         $query = $this->conn->prepare("
         SELECT 
             subj.subject AS subject_label,
-            COALESCE(AVG(score.score), 0) AS avg_score,
-            subj.subject_code
+            subj.subject_code,
+            subj.subject_id,
+            quiz.quiz_id
         FROM
             subject_tbl subj
         LEFT JOIN
             quiz_tbl quiz ON subj.subject_id = quiz.subject_id
-        LEFT JOIN
-            score_tbl score ON score.quiz_id = quiz.quiz_id
-            AND score.student_id = ?
+            AND quiz.add_time BETWEEN ? AND ?
+            AND quiz.status IN ('Active', 'Completed')
         WHERE
             subj.section_id = ?
-        GROUP BY 
-            subj.subject
         ORDER BY 
             subj.subject ASC
     ");
 
-        // Bind the studentId and sectionId parameters
-        $query->bind_param("ss", $studentId, $sectionId);
+        // Bind the parameters
+        $query->bind_param("sss", $startDate, $endDate, $sectionId);
 
         if ($query->execute()) {
             $result = $query->get_result();
 
-            // Initialize arrays to hold subjects, scores, and subject codes
+            // Initialize arrays to store data for each subject
             $subjects = [];
             $scores = [];
             $subjectCodes = [];
+            $subjectsData = [];
 
-            // Fetch the average scores per subject
             while ($row = $result->fetch_assoc()) {
-                $subjects[] = $row['subject_label'];        // Subject name
-                $scores[] = (float) $row['avg_score'];      // Average score
-                $subjectCodes[] = strtolower($row['subject_code']); // Subject code in lowercase
+                $subjectLabel = $row['subject_label'];
+                $subjectCode = strtolower($row['subject_code']);
+                $subjectId = $row['subject_id'];
+                $quizId = $row['quiz_id'];
+
+                // Initialize if subject is not already in the data array
+                if (!isset($subjectsData[$subjectId])) {
+                    $subjectsData[$subjectId] = [
+                        'label' => $subjectLabel,
+                        'code' => $subjectCode,
+                        'totalScore' => 0,
+                        'quizCount' => 0,
+                        'attemptedQuizCount' => 0,
+                    ];
+                }
+
+                // Fetch the student score if there is a quiz ID
+                if ($quizId) {
+                    $score = $this->fetchScoreByQuizId($quizId, $studentId);
+
+                    $subjectsData[$subjectId]['quizCount']++;
+                    if ($score !== null) {
+                        $subjectsData[$subjectId]['totalScore'] += $score;
+                        $subjectsData[$subjectId]['attemptedQuizCount']++;
+                    }
+                }
             }
 
-            // Prepare the data to return for the bar chart
+            // Calculate averages and prepare final arrays for return
+            foreach ($subjectsData as $subject) {
+                $subjects[] = $subject['label'];
+                $subjectCodes[] = $subject['code'];
+
+                // Calculate average score, setting to zero if no attempted quizzes
+                if ($subject['quizCount'] > 0) {
+                    $averageScore = $subject['totalScore'] / $subject['quizCount'];
+                    $scores[] = round($averageScore, 2);
+                } else {
+                    $scores[] = 0; // No score available if no quizzes were present
+                }
+            }
+
+            // Prepare data for the bar chart
             $data = [
-                'subjects' => $subjects,          // Subject labels
-                'scores' => $scores,              // Average scores
-                'subjectCodes' => $subjectCodes   // Subject codes for color mapping
+                'subjects' => $subjects,
+                'scores' => $scores,
+                'subjectCodes' => $subjectCodes,
             ];
 
-            return $data;  // Return the final data for the bar chart
+            return $data;
         } else {
-            return null;  // Return null in case of failure
+            return null;
         }
     }
+
 
 
     public function getSectionQuizRecords($sectionId)
@@ -4253,6 +4492,8 @@ class fetchClass extends db_connect
 
         return null;
     }
+
+
 }
 
 

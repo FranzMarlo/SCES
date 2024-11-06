@@ -1122,6 +1122,7 @@ document.addEventListener("DOMContentLoaded", function () {
       data: {
         submitType: "studentAverageScoreByMonth",
         student_id: studentId,
+        section_id: section_id,
       },
       success: function (response) {
         const chartData = JSON.parse(response);
