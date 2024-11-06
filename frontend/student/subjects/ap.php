@@ -92,7 +92,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/subject-hea
                 <div class="no-data-box">
                   <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
                   <h1>No lessons uploaded.</h1>
-                  <h1>Upload a lesson by clicking the button above.</h1>
+                  <h1>Uploaded lessons will be displayed here.</h1>
                 </div>
               <?php endif; ?>
             </div>

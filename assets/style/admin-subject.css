@@ -102,6 +102,11 @@
     cursor: pointer;
     position: relative;
   }
+  .subject-item:hover {
+    .subject-icon {
+      box-shadow: 0 0 12px 0 #9c9c9c;
+    }
+  }
   .subject-icon {
     display: flex;
     border-radius: 30px;

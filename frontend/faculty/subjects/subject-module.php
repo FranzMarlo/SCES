@@ -112,7 +112,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-pop
                   <th>Student ID</th>
                   <th>Last Name</th>
                   <th>First Name</th>
-                  <th>Last Name</th>
+                  <th>Middle Name</th>
                   <th>Age</th>
                   <th>Gender</th>
                   <th>More</th>

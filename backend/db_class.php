@@ -264,7 +264,6 @@ class globalClass extends db_connect
             s.subject,
             s.level_id,
             s.icon,
-            s.link,
             s.subject_title,
             s.subject_code,
             t.teacher_fname,
@@ -973,10 +972,10 @@ class globalClass extends db_connect
             return false;
         }
     }
-    public function studentGetLessons($levelId, $subjectID, $sectionId)
+    public function studentGetLessons($levelId, $subjectId, $sectionId)
     {
         $query = $this->conn->prepare("SELECT * FROM lesson_tbl WHERE level_id = ? AND subject_id = ? AND section_id = ? ORDER BY lesson_number ASC");
-        $query->bind_param("sss", $levelId, $subjectID, $sectionId);
+        $query->bind_param("sss", $levelId, $subjectId, $sectionId);
 
         if ($query->execute()) {
             $result = $query->get_result();
@@ -1049,6 +1048,8 @@ class globalClass extends db_connect
             subject.teacher_id = ?
         AND
             quiz.status = ?
+        AND
+            subject.archived = 'No'
         GROUP BY
             quiz.quiz_id
         ORDER BY
@@ -1610,6 +1611,8 @@ class globalClass extends db_connect
             quiz.status = 'Active'
         AND 
             score.score IS NULL
+        AND
+            subject.archived = 'No'
     ");
 
         // Bind parameters for sectionId, studentId, and status (pending)
@@ -1773,15 +1776,12 @@ class globalClass extends db_connect
     {
         $query = $this->conn->prepare("
         SELECT 
-            subject.subject,          -- Get the subject name
-            AVG(score.score) AS average_score -- Calculate the average score for the subject
+            subject.subject,          
+            AVG(score.score) AS average_score 
         FROM quiz_tbl quiz
-        INNER JOIN subject_tbl subject
-        ON subject.subject_id = quiz.subject_id
-        INNER JOIN student_tbl student
-        ON student.section_id = subject.section_id
-        LEFT JOIN score_tbl score
-        ON quiz.quiz_id = score.quiz_id
+        INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_tbl student ON student.section_id = subject.section_id
+        LEFT JOIN score_tbl score ON quiz.quiz_id = score.quiz_id
         WHERE 
             score.student_id = ?
         AND 
@@ -1789,9 +1789,9 @@ class globalClass extends db_connect
         AND
             subject.section_id = ?
         GROUP BY 
-            subject.subject_id         -- Group by subject to calculate per subject
+            subject.subject_id
         ORDER BY 
-            subject.subject ASC   -- Order by subject name (optional)
+            subject.subject ASC
     ");
 
         $query->bind_param("ss", $studentId, $sectionId);
@@ -1800,8 +1800,12 @@ class globalClass extends db_connect
             $result = $query->get_result();
             $averageScores = $result->fetch_all(MYSQLI_ASSOC);
 
+            // Case 1: No subjects or average scores found
             if (empty($averageScores) || count($averageScores) === 1) {
-                return 'No Data';
+                return [
+                    'largest' => 'No Data',
+                    'smallest' => 'No Data',
+                ];
             }
 
             $largest = null;
@@ -1818,14 +1822,27 @@ class globalClass extends db_connect
                 }
             }
 
+            // Case 2: If the largest and smallest average scores are the same
+            if ($largest['average_score'] == $smallest['average_score']) {
+                return [
+                    'largest' => 'All Subjects',
+                    'smallest' => 'No Data',
+                ];
+            }
+
             return [
-                'largest' => $largest['subject'] ?? null,
-                'smallest' => $smallest['subject'] ?? null,
+                'largest' => $largest['subject'] ?? 'No Data',
+                'smallest' => $smallest['subject'] ?? 'No Data',
             ];
         }
 
-        return null;
+        return [
+            'largest' => 'No Data',
+            'smallest' => 'No Data',
+        ];
     }
+
+
 
     public function studentGetPendingQuizzes($sectionId, $studentId)
     {
@@ -2259,7 +2276,7 @@ class globalClass extends db_connect
         return false;
     }
 
-    public function addSubject($teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $code, $link)
+    public function addSubject($teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $code)
     {
         $year = date("Y");
         $subjectId = 'S' . $code . $year . sprintf('%04d', rand(0, 9999));
@@ -2269,8 +2286,8 @@ class globalClass extends db_connect
             $subjectId = 'S' . $code . $year . sprintf('%04d', rand(0, 9999));
             $checkIdResult = $this->checkSubjectId($subjectId);
         }
-        $query = $this->conn->prepare("INSERT INTO `subject_tbl` (`subject_id`, `teacher_id`, `level_id`, `subject`, `subject_title`, `section_id`, `icon`, `subject_code`, `year`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $query->bind_param("ssssssssis", $subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $year, $link);
+        $query = $this->conn->prepare("INSERT INTO `subject_tbl` (`subject_id`, `teacher_id`, `level_id`, `subject`, `subject_title`, `section_id`, `icon`, `subject_code`, `year`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssssssi", $subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $year);
         if ($query->execute()) {
             return true;
         } else {
@@ -2298,10 +2315,10 @@ class globalClass extends db_connect
         }
     }
 
-    public function updateSubject($subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $link)
+    public function updateSubject($subjectId, $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code)
     {
-        $query = $this->conn->prepare("UPDATE subject_tbl SET teacher_id = ?, level_id = ?, subject = ?, subject_title = ?, section_id = ?, icon = ?, subject_code = ?, link = ? WHERE subject_id = ?");
-        $query->bind_param("sssssssss", $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $link, $subjectId);
+        $query = $this->conn->prepare("UPDATE subject_tbl SET teacher_id = ?, level_id = ?, subject = ?, subject_title = ?, section_id = ?, icon = ?, subject_code = ? WHERE subject_id = ?");
+        $query->bind_param("ssssssss", $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $subjectId);
         if ($query->execute()) {
             return true;
         } else {
@@ -2494,9 +2511,10 @@ class globalClass extends db_connect
         return null;
     }
 
-    public function updateStudentSection($studentId, $levelId, $sectionId){
+    public function updateStudentSection($studentId, $levelId, $sectionId)
+    {
         $query = $this->conn->prepare("UPDATE student_tbl SET section_id = ?, level_id = ? WHERE student_id = ?");
-        $query->bind_param("sss",  $sectionId, $levelId, $studentId);
+        $query->bind_param("sss", $sectionId, $levelId, $studentId);
         if ($query->execute()) {
             return true;
         } else {
@@ -2504,7 +2522,8 @@ class globalClass extends db_connect
         }
     }
 
-    public function addStudentRecord($studentId, $studentLRN, $sectionId, $levelId){
+    public function addStudentRecord($studentId, $studentLRN, $sectionId, $levelId)
+    {
         $year = date("Y");
         $recordId = 'R' . $year . sprintf('%04d', rand(0, 9999));
         $checkIdResult = $this->checkRecordId($recordId);
@@ -2533,7 +2552,8 @@ class globalClass extends db_connect
         }
     }
 
-    public function addGWARecord($studentLRN, $studentLname, $studentFname, $studentMname, $gender, $gradeLevel, $section, $gwa, $remarks, $status){
+    public function addGWARecord($studentLRN, $studentLname, $studentFname, $studentMname, $gender, $gradeLevel, $section, $gwa, $remarks, $status)
+    {
         $year = date("Y");
         $query = $this->conn->prepare("INSERT INTO `record_tbl` (`lrn`, `student_lname`, `student_fname`, `student_mname`, `gender`, `grade_level`, `section`, `year`, `gwa`, `remarks`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $query->bind_param("sssssssiiss", $studentLRN, $studentLname, $studentFname, $studentMname, $gender, $gradeLevel, $section, $year, $gwa, $remarks, $status);

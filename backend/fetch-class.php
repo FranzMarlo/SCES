@@ -420,6 +420,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $studentRecords = $fetchDb->facultyFetchScoresBySubject($studentId, $subjectId);
         echo json_encode($studentRecords);
+    } else if ($submitType === 'studentGetQuizRecordsBySubject') {
+        $subjectId = $_POST['subject_id'];
+        $studentId = $_POST['student_id'];
+
+        $studentRecords = $fetchDb->studentFetchQuizRecordsBySubject($studentId, $subjectId);
+        echo json_encode($studentRecords);
     } else if ($submitType === 'facultyGetGrades') {
         $studentId = $_POST['student_id'];
 
@@ -432,6 +438,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $studentGrades = $fetchDb->studentFetchGradesBySection($studentId, $sectionId);
         echo json_encode($studentGrades);
     } else if ($submitType === 'facultyGetGradesBySubject') {
+        $subjectId = $_POST['subject_id'];
+        $studentId = $_POST['student_id'];
+
+        $studentGrades = $fetchDb->studentFetchGradesBySubject($studentId, $subjectId);
+        echo json_encode($studentGrades);
+    } else if ($submitType === 'studentGetGradesBySubject') {
         $subjectId = $_POST['subject_id'];
         $studentId = $_POST['student_id'];
 

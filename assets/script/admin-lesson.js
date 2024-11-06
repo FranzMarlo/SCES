@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var bodyElement = document.querySelector("body");
   var section_id = bodyElement.getAttribute("data-section");
   var subject_id = bodyElement.getAttribute("data-subject");
-
   var addLessonModal = document.getElementById("addLessonModal");
   var addLessonBtn = document.getElementById("addLesson");
   var closeBtn = document.querySelector(".close-btn");
@@ -135,6 +134,34 @@ document.addEventListener("DOMContentLoaded", function () {
       initializeRankingTable();
       setActiveClass("analyticsTab");
     });
+
+    document.getElementById("moduleLessons").addEventListener("click", function () {
+      updateTabDisplay("lessonTab", 1);
+      setActiveClass("lessonTab");
+    });
+  
+    document.getElementById("moduleStudents").addEventListener("click", function () {
+      updateTabDisplay("studentTab", 2);
+      initializeStudentsTable();
+      setActiveClass("studentTab");
+    });
+  
+    document.getElementById("moduleRecords").addEventListener("click", function () {
+      updateTabDisplay("recordsTab", 3);
+      initializeRecordsTable();
+      setActiveClass("recordsTab");
+    });
+  
+    document
+      .getElementById("moduleAnalytics")
+      .addEventListener("click", function () {
+        updateTabDisplay("analyticsTab", 4);
+        populateSubjectPanelData();
+        fetchSubjectPieChartData();
+        initializeSubjectLineChart();
+        initializeRankingTable();
+        setActiveClass("analyticsTab");
+      });
 
   // Initialize the active tab on page load
   window.addEventListener("load", activateTabFromParams);

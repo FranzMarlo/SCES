@@ -22,6 +22,7 @@
   gap: 40px;
   border: 2px solid #000;
   flex-direction: row;
+  min-height: 600px;
 }
 .no-data-box-centered {
   display: flex;
@@ -37,6 +38,11 @@
   width: 200px;
   text-decoration: none;
   color: #000;
+}
+.subject-box a:hover {
+  .box-icon{
+    box-shadow: 0 0 12px 0 #9c9c9c;
+  }
 }
 .subject-box a .box .box-icon {
   border-radius: 30px;
@@ -134,6 +140,9 @@
   .subject-box a{
     height: fit-content;
   }
+  .no-data-box h1{
+    font-size: 1.1rem;
+  }
 }
 @media (width < 768px) {
   .subject-panel .title-box img {
@@ -158,6 +167,9 @@
   }
   .subject-box a .box .box-title span {
     font-size: 0.8rem;
+  }
+  .no-data-box h1{
+    font-size: 1rem;
   }
 }
 @media (width < 600px) {

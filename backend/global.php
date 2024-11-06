@@ -1485,9 +1485,8 @@ if (isset($_POST['submitType'])) {
                 $subject_title = $subjectData['subject_title'];
                 $icon = $subjectData['icon'];
                 $subject_code = $subjectData['subject_code'];
-                $link = $subjectData['link'];
                 $code = substr($subjectData['subject'], -1);
-                $addSubject = $db->addSubject($addTeacher, $addGradeLevel, $addSubject, $subject_title, $addSection, $icon, $subject_code, $code, $link);
+                $addSubject = $db->addSubject($addTeacher, $addGradeLevel, $addSubject, $subject_title, $addSection, $icon, $subject_code, $code);
                 if ($addSubject != false) {
                     echo '200';
                 } else {
@@ -1531,8 +1530,7 @@ if (isset($_POST['submitType'])) {
                 $subject_title = $subjectData['subject_title'];
                 $icon = $subjectData['icon'];
                 $subject_code = $subjectData['subject_code'];
-                $link = $subjectData['link'];
-                $addSubject = $db->updateSubject($editSubjectIdHolder, $editTeacher, $editGradeLevel, $editSubject, $subject_title, $editSection, $icon, $subject_code, $link);
+                $addSubject = $db->updateSubject($editSubjectIdHolder, $editTeacher, $editGradeLevel, $editSubject, $subject_title, $editSection, $icon, $subject_code);
                 if ($addSubject != false) {
                     echo '200';
                 } else {

@@ -707,7 +707,7 @@ class fetchClass extends db_connect
         AND
             subject.subject_id = ?
         ORDER BY
-            level.grade_level DESC");
+            grade.quarter ASC");
 
         $query->bind_param("ss", $studentId, $subjectId);
 
@@ -1031,6 +1031,45 @@ class fetchClass extends db_connect
         }
     }
 
+    public function getStudentClassmate($sectionId)
+    {
+        $query = $this->conn->prepare("
+            SELECT
+                CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
+                student.profile_image,
+                level.grade_level,
+                record.level_id,
+                record.section_id
+            FROM
+                student_record record
+            INNER JOIN
+                student_tbl student
+            ON
+                student.student_id = record.student_id
+            INNER JOIN
+                level_tbl level
+            ON
+                record.level_id = level.level_id
+            INNER JOIN
+                section_tbl section
+            ON
+                record.section_id = section.section_id
+            WHERE 
+                record.section_id = ?
+            ORDER BY
+                student.student_lname ASC
+        ");
+        $query->bind_param("s", $sectionId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $students = $result->fetch_all(MYSQLI_ASSOC);
+            return $students;
+        } else {
+
+            return false;
+        }
+    }
+
     public function getAllStudents()
     {
         $query = $this->conn->prepare("
@@ -1224,7 +1263,9 @@ class fetchClass extends db_connect
     INNER JOIN 
         level_tbl level ON level.level_id = section.level_id
     INNER JOIN 
-        student_tbl student ON student.section_id = section.section_id
+        student_record record ON record.section_id = section.section_id
+    INNER JOIN
+        student_tbl student ON student.student_id = record.student_id
     INNER JOIN 
         score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
     WHERE 
@@ -3974,6 +4015,65 @@ class fetchClass extends db_connect
         }
 
         return null;
+    }
+
+    public function studentFetchQuizRecordsBySubject($studentId, $subjectId)
+    {
+        $query = $this->conn->prepare("
+    SELECT
+        subject.subject_id,
+        subject.subject,
+        level.level_id,
+        level.grade_level,
+        section.section,
+        section.section_id,
+        quiz.quiz_id,
+        quiz.quiz_number,
+        quiz.title,
+        score.score,
+        record.student_id,
+        CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
+        score.item_number,
+        score.remarks,
+        score.time,
+        score.percentage
+    FROM
+        quiz_tbl quiz
+    INNER JOIN
+        subject_tbl subject ON subject.subject_id = quiz.subject_id
+    INNER JOIN 
+        section_tbl section ON section.section_id = subject.section_id
+    INNER JOIN 
+        level_tbl level ON level.level_id = section.level_id
+    INNER JOIN 
+        student_record record ON record.section_id = section.section_id
+    INNER JOIN
+        student_tbl student ON student.student_id = record.student_id
+    INNER JOIN 
+        score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = record.student_id
+    WHERE 
+        score.student_id = ?
+    AND
+        quiz.subject_id = ?
+    AND
+        score.score IS NOT NULL
+    ORDER BY
+        score.time DESC");
+
+        $query->bind_param("ss", $studentId, $subjectId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $allResults = $result->fetch_all(MYSQLI_ASSOC);
+
+            foreach ($allResults as &$record) {
+                $record['time'] = date('F j, Y', strtotime($record['time']));
+            }
+
+            return $allResults;
+        } else {
+            return null;
+        }
     }
 
 }

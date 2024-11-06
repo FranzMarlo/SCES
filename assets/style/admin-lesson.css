@@ -401,6 +401,7 @@
   margin-bottom: 5px;
 }
 .close-btn {
+  color: #000;
   color: #aaa;
   float: right;
   font-size: 28px;
@@ -409,7 +410,7 @@
 }
 .close-btn:hover,
 .close-btn:focus {
-  color: #000;
+  color: #aaa;
   text-decoration: none;
 }
 .modal-content h2 {
@@ -608,6 +609,9 @@ table.dataTable tbody td.dataTables_empty {
   border: 2px solid #000;
   cursor: pointer;
 }
+.more-btn:hover {
+  background-color: #45a049;
+}
 .modal::-webkit-scrollbar {
   display: none;
 }
@@ -648,6 +652,9 @@ table.dataTable tbody td.dataTables_empty {
 .modal-content-student::-webkit-scrollbar {
   display: none;
 }
+.modal-content-quiz::-webkit-scrollbar {
+  display: none;
+}
 .modal-head {
   width: 100%;
   display: flex;
@@ -669,18 +676,6 @@ table.dataTable tbody td.dataTables_empty {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
-}
-.close-btn {
-  color: #000;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-.close-btn:hover,
-.close-btn:focus {
-  color: #aaa;
-  text-decoration: none;
-  cursor: pointer;
 }
 .head-row {
   width: 100%;

@@ -135,6 +135,39 @@ document.addEventListener("DOMContentLoaded", function () {
       setActiveClass("analyticsTab");
     });
 
+  document
+    .getElementById("moduleLessons")
+    .addEventListener("click", function () {
+      updateTabDisplay("lessonTab", 1);
+      setActiveClass("lessonTab");
+    });
+
+  document
+    .getElementById("moduleStudents")
+    .addEventListener("click", function () {
+      updateTabDisplay("studentTab", 2);
+      initializeStudentsTable();
+      setActiveClass("studentTab");
+    });
+
+  document
+    .getElementById("moduleRecords")
+    .addEventListener("click", function () {
+      updateTabDisplay("recordsTab", 3);
+      initializeRecordsTable();
+      setActiveClass("recordsTab");
+    });
+
+  document
+    .getElementById("moduleAnalytics")
+    .addEventListener("click", function () {
+      updateTabDisplay("analyticsTab", 4);
+      populateSubjectPanelData();
+      fetchSubjectPieChartData();
+      initializeSubjectLineChart();
+      initializeRankingTable();
+      setActiveClass("analyticsTab");
+    });
   // Initialize the active tab on page load
   window.addEventListener("load", activateTabFromParams);
 
