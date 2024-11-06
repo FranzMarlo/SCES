@@ -6,6 +6,8 @@ if (isset($_SESSION['student_id'])) {
     $studentFname = $_SESSION['student_fname'];
     $studentMname = $_SESSION['student_mname'];
     $studentLname = $_SESSION['student_lname'];
+    $studentSuffix = $_SESSION['student_suffix'];
+    $lrn = $_SESSION['lrn']; 
     $age = $_SESSION['age']; 
     $gender = $_SESSION['gender']; 
     $email = $_SESSION['email']; 
@@ -15,7 +17,6 @@ if (isset($_SESSION['student_id'])) {
     $city = $_SESSION['city'];
     $barangay = $_SESSION['barangay'];
     $street= $_SESSION['street'];
-    $registration = $_SESSION['registration'];
     $image = $_SESSION['profile_image'];
     $sectionId =  $_SESSION['section_id'];
     $level_id = $_SESSION['level_id'];
@@ -23,8 +24,27 @@ if (isset($_SESSION['student_id'])) {
     $gradeLevel = $_SESSION['grade_level'];
     $passwordChange = $_SESSION['password_change'];
     $emailVerification = $_SESSION['email_verification'];
-    $middleInitial = substr($studentMname, 0, 1) . '.';
+    $middleInitial = getMiddleInitial($studentMname);
+    $suffix = getSuffix($studentSuffix);
 }
 else{
     header('Location: /SCES/frontend/student/login.php');
+}
+
+function getMiddleInitial($middleName){
+    if ($middleName == 'N/a'){
+        return '';
+    }
+    else{
+        return substr($middleName, 0, 1) . '.';
+    }
+}
+
+function getSuffix($suffix){
+    if ($suffix == 'N/A'){
+        return '';
+    }
+    else{
+        return $suffix;
+    }
 }

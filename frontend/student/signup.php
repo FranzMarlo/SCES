@@ -40,6 +40,32 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/head.php';
               <input type="text" name="lastName" id="lastName" placeholder="Last Name" />
             </div>
             <div class="input-icons">
+              <label for="studSuffix">
+                <i class="fa-solid fa-user icon"></i>
+              </label>
+              <select name="studSuffix" id="studSuffix">
+                <option value="" disabled selected>Select Suffix</option>
+                <option value="N/A">None</option>
+                <option value="Sr">Sr.</option>
+                <option value="Jr">Jr.</option>
+                <option value="II">II</option>
+                <option value="III">III</option>
+                <option value="IV">IV</option>
+                <option value="V">V</option>
+                <option value="VI">VI</option>
+                <option value="VII">VII</option>
+                <option value="VIII">VIII</option>
+                <option value="IX">IX</option>
+                <option value="X">X</option>
+              </select>
+            </div>
+            <div class="input-icons">
+              <label for="studentLRN">
+                <i class="fa-solid fa-school-lock icon"></i>
+              </label>
+              <input type="number" name="studentLRN" id="studentLRN" placeholder="LRN" />
+            </div>
+            <div class="input-icons">
               <label for="gradeLevel">
                 <i class="fa-solid fa-graduation-cap icon"></i>
               </label>

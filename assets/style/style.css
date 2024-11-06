@@ -199,6 +199,11 @@ a.button-container{
 .create-btn {
   width: 100%;
 }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 @media (width < 1199px) {
   .separator {
     margin-left: 10px;

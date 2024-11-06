@@ -1,46 +1,35 @@
 document.addEventListener("DOMContentLoaded", function () {
     const gradeLevel = document.getElementById("gradeLevel");
-    const section = document.getElementById("section");
-  
-    const sectionOptions = {
-      G0001: [
-        { value: "G1-001", text: "Banana" },
-        { value: "G1-001", text: "Acacia" },
-      ],
-      G0002: [
-        { value: "G1-001", text: "Mango" },
-        { value: "G1-001", text: "Pine" },
-      ],
-      G0003: [
-        { value: "G1-001", text: "Cedar" },
-        { value: "G1-001", text: "Maple" },
-      ],
-      G0004: [
-        { value: "G1-001", text: "Mahogany" },
-        { value: "G1-001", text: "Cherry" },
-      ],
-      G0005: [
-        { value: "G1-001", text: "Bamboo" },
-        { value: "G1-001", text: "Oak" },
-      ],
-      G0006: [
-        { value: "G1-001", text: "Willow" },
-        { value: "G1-001", text: "Aspen" },
-      ],
-    };
   
     gradeLevel.addEventListener("change", function () {
-      section.innerHTML =
-        '<option value="" disabled selected>Select Section</option>';
-  
-      const selectedGrade = gradeLevel.value;
-      if (selectedGrade && sectionOptions[selectedGrade]) {
-        sectionOptions[selectedGrade].forEach((option) => {
-          const opt = document.createElement("option");
-          opt.value = option.value;
-          opt.textContent = option.text;
-          section.appendChild(opt);
-        });
+      const gradeLevelId = this.value;
+
+      if (!gradeLevelId) {
+        // Reset the Subject and Section dropdowns to default
+        document.getElementById("editSubject").innerHTML =
+          '<option value="" selected>Select Grade Level First</option>';
+        document.getElementById("editSection").innerHTML =
+          '<option value="" selected>Select Grade Level First</option>';
+      } else {
+        // Fetch options based on selected grade level
+        fetchOptions(gradeLevelId, "section", "getSections", 'Section');
       }
     });
+
+    function fetchOptions(levelId, targetElementId, submitType, value) {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/SCES/backend/fetch-class.php", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          const targetDropdown = document.getElementById(targetElementId);
+  
+          targetDropdown.innerHTML =
+            `<option value="">Select ${value}</option>` + xhr.responseText;
+        }
+      };
+  
+      xhr.send(`levelId=${levelId}&submitType=${submitType}`);
+    }
   });

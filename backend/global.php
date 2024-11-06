@@ -59,9 +59,11 @@ if (isset($_POST['submitType'])) {
         }
     } else if ($_POST['submitType'] === 'studentSignUp') {
 
-        $firstName = validate($_POST['firstName']);
-        $middleName = validate($_POST['middleName']);
-        $lastName = validate($_POST['lastName']);
+        $firstName = ucwords(validate($_POST['firstName']));
+        $middleName = ucwords(validate($_POST['middleName']));
+        $lastName = ucwords(validate($_POST['lastName']));
+        $studSuffix = validate($_POST['studSuffix']);
+        $studentLRN = validate($_POST['studentLRN']);
         $gradeLevelId = validate($_POST['gradeLevel']);
         $sectionId = validate($_POST['section']);
         $email = validate($_POST['email']);
@@ -70,13 +72,16 @@ if (isset($_POST['submitType'])) {
 
         $emailPattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
 
-
         if (empty($firstName)) {
             echo '452';
         } else if (empty($middleName)) {
             echo '453';
         } else if (empty($lastName)) {
             echo '454';
+        } else if (empty($studSuffix)) {
+            echo '464';
+        } else if (empty($studentLRN)) {
+            echo '465';
         } else if (empty($gradeLevelId)) {
             echo '455';
         } else if (empty($sectionId)) {
@@ -94,56 +99,67 @@ if (isset($_POST['submitType'])) {
         } else if ($password !== $confirmPassword) {
             echo '462';
         } else {
-            $checkEmail = $db->checkEmail($email);
-            if ($checkEmail->num_rows > 0) {
-                echo '463';
-            } else {
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-                $signUpResult = $db->studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, 0, 'Not Set', $email, $hashedPassword, 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'Incomplete', 'default-profile.png', 'Not Verified');
-
-
-                if ($signUpResult !== false) {
-                    $getGradeLevel = $db->getGradeLevel($gradeLevelId);
-                    if ($getGradeLevel !== false) {
-                        $gradeLevel = $getGradeLevel;
-                    } else {
-                        echo '400';
-                        exit();
-                    }
-                    $getSection = $db->getSection($sectionId);
-                    if ($getSection !== false) {
-                        $section = $getSection;
-                    } else {
-                        echo '400';
-                        exit();
-                    }
-                    session_start();
-                    $_SESSION['student_id'] = $signUpResult;
-                    $_SESSION['level_id'] = $gradeLevelId;
-                    $_SESSION['section_id'] = $sectionId;
-                    $_SESSION['student_fname'] = $firstName;
-                    $_SESSION['student_mname'] = $middleName;
-                    $_SESSION['student_lname'] = $lastName;
-                    $_SESSION['age'] = 0;
-                    $_SESSION['gender'] = 'Not Set';
-                    $_SESSION['email'] = $email;
-                    $_SESSION['password'] = $hashedPassword;
-                    $_SESSION['guardian_name'] = 'Not Set';
-                    $_SESSION['guardian_contact'] = 'Not Set';
-                    $_SESSION['city'] = 'Not Set';
-                    $_SESSION['barangay'] = 'Not Set';
-                    $_SESSION['street'] = 'Not Set';
-                    $_SESSION['registration'] = 'Incomplete';
-                    $_SESSION['profile_image'] = 'default-profile.png';
-                    $_SESSION['section'] = $section;
-                    $_SESSION['grade_level'] = $gradeLevel;
-                    $_SESSION['email_verification'] = 'Not Verified';
-                    $_SESSION['password_change'] = NULL;
-                    echo '200';
+            $checkLRN = $db->checkStudentLRN($lastName, $studentLRN, $sectionId, $gradeLevelId);
+            if ($checkLRN->num_rows > 0) {
+                $checkEmail = $db->checkEmail($email);
+                if ($checkEmail->num_rows > 0) {
+                    echo '463';
                 } else {
-                    echo '400';
+                    $verifyLRN = $db->verifyLRN($studentLRN);
+                    if ($verifyLRN->num_rows > 0) {
+                        echo '467';
+                    } else {
+                        $studentData = $db->fetchInitialStudentData($studentLRN);
+                        $gender = ucwords($studentData['gender']);
+                        $age = $studentData['age'];
+                        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                        $signUpResult = $db->studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $studSuffix, $studentLRN, $age, $gender, $email, $hashedPassword, 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'default-profile.png', 'Not Verified');
+                        if ($signUpResult !== false) {
+                            $getGradeLevel = $db->getGradeLevel($gradeLevelId);
+                            if ($getGradeLevel !== false) {
+                                $gradeLevel = $getGradeLevel;
+                            } else {
+                                echo '400';
+                                exit();
+                            }
+                            $getSection = $db->getSection($sectionId);
+                            if ($getSection !== false) {
+                                $section = $getSection;
+                            } else {
+                                echo '400';
+                                exit();
+                            }
+                            session_start();
+                            $_SESSION['student_id'] = $signUpResult;
+                            $_SESSION['level_id'] = $gradeLevelId;
+                            $_SESSION['section_id'] = $sectionId;
+                            $_SESSION['student_fname'] = $firstName;
+                            $_SESSION['student_mname'] = $middleName;
+                            $_SESSION['student_lname'] = $lastName;
+                            $_SESSION['student_suffix'] = $studSuffix;
+                            $_SESSION['lrn'] = $studentLRN;
+                            $_SESSION['age'] = $age;
+                            $_SESSION['gender'] = $gender;
+                            $_SESSION['email'] = $email;
+                            $_SESSION['password'] = $hashedPassword;
+                            $_SESSION['guardian_name'] = 'Not Set';
+                            $_SESSION['guardian_contact'] = 'Not Set';
+                            $_SESSION['city'] = 'Not Set';
+                            $_SESSION['barangay'] = 'Not Set';
+                            $_SESSION['street'] = 'Not Set';
+                            $_SESSION['profile_image'] = 'default-profile.png';
+                            $_SESSION['section'] = $section;
+                            $_SESSION['grade_level'] = $gradeLevel;
+                            $_SESSION['email_verification'] = 'Not Verified';
+                            $_SESSION['password_change'] = NULL;
+                            echo '200';
+                        } else {
+                            echo '400';
+                        }
+                    }
                 }
+            } else {
+                echo '466';
             }
         }
     } else if ($_POST['submitType'] === 'editProfileForm') {

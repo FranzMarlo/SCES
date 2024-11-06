@@ -37,11 +37,14 @@ $("#studSignUp").on("submit", function (e) {
   var firstName = $("#firstName").val();
   var middleName = $("#middleName").val();
   var lastName = $("#lastName").val();
+  var studSuffix = $("#studSuffix").val();
+  var studentLRN = $("#studentLRN").val();
   var gradeLevel = $("#gradeLevel").val();
   var section = $("#section").val();
   var email = $("#email").val();
   var password = $("#password").val();
   var confirmPassword = $("#confirmPassword").val();
+
   $.ajax({
     type: "POST",
     url: "/SCES/backend/global.php",
@@ -50,11 +53,13 @@ $("#studSignUp").on("submit", function (e) {
       firstName: firstName,
       middleName: middleName,
       lastName: lastName,
+      studSuffix: studSuffix,
+      studentLRN: studentLRN,
       gradeLevel: gradeLevel,
       section: section,
       email: email,
       password: password,
-      confirmPassword: confirmPassword,
+      confirmPassword: confirmPassword
     },
     success: function (response) {
       console.log(response);
@@ -92,6 +97,7 @@ $("#studSignUp").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Middle Name Cannot Be Empty",
+              text: "If middle name is not applicable, please enter N/A",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -206,7 +212,55 @@ $("#studSignUp").on("submit", function (e) {
             });
           }
         );
-      } else {
+      } else if (response == "464") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Suffix",
+              text: "Select None if not applicable",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "465") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your LRN",
+              text: "LRN or Learner Reference Number is provided by your school and can be seen on your school ID",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "466") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Invalid Student Details",
+              text: "Please register with your LRN and current Grade & Section",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }else if (response == "467") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "LRN Already Registered In The System",
+              text: "Please proceed to login if you are already registered. If this is wrong, please contact your adviser",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }else {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -4194,7 +4248,6 @@ $("#retainStudentForm").on("submit", function (e) {
     },
   });
 });
-
 
 function logoutFunc() {
   Swal.fire({

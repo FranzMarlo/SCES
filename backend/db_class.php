@@ -29,7 +29,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $guardian_name, $guardian_contact, $city, $barangay, $street, $registration, $image, $emailVerification)
+    public function studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $suffix, $lrn, $age, $gender, $email, $hashedPassword, $guardian_name, $guardian_contact, $city, $barangay, $street, $image, $emailVerification)
     {
         $year = date("Y");
         $studentId = $year . sprintf('%04d', rand(0, 9999));
@@ -39,15 +39,21 @@ class globalClass extends db_connect
             $studentId = $year . sprintf('%04d', rand(0, 9999));
             $checkIdResult = $this->checkStudentId($studentId);
         }
-        $query = $this->conn->prepare("INSERT INTO `student_tbl` (`student_id`, `level_id`, `section_id`, `student_fname`, `student_mname`, `student_lname`, `age`, `gender`, `guardian_name`, `guardian_contact`, `city`, `barangay`, `street`, `registration`, `profile_image`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $query->bind_param("ssssssissssssss", $studentId, $gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $age, $gender, $guardian_name, $guardian_contact, $city, $barangay, $street, $registration, $image);
+        $query = $this->conn->prepare("INSERT INTO `student_tbl` (`student_id`, `lrn`, `level_id`, `section_id`, `student_fname`, `student_mname`, `student_lname`, `student_suffix`, `age`, `gender`, `guardian_name`, `guardian_contact`, `city`, `barangay`, `street`, `profile_image`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssssssisssssss", $studentId, $lrn, $gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $suffix, $age, $gender, $guardian_name, $guardian_contact, $city, $barangay, $street, $image);
 
 
         if ($query->execute()) {
             $loginQuery = $this->conn->prepare("INSERT INTO `login_tbl` (`student_id`, `email`, `password`, `email_verification`) VALUES (?, ?, ?, ?)");
             $loginQuery->bind_param("ssss", $studentId, $email, $hashedPassword, $emailVerification);
             if ($loginQuery->execute()) {
-                return $studentId;
+                $recordStudent = $this->addStudentRecord($studentId, $lrn, $sectionId, $gradeLevelId);
+                if($recordStudent != false){
+                    return $studentId;
+                }
+                else{
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -2626,7 +2632,85 @@ class globalClass extends db_connect
         }
     }
 
+    public function checkStudentLRN($lname, $lrn, $section, $level)
+    {   
+        $lastName = strtoupper($lname);
+        $dataSection = strtoupper($this->getSectionById($section));
+        $dataLevel =  strtoupper($this->getLevelById($level));
+        $query = $this->conn->prepare("SELECT * FROM `student_masterlist` WHERE `lrn` = ? and `student_lname` = ? and `section` = ? and `grade_level` = ? ");
+        $query->bind_param("ssss", $lrn, $lastName, $dataSection, $dataLevel);
 
+        if ($query->execute()) {
+            $checkLRN = $query->get_result();
+            return $checkLRN;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function getSectionById($sectionId){
+        $query = "SELECT section FROM section_tbl WHERE section_id = ?";
+        $queryResult = $this->conn->prepare($query);
+
+        if (!$queryResult) {
+            return null;
+        }
+
+        $queryResult->bind_param("s",$sectionId);
+        $queryResult->execute();
+        $result = $queryResult->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+            return $row['section'] !== null ? $row['section'] : null;
+        }
+        return null;
+    }
+
+    public function getLevelById($levelId){
+        $query = "SELECT grade_level FROM level_tbl WHERE level_id = ?";
+        $queryResult = $this->conn->prepare($query);
+
+        if (!$queryResult) {
+            return null;
+        }
+
+        $queryResult->bind_param("s",$levelId);
+        $queryResult->execute();
+        $result = $queryResult->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+            return $row['grade_level'] !== null ? $row['grade_level'] : null;
+        }
+        return null;
+    }
+
+
+    public function fetchInitialStudentData($lrn)
+    {   
+        $query = $this->conn->prepare("SELECT * FROM `student_masterlist` WHERE `lrn` = ?");
+        $query->bind_param("s", $lrn);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $studentData = $result->fetch_assoc();
+            return $studentData;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function verifyLRN($lrn){
+        $query = $this->conn->prepare("SELECT * FROM `student_tbl` WHERE `lrn` = ?");
+        $query->bind_param("s", $lrn);
+
+        if ($query->execute()) {
+            $verifyLRN = $query->get_result();
+            return $verifyLRN;
+        }
+    }
+    
 }
 
 
