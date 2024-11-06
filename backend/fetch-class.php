@@ -732,32 +732,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($submitType === 'analyticsAverageScoreByGradeLevelWithFilter') {
         $year = $_POST['year'];
         $gradeLevel = $_POST['gradeLevel'];
-
+    
         $students = $fetchDb->getAllStudentsWithFilter($year, $gradeLevel);
-
+    
         $grades = [];
         $scores = [];
-
+    
         if (!empty($students)) {
             foreach ($students as $student) {
                 $studentId = $student['student_id'];
                 $studentData = $fetchDb->studentFetchScoresByGradeLevelWithFilter($studentId, $year, $gradeLevel);
-
+    
                 if (empty($grades)) {
                     $grades = $studentData['grades'];
                     $scores = array_fill(0, count($grades), 0); // Initialize scores with zeroes
                 }
-
+    
                 foreach ($studentData['scores'] as $index => $avgScore) {
                     $scores[$index] += $avgScore;
                 }
             }
-
+    
             $studentCount = count($students);
             $averageScoresByGradeLevel = array_map(function ($totalScore) use ($studentCount) {
                 return $studentCount > 0 ? $totalScore / $studentCount : 0;
             }, $scores);
-
+    
             echo json_encode([
                 'labels' => $grades,
                 'barData' => $averageScoresByGradeLevel

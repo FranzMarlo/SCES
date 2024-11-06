@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
         render: function (data) {
           var className =
             data === "Passed" ? "passed" : data === "Failed" ? "failed" : "";
-          return `<span class="${className}">${data}</span>`;
+          return `<div class="center-image"><span class="${className}">${data}</span></div>`;
         },
       },
       { data: "time" },
@@ -293,9 +293,8 @@ document.addEventListener("DOMContentLoaded", function () {
           } else if (data === "Failed") {
             className = "failed";
           }
-          return `<span class="${className}">${data}</span>`;
+          return `<div class="center-image"><span class="${className}">${data}</span></div>`;
         },
-        width: "100px",
         className: "text-center",
       },
       { data: "quarter", className: "text-center" },

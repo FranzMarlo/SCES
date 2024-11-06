@@ -266,6 +266,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
             </div>
         </div>
     </div>
+    
     <div id="viewQuizModal" class="modal">
         <div class="modal-content">
             <div class="modal-head">

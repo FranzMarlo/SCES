@@ -234,9 +234,29 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".add-question").forEach((button) => {
     button.addEventListener("click", function () {
       const quizId = button.getAttribute("data-quiz-id");
-      quizIdInput.value = quizId;
-      addQuestionModal.style.display = "flex";
-      document.body.style.overflow = "hidden";
+      fetch(`/SCES/backend/fetch-class.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `submitType=checkQuestionCount&quiz_id=${quizId}`,
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          if (data >= 10) {
+            Swal.fire({
+              icon: "warning",
+              title: "Number Of Questions Exceeded",
+              text: "Number of questions for the quiz is already 10",
+              confirmButtonColor: "#4CAF50",
+            });
+            return;
+          } else {
+            quizIdInput.value = quizId;
+            addQuestionModal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+          }
+        });
     });
   });
 
@@ -1140,7 +1160,7 @@ document.addEventListener("DOMContentLoaded", function () {
             Swal.fire({
               icon: "warning",
               title: "Invalid Number Of Questions",
-              text: "Number of questions for the quiz must be at least 10",
+              text: "Number of questions for the quiz must be 10",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -1266,7 +1286,7 @@ document.addEventListener("DOMContentLoaded", function () {
               Swal.fire({
                 icon: "warning",
                 title: "Invalid Number Of Questions",
-                text: "Number of questions for the quiz must be at least 10",
+                text: "Number of questions for the quiz must be 10",
                 confirmButtonColor: "#4CAF50",
               });
             }
@@ -1602,4 +1622,6 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
   }
+
+  function checkQuestionCount(quizId) {}
 });

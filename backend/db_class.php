@@ -1555,7 +1555,7 @@ class globalClass extends db_connect
         FROM quiz_tbl quiz
         INNER JOIN subject_tbl subject
         ON subject.subject_id = quiz.subject_id
-        INNER JOIN student_tbl student
+        INNER JOIN student_record student
         ON student.section_id = subject.section_id
         INNER JOIN section_tbl section
         ON subject.section_id = section.section_id
@@ -1565,8 +1565,6 @@ class globalClass extends db_connect
         ON quiz.lesson_id = lesson.lesson_id
         LEFT JOIN score_tbl score
         ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
-        INNER JOIN teacher_tbl teacher
-        ON teacher.teacher_id = subject.teacher_id
         WHERE 
             student.student_id = ?
         AND 
@@ -1591,7 +1589,7 @@ class globalClass extends db_connect
         FROM quiz_tbl quiz
         INNER JOIN subject_tbl subject
         ON subject.subject_id = quiz.subject_id
-        INNER JOIN student_tbl student
+        INNER JOIN student_record student
         ON student.section_id = subject.section_id
         INNER JOIN section_tbl section
         ON subject.section_id = section.section_id
@@ -1601,14 +1599,12 @@ class globalClass extends db_connect
         ON quiz.lesson_id = lesson.lesson_id
         LEFT JOIN score_tbl score
         ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
-        INNER JOIN teacher_tbl teacher
-        ON teacher.teacher_id = subject.teacher_id
         WHERE 
             student.section_id = ?
         AND 
             student.student_id = ?
         AND 
-            quiz.status = 'Active'
+            quiz.status IN ('Active', 'Completed')
         AND 
             score.score IS NULL
         AND
@@ -1667,38 +1663,54 @@ class globalClass extends db_connect
 
     public function studentGetAverageScore($studentId)
     {
-        // Prepare the SQL query to calculate the average score for the student
-        $query = $this->conn->prepare("
-        SELECT 
-            AVG(score.score) AS average_score
+        // Query 1: Count all quizzes in the section
+        $totalQuizzesQuery = $this->conn->prepare("
+        SELECT COUNT(quiz.quiz_id) AS total_quizzes
         FROM quiz_tbl quiz
         INNER JOIN subject_tbl subject
-        ON subject.subject_id = quiz.subject_id
-        INNER JOIN student_tbl student
-        ON student.section_id = subject.section_id
-        LEFT JOIN score_tbl score
-        ON quiz.quiz_id = score.quiz_id
-        WHERE 
-            student.student_id = ?
-        AND 
-            score.score IS NOT NULL
+            ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_record student ON student.section_id = subject.section_id
+        WHERE student.student_id = ?
+        AND quiz.status IN ('Active', 'Completed')
     ");
+        $totalQuizzesQuery->bind_param("s", $studentId);
 
-        // Bind the studentId parameter
-        $query->bind_param("s", $studentId);
-
-        // Execute the query
-        if ($query->execute()) {
-            $result = $query->get_result();
-            $scoreDetails = $result->fetch_assoc();
-
-            // Return the average score if the result is valid
-            if ($scoreDetails && isset($scoreDetails['average_score'])) {
-                return round($scoreDetails['average_score'], 2); // Round to 2 decimal places
-            }
+        if ($totalQuizzesQuery->execute()) {
+            $totalQuizzesResult = $totalQuizzesQuery->get_result();
+            $totalQuizzesData = $totalQuizzesResult->fetch_assoc();
+            $totalQuizzes = $totalQuizzesData['total_quizzes'] ?? 0;
+        } else {
+            return null;
         }
 
-        return null; // Return null if no scores are found or query fails
+        if ($totalQuizzes === 0) {
+            return 0;
+        }
+
+        $totalScoreQuery = $this->conn->prepare("
+        SELECT SUM(score.score) AS total_score
+        FROM score_tbl score
+        INNER JOIN quiz_tbl quiz
+            ON quiz.quiz_id = score.quiz_id
+        INNER JOIN subject_tbl subject
+            ON subject.subject_id = quiz.subject_id
+        WHERE score.student_id = ?
+        AND score.score IS NOT NULL
+    ");
+        $totalScoreQuery->bind_param("s", $studentId);
+
+        // Execute the second query to get the total score
+        if ($totalScoreQuery->execute()) {
+            $totalScoreResult = $totalScoreQuery->get_result();
+            $totalScoreData = $totalScoreResult->fetch_assoc();
+            $totalScore = $totalScoreData['total_score'] ?? 0;
+        } else {
+            return null; // Return null if the query fails
+        }
+
+        // Calculate the average score (total score divided by total quizzes)
+        $averageScore = $totalScore / $totalQuizzes;
+        return round($averageScore, 2); // Round to 2 decimal places
     }
 
     public function studentGetQuizCompletion($studentId)

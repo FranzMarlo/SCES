@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-          body: `submitType=fetchStudentQuizHistory&student_id=${studentId}&quiz_id=${quizId}`,
+          body: `submitType=viewQuizHistory&student_id=${studentId}&quiz_id=${quizId}`,
         })
           .then((response) => response.json())
           .then((data) => {
@@ -215,9 +215,12 @@ document.addEventListener("DOMContentLoaded", function () {
               showAlert("error", "Student has not answered the quiz yet");
               return;
             }
-            const quizTakerSpan = document.getElementById("quizTaker");
-            quizTakerSpan.textContent = quizTaker;
 
+            if (data.status !== 'Completed'){
+              showAlert("warning", "Quiz cannot be viewed", "Active quizzes cannot be viewed and will only be available for viewing when its mark as completed by instructor");
+              return;
+            }
+            
             const viewQuizModal = document.getElementById("viewQuizModal");
 
             viewQuizModal.querySelector(

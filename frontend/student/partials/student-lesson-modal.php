@@ -2,8 +2,8 @@
     <div class="modal-content-quiz">
         <div class="modal-head-quiz">
             <div class="student-info">
-                <span><strong id="quizTaker"></strong></span>
-                <span id="quizSubject"></span>
+                <span><strong><?php echo htmlspecialchars($studentFname . ' ' . $middleInitial . ' ' . $studentLname); ?></strong></span>
+                <span><?php echo htmlspecialchars($gradeLevel . ' - ' . $section); ?></span>
             </div>
             <span id="closeViewQuizModal" class="close-btn">&times;</span>
         </div>

@@ -248,7 +248,9 @@ class fetchClass extends db_connect
         INNER JOIN 
             level_tbl level ON level.level_id = section.level_id
         LEFT JOIN 
-            student_tbl student ON student.section_id = section.section_id
+            student_record record ON record.section_id = section.section_id
+        INNER JOIN
+            student_tbl student ON student.student_id = record.student_id
         LEFT JOIN 
             score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
         WHERE 
@@ -279,7 +281,7 @@ class fetchClass extends db_connect
         INNER JOIN section_tbl section ON subject.section_id = section.section_id
         INNER JOIN level_tbl level ON subject.level_id = level.level_id
         INNER JOIN lesson_tbl lesson ON quiz.lesson_id = lesson.lesson_id
-        LEFT JOIN student_tbl student ON student.section_id = section.section_id
+        LEFT JOIN student_record student ON student.section_id = section.section_id
         LEFT JOIN score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
         WHERE quiz.quiz_id = ? AND score.remarks = 'Passed';
         ");
@@ -305,7 +307,7 @@ class fetchClass extends db_connect
         INNER JOIN section_tbl section ON subject.section_id = section.section_id
         INNER JOIN level_tbl level ON subject.level_id = level.level_id
         INNER JOIN lesson_tbl lesson ON quiz.lesson_id = lesson.lesson_id
-        LEFT JOIN student_tbl student ON student.section_id = section.section_id
+        LEFT JOIN student_record student ON student.section_id = section.section_id
         LEFT JOIN score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
         WHERE quiz.quiz_id = ? AND score.remarks = 'Failed';
         ");
@@ -331,7 +333,7 @@ class fetchClass extends db_connect
         INNER JOIN section_tbl section ON subject.section_id = section.section_id
         INNER JOIN level_tbl level ON subject.level_id = level.level_id
         INNER JOIN lesson_tbl lesson ON quiz.lesson_id = lesson.lesson_id
-        LEFT JOIN student_tbl student ON student.section_id = section.section_id
+        LEFT JOIN student_record student ON student.section_id = section.section_id
         LEFT JOIN score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
         WHERE quiz.quiz_id = ?;
         ");
@@ -575,7 +577,7 @@ class fetchClass extends db_connect
     INNER JOIN 
         level_tbl level ON level.level_id = section.level_id
     LEFT JOIN 
-        student_tbl student ON student.section_id = section.section_id
+        student_record student ON student.section_id = section.section_id
     LEFT JOIN 
         score_tbl score ON score.quiz_id = quiz.quiz_id AND score.student_id = student.student_id
     WHERE 
@@ -1489,8 +1491,6 @@ class fetchClass extends db_connect
         FROM quiz_tbl quiz
         INNER JOIN subject_tbl subject
         ON subject.subject_id = quiz.subject_id
-        INNER JOIN student_tbl student
-        ON student.section_id = subject.section_id
         INNER JOIN section_tbl section
         ON subject.section_id = section.section_id
         INNER JOIN level_tbl level
@@ -1771,62 +1771,99 @@ class fetchClass extends db_connect
 
     public function facultyGetAverageScoreBySection($studentId, $sectionId)
     {
-        $query = $this->conn->prepare("
-        SELECT 
-            AVG(score.score) AS average_score
-        FROM score_tbl score
-        INNER JOIN quiz_tbl quiz ON score.quiz_id = quiz.quiz_id
+        // Query 1: Count all quizzes in the section
+        $totalQuizzesQuery = $this->conn->prepare("
+        SELECT COUNT(quiz.quiz_id) AS total_quizzes
+        FROM quiz_tbl quiz
         INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
-        WHERE 
-            score.student_id = ?
-        AND 
-            score.score IS NOT NULL
-        AND 
-            subject.section_id = ?
+        WHERE subject.section_id = ?
+        AND quiz.status IN ('Active', 'Completed')
     ");
+        $totalQuizzesQuery->bind_param("s", $sectionId);
 
-        $query->bind_param("ss", $studentId, $sectionId);
-
-        if ($query->execute()) {
-            $result = $query->get_result();
-            $scoreDetails = $result->fetch_assoc();
-
-            if ($scoreDetails && isset($scoreDetails['average_score'])) {
-                return round($scoreDetails['average_score'], 2);
-            }
+        if ($totalQuizzesQuery->execute()) {
+            $totalQuizzesResult = $totalQuizzesQuery->get_result();
+            $totalQuizzesData = $totalQuizzesResult->fetch_assoc();
+            $totalQuizzes = $totalQuizzesData['total_quizzes'] ?? 0;
+        } else {
+            return null; // Return null if the query fails
         }
 
-        return null;
+        if ($totalQuizzes === 0) {
+            return 0;
+        }
+
+        $totalScoreQuery = $this->conn->prepare("
+        SELECT SUM(score.score) AS total_score
+        FROM score_tbl score
+        INNER JOIN quiz_tbl quiz ON quiz.quiz_id = score.quiz_id
+        INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+        WHERE score.student_id = ?
+        AND subject.section_id = ?
+        AND score.score IS NOT NULL
+    ");
+        $totalScoreQuery->bind_param("ss", $studentId, $sectionId);
+
+        if ($totalScoreQuery->execute()) {
+            $totalScoreResult = $totalScoreQuery->get_result();
+            $totalScoreData = $totalScoreResult->fetch_assoc();
+            $totalScore = $totalScoreData['total_score'] ?? 0;
+        } else {
+            return null; // Return null if the query fails
+        }
+
+        // Calculate the average score by dividing the total score by the number of quizzes
+        $averageScore = $totalScore / $totalQuizzes;
+        return round($averageScore, 2); // Round to 2 decimal places
     }
+
 
     public function facultyGetAverageScoreBySubject($studentId, $subjectId)
     {
-        $query = $this->conn->prepare("
-        SELECT 
-            AVG(score.score) AS average_score
-        FROM score_tbl score
-        INNER JOIN quiz_tbl quiz ON score.quiz_id = quiz.quiz_id
-        WHERE 
-            score.student_id = ?
-        AND 
-            quiz.subject_id = ?
-        AND 
-            score.score IS NOT NULL
+        // Query 1: Count all quizzes for the subject
+        $totalQuizzesQuery = $this->conn->prepare("
+        SELECT COUNT(quiz.quiz_id) AS total_quizzes
+        FROM quiz_tbl quiz
+        WHERE quiz.subject_id = ?
+        AND quiz.status IN ('Active', 'Completed')
     ");
+        $totalQuizzesQuery->bind_param("s", $subjectId);
 
-        $query->bind_param("ss", $studentId, $subjectId);
-
-        if ($query->execute()) {
-            $result = $query->get_result();
-            $scoreDetails = $result->fetch_assoc();
-
-            if ($scoreDetails && isset($scoreDetails['average_score'])) {
-                return round($scoreDetails['average_score'], 2);
-            }
+        if ($totalQuizzesQuery->execute()) {
+            $totalQuizzesResult = $totalQuizzesQuery->get_result();
+            $totalQuizzesData = $totalQuizzesResult->fetch_assoc();
+            $totalQuizzes = $totalQuizzesData['total_quizzes'] ?? 0;
+        } else {
+            return null;
         }
 
-        return null;
+        if ($totalQuizzes === 0) {
+            return 0;
+        }
+
+        $totalScoreQuery = $this->conn->prepare("
+        SELECT SUM(score.score) AS total_score
+        FROM score_tbl score
+        INNER JOIN quiz_tbl quiz ON quiz.quiz_id = score.quiz_id
+        WHERE score.student_id = ?
+        AND quiz.subject_id = ?
+        AND score.score IS NOT NULL
+    ");
+        $totalScoreQuery->bind_param("ss", $studentId, $subjectId);
+
+        if ($totalScoreQuery->execute()) {
+            $totalScoreResult = $totalScoreQuery->get_result();
+            $totalScoreData = $totalScoreResult->fetch_assoc();
+            $totalScore = $totalScoreData['total_score'] ?? 0;
+        } else {
+            return null; // Return null if the query fails
+        }
+
+        // Calculate the average score (total score divided by total quizzes)
+        $averageScore = $totalScore / $totalQuizzes;
+        return round($averageScore, 2); // Round to 2 decimal places
     }
+
 
 
     public function getStudentLRN($studentId)
@@ -1963,66 +2000,81 @@ class fetchClass extends db_connect
         $endDate = strtotime("$endYear-04-30");       // End of academic year (April 30)
 
         while ($currentDate <= $endDate) {
+            $monthKey = date('Y-m', $currentDate);
             $monthLabel = date('F', $currentDate);   // e.g., "June", "July"
-            $months[date('Y-m', $currentDate)] = [
+            $months[$monthKey] = [
                 'month' => $monthLabel,
-                'avg_score' => 0  // Initialize score to 0 for each month
+                'avg_score' => 0,  // Initialize average score to 0 for each month
+                'quiz_ids' => []
             ];
             $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
         }
 
-        // Query to get the average scores per month within the academic year range
+        // Query to get all quizzes within the academic year range, using due_date
         $query = $this->conn->prepare("
         SELECT 
-            DATE_FORMAT(score.time, '%Y-%m') AS month,  
-            AVG(score.score) AS avg_score
+            quiz.quiz_id, DATE_FORMAT(quiz.add_time, '%Y-%m') AS month
         FROM
             quiz_tbl quiz
-        INNER JOIN
-            score_tbl score ON score.quiz_id = quiz.quiz_id
         WHERE 
-            score.student_id = ?
-        AND 
-            score.score IS NOT NULL
-        AND 
-            score.time BETWEEN ? AND ?
+            quiz.add_time BETWEEN ? AND ?
         AND
             quiz.subject_id = ?
-        GROUP BY 
-            month
+        AND 
+            quiz.status IN ('Active', 'Completed')
         ORDER BY 
             month ASC
     ");
 
-        // Bind parameters: studentId, start date (June 1), and end date (April 30)
         $startDate = "$startYear-06-01";
         $endDate = "$endYear-04-30";
-        $query->bind_param("ssss", $studentId, $startDate, $endDate, $subjectId);
+        $query->bind_param("sss", $startDate, $endDate, $subjectId);
 
         if ($query->execute()) {
             $result = $query->get_result();
 
-            // Fetch the average scores per month
+            // Populate quiz IDs for each month
             while ($row = $result->fetch_assoc()) {
-                $monthKey = $row['month'];  // 'Y-m' format
-
-                // Update the score for the month if it exists in the query results
+                $monthKey = $row['month'];
                 if (isset($months[$monthKey])) {
-                    $months[$monthKey]['avg_score'] = (float) $row['avg_score'];
+                    $months[$monthKey]['quiz_ids'][] = $row['quiz_id'];
                 }
             }
 
-            // Prepare the data to return for the line chart
+            // Calculate average score per month based on quizzes available and attempted by the student
+            foreach ($months as $monthKey => &$monthData) {
+                $totalScore = 0;
+                $quizCount = count($monthData['quiz_ids']);  // Total quizzes in the month
+
+                foreach ($monthData['quiz_ids'] as $quizId) {
+                    $score = $this->fetchScoreByQuizId($quizId, $studentId);
+
+                    if ($score !== null) { // Only add to total score if the student attempted it
+                        $totalScore += $score;
+                    }
+                }
+
+                // Calculate average score for the month, including unattempted quizzes in the count
+                if ($quizCount > 0) {
+                    $monthData['avg_score'] = round($totalScore / $quizCount, 2);
+                }
+            }
+
+            // Prepare data for the line chart
             $data = [
                 'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
                 'scores' => array_column($months, 'avg_score')  // Average scores
             ];
 
-            return $data;  // Return the final data for the line chart
+            return $data;
         } else {
             return null;  // Return null in case of failure
         }
     }
+
+
+
+
 
     public function studentFetchScoresByMonth($studentId)
     {
@@ -2549,139 +2601,190 @@ class fetchClass extends db_connect
 
     public function facultyGetSubjectAverageScore($subjectId)
     {
+        // Prepare the query to fetch students enrolled in the subject
         $query = $this->conn->prepare("
-        SELECT 
-            AVG(score.score) AS average_score
-        FROM quiz_tbl quiz
-        INNER JOIN subject_tbl subject
-        ON subject.subject_id = quiz.subject_id
-        LEFT JOIN score_tbl score
-        ON quiz.quiz_id = score.quiz_id
-        WHERE 
-            score.score IS NOT NULL
-        AND
-            quiz.subject_id = ?
+        SELECT DISTINCT student.student_id
+        FROM student_record student
+        INNER JOIN section_tbl section ON student.section_id = section.section_id
+        INNER JOIN subject_tbl subject ON section.section_id = subject.section_id
+        WHERE subject.subject_id = ?
     ");
-
         $query->bind_param("s", $subjectId);
 
+        // Execute the query to get the student records
         if ($query->execute()) {
             $result = $query->get_result();
-            $scoreDetails = $result->fetch_assoc();
+            $students = $result->fetch_all(MYSQLI_ASSOC);
 
-            if ($scoreDetails && isset($scoreDetails['average_score'])) {
-                return round($scoreDetails['average_score'], 2);
+            // Initialize variables for total score and student count
+            $totalScore = 0;
+            $studentCount = 0;
+
+            // Loop through each student and get their average score
+            foreach ($students as $student) {
+                // Get the average score for each student for this subject
+                $averageScore = $this->facultyGetAverageScoreBySubject($student['student_id'], $subjectId);
+
+                // Add the average score to the total score
+                $totalScore += $averageScore;
+                $studentCount++; // Increment the student count
+            }
+
+            // Calculate the subject average score if there are any students
+            if ($studentCount > 0) {
+                return $totalScore / $studentCount; // Return the average of all students
+            } else {
+                return 0; // No students, so return 0
             }
         }
 
-        return null;
+        return null; // Return null if the query fails
     }
+
 
     public function facultyGetHighestStudentAverageScore($subjectId)
     {
         $query = $this->conn->prepare("
-        SELECT 
-            MAX(student_avg.avg_score) AS highest_average_score
-        FROM (
-            SELECT 
-                student.student_id,
-                AVG(score.score) AS avg_score
-            FROM quiz_tbl quiz
-            INNER JOIN score_tbl score ON quiz.quiz_id = score.quiz_id
-            INNER JOIN student_tbl student ON student.student_id = score.student_id
-            WHERE 
-                score.score IS NOT NULL
-            AND
-                quiz.subject_id = ?
-            GROUP BY student.student_id
-        ) AS student_avg
+        SELECT DISTINCT student.student_id
+        FROM student_record student
+        INNER JOIN section_tbl section ON student.section_id = section.section_id
+        INNER JOIN subject_tbl subject ON section.section_id = subject.section_id
+        WHERE subject.subject_id = ?
     ");
 
         $query->bind_param("s", $subjectId);
 
+        // Execute query and fetch student records
         if ($query->execute()) {
             $result = $query->get_result();
-            $scoreDetails = $result->fetch_assoc();
+            $students = $result->fetch_all(MYSQLI_ASSOC);
 
-            if ($scoreDetails && isset($scoreDetails['highest_average_score'])) {
-                return round($scoreDetails['highest_average_score'], 2);
-            }
-        }
+            $highestAverage = 0;
 
-        return null;
-    }
+            foreach ($students as $student) {
+                $averageScore = $this->facultyGetAverageScoreBySubject($student['student_id'], $subjectId);
 
-    public function subjectFetchScores($subjectId)
-    {
-        $currentMonth = date('n');
-        $currentYear = date('Y');
-
-        if ($currentMonth >= 6) {
-            $startYear = $currentYear;
-            $endYear = $currentYear + 1;
-        } else {
-            $startYear = $currentYear - 1;
-            $endYear = $currentYear;
-        }
-
-        $months = [];
-        $currentDate = strtotime("$startYear-06-01");
-        $endDate = strtotime("$endYear-04-30");
-
-        while ($currentDate <= $endDate) {
-            $monthLabel = date('F', $currentDate);
-            $months[date('Y-m', $currentDate)] = [
-                'month' => $monthLabel,
-                'avg_score' => 0
-            ];
-            $currentDate = strtotime("+1 month", $currentDate);
-        }
-
-        $query = $this->conn->prepare("
-        SELECT 
-            DATE_FORMAT(score.time, '%Y-%m') AS month,  
-            AVG(score.score) AS avg_score
-        FROM
-            quiz_tbl quiz
-        INNER JOIN
-            score_tbl score ON score.quiz_id = quiz.quiz_id
-        WHERE 
-            score.score IS NOT NULL
-        AND 
-            score.time BETWEEN ? AND ?
-        AND
-            quiz.subject_id = ?
-        GROUP BY 
-            month
-        ORDER BY 
-            month ASC
-    ");
-
-        $startDate = "$startYear-06-01";
-        $endDate = "$endYear-04-30";
-        $query->bind_param("sss", $startDate, $endDate, $subjectId);
-
-        if ($query->execute()) {
-            $result = $query->get_result();
-
-            while ($row = $result->fetch_assoc()) {
-                $monthKey = $row['month'];
-
-                if (isset($months[$monthKey])) {
-                    $months[$monthKey]['avg_score'] = (float) $row['avg_score'];
+                if ($averageScore > $highestAverage) {
+                    $highestAverage = $averageScore;
                 }
             }
 
-            $data = [
-                'months' => array_column($months, 'month'),
-                'scores' => array_column($months, 'avg_score')
-            ];
-
-            return $data;
+            return $highestAverage;
         } else {
             return null;
         }
     }
+
+
+    public function subjectFetchScores($subjectId)
+    {
+        $currentMonth = date('n');  // Current month number (1-12)
+        $currentYear = date('Y');   // Current year
+
+        // Determine the academic year based on the current month
+        if ($currentMonth >= 6) {
+            $startYear = $currentYear;       // Academic year starts this year
+            $endYear = $currentYear + 1;     // Academic year ends next year
+        } else {
+            $startYear = $currentYear - 1;   // Academic year started last year
+            $endYear = $currentYear;         // Academic year ends this year
+        }
+
+        // Initialize months array with all months in the academic year (June-April)
+        $months = [];
+        $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
+        $endDate = strtotime("$endYear-04-30");        // End of academic year (April 30)
+
+        while ($currentDate <= $endDate) {
+            $monthKey = date('Y-m', $currentDate);
+            $monthLabel = date('F', $currentDate);     // e.g., "June", "July"
+            $months[$monthKey] = [
+                'month' => $monthLabel,
+                'avg_score' => 0,                      // Initialize average score to 0 for each month
+                'quiz_ids' => []
+            ];
+            $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
+        }
+
+        // Fetch all students associated with the subject
+        $studentQuery = $this->conn->prepare("
+        SELECT student_id
+        FROM student_record AS sr
+        INNER JOIN section_tbl AS sec ON sr.section_id = sec.section_id
+        INNER JOIN subject_tbl AS sub ON sec.section_id = sub.section_id
+        WHERE sub.subject_id = ?
+    ");
+        $studentQuery->bind_param("s", $subjectId);
+        $studentQuery->execute();
+        $studentsResult = $studentQuery->get_result();
+
+        $students = [];
+        while ($studentRow = $studentsResult->fetch_assoc()) {
+            $students[] = $studentRow['student_id'];
+        }
+
+        // Fetch quizzes for the subject within the academic year, grouped by month
+        $quizQuery = $this->conn->prepare("
+        SELECT quiz.quiz_id, DATE_FORMAT(quiz.add_time, '%Y-%m') AS month
+        FROM quiz_tbl quiz
+        WHERE quiz.add_time BETWEEN ? AND ?
+        AND quiz.subject_id = ?
+        AND quiz.status IN ('Active', 'Completed')
+        ORDER BY month ASC
+    ");
+        $startDate = "$startYear-06-01";
+        $endDate = "$endYear-04-30";
+        $quizQuery->bind_param("sss", $startDate, $endDate, $subjectId);
+        $quizQuery->execute();
+        $quizzesResult = $quizQuery->get_result();
+
+        // Populate quiz IDs for each month
+        while ($row = $quizzesResult->fetch_assoc()) {
+            $monthKey = $row['month'];
+            if (isset($months[$monthKey])) {
+                $months[$monthKey]['quiz_ids'][] = $row['quiz_id'];
+            }
+        }
+
+        // Calculate the average score for each month by iterating through students and quizzes
+        foreach ($months as $monthKey => &$monthData) {
+            $totalScore = 0;
+            $totalQuizzes = count($monthData['quiz_ids']);  // Total quizzes in the month
+            $totalStudentScores = 0;
+
+            if ($totalQuizzes > 0) {
+                foreach ($students as $studentId) {
+                    $studentTotalScore = 0;
+                    $studentAttemptedQuizzes = 0;
+
+                    foreach ($monthData['quiz_ids'] as $quizId) {
+                        $score = $this->fetchScoreByQuizId($quizId, $studentId);
+
+                        if ($score !== null) { // Include only if quiz was attempted
+                            $studentTotalScore += $score;
+                            $studentAttemptedQuizzes++;
+                        }
+                    }
+
+                    // Add this student’s average (or zero if no attempts)
+                    $studentAverage = $studentAttemptedQuizzes > 0 ? $studentTotalScore / $totalQuizzes : 0;
+                    $totalStudentScores += $studentAverage;
+                }
+
+                // Calculate the overall monthly average for all students
+                $monthData['avg_score'] = round($totalStudentScores / count($students), 2);
+            }
+        }
+
+        // Prepare data for output
+        $data = [
+            'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
+            'scores' => array_column($months, 'avg_score')  // Average scores
+        ];
+
+        return $data;
+    }
+
 
 
     public function subjectQuizCompletion($subjectId)
@@ -2725,81 +2828,17 @@ class fetchClass extends db_connect
         SELECT 
             record.student_id,
             record.lrn,
-            ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
-            CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
-            AVG(score.score) AS average_score 
+            CONCAT(student.student_fname, ' ', student.student_lname) AS full_name
         FROM 
             student_record record
         INNER JOIN
             student_tbl student ON student.student_id = record.student_id
         INNER JOIN 
             subject_tbl subject ON record.section_id = subject.section_id
-        INNER JOIN 
-            quiz_tbl quiz ON quiz.subject_id = subject.subject_id
-        LEFT JOIN 
-            score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
         WHERE 
             record.section_id = ?
-        AND 
-            quiz.subject_id = ?
-        AND 
-            score.score IS NOT NULL
         GROUP BY 
-            full_name
-        ORDER BY 
-            average_score DESC
-    ");
-
-        $query->bind_param("ss", $sectionId, $subjectId);
-
-        if ($query->execute()) {
-            $result = $query->get_result();
-            $students = [];
-
-            while ($row = $result->fetch_assoc()) {
-                $students[] = [
-                    'student_id' => $row['student_id'],
-                    'lrn' => $row['lrn'],
-                    'rank' => $row['rank'],
-                    'full_name' => $row['full_name'],
-                    'average_score' => round($row['average_score'], 2),
-                ];
-            }
-
-            return $students;
-        }
-
-
-        return null;
-    }
-
-    public function rankingStudentsBySection($sectionId)
-    {
-        $query = $this->conn->prepare("
-        SELECT 
-            record.student_id,
-            student.lrn,
-            ROW_NUMBER() OVER (ORDER BY AVG(score.score) DESC) AS rank,
-            CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
-            AVG(score.score) AS average_score 
-        FROM 
-            student_record record
-        INNER JOIN
-            student_tbl student ON student.student_id = record.student_id
-        INNER JOIN 
-            subject_tbl subject ON record.section_id = subject.section_id
-        INNER JOIN 
-            quiz_tbl quiz ON quiz.subject_id = subject.subject_id
-        LEFT JOIN 
-            score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
-        WHERE 
-            record.section_id = ?
-        AND 
-            score.score IS NOT NULL
-        GROUP BY 
-            full_name
-        ORDER BY 
-            average_score DESC
+            record.student_id
     ");
 
         $query->bind_param("s", $sectionId);
@@ -2808,23 +2847,87 @@ class fetchClass extends db_connect
             $result = $query->get_result();
             $students = [];
 
+            // Loop through each student to calculate accurate average scores
             while ($row = $result->fetch_assoc()) {
+                // Use facultyGetAverageScoreBySubject to get a more accurate average score for each student
+                $averageScore = $this->facultyGetAverageScoreBySubject($row['student_id'], $subjectId);
+
                 $students[] = [
                     'student_id' => $row['student_id'],
                     'lrn' => $row['lrn'],
-                    'rank' => $row['rank'],
                     'full_name' => $row['full_name'],
-                    'average_score' => round($row['average_score'], 2),
+                    'average_score' => $averageScore,
                 ];
+            }
+
+            usort($students, function ($a, $b) {
+                return $b['average_score'] <=> $a['average_score'];
+            });
+
+            foreach ($students as $index => &$student) {
+                $student['rank'] = $index + 1;
             }
 
             return $students;
         }
 
-
         return null;
     }
 
+
+
+    public function rankingStudentsBySection($sectionId)
+    {
+        // Query to get unique students in the specified section
+        $query = $this->conn->prepare("
+        SELECT 
+            record.student_id,
+            student.lrn,
+            CONCAT(student.student_fname, ' ', student.student_lname) AS full_name
+        FROM 
+            student_record record
+        INNER JOIN
+            student_tbl student ON student.student_id = record.student_id
+        WHERE 
+            record.section_id = ?
+        GROUP BY 
+            record.student_id
+    ");
+
+        $query->bind_param("s", $sectionId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $students = [];
+
+            // Loop through each student to calculate accurate average scores
+            while ($row = $result->fetch_assoc()) {
+                // Calculate average score using the facultyGetAverageScoreBySection function
+                $averageScore = $this->facultyGetAverageScoreBySection($row['student_id'], $sectionId);
+
+                $students[] = [
+                    'student_id' => $row['student_id'],
+                    'lrn' => $row['lrn'],
+                    'full_name' => $row['full_name'],
+                    'average_score' => $averageScore,
+                ];
+            }
+
+            // Sort students by average score in descending order
+            usort($students, function ($a, $b) {
+                return $b['average_score'] <=> $a['average_score'];
+            });
+
+            // Assign rank to each student based on sorted order
+            foreach ($students as $index => &$student) {
+                $student['rank'] = $index + 1;
+            }
+
+            return $students;
+        }
+
+        return null;
+    }
     public function rankingStudentsByYear()
     {
         $query = $this->conn->prepare("
@@ -4076,6 +4179,80 @@ class fetchClass extends db_connect
         }
     }
 
+    public function studentGetAverageScore($studentId)
+    {
+        // Query 1: Count all quizzes in the section
+        $totalQuizzesQuery = $this->conn->prepare("
+        SELECT COUNT(quiz.quiz_id) AS total_quizzes
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject
+            ON subject.subject_id = quiz.subject_id
+        INNER JOIN student_record student ON student.section_id = subject.section_id
+        WHERE student.student_id = ?
+        AND quiz.status IN ('Active', 'Completed')
+    ");
+        $totalQuizzesQuery->bind_param("s", $studentId);
+
+        if ($totalQuizzesQuery->execute()) {
+            $totalQuizzesResult = $totalQuizzesQuery->get_result();
+            $totalQuizzesData = $totalQuizzesResult->fetch_assoc();
+            $totalQuizzes = $totalQuizzesData['total_quizzes'] ?? 0;
+        } else {
+            return null;
+        }
+
+        if ($totalQuizzes === 0) {
+            return 0;
+        }
+
+        $totalScoreQuery = $this->conn->prepare("
+        SELECT SUM(score.score) AS total_score
+        FROM score_tbl score
+        INNER JOIN quiz_tbl quiz
+            ON quiz.quiz_id = score.quiz_id
+        INNER JOIN subject_tbl subject
+            ON subject.subject_id = quiz.subject_id
+        WHERE score.student_id = ?
+        AND score.score IS NOT NULL
+    ");
+        $totalScoreQuery->bind_param("s", $studentId);
+
+        // Execute the second query to get the total score
+        if ($totalScoreQuery->execute()) {
+            $totalScoreResult = $totalScoreQuery->get_result();
+            $totalScoreData = $totalScoreResult->fetch_assoc();
+            $totalScore = $totalScoreData['total_score'] ?? 0;
+        } else {
+            return null; // Return null if the query fails
+        }
+
+        // Calculate the average score (total score divided by total quizzes)
+        $averageScore = $totalScore / $totalQuizzes;
+        return round($averageScore, 2); // Round to 2 decimal places
+    }
+
+    public function fetchScoreByQuizId($quizId, $studentId)
+    {
+        $query = $this->conn->prepare("
+            SELECT score
+            FROM score_tbl
+            WHERE quiz_id = ?
+            AND student_id = ?
+        ");
+        $query->bind_param("ss", $quizId, $studentId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            if ($row = $result->fetch_assoc()) {
+                return (float) $row['score'];
+            } else {
+                return null;
+            }
+        }
+
+        return null;
+    }
 }
 
 
