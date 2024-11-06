@@ -49,7 +49,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                                     <div class="id-row">
                                         <div class="id-col">
                                             <p>NAME</p>
-                                            <span><?php echo htmlspecialchars(strtoupper($studentFname)); ?></span>
+                                            <span><?php echo htmlspecialchars(strtoupper($firstName)); ?></span>
                                         </div>
                                         <div class="id-col">
                                             <p>SCHOOL YEAR</p>
@@ -96,7 +96,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                                 </div>
                                 <div class="info-col">
                                     <p>Suffix</p>
-                                    <span>N/A</span>
+                                    <span><?php echo htmlspecialchars($studentSuffix); ?></span>
                                 </div>
                             </div>
                             <div class="info-row">
@@ -108,10 +108,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                                     <p>Age</p>
                                     <span><?php echo htmlspecialchars($age); ?></span>
                                 </div>
-                                <div class="info-col">
-                                    <p>Birthday</p>
-                                    <span>August 14, 2002</span>
-                                </div>
                             </div>
                         </div>
                         <div class="info-panel">
@@ -122,11 +118,11 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                             <div class="info-row">
                                 <div class="info-col">
                                     <p>Student No.</p>
-                                    <span>Doe</span>
+                                    <span><?php echo htmlspecialchars($studentId); ?></span>
                                 </div>
                                 <div class="info-col">
                                     <p>LRN</p>
-                                    <span>John</span>
+                                    <span><?php echo htmlspecialchars($lrn); ?></span>
                                 </div>
                                 <div class="info-col">
                                     <p>Grade Level</p>

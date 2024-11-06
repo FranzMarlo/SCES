@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
         profileTab.classList.remove("active");
         recordsTab.classList.add("active");
         statsTab.classList.remove("active");
+        initializeQuizScoresTable();
         break;
       case 3:
         statsContainer.style.display = "flex";
@@ -51,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   recordsTab.addEventListener("click", function () {
     showContainer(2);
+    initializeQuizScoresTable();
   });
 
   statsTab.addEventListener("click", function () {
@@ -62,77 +64,92 @@ document.addEventListener("DOMContentLoaded", function () {
 
   showContainer(activeTab);
 
-  var quizScoresTable = $("#quizScoresTable").DataTable({
-    responsive: {
-      details: {
-        type: "inline",
-        display: $.fn.dataTable.Responsive.display.childRowImmediate,
-        renderer: function (api, rowIdx, columns) {
-          var data = $.map(columns, function (col, i) {
-            return col.hidden
-              ? '<tr data-dt-row="' +
-                  col.rowIdx +
-                  '" data-dt-column="' +
-                  col.columnIdx +
-                  '">' +
-                  "<td>" +
-                  col.title +
-                  ":" +
-                  "</td> " +
-                  "<td>" +
-                  col.data +
-                  "</td>" +
-                  "</tr>"
-              : "";
-          }).join("");
-
-          return data ? $("<table/>").append(data) : false;
-        },
-      },
-    },
-    ajax: {
-      url: "/SCES/backend/fetch-class.php",
-      type: "POST",
-      data: function (d) {
+  function initializeQuizScoresTable() {
+    if ($.fn.dataTable.isDataTable("#quizScoresTable")) {
+      var quizScoresTable = $("#quizScoresTable").DataTable();
+      quizScoresTable.settings()[0].ajax.data = function (d) {
         d.submitType = "getQuizRecords";
         return d;
-      },
-      dataSrc: "",
-    },
-    columns: [
-      { data: "quiz_number", className: "text-center" },
-      { data: "subject", className: "text-center" },
-      { data: "title", className: "text-center" },
-      { data: "score", className: "text-center" },
-      { data: "item_number", className: "text-center" },
-      {
-        data: "remarks",
-        render: function (data) {
-          var className =
-            data === "Passed" ? "passed" : data === "Failed" ? "failed" : "";
-          return `<div class="center-image"><span class="${className}">${data}</span></div>`;
+      };
+      quizScoresTable.ajax.reload();
+    } else {
+      var quizScoresTable = $("#quizScoresTable").DataTable({
+        responsive: {
+          details: {
+            type: "inline",
+            display: $.fn.dataTable.Responsive.display.childRowImmediate,
+            renderer: function (api, rowIdx, columns) {
+              var data = $.map(columns, function (col, i) {
+                return col.hidden
+                  ? '<tr data-dt-row="' +
+                      col.rowIdx +
+                      '" data-dt-column="' +
+                      col.columnIdx +
+                      '">' +
+                      "<td>" +
+                      col.title +
+                      ":" +
+                      "</td> " +
+                      "<td>" +
+                      col.data +
+                      "</td>" +
+                      "</tr>"
+                  : "";
+              }).join("");
+
+              return data ? $("<table/>").append(data) : false;
+            },
+          },
         },
-      },
-      { data: "time" },
-      {
-        data: null,
-        render: function (data, type, row) {
-          return `<div class="center-image">
+        ajax: {
+          url: "/SCES/backend/fetch-class.php",
+          type: "POST",
+          data: function (d) {
+            d.submitType = "getQuizRecords";
+            return d;
+          },
+          dataSrc: "",
+        },
+        columns: [
+          { data: "quiz_number", className: "text-center" },
+          { data: "subject", className: "text-center" },
+          { data: "title", className: "text-center" },
+          { data: "score", className: "text-center" },
+          { data: "item_number", className: "text-center" },
+          {
+            data: "remarks",
+            render: function (data) {
+              var className =
+                data === "Passed"
+                  ? "passed"
+                  : data === "Failed"
+                  ? "failed"
+                  : "";
+              return `<div class="center-image"><span class="${className}">${data}</span></div>`;
+            },
+          },
+          { data: "time" },
+          {
+            data: null,
+            render: function (data, type, row) {
+              return `<div class="center-image">
         <button class="more-btn" data-quiz-id="${row.quiz_id}"><i class="fa-solid fa-chevron-right"></i></button>
         </div>`;
+            },
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+          },
+        ],
+        language: {
+          emptyTable: "No data available in table", // Message when there's no data
         },
-        orderable: false,
-        searchable: false,
-        className: "text-center",
-      },
-    ],
-    language: {
-      emptyTable: "No data available in table", // Message when there's no data
-    },
-    initComplete: function () {
-      quizScoresTable.draw(); // Force a redraw to apply styles properly
-    },
-  });
+        initComplete: function () {
+          quizScoresTable.draw(); // Force a redraw to apply styles properly
+        },
+      });
+    }
+  }
 
   document
     .getElementById("quizScoresTable")
@@ -153,8 +170,12 @@ document.addEventListener("DOMContentLoaded", function () {
               showAlert("error", "Student has not answered the quiz yet");
               return;
             }
-            if (data.status !== 'Completed'){
-              showAlert("warning", "Quiz cannot be viewed", "Active quizzes cannot be viewed and will only be available for viewing when its mark as completed by instructor");
+            if (data.status !== "Completed") {
+              showAlert(
+                "warning",
+                "Quiz cannot be viewed",
+                "Active quizzes cannot be viewed and will only be available for viewing when its mark as completed by instructor"
+              );
               return;
             }
 
@@ -241,71 +262,81 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
     });
-
-  var gradesTable = $("#gradesTable").DataTable({
-    responsive: {
-      details: {
-        type: "inline",
-        display: $.fn.dataTable.Responsive.display.childRowImmediate,
-        renderer: function (api, rowIdx, columns) {
-          var data = $.map(columns, function (col, i) {
-            return col.hidden
-              ? '<tr data-dt-row="' +
-                  col.rowIdx +
-                  '" data-dt-column="' +
-                  col.columnIdx +
-                  '">' +
-                  "<td>" +
-                  col.title +
-                  ":" +
-                  "</td> " +
-                  "<td>" +
-                  col.data +
-                  "</td>" +
-                  "</tr>"
-              : "";
-          }).join("");
-
-          return data ? $("<table/>").append(data) : false;
-        },
-      },
-    },
-    ajax: {
-      url: "/SCES/backend/fetch-class.php",
-      type: "POST",
-      data: function (d) {
+  function initializeGradesTable() {
+    if ($.fn.dataTable.isDataTable("#gradesTable")) {
+      var gradesTable = $("#gradesTable").DataTable();
+      gradesTable.settings()[0].ajax.data = function (d) {
         d.submitType = "getGrades";
         return d;
-      },
-      dataSrc: "",
-    },
-    columns: [
-      { data: "subject", className: "text-center" },
-      { data: "grade", className: "text-center" },
-      {
-        data: "remarks",
-        render: function (data) {
-          var className = "";
-          if (["Outstanding", "Very Good", "Good"].includes(data)) {
-            className = "passed";
-          } else if (data === "Fair") {
-            className = "fair";
-          } else if (data === "Failed") {
-            className = "failed";
-          }
-          return `<div class="center-image"><span class="${className}">${data}</span></div>`;
+      };
+      gradesTable.ajax.reload();
+    } else {
+      var gradesTable = $("#gradesTable").DataTable({
+        responsive: {
+          details: {
+            type: "inline",
+            display: $.fn.dataTable.Responsive.display.childRowImmediate,
+            renderer: function (api, rowIdx, columns) {
+              var data = $.map(columns, function (col, i) {
+                return col.hidden
+                  ? '<tr data-dt-row="' +
+                      col.rowIdx +
+                      '" data-dt-column="' +
+                      col.columnIdx +
+                      '">' +
+                      "<td>" +
+                      col.title +
+                      ":" +
+                      "</td> " +
+                      "<td>" +
+                      col.data +
+                      "</td>" +
+                      "</tr>"
+                  : "";
+              }).join("");
+
+              return data ? $("<table/>").append(data) : false;
+            },
+          },
         },
-        className: "text-center",
-      },
-      { data: "quarter", className: "text-center" },
-    ],
-    language: {
-      emptyTable: "No data available in table", // Message when there's no data
-    },
-    initComplete: function () {
-      gradesTable.draw(); // Force a redraw to apply styles properly
-    },
-  });
+        ajax: {
+          url: "/SCES/backend/fetch-class.php",
+          type: "POST",
+          data: function (d) {
+            d.submitType = "getGrades";
+            return d;
+          },
+          dataSrc: "",
+        },
+        columns: [
+          { data: "subject", className: "text-center" },
+          { data: "grade", className: "text-center" },
+          {
+            data: "remarks",
+            render: function (data) {
+              var className = "";
+              if (["Outstanding", "Very Good", "Good"].includes(data)) {
+                className = "passed";
+              } else if (data === "Fair") {
+                className = "fair";
+              } else if (data === "Failed") {
+                className = "failed";
+              }
+              return `<div class="center-image"><span class="${className}">${data}</span></div>`;
+            },
+            className: "text-center",
+          },
+          { data: "quarter", className: "text-center" },
+        ],
+        language: {
+          emptyTable: "No data available in table", // Message when there's no data
+        },
+        initComplete: function () {
+          gradesTable.draw(); // Force a redraw to apply styles properly
+        },
+      });
+    }
+  }
 
   $.ajax({
     url: "/SCES/backend/fetch-class.php",

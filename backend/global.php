@@ -37,6 +37,7 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['student_fname'] = $getStudentData['student_fname'];
                 $_SESSION['student_mname'] = $getStudentData['student_mname'];
                 $_SESSION['student_lname'] = $getStudentData['student_lname'];
+                $_SESSION['student_suffix'] = $getStudentData['student_suffix'];
                 $_SESSION['age'] = $getStudentData['age'];
                 $_SESSION['gender'] = $getStudentData['gender'];
                 $_SESSION['email'] = $result['email'];
@@ -47,7 +48,6 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['barangay'] = $getStudentData['barangay'];
                 $_SESSION['street'] = $getStudentData['street'];
                 $_SESSION['profile_image'] = $getStudentData['profile_image'];
-                $_SESSION['registration'] = $getStudentData['registration'];
                 $_SESSION['section'] = $section;
                 $_SESSION['grade_level'] = $gradeLevel;
                 $_SESSION['email_verification'] = $result['email_verification'];

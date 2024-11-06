@@ -19,7 +19,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
       ?>
       <div class="about-panel">
         <div class="about-text">
-          <h1>Hi, <?php echo htmlspecialchars($studentFname); ?></h1>
+          <h1>Hi, <?php echo htmlspecialchars($firstName); ?></h1>
           <p>This online learning platform serves as a welcoming home for learners.</p>
           <a href="/SCES/frontend/student/help.php" class="link-btn">Learn More</a>
         </div>

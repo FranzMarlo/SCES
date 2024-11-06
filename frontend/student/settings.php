@@ -39,7 +39,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
 									id="change-avatar-icon">
 							</div>
 							<div class="profile-info">
-								<h1><?php echo htmlspecialchars($studentFname . ' ' . $studentLname); ?></h1>
+								<h1><?php echo htmlspecialchars($studentFname . ' ' . $suffix . ' ' . $studentLname); ?></h1>
 								<span><?php echo htmlspecialchars($gradeLevel . ' - ' . $section); ?></span>
 								<span>Student ID: <?php echo htmlspecialchars($studentId); ?></span>
 							</div>

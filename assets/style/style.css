@@ -66,6 +66,19 @@ body {
   box-shadow: -4px 0 2px 0 #9c9c9c;
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.link-text{
+  right: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #000;
+}
+.link-text:hover{
+  color: #aaa;
 }
 .separator {
   display: flex;
@@ -124,6 +137,22 @@ a.button-container{
   max-width: 320px;
   margin-bottom: 25px;
   position: relative;
+}
+.input-icons-recover {
+  width: 70%;
+  max-width: 320px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  text-align: justify;
+  align-items: center;
+}
+.input-icons-span {
+  width: 70%;
+  max-width: 320px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
 }
 .input-icons i {
   position: absolute;
@@ -186,7 +215,6 @@ a.button-container{
 .form-wrapper form button[type="submit"] {
   border-radius: 30px;
   padding: 0 15px;
-  width: 100px;
   height: 35px;
   background-color: #183577;
   color: #fff;
@@ -306,6 +334,9 @@ input[type="number"]::-webkit-outer-spin-button {
   .input-icons {
     margin-bottom: 20px;
   }
+  .input-icons {
+    margin-bottom: 15px;
+  }
   .form-wrapper form input[type="submit"] {
     margin-top: 0;
   }
@@ -375,6 +406,14 @@ input[type="number"]::-webkit-outer-spin-button {
   .input-icons {
     max-width: 250px;
     margin-bottom: 20px;
+  }
+  .input-icons-span {
+    max-width: 250px;
+    margin-bottom: 15px;
+  }
+  .input-icons-recover {
+    max-width: 250px;
+    margin-bottom: 15px;
   }
   .form-wrapper form input[type="submit"] {
     margin-top: 0;
