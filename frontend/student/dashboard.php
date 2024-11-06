@@ -21,7 +21,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
         <div class="about-text">
           <h1>Hi, <?php echo htmlspecialchars($studentFname); ?></h1>
           <p>This online learning platform serves as a welcoming home for learners.</p>
-          <button>Learn More</button>
+          <a href="/SCES/frontend/student/help.php" class="link-btn">Learn More</a>
         </div>
         <div class="about-img">
           <img src="/SCES/assets/images/dashboard-overview.png" alt="dashboard overview icon">

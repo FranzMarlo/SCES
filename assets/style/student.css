@@ -193,14 +193,18 @@ body {
   font-size: 20px;
   margin-bottom: 20px;
 }
-.about-text button {
+.about-text .link-btn {
   background-color: #fbf4cb;
   border-style: none;
-  height: 40px;
-  width: 100px;
-  padding: 5px;
+  padding: 10px 15px;
   border-radius: 30px;
   border: 2px solid #000;
+  text-decoration: none;
+  color: #000;
+  font-size: 1rem;
+}
+.about-text .link-btn:hover {
+  background-color: #ffea73;
 }
 .about-img {
   padding: 7px 20px;
@@ -578,6 +582,10 @@ canvas {
   }
 }
 @media (width < 768px) {
+  .about-text .link-btn {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
   .pop-up {
     width: 230px;
   }
@@ -682,6 +690,10 @@ canvas {
   }
 }
 @media (width < 600px) {
+  .about-text .link-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
   .header .welcome-box .welcome-text h1 {
     font-size: 20px;
   }
