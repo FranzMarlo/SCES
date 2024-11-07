@@ -1,5 +1,16 @@
 <?php
 session_start();
+
+// Prevent caching of the login page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+// If the user is already logged in, redirect them to the dashboard
+if (isset($_SESSION['student_id'])) {
+    header("Location: /SCES/frontend/student/dashboard.php");
+    exit();
+}
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/backend/global.php';
 
 $log = new loggedIn();

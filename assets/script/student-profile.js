@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
         recordsTab.classList.add("active");
         statsTab.classList.remove("active");
         initializeQuizScoresTable();
+        initializeGradesTable();
         break;
       case 3:
         statsContainer.style.display = "flex";
@@ -53,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
   recordsTab.addEventListener("click", function () {
     showContainer(2);
     initializeQuizScoresTable();
+    initializeGradesTable();
   });
 
   statsTab.addEventListener("click", function () {
