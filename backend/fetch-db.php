@@ -3935,6 +3935,37 @@ class fetchClass extends db_connect
         }
     }
 
+    public function mainFacultyQuizCompletion($teacherId)
+    {
+        $emptyValue = [
+            'accomplished' => 0,
+            'pending' => 0
+        ];
+
+        $quizzesQuery = $this->conn->prepare("
+        SELECT 
+            SUM(CASE WHEN quiz.status = 'Active' THEN 1 ELSE 0 END) AS active_count,
+            SUM(CASE WHEN quiz.status = 'Inactive' THEN 1 ELSE 0 END) AS inactive_count,
+            SUM(CASE WHEN quiz.status = 'Completed' THEN 1 ELSE 0 END) AS completed_count
+        FROM quiz_tbl quiz
+        INNER JOIN subject_tbl subject ON subject.subject_id = quiz.subject_id
+        WHERE
+            subject.teacher_id = ?
+    ");
+        $quizzesQuery->bind_param("s", $teacherId);
+        if ($quizzesQuery->execute()) {
+            $result = $quizzesQuery->get_result();
+            $quizData = $result->fetch_assoc();
+
+            return [
+                'accomplished' => (int) $quizData['completed_count'],
+                'pending' => (int) $quizData['active_count'] + (int) $quizData['inactive_count']
+            ];
+        } else {
+            return $emptyValue;
+        }
+    }
+
     public function getStudentsByYear()
     {
         $currentYear = date("Y");
@@ -3966,6 +3997,49 @@ class fetchClass extends db_connect
     ");
 
         $query->bind_param("s", $schoolYear);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $studentsCount = $result->fetch_all(MYSQLI_ASSOC);
+            return $studentsCount;
+        } else {
+            return false;
+        }
+    }
+
+    public function getTeacherStudentsByYear($teacherId)
+    {
+        $currentYear = date("Y");
+        $currentMonth = date("m");
+
+        if ($currentMonth < 6) {
+            $schoolYear = ($currentYear - 1) . "-" . $currentYear;
+        } else {
+            $schoolYear = $currentYear . "-" . ($currentYear + 1);
+        }
+
+        $query = $this->conn->prepare("
+        SELECT 
+            level.grade_level,
+            COALESCE(COUNT(DISTINCT student.student_id), 0) AS student_count
+        FROM 
+            level_tbl level
+        INNER JOIN 
+            student_tbl student ON student.level_id = level.level_id
+        INNER JOIN 
+            section_tbl section ON student.section_id = section.section_id
+        INNER JOIN
+            subject_tbl subject ON section.section_id = subject.section_id
+        AND 
+            section.year = ?
+        AND
+            subject.teacher_id = ?
+        GROUP BY 
+            level.grade_level
+        ORDER BY 
+            level.grade_level ASC
+    ");
+
+        $query->bind_param("ss", $schoolYear, $teacherId);
         if ($query->execute()) {
             $result = $query->get_result();
             $studentsCount = $result->fetch_all(MYSQLI_ASSOC);

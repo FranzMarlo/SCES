@@ -732,32 +732,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($submitType === 'analyticsAverageScoreByGradeLevelWithFilter') {
         $year = $_POST['year'];
         $gradeLevel = $_POST['gradeLevel'];
-    
+
         $students = $fetchDb->getAllStudentsWithFilter($year, $gradeLevel);
-    
+
         $grades = [];
         $scores = [];
-    
+
         if (!empty($students)) {
             foreach ($students as $student) {
                 $studentId = $student['student_id'];
                 $studentData = $fetchDb->studentFetchScoresByGradeLevelWithFilter($studentId, $year, $gradeLevel);
-    
+
                 if (empty($grades)) {
                     $grades = $studentData['grades'];
                     $scores = array_fill(0, count($grades), 0); // Initialize scores with zeroes
                 }
-    
+
                 foreach ($studentData['scores'] as $index => $avgScore) {
                     $scores[$index] += $avgScore;
                 }
             }
-    
+
             $studentCount = count($students);
             $averageScoresByGradeLevel = array_map(function ($totalScore) use ($studentCount) {
                 return $studentCount > 0 ? $totalScore / $studentCount : 0;
             }, $scores);
-    
+
             echo json_encode([
                 'labels' => $grades,
                 'barData' => $averageScoresByGradeLevel
@@ -1012,6 +1012,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($panelData);
     } else if ($submitType === 'mainDashboardBarChartData') {
         $panelData = $fetchDb->getStudentsByYear(); // or any function that fetches the required data
+
+        // Assuming $panelData is an array of student counts grouped by grade level
+        $labels = [];
+        $counts = [];
+
+        // Prepare labels and counts for the bar chart
+        foreach ($panelData as $data) {
+            $labels[] = $data['grade_level']; // Adjust this key based on your actual array structure
+            $counts[] = $data['student_count']; // Adjust this key based on your actual array structure
+        }
+
+        echo json_encode(['labels' => $labels, 'counts' => $counts]);
+    } else if ($submitType === 'mainFacultyDashboardDonutChartData') {
+        
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $panelData = $fetchDb->mainFacultyQuizCompletion($teacherId);
+
+        echo json_encode($panelData);
+    } else if ($submitType === 'mainFacultyDashboardBarChartData') {
+
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $panelData = $fetchDb->getTeacherStudentsByYear($teacherId); // or any function that fetches the required data
 
         // Assuming $panelData is an array of student counts grouped by grade level
         $labels = [];

@@ -605,6 +605,7 @@ class globalClass extends db_connect
             return false;
         }
     }
+    
 
     public function adminGetTotalTeacherStudent()
     {
@@ -727,10 +728,54 @@ class globalClass extends db_connect
         }
     }
 
+    public function getTotalTeacherSubject($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT `subject_id`) as total
+        FROM 
+            subject_tbl
+        WHERE
+            teacher_id = ?
+        ");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return false;
+        }
+    }
+
     public function getTotalQuiz()
     {
         $query = $this->conn->prepare("SELECT COUNT(`quiz_id`) as total FROM quiz_tbl");
 
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $total = $result->fetch_assoc();
+            return $total['total'];
+        } else {
+            return 'System Error';
+        }
+    }
+
+    public function getTotalTeacherQuiz($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            COUNT(DISTINCT `quiz_id`) as total 
+        FROM 
+            quiz_tbl quiz
+        INNER JOIN
+            subject_tbl subject ON subject.subject_id = quiz.subject_id
+        WHERE
+            subject.teacher_id = ?
+        AND 
+            quiz.status IN ('Active', 'Completed')
+        ");
+        $query->bind_param("s", $teacherId);
         if ($query->execute()) {
             $result = $query->get_result();
             $total = $result->fetch_assoc();

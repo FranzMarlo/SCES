@@ -1,6 +1,10 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-head.php';
-$page = 'Home';
+$page = 'SCES Faculty';
+$totalStudents = $db->getTotalTeacherStudent($teacherId);
+$totalLessons = $db->getTotalTeacherLesson($teacherId);
+$totalSubjects = $db->getTotalTeacherSubject($teacherId);
+$totalQuizzes = $db->getTotalTeacherQuiz($teacherId);
 ?>
 <title>Home | SCES Online Learning Platform</title>
 </head>
@@ -49,8 +53,8 @@ $page = 'Home';
             <img src="/SCES/assets/images/total-teachers-icon.png" alt="total teachers icon">
           </div>
           <div class="box-text">
-            <h1>Total Teachers</h1>
-            <span><?php echo htmlspecialchars($totalTeachers); ?></span>
+            <h1>Total Lessons</h1>
+            <span><?php echo htmlspecialchars($totalLessons); ?></span>
           </div>
         </div>
         <div class="box subjects">
@@ -85,4 +89,4 @@ $page = 'Home';
   <?php
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
   ?>
-   <script src="/SCES/assets/script/admin-dashboard.js"></script>
+   <script src="/SCES/assets/script/faculty-dashboard.js"></script>
