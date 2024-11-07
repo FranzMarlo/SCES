@@ -107,7 +107,7 @@ $page = '';
                                                     data-section-id="<?php echo htmlspecialchars($archive['section_id']); ?>">Edit</a>
                                             </li>
                                             <li><a href="javascript:void(0)" class="not-archive-btn"
-                                                    data-section-id="<?php echo htmlspecialchars($archive['section_id']); ?>">Archive</a>
+                                                    data-section-id="<?php echo htmlspecialchars($archive['section_id']); ?>">Enable</a>
                                             </li>
                                         </ul>
                                     </div>

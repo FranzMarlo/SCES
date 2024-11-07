@@ -123,6 +123,7 @@ function subjectBtn(event, button) {
 function hiddenLink(element) {
   var subjectItem = element.closest(".subject-item");
   var hiddenLink = subjectItem.querySelector(".hidden-link");
+  document.getElementById('subjectSearch').value = '';
 
   if (hiddenLink) {
     hiddenLink.click(); // Trigger the hidden link click

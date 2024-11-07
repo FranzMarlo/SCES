@@ -50,6 +50,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize on page load
   setActiveTab();
 
+  window.addEventListener("load", () => {
+    document.getElementById("subjectSearch").value = "";
+  });
+  
   const addSubjectBtn = document.getElementById("addSubjectBtn");
   const addSubjectModal = document.getElementById("addSubjectModal");
   const addSubjectForm = document.getElementById("addSubjectForm");
@@ -104,8 +108,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((response) => response.json())
         .then((data) => {
           // Fetch options and set values after they are populated
-          fetchOptions(data.level_id, "editSubject", "getSubjects", 'Subject');
-          fetchOptions(data.level_id, "editSection", "getSections", 'Section');
+          fetchOptions(data.level_id, "editSubject", "getSubjects", "Subject");
+          fetchOptions(data.level_id, "editSection", "getSections", "Section");
 
           // Wait for dropdowns to be populated before setting values
           setTimeout(() => {
@@ -171,8 +175,8 @@ document.addEventListener("DOMContentLoaded", function () {
           '<option value="" selected>Select Grade Level First</option>';
       } else {
         // Fetch options based on selected grade level
-        fetchOptions(gradeLevelId, "editSubject", "getSubjects", 'Subject');
-        fetchOptions(gradeLevelId, "editSection", "getSections", 'Section');
+        fetchOptions(gradeLevelId, "editSubject", "getSubjects", "Subject");
+        fetchOptions(gradeLevelId, "editSection", "getSections", "Section");
       }
     });
 
@@ -189,8 +193,8 @@ document.addEventListener("DOMContentLoaded", function () {
           '<option value="" selected>Select Grade Level First</option>';
       } else {
         // Fetch options based on selected grade level
-        fetchOptions(gradeLevelId, "addSubject", "getSubjects", 'Subject');
-        fetchOptions(gradeLevelId, "addSection", "getSections", 'Section');
+        fetchOptions(gradeLevelId, "addSubject", "getSubjects", "Subject");
+        fetchOptions(gradeLevelId, "addSection", "getSections", "Section");
       }
     });
 

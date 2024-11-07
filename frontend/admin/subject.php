@@ -55,18 +55,31 @@ $page = '';
                     <h1>Subjects</h1>
                     <button class="add-btn" id="addSubjectBtn"><i class="fa-solid fa-plus"></i>Add Subject</button>
                 </div>
-                <?php $subjects = $db->getAdminSubjects(); ?>
-                <?php $archived = $db->getAdminArchivedSubjects(); ?>
+                <?php
+                $subjects = $db->getAdminSubjects();
+                $archived = $db->getAdminArchivedSubjects();
+                ?>
                 <div class="subject-container">
                     <div class="tab-controller">
-                        <div class="tab-item" id=subjectTab>Subjects</div>
-                        <div class="tab-item" id="archivedTab">Archived</div>
+                        <div class="tab-container">
+                            <div class="tab-item" id=subjectTab>Subjects</div>
+                            <div class="tab-item" id="archivedTab">Archived</div>
+                        </div>
+                        <div class="search-container">
+                            <input type="text" id="subjectSearch" placeholder="Search Subject"
+                                onkeyup="filterSubjects()">
+                            <i class="fa fa-search search-icon"></i>
+                        </div>
                     </div>
                     <div class="item-container <?php echo empty($subjects) ? 'no-data-box-centered' : ''; ?>"
                         id="subjectContainer">
                         <?php if ($subjects): ?>
                             <?php foreach ($subjects as $subject): ?>
-                                <div class="subject-item">
+                                <div class="subject-item"
+                                    data-subject-name="<?php echo htmlspecialchars($subject['subject']); ?>"
+                                    data-subject-year="<?php echo htmlspecialchars($subject['year']); ?>"
+                                    data-subject-section="<?php echo htmlspecialchars($subject['section']); ?>"
+                                    data-subject-level="<?php echo htmlspecialchars($subject['grade_level']); ?>">
                                     <a href="/SCES/frontend/admin/subjects/subject-module.php?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject_id']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>&teacher=<?php echo urlencode($subject['teacher_id']); ?>"
                                         class="hidden-link"></a>
                                     <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>"
@@ -108,7 +121,11 @@ $page = '';
                         id="archivedContainer">
                         <?php if ($archived): ?>
                             <?php foreach ($archived as $archive): ?>
-                                <div class="subject-item">
+                                <div class="subject-item"
+                                    data-subject-name="<?php echo htmlspecialchars($archive['subject']); ?>"
+                                    data-subject-year="<?php echo htmlspecialchars($archive['year']); ?>"
+                                    data-subject-section="<?php echo htmlspecialchars($archive['section']); ?>"
+                                    data-subject-level="<?php echo htmlspecialchars($archive['grade_level']); ?>">
                                     <a href="/SCES/frontend/admin/subjects/subject-module.php?section=<?php echo urlencode($archive['section_id']); ?>&subject=<?php echo urlencode($archive['subject_id']); ?>&gradelevel=<?php echo urlencode($archive['level_id']); ?>&teacher=<?php echo urlencode($archive['teacher_id']); ?>"
                                         class="hidden-link"></a>
                                     <div class="subject-icon <?php echo strtolower($archive['subject_code']); ?>"
@@ -149,6 +166,7 @@ $page = '';
                 </div>
             </div>
         </div>
+        <script src="/SCES/assets/script/search-filter.js"></script>
         <?php
         include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-modal.php';
         include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
