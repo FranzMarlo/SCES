@@ -7,11 +7,11 @@ import joblib
 
 # Sample GWA records data
 gwa_records = [
-    {"gwa": 87, "grade_section": "Grade 1 - SSES", "remarks": "Good"},
-    {"gwa": 90, "grade_section": "Grade 2 - SSES", "remarks": "Outstanding"},
-    {"gwa": 79, "grade_section": "Grade 3 - SSES", "remarks": "Fair"},
+    {"gwa": 85, "grade_section": "Grade 5 - Apple", "remarks": "Very Good"},
     {"gwa": 82, "grade_section": "Grade 4 - SSES", "remarks": "Good"},
-    {"gwa": 85, "grade_section": "Grade 5 - Apple", "remarks": "Very Good"}
+    {"gwa": 79, "grade_section": "Grade 3 - SSES", "remarks": "Fair"},
+    {"gwa": 90, "grade_section": "Grade 2 - SSES", "remarks": "Outstanding"},
+    {"gwa": 87, "grade_section": "Grade 1 - SSES", "remarks": "Good"}
 ]
 
 # Extract GWA values and remarks
