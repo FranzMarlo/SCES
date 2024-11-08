@@ -33,7 +33,7 @@
   min-height: 600px;
 }
 .section-container {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   padding: 50px;
   padding-top: 20px;
@@ -337,9 +337,15 @@ select option {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 15px;
   padding: 15px;
   padding-bottom: 0;
+  justify-content: space-between;
+}
+.tab-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
 }
 .tab-item {
   display: flex;
@@ -356,6 +362,29 @@ select option {
 .tab-item.active {
   font-weight: bold;
   background-color: #c5e3ff;
+}
+.search-container {
+  position: relative;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+}
+#sectionSearch {
+  width: 100%;
+  max-width: 200px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 35px;
+  padding-right: 10px;
+  font-size: 1rem;
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 43%;
+  transform: translateY(-50%);
+  font-size: 1.3rem;
+  color: #888; 
 }
 @media (width < 1199px) {
   .section-item {
@@ -388,6 +417,17 @@ select option {
   }
 }
 @media (width < 768px) {
+  #sectionSearch {
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 32px;
+    padding-right: 8px;
+    font-size: 0.9rem;
+  }
+  .search-icon {
+    font-size: 1.2rem;
+  }
   .panel-title h1 {
     font-size: 1.5rem;
   }
@@ -412,6 +452,17 @@ select option {
   }
 }
 @media (width < 600px) {
+  .tab-controller {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .search-container{
+    width: 100%;
+  }
+  #sectionSearch {
+    max-width: none;
+  }
   .tab-item {
     font-size: 0.8rem;
     padding: 10px 15px;

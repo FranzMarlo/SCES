@@ -90,7 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 let openPopupMenu = null;
-let openPopupSection = null;
 
 function subjectBtn(event, button) {
   event.preventDefault();
@@ -123,7 +122,7 @@ function subjectBtn(event, button) {
 function hiddenLink(element) {
   var subjectItem = element.closest(".subject-item");
   var hiddenLink = subjectItem.querySelector(".hidden-link");
-  document.getElementById('subjectSearch').value = '';
+  document.getElementById("subjectSearch").value = "";
 
   if (hiddenLink) {
     hiddenLink.click(); // Trigger the hidden link click
@@ -133,6 +132,7 @@ function hiddenLink(element) {
 function sectionLink(element) {
   var sectionItem = element.closest(".section-item");
   var hiddenLink = sectionItem.querySelector(".hidden-link");
+  document.getElementById("sectionSearch").value = "";
 
   if (hiddenLink) {
     hiddenLink.click(); // Trigger the hidden link click
@@ -146,21 +146,24 @@ function sectionBtn(event, button) {
   var sectionItem = button.closest(".section-item");
   var popupMenu = sectionItem.querySelector(".popup-menu");
 
+  // Close any previously opened popup
   if (openPopupMenu && openPopupMenu !== popupMenu) {
-    openPopupSection.classList.remove("show");
+    openPopupMenu.classList.remove("show");
   }
 
+  // Toggle the current popup menu
   if (popupMenu) {
     popupMenu.classList.toggle("show");
-    openPopupSection = popupMenu.classList.contains("show") ? popupMenu : null;
+    openPopupMenu = popupMenu.classList.contains("show") ? popupMenu : null;
   }
 
+  // Close the popup if clicked outside
   document.addEventListener(
     "click",
     function (e) {
-      if (!sectionItem.contains(e.target) && openPopupSection) {
-        openPopupSection.classList.remove("show");
-        openPopupSection = null;
+      if (!sectionItem.contains(e.target) && openPopupMenu) {
+        openPopupMenu.classList.remove("show");
+        openPopupMenu = null;
       }
     },
     { once: true }

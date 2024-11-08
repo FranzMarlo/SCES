@@ -93,3 +93,191 @@ function filterSubjects() {
     document.getElementById("archivedContainer").removeChild(noDataBoxArchived);
   }
 }
+
+function filterSections() {
+  const searchTerm = document
+    .getElementById("sectionSearch")
+    .value.toLowerCase();
+  const sectionItems = document.querySelectorAll(".section-item");
+
+  let anyVisibleSection = false;
+  let anyVisibleArchived = false;
+
+  // Loop through all section items and filter by search term
+  sectionItems.forEach(function (sectionItem) {
+    const adviserName = sectionItem
+      .getAttribute("data-section-adviser")
+      .toLowerCase();
+    const sectionYear = sectionItem
+      .getAttribute("data-section-year")
+      .toLowerCase();
+    const sectionSection = sectionItem
+      .getAttribute("data-section-section")
+      .toLowerCase();
+    const sectionLevel = sectionItem
+      .getAttribute("data-section-level")
+      .toLowerCase();
+
+    // Check if the item matches the search term
+    if (
+      adviserName.includes(searchTerm) ||
+      sectionYear.includes(searchTerm) ||
+      sectionSection.includes(searchTerm) ||
+      sectionLevel.includes(searchTerm)
+    ) {
+      // Show the item if it belongs to either the section or archived container
+      if (sectionItem.closest("#sectionContainer")) {
+        sectionItem.style.display = "flex";
+        anyVisibleSection = true;
+      } else if (sectionItem.closest("#archivedContainer")) {
+        sectionItem.style.display = "flex";
+        anyVisibleArchived = true;
+      }
+    } else {
+      sectionItem.style.display = "none"; // Hide if it doesn't match the search term
+    }
+  });
+
+  // Manage "No section found" message for sectionContainer
+  let noDataBoxSection = document
+    .getElementById("sectionContainer")
+    .querySelector(".no-data-box");
+  if (!anyVisibleSection) {
+    if (!noDataBoxSection) {
+      noDataBoxSection = document.createElement("div");
+      noDataBoxSection.classList.add("no-data-box");
+      noDataBoxSection.innerHTML = `
+                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                <h1>No section found.</h1>
+            `;
+      document
+        .getElementById("sectionContainer")
+        .classList.add("no-data-box-centered");
+      document.getElementById("sectionContainer").appendChild(noDataBoxSection);
+    }
+  } else if (noDataBoxSection) {
+    // Remove the no-data-box if sections are visible
+    document
+      .getElementById("sectionContainer")
+      .classList.remove("no-data-box-centered");
+    document.getElementById("sectionContainer").removeChild(noDataBoxSection);
+  }
+
+  // Manage "No section found" message for archivedContainer
+  let noDataBoxArchived = document
+    .getElementById("archivedContainer")
+    .querySelector(".no-data-box");
+  if (!anyVisibleArchived) {
+    if (!noDataBoxArchived) {
+      noDataBoxArchived = document.createElement("div");
+      noDataBoxArchived.classList.add("no-data-box");
+      noDataBoxArchived.innerHTML = `
+                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                <h1>No archived section found.</h1>
+            `;
+      document
+        .getElementById("archivedContainer")
+        .classList.add("no-data-box-centered");
+      document
+        .getElementById("archivedContainer")
+        .appendChild(noDataBoxArchived);
+    }
+  } else if (noDataBoxArchived) {
+    document
+      .getElementById("archivedContainer")
+      .classList.remove("no-data-box-centered");
+    document.getElementById("archivedContainer").removeChild(noDataBoxArchived);
+  }
+}
+
+function facultyFilterSections() {
+  const searchTerm = document
+    .getElementById("sectionSearch")
+    .value.toLowerCase();
+  const sectionItems = document.querySelectorAll(".section-item");
+
+  let anyVisibleSection = false;
+  let anyVisibleArchived = false;
+
+  // Loop through all section items and filter by search term
+  sectionItems.forEach(function (sectionItem) {
+    const sectionYear = sectionItem
+      .getAttribute("data-section-year")
+      .toLowerCase();
+    const sectionSection = sectionItem
+      .getAttribute("data-section-section")
+      .toLowerCase();
+    const sectionLevel = sectionItem
+      .getAttribute("data-section-level")
+      .toLowerCase();
+
+    // Check if the item matches the search term
+    if (
+      sectionYear.includes(searchTerm) ||
+      sectionSection.includes(searchTerm) ||
+      sectionLevel.includes(searchTerm)
+    ) {
+      // Show the item if it belongs to either the section or archived container
+      if (sectionItem.closest("#sectionContainer")) {
+        sectionItem.style.display = "flex";
+        anyVisibleSection = true;
+      } else if (sectionItem.closest("#archivedContainer")) {
+        sectionItem.style.display = "flex";
+        anyVisibleArchived = true;
+      }
+    } else {
+      sectionItem.style.display = "none"; // Hide if it doesn't match the search term
+    }
+  });
+
+  // Manage "No section found" message for sectionContainer
+  let noDataBoxSection = document
+    .getElementById("sectionContainer")
+    .querySelector(".no-data-box");
+  if (!anyVisibleSection) {
+    if (!noDataBoxSection) {
+      noDataBoxSection = document.createElement("div");
+      noDataBoxSection.classList.add("no-data-box");
+      noDataBoxSection.innerHTML = `
+                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                <h1>No section found.</h1>
+            `;
+      document
+        .getElementById("sectionContainer")
+        .classList.add("no-data-box-centered");
+      document.getElementById("sectionContainer").appendChild(noDataBoxSection);
+    }
+  } else if (noDataBoxSection) {
+    // Remove the no-data-box if sections are visible
+    document
+      .getElementById("sectionContainer")
+      .classList.remove("no-data-box-centered");
+    document.getElementById("sectionContainer").removeChild(noDataBoxSection);
+  }
+
+  // Manage "No section found" message for archivedContainer
+  let noDataBoxArchived = document
+    .getElementById("archivedContainer")
+    .querySelector(".no-data-box");
+  if (!anyVisibleArchived) {
+    if (!noDataBoxArchived) {
+      noDataBoxArchived = document.createElement("div");
+      noDataBoxArchived.classList.add("no-data-box");
+      noDataBoxArchived.innerHTML = `
+                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                <h1>No archived section found.</h1>
+            `;
+      document
+        .getElementById("archivedContainer")
+        .classList.add("no-data-box-centered");
+      document
+        .getElementById("archivedContainer")
+        .appendChild(noDataBoxArchived);
+    }
+  } else if (noDataBoxArchived) {
+    document
+      .getElementById("archivedContainer")
+      .classList.remove("no-data-box-centered");
+    document.getElementById("archivedContainer").removeChild(noDataBoxArchived);
+  }
+}

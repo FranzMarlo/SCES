@@ -49,10 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialize on page load
   setActiveTab();
-
-  window.addEventListener("load", () => {
-    document.getElementById("subjectSearch").value = "";
-  });
   
   const addSubjectBtn = document.getElementById("addSubjectBtn");
   const addSubjectModal = document.getElementById("addSubjectModal");

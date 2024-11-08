@@ -31,15 +31,27 @@ $page = '';
                 </div>
                 <div class="item-container">
                     <div class="tab-controller">
-                        <div class="tab-item" id=sectionTab>Sections</div>
-                        <div class="tab-item" id="archivedTab">Archived</div>
+                        <div class="tab-container">
+                            <div class="tab-item" id=sectionTab>Sections</div>
+                            <div class="tab-item" id="archivedTab">Archived</div>
+                        </div>
+                        <div class="search-container">
+                            <input type="text" id="sectionSearch" placeholder="Search Section"
+                                onkeyup="filterSections()">
+                            <i class="fa fa-search search-icon"></i>
+                        </div>
                     </div>
                     <?php $sections = $db->adminGetSection(); ?>
-                    <?php $archived = $db->facultyGetArchivedSection(); ?>
-                    <div class="section-container <?php echo empty($sections) ? 'no-data-box-centered' : ''; ?>" id="sectionContainer">
+                    <?php $archived = $db->adminGetArchivedSection(); ?>
+                    <div class="section-container <?php echo empty($sections) ? 'no-data-box-centered' : ''; ?>"
+                        id="sectionContainer">
                         <?php if ($sections): ?>
                             <?php foreach ($sections as $section): ?>
-                                <div class="section-item">
+                                <div class="section-item"
+                                    data-section-adviser="<?php echo htmlspecialchars($section['teacher_fname'] . ' ' . $section['teacher_lname']); ?>"
+                                    data-section-year="<?php echo htmlspecialchars($section['year']); ?>"
+                                    data-section-section="<?php echo htmlspecialchars($section['section']); ?>"
+                                    data-section-level="<?php echo htmlspecialchars($section['grade_level']); ?>">
                                     <a href="/SCES/frontend/admin/student-section.php?section=<?php echo $section['section_id']; ?>"
                                         class="hidden-link"></a>
                                     <div class="icon-box <?php echo $section['short']; ?>" onclick="sectionLink(this)">
@@ -78,10 +90,15 @@ $page = '';
                             </div>
                         <?php endif; ?>
                     </div>
-                    <div class="section-container <?php echo empty($archived) ? 'no-data-box-centered' : ''; ?>" id="archivedContainer">
+                    <div class="section-container <?php echo empty($archived) ? 'no-data-box-centered' : ''; ?>"
+                        id="archivedContainer">
                         <?php if ($archived): ?>
                             <?php foreach ($archived as $archive): ?>
-                                <div class="section-item">
+                                <div class="section-item"
+                                    data-section-adviser="<?php echo htmlspecialchars($archive['teacher_fname'] . ' ' . $archive['teacher_lname']); ?>"
+                                    data-section-year="<?php echo htmlspecialchars($archive['year']); ?>"
+                                    data-section-section="<?php echo htmlspecialchars($archive['section']); ?>"
+                                    data-section-level="<?php echo htmlspecialchars($archive['grade_level']); ?>">
                                     <a href="/SCES/frontend/admin/student-section.php?section=<?php echo $archive['section_id']; ?>"
                                         class="hidden-link"></a>
                                     <div class="icon-box <?php echo $archive['short']; ?>" onclick="sectionLink(this)">
@@ -123,9 +140,9 @@ $page = '';
                 </div>
             </div>
         </div>
-    </div>
-    <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/section-modal.php';
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
-    ?>
-    <script src="/SCES/assets/script/admin-section.js"></script>
+        <script src="/SCES/assets/script/search-filter.js"></script>
+        <?php
+        include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/section-modal.php';
+        include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-footer.php';
+        ?>
+        <script src="/SCES/assets/script/admin-section.js"></script>

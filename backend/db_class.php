@@ -313,7 +313,8 @@ class globalClass extends db_connect
             t.gender,
             l.level_id,
             l.grade_level,
-            c.section
+            c.section,
+            s.year
         FROM subject_tbl s
         INNER JOIN
             teacher_tbl t
@@ -331,6 +332,52 @@ class globalClass extends db_connect
             s.teacher_id = ? 
          AND
             s.archived = 'No'");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjects = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjects;
+        } else {
+            return false;
+        }
+    }
+
+    public function getArchivedFacultySubjects($teacherId)
+    {
+
+        $query = $this->conn->prepare("
+        SELECT 
+            s.subject_id,
+            s.subject,
+            s.level_id,
+            s.icon,
+            s.section_id,
+            s.subject_title,
+            s.subject_code,
+            t.teacher_fname,
+            t.teacher_lname,
+            t.gender,
+            l.level_id,
+            l.grade_level,
+            c.section,
+            s.year
+        FROM subject_tbl s
+        INNER JOIN
+            teacher_tbl t
+        ON
+            s.teacher_id = t.teacher_id
+        INNER JOIN
+            level_tbl l
+        ON
+            s.level_id = l.level_id
+        INNER JOIN
+            section_tbl c
+        ON
+            s.section_id = c.section_id
+        WHERE 
+            s.teacher_id = ? 
+         AND
+            s.archived = 'Yes'");
         $query->bind_param("s", $teacherId);
         if ($query->execute()) {
             $result = $query->get_result();
@@ -2001,7 +2048,7 @@ class globalClass extends db_connect
             level_tbl level
         ON
             section.level_id = level.level_id
-        LEFT JOIN
+        INNER JOIN
             teacher_tbl teacher
         ON
             section.teacher_id = teacher.teacher_id
@@ -2020,6 +2067,86 @@ class globalClass extends db_connect
             $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
             return $subjectDetails;
         }
+        return [];
+    }
+
+    public function facultyGetArchivedSection($teacherId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            level.level_id,
+            level.grade_level,
+            level.short,
+            section.section,
+            section.section_id,
+            section.year,
+            teacher.teacher_lname,
+            teacher.teacher_fname,
+            teacher.gender
+        FROM
+            section_tbl section
+        INNER JOIN
+            level_tbl level
+        ON
+            section.level_id = level.level_id
+        INNER JOIN
+            teacher_tbl teacher
+        ON
+            section.teacher_id = teacher.teacher_id
+        WHERE
+            section.archived = 'True'
+        AND
+            section.teacher_id = ?
+        GROUP BY
+            section.section_id
+        ORDER BY
+            section.section ASC
+        ");
+        $query->bind_param("s", $teacherId);
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjectDetails;
+        }
+        return [];
+    }
+
+    public function adminGetArchivedSection()
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            level.level_id,
+            level.grade_level,
+            level.short,
+            section.section,
+            section.section_id,
+            section.year,
+            teacher.teacher_lname,
+            teacher.teacher_fname,
+            teacher.gender
+        FROM
+            section_tbl section
+        INNER JOIN
+            level_tbl level
+        ON
+            section.level_id = level.level_id
+        LEFT JOIN
+            teacher_tbl teacher
+        ON
+            section.teacher_id = teacher.teacher_id
+        WHERE
+            section.archived = 'True'
+        GROUP BY
+            section.section_id
+        ORDER BY
+            section.section ASC
+        ");
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
+            return $subjectDetails;
+        }
+
         return [];
     }
 
@@ -2048,45 +2175,6 @@ class globalClass extends db_connect
             section.teacher_id = teacher.teacher_id
         WHERE
             section.archived = 'False'
-        GROUP BY
-            section.section_id
-        ORDER BY
-            section.section ASC
-        ");
-        if ($query->execute()) {
-            $result = $query->get_result();
-            $subjectDetails = $result->fetch_all(MYSQLI_ASSOC);
-            return $subjectDetails;
-        }
-
-        return [];
-    }
-
-    public function facultyGetArchivedSection()
-    {
-        $query = $this->conn->prepare("
-        SELECT 
-            level.level_id,
-            level.grade_level,
-            level.short,
-            section.section,
-            section.section_id,
-            section.year,
-            teacher.teacher_lname,
-            teacher.teacher_fname,
-            teacher.gender
-        FROM
-            section_tbl section
-        INNER JOIN
-            level_tbl level
-        ON
-            section.level_id = level.level_id
-        LEFT JOIN
-            teacher_tbl teacher
-        ON
-            section.teacher_id = teacher.teacher_id
-        WHERE
-            section.archived = 'True'
         GROUP BY
             section.section_id
         ORDER BY
@@ -2384,6 +2472,17 @@ class globalClass extends db_connect
     {
         $query = $this->conn->prepare("UPDATE subject_tbl SET teacher_id = ?, level_id = ?, subject = ?, subject_title = ?, section_id = ?, icon = ?, subject_code = ? WHERE subject_id = ?");
         $query->bind_param("ssssssss", $teacherId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $subjectId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function facultyUpdateSubject($subjectId, $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code)
+    {
+        $query = $this->conn->prepare("UPDATE subject_tbl SET level_id = ?, subject = ?, subject_title = ?, section_id = ?, icon = ?, subject_code = ? WHERE subject_id = ?");
+        $query->bind_param("sssssss", $levelId, $subject, $subject_title, $sectionId, $icon, $subject_code, $subjectId);
         if ($query->execute()) {
             return true;
         } else {

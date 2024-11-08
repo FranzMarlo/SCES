@@ -50,16 +50,53 @@
 .panel-title h1 {
   font-size: 1.7rem;
 }
+.tab-controller {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 15px;
+  padding-bottom: 0;
+  justify-content: space-between;
+}
+.tab-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+}
+.tab-item {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 20px;
+  border: 2px solid #000;
+  border-radius: 30px;
+  width: fit-content;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #fff;
+}
+.tab-item:hover,
+.tab-item.active {
+  font-weight: bold;
+  background-color: #c5e3ff;
+}
 .subject-container {
   background-color: #f5f5f5;
   border-radius: 30px;
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 2px solid #000;
+  min-height: 550px;
+}
+.item-container {
+  display: none;
   flex-wrap: wrap;
   padding: 50px;
   gap: 40px;
-  border: 2px solid #000;
   flex-direction: row;
-  min-height: 550px;
+  padding-top: 20px;
 }
 .subject-item {
   width: 200px;
@@ -99,7 +136,7 @@
   top: 10px;
   right: 10px;
 }
-.hidden-link{
+.hidden-link {
   display: none;
 }
 .popup-menu {
@@ -173,7 +210,7 @@
 .mapeh {
   background-color: #a3adff;
 }
-.epp{
+.epp {
   background-color: #d9ae9d;
 }
 .no-data-box-centered {
@@ -330,7 +367,7 @@ select option {
   font-size: 14px;
   color: #000;
 }
-.add-btn{
+.add-btn {
   background-color: #4caf50;
   border: 2px solid #000;
   border-radius: 20px;
@@ -343,8 +380,31 @@ select option {
   color: #fff;
   cursor: pointer;
 }
-.add-btn:hover{
+.add-btn:hover {
   background-color: #45a049;
+}
+.search-container {
+  position: relative;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+}
+#subjectSearch {
+  width: 100%;
+  max-width: 200px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 35px;
+  padding-right: 10px;
+  font-size: 1rem;
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 43%;
+  transform: translateY(-50%);
+  font-size: 1.3rem;
+  color: #888; 
 }
 @media (width < 1199px) {
   .item-text {
@@ -362,10 +422,13 @@ select option {
   }
 }
 @media (width < 992px) {
-  .add-btn{
+  .tab-item {
     font-size: 0.9rem;
   }
-  .subject-container {
+  .add-btn {
+    font-size: 0.9rem;
+  }
+  .item-container {
     padding: 30px;
     gap: 30px;
   }
@@ -386,10 +449,21 @@ select option {
   }
 }
 @media (width < 768px) {
-  .add-btn{
+  #subjectSearch {
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 32px;
+    padding-right: 8px;
+    font-size: 0.9rem;
+  }
+  .search-icon {
+    font-size: 1.2rem;
+  }
+  .add-btn {
     font-size: 0.8rem;
   }
-  .subject-container {
+  .item-container {
     gap: 25px;
     padding: 20px;
   }
@@ -416,7 +490,22 @@ select option {
   }
 }
 @media (width < 600px) {
-  .add-btn{
+  .tab-controller {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .search-container{
+    width: 100%;
+  }
+  #subjectSearch {
+    max-width: none;
+  }
+  .tab-item {
+    font-size: 0.8rem;
+    padding: 10px 15px;
+  }
+  .add-btn {
     font-size: 0.7rem;
   }
   .modal-content {
@@ -440,7 +529,7 @@ select option {
   .subject-icon img {
     height: 8rem;
   }
-  .subject-container {
+  .item-container {
     gap: 10px;
     padding: 10px;
     justify-content: center;

@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".edit-btn").forEach((editLink) => {
       editLink.addEventListener("click", function () {
         const sectionId = this.getAttribute("data-section-id");
-        openPopupSection.classList.remove("show");
+        openPopupMenu.classList.remove("show");
         editSectionModal.style.display = "flex";
         document.body.style.overflow = "hidden";
   
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".archive-btn").forEach((editLink) => {
       editLink.addEventListener("click", function () {
         const sectionId = this.getAttribute("data-section-id");
-        openPopupSection.classList.remove("show");
+        openPopupMenu.classList.remove("show");
         Swal.fire({
           title: "Do you want to archive this section?",
           text: "Archived section won't be visible to instructors",
@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".not-archive-btn").forEach((editLink) => {
       editLink.addEventListener("click", function () {
         const sectionId = this.getAttribute("data-section-id");
-        openPopupSection.classList.remove("show");
+        openPopupMenu.classList.remove("show");
         Swal.fire({
           title: "Do you want to re-enable this section?",
           text: "Archived sections are not visible to instructors",
