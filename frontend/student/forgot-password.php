@@ -1,7 +1,7 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/head.php';
 ?>
-<title>Log In | SCES Online Learning Platform</title>
+<title>Forgot Password | SCES Online Learning Platform</title>
 </head>
 
 <body>
@@ -26,9 +26,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/head.php';
             <label for="email">
               <i class="fa-solid fa-envelope icon"></i>
             </label>
-            <input type="email" name="email" id="email" placeholder="Email" />
+            <input type="email" name="email" id="email" placeholder="Enter Email" />
           </div>
-          <button type="submit" id="studForgotPassBtn">Send Code</button>
+          <button type="submit" id="studForgotPassBtn">Send Link</button>
         </form>
       </div>
       <br>

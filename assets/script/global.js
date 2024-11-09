@@ -15,6 +15,29 @@ $("#studLogin").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         window.location.href = "/SCES/frontend/student/dashboard.php";
+      } else if (response == "451") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your Email",
+              text: "Ensure that the email you are using is registered in the platform",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
       } else {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
@@ -59,7 +82,7 @@ $("#studSignUp").on("submit", function (e) {
       section: section,
       email: email,
       password: password,
-      confirmPassword: confirmPassword
+      confirmPassword: confirmPassword,
     },
     success: function (response) {
       console.log(response);
@@ -248,7 +271,7 @@ $("#studSignUp").on("submit", function (e) {
             });
           }
         );
-      }else if (response == "467") {
+      } else if (response == "467") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -260,7 +283,7 @@ $("#studSignUp").on("submit", function (e) {
             });
           }
         );
-      }else {
+      } else {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
           function () {
@@ -4240,6 +4263,196 @@ $("#retainStudentForm").on("submit", function (e) {
               icon: "error",
               title: "Updating Student Section Failed",
               text: "Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+$("#studForgotPass").on("submit", function (e) {
+  e.preventDefault();
+  var email = $("#email").val();
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "studentForgotPass",
+      email: email,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.ajax({
+          type: "POST",
+          url: "/SCES/backend/student/send-password-link.php",
+          success: function (sendEmailResponse) {
+            if (sendEmailResponse === "200") {
+              Swal.fire({
+                icon: "success",
+                title: "Email Sent",
+                text: "The password reset link has been sent to your email",
+                confirmButtonColor: "#4CAF50",
+                allowOutsideClick: false,
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Failed to Send Email",
+                text: "Please try again later.",
+                confirmButtonColor: "#4CAF50",
+              });
+            }
+          },
+          error: function () {
+            Swal.fire({
+              icon: "error",
+              title: "Server Error",
+              text: "Unable to complete your request. Please try again later.",
+              confirmButtonColor: "#4CAF50",
+            });
+          },
+        });
+      } else if (response == "450") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your Email",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            });
+          }
+        );
+      } else if (response == "451") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Valid Email",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Account Recovery Cannot Be Processed",
+              text: "Registered email is unverified",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Account Not Found",
+              text: "Please enter the email used in your registration",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+$("#studChangePass").on("submit", function (e) {
+  e.preventDefault();
+  var email = $("#email").val();
+  var password = $("#password").val();
+  var confirmPassword = $("#confirmPassword").val();
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "studentChangePass",
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Password Changed",
+              text: "Please login with your new password",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/SCES/frontend/student/login.php";
+              }
+            });
+          }
+        );
+      } else if (response == "450") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter New Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "451") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "New Password Must Be At Least 6 Characters",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Confirm Your New Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "453") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "New Passwords Don't Match Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Update Password Failed",
+              text: "Please try again later",
               confirmButtonColor: "#4CAF50",
             });
           }

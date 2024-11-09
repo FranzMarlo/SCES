@@ -1,16 +1,17 @@
+# predictive-model.py
 from flask import Flask, request, jsonify
 import numpy as np
-import joblib
 from flask_cors import CORS
+import joblib
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-# Load models and encoder
-grad_model = joblib.load('grad_model.pkl')
-success_model = joblib.load('success_model.pkl')
-next_gwa_model = joblib.load('next_gwa_model.pkl')
-label_encoder = joblib.load('remarks_label_encoder.pkl')
+# Load optional label encoder if available
+try:
+    label_encoder = joblib.load('remarks_label_encoder.pkl')
+except FileNotFoundError:
+    label_encoder = None
 
 # Function to classify remarks based on predicted success rate
 def classify_remarks(success_rate):
@@ -36,33 +37,32 @@ def predict():
     if not gwa_records:
         return jsonify({"error": "No GWA records provided."}), 400
 
-    # Extract data from the last record
-    last_record = gwa_records[-1]
-    gwa_value = last_record['gwa']
-    remark = last_record['remarks']
-    encoded_remark = label_encoder.transform([remark])[0]
+    # Extract GWA values from records
+    gwa_values = [record["gwa"] for record in gwa_records]
+    recent_gwa = gwa_values[-1]
+    cumulative_gwa = np.mean(gwa_values)
+    gwa_trend = gwa_values[-1] - gwa_values[0]  # Difference between first and last GWA
 
-    # Calculate required features for prediction
-    previous_gwa = gwa_records[-2]["gwa"] if len(gwa_records) > 1 else gwa_value
-    cumulative_gwa = np.mean([record["gwa"] for record in gwa_records])
-    gwa_change = gwa_value - previous_gwa if len(gwa_records) > 1 else 0
+    # Graduation prediction: Based on most recent GWA
+    predicted_grad_rate = "Passed" if recent_gwa >= 80 else "At Risk"
 
-    # Prepare the feature array for prediction
-    feature_array = np.array([[gwa_value, previous_gwa, encoded_remark, cumulative_gwa, gwa_change]])
+    # Calculate adjusted success rate based on cumulative GWA and trend
+    trend_adjustment = gwa_trend * 0.1  # Small adjustment based on trend (10%)
+    predicted_success_rate = cumulative_gwa + trend_adjustment
+    predicted_success_rate = round(predicted_success_rate, 2)
 
-    # Predict graduation rate and academic success rate
-    predicted_grad_rate = grad_model.predict(feature_array)[0]
-    predicted_success_rate = success_model.predict(feature_array)[0]
+    # Predict next GWA based on recent trend
+    predicted_next_gwa = recent_gwa + trend_adjustment
+    predicted_next_gwa = round(predicted_next_gwa, 1)
 
-    # Predict the next GWA separately
-    predicted_next_gwa = next_gwa_model.predict(feature_array)[0]
+    # Remarks classification based on success rate
     predicted_remarks = classify_remarks(predicted_next_gwa)
 
     response = {
-        'predicted_performance': 'Passed' if predicted_grad_rate == 1 else 'At Risk',
-        'predicted_academic_success_rate': round(float(predicted_success_rate), 2),
+        'predicted_performance': predicted_grad_rate,
+        'predicted_academic_success_rate': predicted_success_rate,
         'predicted_remarks': predicted_remarks,
-        'predicted_next_gwa': round(float(predicted_next_gwa), 2)
+        'predicted_next_gwa': predicted_next_gwa
     }
 
     return jsonify(response)

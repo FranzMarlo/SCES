@@ -48,10 +48,9 @@ class globalClass extends db_connect
             $loginQuery->bind_param("ssss", $studentId, $email, $hashedPassword, $emailVerification);
             if ($loginQuery->execute()) {
                 $recordStudent = $this->addStudentRecord($studentId, $lrn, $sectionId, $gradeLevelId);
-                if($recordStudent != false){
+                if ($recordStudent != false) {
                     return $studentId;
-                }
-                else{
+                } else {
                     return false;
                 }
             } else {
@@ -126,6 +125,19 @@ class globalClass extends db_connect
             return $checkEmail;
         }
     }
+
+    public function checkEmailVerification($email)
+    {
+        $query = $this->conn->prepare("SELECT email_verification, student_id FROM `login_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $checkEmail = $query->get_result();
+            $data = $checkEmail->fetch_assoc();
+            return $data;
+        }
+    }
+
 
     public function checkAdminEmail($email)
     {
@@ -654,7 +666,7 @@ class globalClass extends db_connect
             return false;
         }
     }
-    
+
 
     public function adminGetTotalTeacherStudent()
     {
@@ -2779,23 +2791,23 @@ class globalClass extends db_connect
     }
 
     public function checkStudentLRN($lname, $lrn, $section, $level)
-    {   
+    {
         $lastName = strtoupper($lname);
         $dataSection = strtoupper($this->getSectionById($section));
-        $dataLevel =  strtoupper($this->getLevelById($level));
+        $dataLevel = strtoupper($this->getLevelById($level));
         $query = $this->conn->prepare("SELECT * FROM `student_masterlist` WHERE `lrn` = ? and `student_lname` = ? and `section` = ? and `grade_level` = ? ");
         $query->bind_param("ssss", $lrn, $lastName, $dataSection, $dataLevel);
 
         if ($query->execute()) {
             $checkLRN = $query->get_result();
             return $checkLRN;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    public function getSectionById($sectionId){
+    public function getSectionById($sectionId)
+    {
         $query = "SELECT section FROM section_tbl WHERE section_id = ?";
         $queryResult = $this->conn->prepare($query);
 
@@ -2803,7 +2815,7 @@ class globalClass extends db_connect
             return null;
         }
 
-        $queryResult->bind_param("s",$sectionId);
+        $queryResult->bind_param("s", $sectionId);
         $queryResult->execute();
         $result = $queryResult->get_result();
 
@@ -2813,7 +2825,8 @@ class globalClass extends db_connect
         return null;
     }
 
-    public function getLevelById($levelId){
+    public function getLevelById($levelId)
+    {
         $query = "SELECT grade_level FROM level_tbl WHERE level_id = ?";
         $queryResult = $this->conn->prepare($query);
 
@@ -2821,7 +2834,7 @@ class globalClass extends db_connect
             return null;
         }
 
-        $queryResult->bind_param("s",$levelId);
+        $queryResult->bind_param("s", $levelId);
         $queryResult->execute();
         $result = $queryResult->get_result();
 
@@ -2833,7 +2846,7 @@ class globalClass extends db_connect
 
 
     public function fetchInitialStudentData($lrn)
-    {   
+    {
         $query = $this->conn->prepare("SELECT * FROM `student_masterlist` WHERE `lrn` = ?");
         $query->bind_param("s", $lrn);
 
@@ -2841,13 +2854,13 @@ class globalClass extends db_connect
             $result = $query->get_result();
             $studentData = $result->fetch_assoc();
             return $studentData;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    public function verifyLRN($lrn){
+    public function verifyLRN($lrn)
+    {
         $query = $this->conn->prepare("SELECT * FROM `student_tbl` WHERE `lrn` = ?");
         $query->bind_param("s", $lrn);
 
@@ -2856,7 +2869,54 @@ class globalClass extends db_connect
             return $verifyLRN;
         }
     }
-    
+
+    public function getStudentName($studentId)
+    {
+        $query = $this->conn->prepare("SELECT student_fname FROM `student_tbl` WHERE `student_id` = ?");
+        $query->bind_param("s", $studentId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $studentData = $result->fetch_assoc();
+            return $studentData['student_fname'];
+        }
+    }
+
+    public function storePasswordResetToken($email, $token, $expires)
+    {
+        $query = $this->conn->prepare("INSERT INTO student_pass_reset (email, token, expires) VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE token = VALUES(token), expires = VALUES(expires)");
+        $query->bind_param("ssi", $email, $token, $expires);
+        return $query->execute();
+    }
+
+    public function checkTokenExpiry($email, $token)
+    {
+        $query = $this->conn->prepare("SELECT expires FROM student_pass_reset WHERE email = ? AND token = ?");
+        $query->bind_param("ss", $email, $token);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            if ($data = $result->fetch_assoc()) {
+                return (int) $data['expires'];
+            }
+        }
+
+        return null;
+    }
+
+    public function getStudentIdByEmail($email)
+    {
+        $query = $this->conn->prepare("SELECT student_id FROM `login_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $data = $result->fetch_assoc();
+            return $data['student_id'];
+        }
+    }
 }
 
 
