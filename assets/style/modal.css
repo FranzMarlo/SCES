@@ -1,0 +1,263 @@
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal::-webkit-scrollbar {
+  display: none;
+}
+.modal {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #fefefe;
+  margin: 10px auto;
+  border: 2px solid #000;
+  width: 60%;
+  border-radius: 30px;
+  max-width: 1200px;
+  animation: slideIn 0.3s ease-out;
+  overflow-y: auto;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+.modal-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.modal-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  padding-bottom: 10px;
+}
+.title-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.title-box h1 {
+  font-size: 1.7rem;
+}
+.title-img {
+  width: 2rem;
+  height: 2rem;
+}
+.close-btn {
+  color: #000;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close-btn:hover,
+.close-btn:focus {
+  color: #aaa;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal-tab-controller {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 10px;
+}
+.tab-item {
+  padding: 10px 20px;
+  border: 2px solid #000;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.tab-item.active,
+.tab-item:hover {
+  background-color: #fad9ec;
+  font-weight: bold;
+}
+.modal-tab {
+  width: 100%;
+  padding: 20px;
+  padding-bottom: 10px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.modal-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  align-items: center;
+}
+.modal-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.question {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.question-img {
+  border: 2px solid #000;
+  border-radius: 30px;
+  height: 90%;
+  width: 90%;
+  cursor: pointer;
+}
+.question-img-mobile {
+  border: 2px solid #000;
+  border-radius: 30px;
+  height: 90%;
+  width: 40%;
+  cursor: pointer;
+}
+.answer {
+  width: 100%;
+  font-size: 1.2rem;
+  text-align: justify;
+}
+.description {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+}
+.modal-end {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
+}
+.back-btn {
+  border: 2px solid #000;
+  background-color: #4caf50;
+  color: #fff;
+  font-size: 1rem;
+  padding: 10px 15px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+.back-btn:hover {
+  background-color: #4f9951;
+}
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: pointer;
+}
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+}
+@media (width < 1199px) {
+  .modal-content {
+    width: 80%;
+  }
+}
+@media (width < 992px) {
+  .modal-content {
+    width: 90%;
+  }
+  .tab-item {
+    font-size: 0.9rem;
+  }
+  .title-box h1 {
+    font-size: 1.5rem;
+  }
+  .title-img {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+  .question {
+    font-size: 1.2rem;
+  }
+  .answer {
+    font-size: 1.1rem;
+  }
+  .description {
+    font-size: 1.2rem;
+  }
+  .modal-tab {
+    padding: 15px;
+    gap: 15px;
+  }
+  .back-btn {
+    font-size: 0.9rem;
+  }
+}
+@media (width < 600px) {
+  .back-btn {
+    font-size: 0.8rem;
+    padding: 7px 12px;
+  }
+  .modal-tab {
+    padding: 10px;
+    gap: 10px;
+  }
+  .modal-item {
+    padding: 7px;
+    gap: 7px;
+  }
+  .modal-content {
+    width: 95%;
+  }
+  .title-box h1 {
+    font-size: 1.4rem;
+  }
+  .title-img {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .tab-item {
+    padding: 10px 15px;
+    font-size: 0.8rem;
+  }
+  .question {
+    font-size: 1.1rem;
+  }
+  .answer {
+    font-size: 1rem;
+  }
+  .description {
+    font-size: 1.1rem;
+  }
+}

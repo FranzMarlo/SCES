@@ -2,6 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/help.css" />
+<link rel="stylesheet" href="/SCES/assets/style/modal.css" />
 <title>Help | SCES Online Learning Platform</title>
 </head>
 
@@ -23,7 +24,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
         </div>
         <div class="panel-box">
           <div class="panel-part">
-            <a href="#" class="panel-item">
+            <div class="panel-item" id="gettingStartedButton">
               <div class="item-icon">
                 <img src="/SCES/assets/images/start-help.png" alt="rocket png">
               </div>
@@ -31,7 +32,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
                 <h2>Getting Started</h2>
                 <span>Questions about SCES Online Learning Platform Services</span>
               </div>
-            </a>
+            </div>
             <a href="#" class="panel-item">
               <div class="item-icon">
                 <img src="/SCES/assets/images/account-help.png" alt="rocket png">
@@ -90,5 +91,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
     </div>
   </div>
   <?php
+  include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/help-modal.php';
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
   ?>
+  <script src="/SCES/assets/script/help.js"></script>
