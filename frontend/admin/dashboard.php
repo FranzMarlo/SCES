@@ -1,6 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.php';
-$page = 'Home';
+$page = 'SCES Admin';
 ?>
 <title>Home | SCES Online Learning Platform</title>
 </head>

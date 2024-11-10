@@ -8,21 +8,24 @@ const donutLabelPlugin = {
       } = chart;
       const { datasets } = chart.data;
 
-      ctx.save();
+      const data = datasets[0].data;
+      const total = data.reduce((acc, val) => acc + val, 0);
 
-      const fontSize = (bottom - top) / 4; // Adjust the font size relative to chart area
+      if (data.length === 0 || total === 0) {
+        return;
+      }
+      ctx.save();
+      const fontSize = (bottom - top) / 4;
       ctx.font = `${fontSize}px sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillStyle = "#273b4a";
 
-      const textX = (left + right) / 2; // Center position
-      const textY = (top + bottom) / 2; // Center position
+      const textX = (left + right) / 2;
+      const textY = (top + bottom) / 2;
 
-      const total = datasets[0].data[0] + datasets[0].data[1]; // Accomplished + Pending
-      const accomplishedCount = datasets[0].data[0];
+      const accomplishedCount = data[0];
 
-      // Calculate percentage based on accomplished count
       const accomplishedPercentage = Math.round(
         (accomplishedCount / total) * 100
       );
@@ -133,7 +136,7 @@ function initializeBarChart(labels, counts) {
       plugins: {
         title: {
           display: true,
-          text: "Students By Grade Level Per Year",
+          text: "Students By Grade Level",
           font: {
             size: 18,
           },

@@ -234,7 +234,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Handle case where there's no data
     if (totalCompleted == 0 && totalInactive == 0 && totalActive == 0) {
       showAlert("info", "No Data Available For Subject");
-      return;
     }
 
     const pieChart = new Chart(ctxPie, {

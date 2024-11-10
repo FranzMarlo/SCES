@@ -78,17 +78,11 @@
             </div>
             <div class="dropdown-content">
                 <ul>
-                    <li><a href="#"><i class="fa-solid fa-bell"></i>Notifications</a></li>
                     <li><a href="/SCES/frontend/student/profile.php?active=1"><i class="fa-solid fa-user"></i>My Account</a></li>
                 </ul>
             </div>
         </div>
         <div class="user-info">
-            <a href="#">
-                <div class="notif-btn">
-                    <i class="fa-solid fa-bell icon"></i>
-                </div>
-            </a>
             <a href="/SCES/frontend/student/profile.php?active=1" class="current-user">
                 <img src="/SCES/storage/student/images/<?php echo $image; ?>" alt="user icon">
             </a>

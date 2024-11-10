@@ -90,7 +90,7 @@ $page = '';
                                 </div>
                                 <div class="info-col">
                                     <p>Suffix</p>
-                                    <span>N/A</span>
+                                    <span><?php echo htmlspecialchars($teacherSuffix); ?></span>
                                 </div>
                             </div>
                             <div class="info-row">
@@ -101,10 +101,6 @@ $page = '';
                                 <div class="info-col">
                                     <p>Age</p>
                                     <span><?php echo htmlspecialchars($age); ?></span>
-                                </div>
-                                <div class="info-col">
-                                    <p>Birthday</p>
-                                    <span>August 14, 2002</span>
                                 </div>
                             </div>
                         </div>

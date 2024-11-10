@@ -109,9 +109,6 @@
         </div>
     </div>
     <div class="menu-part">
-        <a href="#">
-            <i class="fa-solid fa-bell"></i>
-        </a>
         <img src="/SCES/storage/faculty/images/<?php echo $image; ?>" alt="faculty icon" class="user-icon">
     </div>
 </div>
