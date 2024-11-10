@@ -88,7 +88,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function facultySignUp($firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $registration, $image, $role, $emailVerification, $city, $street, $barangay, $contactNumber)
+    public function facultySignUp($controlNumber, $firstName, $middleName, $lastName, $suffix, $age, $gender, $email, $hashedPassword, $image, $role, $emailVerification, $city, $street, $barangay, $contactNumber)
     {
         $year = date("Y");
         $facultyId = 'T' . $year . '-' . sprintf('%03d', rand(0, 999));
@@ -99,8 +99,8 @@ class globalClass extends db_connect
             $checkIdResult = $this->checkAdminId($facultyId);
         }
 
-        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`, `city`, `barangay`, `street`, `contact_number`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $query->bind_param("ssssissssssss", $facultyId, $firstName, $middleName, $lastName, $age, $gender, $registration, $image, $city, $barangay, $street, $contactNumber, $role);
+        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `trn`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `teacher_suffix`, `age`, `gender`, `image_profile`, `city`, `barangay`, `street`, `contact_number`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssssisssssss", $facultyId, $controlNumber, $firstName, $middleName, $lastName, $suffix, $age, $gender, $image, $city, $barangay, $street, $contactNumber, $role);
 
         if ($query->execute()) {
             $loginQuery = $this->conn->prepare("INSERT INTO `faculty_tbl` (`teacher_id`, `email`, `password`, `email_verification`) VALUES (?, ?, ?, ?)");
@@ -2917,6 +2917,33 @@ class globalClass extends db_connect
             return $data['student_id'];
         }
     }
+
+    public function checkFacultyTRN($lname, $trn, $role)
+    {
+        $lastName = strtoupper($lname);
+        $upperRole = strtoupper($role);
+        $query = $this->conn->prepare("SELECT * FROM `faculty_masterlist` WHERE `trn` = ? and `teacher_lname` = ? and `role` = ?");
+        $query->bind_param("sss", $trn, $lastName, $upperRole);
+
+        if ($query->execute()) {
+            $checkTRN = $query->get_result();
+            return $checkTRN;
+        } else {
+            return false;
+        }
+    }
+
+    public function verifyTRN($trn)
+    {
+        $query = $this->conn->prepare("SELECT * FROM `teacher_tbl` WHERE `trn` = ?");
+        $query->bind_param("s", $trn);
+
+        if ($query->execute()) {
+            $verifyTRN = $query->get_result();
+            return $verifyTRN;
+        }
+    }
+    
 }
 
 

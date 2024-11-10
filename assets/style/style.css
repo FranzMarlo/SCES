@@ -107,7 +107,6 @@ a.button-container{
 .btn-wrapper {
   border-radius: 30px;
   background-color: #dae5fc;
-  height: 100%;
   width: 100%;
   padding: 10px;
   box-shadow: -4px 0 5px -2px #5b5b5b;
@@ -116,6 +115,9 @@ a.button-container{
   font-size: 22px;
   text-align: center;
   color: #353841;
+}
+.btn-wrapper:hover {
+  background-color: #c5d3e5;
 }
 .form-wrapper form {
   display: flex;

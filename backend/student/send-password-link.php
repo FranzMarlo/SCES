@@ -19,7 +19,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['student_fname'])) {
     $firstName = $_SESSION['student_fname'];
 
     $token = bin2hex(random_bytes(32));
-    $expires = date("U") + 600;
+    $expires = date("U") + 300;
     $mail = new PHPMailer(true);
     if ($db->storePasswordResetToken($email, $token, $expires)) {
         $resetLink = "http://localhost/SCES/frontend/student/change-password.php?token=$token&email=$email";
@@ -100,7 +100,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['student_fname'])) {
                             <div class='email-content'>
                                 <h2>SCES Account Recovery</h2>
                                 <p>Hi There, $firstName!</p>
-                                <p>We received a request to reset your password. Use the button below to proceed. The link will only be available for 10 minutes.</p>
+                                <p>We received a request to reset your password. Use the button below to proceed. The link will only be available for 5 minutes.</p>
                                 <a href='$resetLink' class='reset-button'>Reset Your Password</a>
                                 <p>Or copy and paste the link below into your browser:</p>
                                 <p class='link'>$resetLink</p>

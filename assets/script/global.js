@@ -38,6 +38,17 @@ $("#studLogin").on("submit", function (e) {
             });
           }
         );
+      } else if (response == "453") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Valid Email",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
       } else {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
@@ -1781,6 +1792,40 @@ $("#facultyLogin").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         window.location.href = "/SCES/frontend/faculty/dashboard.php";
+      } else if (response == "451") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your Email",
+              text: "Ensure that the email you are using is registered in the platform",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "453") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Valid Email",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
       } else {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
@@ -1803,7 +1848,9 @@ $("#facultySignUp").on("submit", function (e) {
   var firstName = $("#firstName").val();
   var middleName = $("#middleName").val();
   var lastName = $("#lastName").val();
+  var suffix = $("#suffix").val();
   var gender = $("#gender").val();
+  var controlNumber = $("#controlNumber").val();
   var email = $("#email").val();
   var password = $("#password").val();
   var confirmPassword = $("#confirmPassword").val();
@@ -1815,7 +1862,9 @@ $("#facultySignUp").on("submit", function (e) {
       firstName: firstName,
       middleName: middleName,
       lastName: lastName,
+      suffix: suffix,
       gender: gender,
+      controlNumber: controlNumber,
       email: email,
       password: password,
       confirmPassword: confirmPassword,
@@ -1867,6 +1916,30 @@ $("#facultySignUp").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Last Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "455") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Suffix",
+              text: "Select None if not applicable",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "456") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please enter control number",
+              text: "Your control number is provided by your admin",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -1955,6 +2028,42 @@ $("#facultySignUp").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Email Already In Use",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "464") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Faculty Data Not Found",
+              text: "Please check your control number",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "465") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Control Number Already Registered In The System",
+              text: "If this is wrong, please contact your admin",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "466") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Control Number",
+              text: "Your control number is provided by your admin",
               confirmButtonColor: "#4CAF50",
             });
           }
