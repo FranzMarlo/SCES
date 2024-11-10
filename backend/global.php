@@ -1879,6 +1879,65 @@ if (isset($_POST['submitType'])) {
                 exit();
             }
         }
+    } else if ($_POST['submitType'] === 'facultyForgotPass') {
+        $email = validate($_POST['email']);
+        $emailPattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+        if (empty($email)) {
+            echo '450';
+            exit();
+        } else if (!preg_match($emailPattern, $email)) {
+            echo '451';
+            exit();
+        } else {
+            $checkEmail = $db->checkFacultyEmail($email);
+            if ($checkEmail->num_rows > 0) {
+                $checkVerification = $db->checkFacultyEmailVerification($email);
+                $verification = $checkVerification['email_verification'];
+                if ($verification != 'Verified') {
+                    echo '452';
+                    exit();
+                } else {
+                    $teacherName = $db->getFacultyName($checkVerification['teacher_id']);
+                    session_start();
+                    $_SESSION['email'] = $email;
+                    $_SESSION['teacher_fname'] = $teacherName;
+                    echo '200';
+                    exit();
+                }
+            } else {
+                echo '400';
+                exit();
+            }
+        }
+    } else if ($_POST['submitType'] === 'facultyChangePass') {
+        $email = validate($_POST['email']);
+        $password = validate($_POST['password']);
+        $confirmPassword = validate($_POST['confirmPassword']);
+        if (empty($password)) {
+            echo '450';
+            exit();
+        } else if (strlen($password) < 6) {
+            echo '451';
+            exit();
+        } else if (empty($confirmPassword)) {
+            echo '452';
+            exit();
+        } else if ($password != $confirmPassword) {
+            echo '453';
+            exit();
+        } else {
+            $teacherId = $db->getFacultyIdByEmail($email);
+            $currentDate = date("Y-m-d");
+            $newPasswordHash = password_hash($password, PASSWORD_DEFAULT);
+            $updatePassword = $db->updateFacultyPassword($newPasswordHash, $currentDate, $teacherId);
+            if ($updatePassword != false) {
+                echo '200';
+                exit();
+            } else {
+                echo '400';
+                exit();
+            }
+        }
     } else {
         echo '400';
     }

@@ -9,7 +9,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/head.php';
   <div class="flex-container">
     <div class="column left">
       <div class="opening">
-        <h1>Forgot Password</h1>
+      <h1>Hi There!</h1>
+      <h1>Let's Recover Your Account</h1>
       </div>
       <div class="wrapper">
         <img src="/SCES/assets/images/login.png" alt="sign up icon" class="img-500px" />

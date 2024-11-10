@@ -138,6 +138,18 @@ class globalClass extends db_connect
         }
     }
 
+    public function checkFacultyEmailVerification($email)
+    {
+        $query = $this->conn->prepare("SELECT email_verification, teacher_id FROM `faculty_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $checkEmail = $query->get_result();
+            $data = $checkEmail->fetch_assoc();
+            return $data;
+        }
+    }
+
 
     public function checkAdminEmail($email)
     {
@@ -2882,6 +2894,18 @@ class globalClass extends db_connect
         }
     }
 
+    public function getFacultyName($teacherId)
+    {
+        $query = $this->conn->prepare("SELECT teacher_fname FROM `teacher_tbl` WHERE `teacher_id` = ?");
+        $query->bind_param("s", $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $teacherData = $result->fetch_assoc();
+            return $teacherData['teacher_fname'];
+        }
+    }
+
     public function storePasswordResetToken($email, $token, $expires)
     {
         $query = $this->conn->prepare("INSERT INTO student_pass_reset (email, token, expires) VALUES (?, ?, ?)
@@ -2943,7 +2967,41 @@ class globalClass extends db_connect
             return $verifyTRN;
         }
     }
+
+    public function storeFacultyPasswordResetToken($email, $token, $expires)
+    {
+        $query = $this->conn->prepare("INSERT INTO faculty_pass_reset (email, token, expires) VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE token = VALUES(token), expires = VALUES(expires)");
+        $query->bind_param("ssi", $email, $token, $expires);
+        return $query->execute();
+    }
     
+    public function checkFacultyTokenExpiry($email, $token)
+    {
+        $query = $this->conn->prepare("SELECT expires FROM faculty_pass_reset WHERE email = ? AND token = ?");
+        $query->bind_param("ss", $email, $token);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            if ($data = $result->fetch_assoc()) {
+                return (int) $data['expires'];
+            }
+        }
+        return null;
+    }
+
+    public function getFacultyIdByEmail($email)
+    {
+        $query = $this->conn->prepare("SELECT teacher_id FROM `faculty_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $data = $result->fetch_assoc();
+            return $data['teacher_id'];
+        }
+    }
 }
 
 
