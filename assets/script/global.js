@@ -890,6 +890,40 @@ $("#adminLogin").on("submit", function (e) {
       console.log(response);
       if (response == "200") {
         window.location.href = "/SCES/frontend/admin/dashboard.php";
+      } else if (response == "451") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your Email",
+              text: "Ensure that the email you are using is registered in the platform",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "453") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Valid Email",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
       } else {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
@@ -912,7 +946,9 @@ $("#adminSignUp").on("submit", function (e) {
   var firstName = $("#firstName").val();
   var middleName = $("#middleName").val();
   var lastName = $("#lastName").val();
+  var suffix = $("#suffix").val();
   var gender = $("#gender").val();
+  var controlNumber = $("#controlNumber").val();
   var email = $("#email").val();
   var password = $("#password").val();
   var confirmPassword = $("#confirmPassword").val();
@@ -924,7 +960,9 @@ $("#adminSignUp").on("submit", function (e) {
       firstName: firstName,
       middleName: middleName,
       lastName: lastName,
+      suffix: suffix,
       gender: gender,
+      controlNumber: controlNumber,
       email: email,
       password: password,
       confirmPassword: confirmPassword,
@@ -976,6 +1014,30 @@ $("#adminSignUp").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Last Name Cannot Be Empty",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "455") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Suffix",
+              text: "Select None if not applicable",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "456") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please enter control number",
+              text: "Your control number is provided by your admin",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -1064,6 +1126,42 @@ $("#adminSignUp").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Email Already In Use",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "464") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Admin Data Not Found",
+              text: "Please check your control number",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "465") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Control Number Already Registered In The System",
+              text: "If this is wrong, please contact an admin",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "466") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Control Number",
+              text: "Your control number is provided by your admin",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -4760,6 +4858,197 @@ $("#facultyChangePass").on("submit", function (e) {
     },
   });
 });
+
+$("#adminForgotPass").on("submit", function (e) {
+  e.preventDefault();
+  var email = $("#email").val();
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "adminForgotPass",
+      email: email,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.ajax({
+          type: "POST",
+          url: "/SCES/backend/admin/send-password-link.php",
+          success: function (sendEmailResponse) {
+            if (sendEmailResponse === "200") {
+              Swal.fire({
+                icon: "success",
+                title: "Email Sent",
+                text: "The password reset link has been sent to your email",
+                confirmButtonColor: "#4CAF50",
+                allowOutsideClick: false,
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Failed to Send Email",
+                text: "Please try again later.",
+                confirmButtonColor: "#4CAF50",
+              });
+            }
+          },
+          error: function () {
+            Swal.fire({
+              icon: "error",
+              title: "Server Error",
+              text: "Unable to complete your request. Please try again later.",
+              confirmButtonColor: "#4CAF50",
+            });
+          },
+        });
+      } else if (response == "450") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Your Email",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            });
+          }
+        );
+      } else if (response == "451") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Valid Email",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Account Recovery Cannot Be Processed",
+              text: "Registered email is unverified",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Account Not Found",
+              text: "Please enter the email used in your registration",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
+$("#adminChangePass").on("submit", function (e) {
+  e.preventDefault();
+  var email = $("#email").val();
+  var password = $("#password").val();
+  var confirmPassword = $("#confirmPassword").val();
+  $.ajax({
+    type: "POST",
+    url: "/SCES/backend/global.php",
+    data: {
+      submitType: "adminChangePass",
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response == "200") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Password Changed",
+              text: "Please login with your new password",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/SCES/frontend/admin/login.php";
+              }
+            });
+          }
+        );
+      } else if (response == "450") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter New Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "451") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "New Password Must Be At Least 6 Characters",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "452") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Confirm Your New Password",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "453") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "New Passwords Don't Match Please Try Again",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Update Password Failed",
+              text: "Please try again later",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      }
+    },
+  });
+});
+
 
 function logoutFunc() {
   Swal.fire({

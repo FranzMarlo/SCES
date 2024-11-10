@@ -5,11 +5,12 @@ if (isset($_SESSION['teacher_id'])) {
     $teacherFname = $_SESSION['teacher_fname'];
     $teacherMname = $_SESSION['teacher_mname'];
     $teacherLname = $_SESSION['teacher_lname'];
+    $teacherSuffix = $_SESSION['teacher_suffix'];
     $age = $_SESSION['age'];
     $gender = $_SESSION['gender'];
     $email = $_SESSION['email'];
     $password = $_SESSION['password'];
-    $registration = $_SESSION['registration'];
+    $trn = $_SESSION['trn'];
     $image = $_SESSION['image_profile'];
     $role = $_SESSION['role'];
     $city = $_SESSION['city'];
@@ -19,10 +20,42 @@ if (isset($_SESSION['teacher_id'])) {
     $passwordChange = $_SESSION['password_change'];
     $emailVerification = $_SESSION['email_verification'];
     $title = ($gender == 'Female') ? 'Ma\'am' : 'Sir';
-    $middleInitial = substr($teacherMname, 0, 1) . '.';
+    $middleInitial = getMiddleInitial($teacherMname);
+    $suffix = getSuffix($teacherSuffix);
+    $firstName = getFirstName($teacherFname);
     if ($role != 'Admin') {
         header('Location: /SCES/frontend/faculty/login.php');
     }
 } else {
     header('Location: /SCES/frontend/admin/login.php');
+}
+
+function getMiddleInitial($middleName)
+{
+    if ($middleName == 'N/a') {
+        return '';
+    } else {
+        return substr($middleName, 0, 1) . '.';
+    }
+}
+
+function getSuffix($suffix)
+{
+    if ($suffix == 'N/A') {
+        return '';
+    } else {
+        return $suffix;
+    }
+}
+
+function getFirstName($teacherFname)
+{
+    $firstSpacePos = strpos($teacherFname, " ");
+
+    if ($firstSpacePos !== false) {
+        $firstName = substr($teacherFname, 0, $firstSpacePos);
+        return $firstName;
+    } else {
+        return $teacherFname;
+    }
 }

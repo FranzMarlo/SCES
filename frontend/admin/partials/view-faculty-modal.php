@@ -207,7 +207,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="save-btn">Add Lesson</button>
+                    <button type="submit" class="save-btn">Add Teacher</button>
                 </div>
             </form>
         </div>

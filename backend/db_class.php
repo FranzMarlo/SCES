@@ -61,7 +61,7 @@ class globalClass extends db_connect
         }
     }
 
-    public function adminSignUp($firstName, $middleName, $lastName, $age, $gender, $email, $hashedPassword, $registration, $image, $role, $emailVerification, $city, $street, $barangay, $contactNumber)
+    public function adminSignUp($controlNumber, $firstName, $middleName, $lastName, $suffix, $age, $gender, $email, $hashedPassword, $image, $role, $emailVerification, $city, $street, $barangay, $contactNumber)
     {
         $year = date("Y");
         $adminId = 'T' . $year . '-' . sprintf('%03d', rand(0, 999));
@@ -72,8 +72,8 @@ class globalClass extends db_connect
             $checkIdResult = $this->checkAdminId($adminId);
         }
 
-        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `age`, `gender`, `registration`, `image_profile`, `city`, `barangay`, `street`, `contact_number`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $query->bind_param("ssssissssssss", $adminId, $firstName, $middleName, $lastName, $age, $gender, $registration, $image, $city, $barangay, $street, $contactNumber, $role);
+        $query = $this->conn->prepare("INSERT INTO `teacher_tbl` (`teacher_id`, `trn`, `teacher_fname`, `teacher_mname`, `teacher_lname`, `teacher_suffix`, `age`, `gender`, `image_profile`, `city`, `barangay`, `street`, `contact_number`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("ssssssisssssss", $adminId, $controlNumber, $firstName, $middleName, $lastName, $suffix, $age, $gender, $image, $city, $barangay, $street, $contactNumber, $role);
 
         if ($query->execute()) {
             $loginQuery = $this->conn->prepare("INSERT INTO `admin_tbl` (`teacher_id`, `email`, `password`, `email_verification`) VALUES (?, ?, ?, ?)");
@@ -141,6 +141,18 @@ class globalClass extends db_connect
     public function checkFacultyEmailVerification($email)
     {
         $query = $this->conn->prepare("SELECT email_verification, teacher_id FROM `faculty_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $checkEmail = $query->get_result();
+            $data = $checkEmail->fetch_assoc();
+            return $data;
+        }
+    }
+
+    public function checkAdminEmailVerification($email)
+    {
+        $query = $this->conn->prepare("SELECT email_verification, teacher_id FROM `admin_tbl` WHERE `email` = ?");
         $query->bind_param("s", $email);
 
         if ($query->execute()) {
@@ -2957,6 +2969,21 @@ class globalClass extends db_connect
         }
     }
 
+    public function checkAdminTRN($lname, $trn, $role)
+    {
+        $lastName = strtoupper($lname);
+        $upperRole = strtoupper($role);
+        $query = $this->conn->prepare("SELECT * FROM `faculty_masterlist` WHERE `trn` = ? and `teacher_lname` = ? and `role` = ?");
+        $query->bind_param("sss", $trn, $lastName, $upperRole);
+
+        if ($query->execute()) {
+            $checkTRN = $query->get_result();
+            return $checkTRN;
+        } else {
+            return false;
+        }
+    }
+
     public function verifyTRN($trn)
     {
         $query = $this->conn->prepare("SELECT * FROM `teacher_tbl` WHERE `trn` = ?");
@@ -2994,6 +3021,41 @@ class globalClass extends db_connect
     public function getFacultyIdByEmail($email)
     {
         $query = $this->conn->prepare("SELECT teacher_id FROM `faculty_tbl` WHERE `email` = ?");
+        $query->bind_param("s", $email);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $data = $result->fetch_assoc();
+            return $data['teacher_id'];
+        }
+    }
+
+    public function storeAdminPasswordResetToken($email, $token, $expires)
+    {
+        $query = $this->conn->prepare("INSERT INTO admin_pass_reset (email, token, expires) VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE token = VALUES(token), expires = VALUES(expires)");
+        $query->bind_param("ssi", $email, $token, $expires);
+        return $query->execute();
+    }
+    
+    public function checkAdminTokenExpiry($email, $token)
+    {
+        $query = $this->conn->prepare("SELECT expires FROM admin_pass_reset WHERE email = ? AND token = ?");
+        $query->bind_param("ss", $email, $token);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            if ($data = $result->fetch_assoc()) {
+                return (int) $data['expires'];
+            }
+        }
+        return null;
+    }
+
+    public function getAdminIdByEmail($email)
+    {
+        $query = $this->conn->prepare("SELECT teacher_id FROM `admin_tbl` WHERE `email` = ?");
         $query->bind_param("s", $email);
 
         if ($query->execute()) {

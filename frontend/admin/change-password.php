@@ -1,6 +1,6 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/head.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/password-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/password-head.php';
 ?>
 <title>Change Password | SCES Online Learning Platform</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -15,12 +15,12 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/password-he
                         <h1>Change Password</h1>
                     </div>
                     <div class="wrapper">
-                        <img src="/SCES/assets/images/admin-signup.png" alt="sign up icon" />
+                        <img src="/SCES/assets/images/signup-admin.png" alt="sign up icon" />
                     </div>
                 </div>
                 <div class="column right">
                     <div class="form-wrapper">
-                        <form id="facultyChangePass">
+                        <form id="adminChangePass">
                             <h1>Set Up New Password</h1>
                             <div class="input-icons-recover">
                                 <span>Enter and confirm your new password. Your new password must be at least 6
@@ -46,15 +46,15 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/password-he
                                     <i class="fa-solid fa-eye-slash icon" id="toggleConfirmIcon"></i>
                                 </span>
                             </div>
-                            <button type="submit" id="facultyChangePassBtn">Change Password</button>
+                            <button type="submit" id="adminChangePassBtn">Change Password</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     <?php else: ?>
-        <?php include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/page-error.php'; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/page-error.php'; ?>
     <?php endif; ?>
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/footer.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/footer.php';
     ?>

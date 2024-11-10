@@ -380,46 +380,63 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'adminLogin') {
         $email = validate($_POST['email']);
         $password = validate($_POST['password']);
+        $emailPattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+        if (empty($email)) {
+            echo '451';
+            exit();
+        } else if (!preg_match($emailPattern, $email)) {
+            echo '453';
+            exit();
+        } else if (empty($password)) {
+            echo '452';
+            exit();
+        } else {
+            $result = $db->adminLogin($email, $password);
 
-        $result = $db->adminLogin($email, $password);
+            if ($result !== false) {
+                $teacherId = $result['teacher_id'];
+                $getTeacherData = $db->getTeacherData($teacherId);
 
-        if ($result !== false) {
-            $teacherId = $result['teacher_id'];
-            $getTeacherData = $db->getTeacherData($teacherId);
+                if ($getTeacherData !== false) {
 
-            if ($getTeacherData !== false) {
-
-                session_start();
-                $_SESSION['teacher_id'] = $getTeacherData['teacher_id'];
-                $_SESSION['teacher_fname'] = $getTeacherData['teacher_fname'];
-                $_SESSION['teacher_mname'] = $getTeacherData['teacher_mname'];
-                $_SESSION['teacher_lname'] = $getTeacherData['teacher_lname'];
-                $_SESSION['age'] = $getTeacherData['age'];
-                $_SESSION['gender'] = $getTeacherData['gender'];
-                $_SESSION['email'] = $result['email'];
-                $_SESSION['password'] = $result['password'];
-                $_SESSION['registration'] = $getTeacherData['registration'];
-                $_SESSION['image_profile'] = $getTeacherData['image_profile'];
-                $_SESSION['role'] = $getTeacherData['role'];
-                $_SESSION['email_verification'] = $result['email_verification'];
-                $_SESSION['city'] = $getTeacherData['city'];
-                $_SESSION['barangay'] = $getTeacherData['barangay'];
-                $_SESSION['street'] = $getTeacherData['street'];
-                $_SESSION['contact_number'] = $getTeacherData['contact_number'];
-                $_SESSION['password_change'] = $result['password_change'];
-                echo '200';
+                    session_start();
+                    $_SESSION['teacher_id'] = $getTeacherData['teacher_id'];
+                    $_SESSION['teacher_fname'] = $getTeacherData['teacher_fname'];
+                    $_SESSION['teacher_mname'] = $getTeacherData['teacher_mname'];
+                    $_SESSION['teacher_lname'] = $getTeacherData['teacher_lname'];
+                    $_SESSION['teacher_suffix'] = $getTeacherData['teacher_suffix'];
+                    $_SESSION['age'] = $getTeacherData['age'];
+                    $_SESSION['gender'] = $getTeacherData['gender'];
+                    $_SESSION['email'] = $result['email'];
+                    $_SESSION['password'] = $result['password'];
+                    $_SESSION['trn'] = $getTeacherData['trn'];
+                    $_SESSION['image_profile'] = $getTeacherData['image_profile'];
+                    $_SESSION['role'] = $getTeacherData['role'];
+                    $_SESSION['email_verification'] = $result['email_verification'];
+                    $_SESSION['city'] = $getTeacherData['city'];
+                    $_SESSION['barangay'] = $getTeacherData['barangay'];
+                    $_SESSION['street'] = $getTeacherData['street'];
+                    $_SESSION['contact_number'] = $getTeacherData['contact_number'];
+                    $_SESSION['password_change'] = $result['password_change'];
+                    echo '200';
+                    exit();
+                } else {
+                    echo '400';
+                    exit();
+                }
             } else {
                 echo '400';
+                exit();
             }
-        } else {
-            echo '400';
         }
     } else if ($_POST['submitType'] === 'adminSignUp') {
 
-        $firstName = validate($_POST['firstName']);
-        $middleName = validate($_POST['middleName']);
-        $lastName = validate($_POST['lastName']);
+        $firstName = ucwords(validate($_POST['firstName']));
+        $middleName = ucwords(validate($_POST['middleName']));
+        $lastName = ucwords(validate($_POST['lastName']));
+        $suffix = validate($_POST['suffix']);
         $gender = validate($_POST['gender']);
+        $controlNumber = validate($_POST['controlNumber']);
         $role = 'Admin';
         $email = validate($_POST['email']);
         $password = validate($_POST['password']);
@@ -427,58 +444,88 @@ if (isset($_POST['submitType'])) {
 
         $emailPattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
 
-
         if (empty($firstName)) {
             echo '452';
+            exit();
         } else if (empty($middleName)) {
             echo '453';
+            exit();
         } else if (empty($lastName)) {
             echo '454';
+            exit();
+        } else if (empty($suffix)) {
+            echo '455';
+            exit();
         } else if (empty($gender)) {
             echo '472';
+            exit();
+        } else if (empty($controlNumber)) {
+            echo '466';
+            exit();
         } else if (empty($email)) {
             echo '457';
+            exit();
         } else if (!preg_match($emailPattern, $email)) {
             echo '458';
+            exit();
         } else if (empty($password)) {
             echo '459';
+            exit();
         } else if (strlen($password) < 6) {
             echo '460';
+            exit();
         } else if (empty($confirmPassword)) {
             echo '461';
+            exit();
         } else if ($password !== $confirmPassword) {
             echo '462';
+            exit();
         } else {
             $checkEmail = $db->checkAdminEmail($email);
             if ($checkEmail->num_rows > 0) {
                 echo '463';
+                exit();
             } else {
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                $checkTRN = $db->checkAdminTRN($lastName, $controlNumber, $role);
+                if ($checkTRN->num_rows > 0) {
+                    $verifyTRN = $db->verifyTRN($controlNumber);
+                    if ($verifyTRN->num_rows > 0) {
+                        echo '465';
+                        exit();
+                    } else {
+                        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                        $signUpResult = $db->adminSignUp($controlNumber, $firstName, $middleName, $lastName, $suffix, 0, $gender, $email, $hashedPassword, 'default-profile.png', $role, 'Not Verified', 'Not Set', 'Not Set', 'Not Set', 'Not Set');
 
-                $signUpResult = $db->adminSignUp($firstName, $middleName, $lastName, 0, $gender, $email, $hashedPassword, 'Incomplete', 'default-profile.png', $role, 'Not Verified', 'Not Set', 'Not Set', 'Not Set', 'Not Set');
-
-                if ($signUpResult !== false) {
-                    session_start();
-                    $_SESSION['teacher_id'] = $signUpResult;
-                    $_SESSION['teacher_fname'] = $firstName;
-                    $_SESSION['teacher_mname'] = $middleName;
-                    $_SESSION['teacher_lname'] = $lastName;
-                    $_SESSION['age'] = 0;
-                    $_SESSION['gender'] = $gender;
-                    $_SESSION['email'] = $email;
-                    $_SESSION['password'] = $hashedPassword;
-                    $_SESSION['registration'] = 'Incomplete';
-                    $_SESSION['image_profile'] = 'default-profile.png';
-                    $_SESSION['role'] = $role;
-                    $_SESSION['email_verification'] = 'Not Verified';
-                    $_SESSION['city'] = 'Not Set';
-                    $_SESSION['barangay'] = 'Not Set';
-                    $_SESSION['street'] = 'Not Set';
-                    $_SESSION['contact_number'] = 'Not Set';
-                    $_SESSION['password_change'] = NULL;
-                    echo '200';
+                        if ($signUpResult !== false) {
+                            session_start();
+                            $_SESSION['teacher_id'] = $signUpResult;
+                            $_SESSION['teacher_fname'] = $firstName;
+                            $_SESSION['teacher_mname'] = $middleName;
+                            $_SESSION['teacher_lname'] = $lastName;
+                            $_SESSION['teacher_suffix'] = $suffix;
+                            $_SESSION['age'] = 0;
+                            $_SESSION['gender'] = $gender;
+                            $_SESSION['trn'] = $controlNumber;
+                            $_SESSION['email'] = $email;
+                            $_SESSION['password'] = $hashedPassword;
+                            $_SESSION['image_profile'] = 'default-profile.png';
+                            $_SESSION['role'] = $role;
+                            $_SESSION['email_verification'] = 'Not Verified';
+                            $_SESSION['city'] = 'Not Set';
+                            $_SESSION['barangay'] = 'Not Set';
+                            $_SESSION['street'] = 'Not Set';
+                            $_SESSION['contact_number'] = 'Not Set';
+                            $_SESSION['password_change'] = NULL;
+                            echo '200';
+                            exit();
+                        } else {
+                            echo '400';
+                            exit();
+                        }
+                    }
                 } else {
-                    echo '400';
+                    echo '464';
+                    exit();
                 }
             }
         }
@@ -1930,6 +1977,65 @@ if (isset($_POST['submitType'])) {
             $currentDate = date("Y-m-d");
             $newPasswordHash = password_hash($password, PASSWORD_DEFAULT);
             $updatePassword = $db->updateFacultyPassword($newPasswordHash, $currentDate, $teacherId);
+            if ($updatePassword != false) {
+                echo '200';
+                exit();
+            } else {
+                echo '400';
+                exit();
+            }
+        }
+    } else if ($_POST['submitType'] === 'adminForgotPass') {
+        $email = validate($_POST['email']);
+        $emailPattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+        if (empty($email)) {
+            echo '450';
+            exit();
+        } else if (!preg_match($emailPattern, $email)) {
+            echo '451';
+            exit();
+        } else {
+            $checkEmail = $db->checkAdminEmail($email);
+            if ($checkEmail->num_rows > 0) {
+                $checkVerification = $db->checkAdminEmailVerification($email);
+                $verification = $checkVerification['email_verification'];
+                if ($verification != 'Verified') {
+                    echo '452';
+                    exit();
+                } else {
+                    $teacherName = $db->getFacultyName($checkVerification['teacher_id']);
+                    session_start();
+                    $_SESSION['email'] = $email;
+                    $_SESSION['teacher_fname'] = $teacherName;
+                    echo '200';
+                    exit();
+                }
+            } else {
+                echo '400';
+                exit();
+            }
+        }
+    } else if ($_POST['submitType'] === 'adminChangePass') {
+        $email = validate($_POST['email']);
+        $password = validate($_POST['password']);
+        $confirmPassword = validate($_POST['confirmPassword']);
+        if (empty($password)) {
+            echo '450';
+            exit();
+        } else if (strlen($password) < 6) {
+            echo '451';
+            exit();
+        } else if (empty($confirmPassword)) {
+            echo '452';
+            exit();
+        } else if ($password != $confirmPassword) {
+            echo '453';
+            exit();
+        } else {
+            $teacherId = $db->getAdminIdByEmail($email);
+            $currentDate = date("Y-m-d");
+            $newPasswordHash = password_hash($password, PASSWORD_DEFAULT);
+            $updatePassword = $db->updateAdminPassword($newPasswordHash, $currentDate, $teacherId);
             if ($updatePassword != false) {
                 echo '200';
                 exit();
