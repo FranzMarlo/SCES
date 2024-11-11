@@ -33,16 +33,16 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
                 <span>Questions about SCES Online Learning Platform Services</span>
               </div>
             </div>
-            <a href="#" class="panel-item">
+            <div class="panel-item" id="myAccountButton">
               <div class="item-icon">
-                <img src="/SCES/assets/images/account-help.png" alt="rocket png">
+                <img src="/SCES/assets/images/account-help.png" alt="account help png">
               </div>
               <div class="item-text">
                 <h2>My Account</h2>
                 <span>Questions about managing your account and it's features</span>
               </div>
-            </a>
-            <a href="#" class="panel-item">
+            </div>
+            <div class="panel-item" id="learningMaterialButton">
               <div class="item-icon">
                 <img src="/SCES/assets/images/lm-help.png" alt="rocket png">
               </div>
@@ -50,10 +50,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
                 <h2>Learning Materials References</h2>
                 <span>Questions about direct references of your learning materials</span>
               </div>
-            </a>
+            </div>
           </div>
           <div class="panel-part">
-            <a href="#" class="panel-item">
+            <div class="panel-item" id="usageGuidesButton">
               <div class="item-icon">
                 <img src="/SCES/assets/images/usage-help.png" alt="rocket png">
               </div>
@@ -61,8 +61,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
                 <h2>Usage Guides</h2>
                 <span>Instructions about the usage of SCES Online Learning Platform</span>
               </div>
-            </a>
-            <a href="#" class="panel-item">
+            </div>
+            <div class="panel-item" id="learningInquiriesButton">
               <div class="item-icon">
                 <img src="/SCES/assets/images/inquiries-help.png" alt="rocket png">
               </div>
@@ -70,22 +70,22 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
                 <h2>Learning Inquiries</h2>
                 <span>Information you need to know about learning at SCES</span>
               </div>
-            </a>
+            </div>
           </div>
         </div>
         <div class="box-container">
-          <a href="#" class="box faq">
+          <div class="box faq" id="faqBox">
             <img src="/SCES/assets/images/faq-icon.png" alt="faq-icon">
             <h1>FAQ</h1>
-          </a>
-          <a href="#" class="box guides">
+          </div>
+          <div class="box guides" id="usageGuidesBox">
             <img src="/SCES/assets/images/guide-icon.png" alt="guide-icon">
             <h1>GUIDES</h1>
-          </a>
-          <a href="#" class="box updates">
+          </div>
+          <div class="box updates" id="updatesBox">
             <img src="/SCES/assets/images/update-icon.png" alt="update-icon">
             <h1>UPDATES</h1>
-          </a>
+          </div>
         </div>
       </div>
     </div>
