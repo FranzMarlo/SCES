@@ -473,7 +473,7 @@
                     <img src="/SCES/assets/images/question-icon.png" alt="question-icon.png" class="title-img">
                     <span class="question">How to login in the platform?</span>
                 </div>
-                <span class="answer">On the login page, you must enter your registered email and you password.</span>
+                <span class="answer">On the login page, you must enter your registered email and your password.</span>
                 <img src="/SCES/assets/help-img/student-login.png" alt="student-login.png" class="question-img"
                     onclick="openFullscreen(this)">
                 <p class="description">Student Login Page</p>
@@ -523,7 +523,7 @@
                     <img src="/SCES/assets/images/question-icon.png" alt="question-icon.png" class="title-img">
                     <span class="question">How to login in the platform?</span>
                 </div>
-                <span class="answer">On the login page, you must enter your registered email and you password.</span>
+                <span class="answer">On the login page, you must enter your registered email and your password.</span>
                 <img src="/SCES/assets/help-img/mobile-student-login.png" alt="mobile-student-login.png"
                     class="question-img-mobile" onclick="openFullscreen(this)">
                 <p class="description">Student Login Page Mobile View</p>
