@@ -3064,6 +3064,39 @@ class globalClass extends db_connect
             return $data['teacher_id'];
         }
     }
+
+    public function toggleAdminAccount($teacherId, $status)
+    {
+        $query = $this->conn->prepare("UPDATE admin_tbl SET disabled = ? WHERE teacher_id = ?");
+        $query->bind_param("ss", $status, $teacherId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function toggleFacultyAccount($teacherId, $status)
+    {
+        $query = $this->conn->prepare("UPDATE faculty_tbl SET disabled = ? WHERE teacher_id = ?");
+        $query->bind_param("ss", $status, $teacherId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function toggleStudentAccount($studentId, $status)
+    {
+        $query = $this->conn->prepare("UPDATE login_tbl SET disabled = ? WHERE student_id = ?");
+        $query->bind_param("ss", $status, $studentId);
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 

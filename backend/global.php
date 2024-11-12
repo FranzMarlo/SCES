@@ -319,7 +319,7 @@ if (isset($_POST['submitType'])) {
         } else if (!preg_match($phonePattern, $guardianContact)) {
             echo '464';
             exit();
-        }else {
+        } else {
             $editBackgroundInfo = $db->editBackgroundForm($city, $barangay, $street, $guardianFullName, $guardianContact, $studentId);
             if ($editBackgroundInfo !== false) {
                 $_SESSION['city'] = $city;
@@ -2327,6 +2327,78 @@ if (isset($_POST['submitType'])) {
                 echo '400';
                 exit();
             }
+        }
+    } else if ($_POST['submitType'] === 'disableAdminAccount') {
+        $teacherId = validate($_POST['teacher_id']);
+        $status = 'True';
+
+        $changeStatus = $db->toggleAdminAccount($teacherId, $status);
+        if ($changeStatus != false) {
+            echo '200';
+            exit();
+        } else {
+            echo '400';
+            exit();
+        }
+    } else if ($_POST['submitType'] === 'enableAdminAccount') {
+        $teacherId = validate($_POST['teacher_id']);
+        $status = 'False';
+
+        $changeStatus = $db->toggleAdminAccount($teacherId, $status);
+        if ($changeStatus != false) {
+            echo '200';
+            exit();
+        } else {
+            echo '400';
+            exit();
+        }
+    } else if ($_POST['submitType'] === 'disableFacultyAccount') {
+        $teacherId = validate($_POST['teacher_id']);
+        $status = 'True';
+
+        $changeStatus = $db->toggleFacultyAccount($teacherId, $status);
+        if ($changeStatus != false) {
+            echo '200';
+            exit();
+        } else {
+            echo '400';
+            exit();
+        }
+    } else if ($_POST['submitType'] === 'enableFacultyAccount') {
+        $teacherId = validate($_POST['teacher_id']);
+        $status = 'False';
+
+        $changeStatus = $db->toggleFacultyAccount($teacherId, $status);
+        if ($changeStatus != false) {
+            echo '200';
+            exit();
+        } else {
+            echo '400';
+            exit();
+        }
+    } else if ($_POST['submitType'] === 'disableStudentAccount') {
+        $studentId = validate($_POST['student_id']);
+        $status = 'True';
+
+        $changeStatus = $db->toggleStudentAccount($studentId, $status);
+        if ($changeStatus != false) {
+            echo '200';
+            exit();
+        } else {
+            echo '400';
+            exit();
+        }
+    } else if ($_POST['submitType'] === 'enableStudentAccount') {
+        $studentId = validate($_POST['student_id']);
+        $status = 'False';
+
+        $changeStatus = $db->toggleStudentAccount($studentId, $status);
+        if ($changeStatus != false) {
+            echo '200';
+            exit();
+        } else {
+            echo '400';
+            exit();
         }
     } else {
         echo '400';

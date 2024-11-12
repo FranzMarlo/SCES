@@ -167,6 +167,27 @@ document.addEventListener("DOMContentLoaded", function () {
                   tab.classList.add(tabItemClass);
                 });
 
+                const toggleAccountStatus = document.getElementById(
+                  "toggleAccountStatus"
+                );
+                if (data.disabled == "False") {
+                  toggleAccountStatus.classList.remove("enable-btn");
+                  toggleAccountStatus.classList.add("disable-btn");
+                  toggleAccountStatus.innerHTML = `<i class="fa-solid fa-user-gear"></i><span>Disable Account</span>`;
+                } else {
+                  toggleAccountStatus.classList.remove("disable-btn");
+                  toggleAccountStatus.classList.add("enable-btn");
+                  toggleAccountStatus.innerHTML = `<i class="fa-solid fa-user-gear"></i><span>Enable Account</span>`;
+                }
+                toggleAccountStatus.setAttribute(
+                  "data-account-status",
+                  data.disabled
+                );
+                toggleAccountStatus.setAttribute(
+                  "data-teacher-role",
+                  data.role
+                );
+
                 const imageElement = document.getElementById("profileImage");
                 imageElement.src = `/SCES/storage/faculty/images/${data.image_profile}`;
                 imageElement.onerror = function () {
@@ -253,6 +274,27 @@ document.addEventListener("DOMContentLoaded", function () {
                   tab.classList.add(tabItemClass);
                 });
 
+                const toggleAccountStatus = document.getElementById(
+                  "toggleAccountStatus"
+                );
+                if (data.disabled == "False") {
+                  toggleAccountStatus.classList.remove("enable-btn");
+                  toggleAccountStatus.classList.add("disable-btn");
+                  toggleAccountStatus.innerHTML = `<i class="fa-solid fa-user-gear"></i><span>Disable Account</span>`;
+                } else {
+                  toggleAccountStatus.classList.remove("disable-btn");
+                  toggleAccountStatus.classList.add("enable-btn");
+                  toggleAccountStatus.innerHTML = `<i class="fa-solid fa-user-gear"></i><span>Enable Account</span>`;
+                }
+                toggleAccountStatus.setAttribute(
+                  "data-account-status",
+                  data.disabled
+                );
+                toggleAccountStatus.setAttribute(
+                  "data-teacher-role",
+                  data.role
+                );
+
                 const imageElement = document.getElementById("profileImage");
                 imageElement.src = `/SCES/storage/admin/images/${data.image_profile}`;
                 imageElement.onerror = function () {
@@ -295,6 +337,85 @@ document.addEventListener("DOMContentLoaded", function () {
                 showAlert("error", "Server Error", error);
               });
           }
+        }
+      }
+    });
+
+  document
+    .getElementById("toggleAccountStatus")
+    .addEventListener("click", function () {
+      var role = this.getAttribute("data-teacher-role");
+      var status = this.getAttribute("data-account-status");
+      var teacherId = document
+        .getElementById("profileTab")
+        .getAttribute("data-teacher-id");
+      if (role == "Admin") {
+        if (status == "False") {
+          Swal.fire({
+            icon: "question",
+            title: "Disable Admin Account?",
+            text: "Disabling the admin account would make them unable to login to their account.",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            confirmButtonColor: "#4CAF50",
+            cancelButtonColor: "#f44336",
+            allowOutsideClick: false,
+            cancelButtonText: "No",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              disableAdminAccount(teacherId);
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "question",
+            title: "Enable Admin Account?",
+            text: "Enabling the admin account would make them able to login to their account again.",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            confirmButtonColor: "#4CAF50",
+            cancelButtonColor: "#f44336",
+            allowOutsideClick: false,
+            cancelButtonText: "No",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              enableAdminAccount(teacherId);
+            }
+          });
+        }
+      } else {
+        if (status == "False") {
+          Swal.fire({
+            icon: "question",
+            title: "Disable Faculty Account?",
+            text: "Disabling the faculty account would make them unable to login to their account.",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            confirmButtonColor: "#4CAF50",
+            cancelButtonColor: "#f44336",
+            allowOutsideClick: false,
+            cancelButtonText: "No",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              disableFacultyAccount(teacherId);
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "question",
+            title: "Enable Faculty Account?",
+            text: "Enabling the faculty account would make them able to login to their account again.",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            confirmButtonColor: "#4CAF50",
+            cancelButtonColor: "#f44336",
+            allowOutsideClick: false,
+            cancelButtonText: "No",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              enableFacultyAccount(teacherId);
+            }
+          });
         }
       }
     });
@@ -346,6 +467,134 @@ document.addEventListener("DOMContentLoaded", function () {
       tab.classList.remove("active"); // Remove 'active' from all tabs
     });
     document.getElementById(tabId).classList.add("active"); // Add 'active' to the selected tab
+  }
+
+  function disableAdminAccount(teacherId) {
+    const data = new FormData();
+    data.append("submitType", "disableAdminAccount");
+    data.append("teacher_id", teacherId);
+
+    fetch("/SCES/backend/global.php", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.text()) // Get the response as plain text
+      .then((statusCode) => {
+        if (statusCode === "200") {
+          Swal.fire({
+            icon: "info",
+            title: "Admin Account Disabled",
+            text: "The Admin will now be unable to login to their account.",
+            confirmButtonColor: "#4CAF50",
+            allowOutsideClick: false,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        } else {
+          showAlert("error", "System Error", "Please try again later.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching panel data:", error);
+      });
+  }
+
+  function enableAdminAccount(teacherId) {
+    const data = new FormData();
+    data.append("submitType", "enableAdminAccount");
+    data.append("teacher_id", teacherId);
+
+    fetch("/SCES/backend/global.php", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.text()) // Get the response as plain text
+      .then((statusCode) => {
+        if (statusCode === "200") {
+          Swal.fire({
+            icon: "success",
+            title: "Admin Account Enabled",
+            text: "The Admin will now be able to login to their account.",
+            confirmButtonColor: "#4CAF50",
+            allowOutsideClick: false,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        } else {
+          showAlert("error", "System Error", "Please try again later.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching panel data:", error);
+      });
+  }
+
+  function disableFacultyAccount(teacherId) {
+    const data = new FormData();
+    data.append("submitType", "disableFacultyAccount");
+    data.append("teacher_id", teacherId);
+
+    fetch("/SCES/backend/global.php", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.text()) // Get the response as plain text
+      .then((statusCode) => {
+        if (statusCode === "200") {
+          Swal.fire({
+            icon: "info",
+            title: "Faculty Account Disabled",
+            text: "The Faculty will now be unable to login to their account.",
+            confirmButtonColor: "#4CAF50",
+            allowOutsideClick: false,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        } else {
+          showAlert("error", "System Error", "Please try again later.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching panel data:", error);
+      });
+  }
+
+  function enableFacultyAccount(teacherId) {
+    const data = new FormData();
+    data.append("submitType", "enableFacultyAccount");
+    data.append("teacher_id", teacherId);
+
+    fetch("/SCES/backend/global.php", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => response.text()) // Get the response as plain text
+      .then((statusCode) => {
+        if (statusCode === "200") {
+          Swal.fire({
+            icon: "success",
+            title: "Faculty Account Enabled",
+            text: "The Faculty will now be able to login to their account.",
+            confirmButtonColor: "#4CAF50",
+            allowOutsideClick: false,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        } else {
+          showAlert("error", "System Error", "Please try again later.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching panel data:", error);
+      });
   }
 
   function populatePanelData(teacherId) {

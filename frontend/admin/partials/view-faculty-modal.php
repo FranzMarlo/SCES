@@ -15,8 +15,11 @@
             </div>
         </div>
         <div class="tab-controller">
-            <div class="tab-item" id="profileTab">Profile</div>
-            <div class="tab-item" id="analyticsTab">Analytics</div>
+            <div class="tab-part">
+                <div class="tab-item" id="profileTab">Profile</div>
+                <div class="tab-item" id="analyticsTab">Analytics</div>
+            </div>
+            <button id="toggleAccountStatus"></button>
         </div>
         <div class="tab-container" id="profileContainer">
             <div class="tab-panel">

@@ -59,7 +59,8 @@ class fetchClass extends db_connect
                 level.grade_level,
                 section.section,
                 student.section_id,
-                login.email
+                login.email,
+                login.disabled
             FROM
                 student_tbl student
             INNER JOIN
@@ -4104,7 +4105,8 @@ class fetchClass extends db_connect
                 teacher.street,
                 teacher.contact_number,
                 teacher.role,
-                faculty.email
+                faculty.email,
+                faculty.disabled
             FROM
                 teacher_tbl teacher
             INNER JOIN
@@ -4147,7 +4149,8 @@ class fetchClass extends db_connect
                 teacher.street,
                 teacher.contact_number,
                 teacher.role,
-                admin.email
+                admin.email,
+                admin.disabled
             FROM
                 teacher_tbl teacher
             INNER JOIN

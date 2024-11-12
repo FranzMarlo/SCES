@@ -3,7 +3,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.ph
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/data-tables.php';
 $page = '';
 ?>
-<link rel="stylesheet" href="/SCES/assets/style/student-section.css" />
+<link rel="stylesheet" href="/SCES/assets/style/admin-student-list.css" />
 <title>Student List | SCES Online Learning Platform</title>
 </head>
 
