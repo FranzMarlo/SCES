@@ -724,82 +724,100 @@ class fetchClass extends db_connect
     }
 
     public function studentFetchScoresPerMonth($studentId)
-    {
+    {   
+        $studentData = $this->getStudentDetails($studentId);
+        $sectionId = $studentData['section_id'];
         $currentMonth = date('n');
         $currentYear = date('Y');
 
+        // Determine academic year range
         if ($currentMonth >= 6) {
             $startYear = $currentYear;
-            $endYear = $currentYear + 1;  // It will end in April of next year
+            $endYear = $currentYear + 1; // Ends in April next year
         } else {
-            // If the current month is before June, the academic year started in June of the previous year
             $startYear = $currentYear - 1;
-            $endYear = $currentYear;  // It will end in April of the current year
+            $endYear = $currentYear; // Ends in April this year
         }
 
-        // Initialize an array to store months and set all to 0 initially
+        // Prepare months array with default values
         $months = [];
-        $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
-        $endDate = strtotime("$endYear-04-30");       // End of academic year (April 30)
+        $currentDate = strtotime("$startYear-06-01");  // Start from June 1 of academic year
+        $endDate = strtotime("$endYear-04-30");        // Until April 30 of the next year
 
         while ($currentDate <= $endDate) {
-            $monthLabel = date('F', $currentDate);   // Month only, no year
+            $monthLabel = date('F', $currentDate);  // Month only, no year
             $months[date('Y-m', $currentDate)] = [
                 'month' => $monthLabel,
-                'avg_score' => 0  // Initialize score to 0 for every month
+                'totalScore' => 0,
+                'quizCount' => 0,
             ];
-            $currentDate = strtotime("+1 month", $currentDate);  // Increment to next month
+            $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
         }
 
-        // Query to get the average scores per month within the academic year range
+        // Query to get all quizzes for the section within the academic year
         $query = $this->conn->prepare("
         SELECT 
-            DATE_FORMAT(score.time, '%Y-%m') AS month,  -- Group by Year-Month format
-            AVG(score.score) AS avg_score               -- Get the average score per month
+            quiz.quiz_id, DATE_FORMAT(quiz.add_time, '%Y-%m') AS month
         FROM
             quiz_tbl quiz
         INNER JOIN
-            score_tbl score ON score.quiz_id = quiz.quiz_id
+            subject_tbl subject ON quiz.subject_id = subject.subject_id
         WHERE 
-            score.student_id = ?
+            quiz.add_time BETWEEN ? AND ?
+        AND
+            subject.section_id = ?
         AND 
-            score.score IS NOT NULL
-        AND 
-            score.time BETWEEN ? AND ?  -- Limit the scores to the academic year range
-        GROUP BY 
-            month
+            quiz.status IN ('Active', 'Completed')
         ORDER BY 
             month ASC
     ");
 
-        // Bind parameters: studentId, start date (June 1), and end date (April 30)
         $startDate = "$startYear-06-01";
         $endDate = "$endYear-04-30";
-        $query->bind_param("sss", $studentId, $startDate, $endDate);
+        $query->bind_param("sss", $startDate, $endDate, $sectionId);
 
         if ($query->execute()) {
             $result = $query->get_result();
 
+            // Process each quiz and calculate scores by month
             while ($row = $result->fetch_assoc()) {
-                $monthKey = $row['month'];  // 'Y-m' format
+                $quizId = $row['quiz_id'];
+                $monthKey = $row['month'];
 
-                // Update the score for the month if it exists in the query results
+                // Fetch the student score for the current quiz
+                $score = $this->fetchScoreByQuizId($quizId, $studentId);
+
+                // Update monthly data, using score 0 if no score is found
                 if (isset($months[$monthKey])) {
-                    $months[$monthKey]['avg_score'] = (float) $row['avg_score'];
+                    $months[$monthKey]['quizCount']++;
+                    $months[$monthKey]['totalScore'] += ($score !== null) ? $score : 0;
                 }
             }
 
-            // Prepare the data to return for the line chart
+            // Calculate average scores for each month
+            $scores = [];
+            foreach ($months as $month) {
+                if ($month['quizCount'] > 0) {
+                    $averageScore = $month['totalScore'] / $month['quizCount'];
+                    $scores[] = round($averageScore, 2);
+                } else {
+                    $scores[] = 0; // No quizzes in that month
+                }
+            }
+
+            // Prepare final data for return
             $data = [
-                'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
-                'scores' => array_column($months, 'avg_score')  // Average scores
+                'months' => array_column($months, 'month'), // Month names (June, July, etc.)
+                'scores' => $scores                          // Calculated scores
             ];
 
-            return $data;  // Return the final data for the line chart
+            return $data;
         } else {
-            return null;  // Return null in case of failure
+            return null; // Handle error in case of query failure
         }
     }
+
+
 
     public function fetchGWAByAcademicYear($lrn)
     {
@@ -2242,37 +2260,37 @@ class fetchClass extends db_connect
         }
     }
     public function studentFetchScoresBySectionMonthly($studentId, $sectionId)
-{
-    $currentMonth = date('n');  // Current month number (1-12)
-    $currentYear = date('Y');   // Current year
+    {
+        $currentMonth = date('n');  // Current month number (1-12)
+        $currentYear = date('Y');   // Current year
 
-    // Determine the academic year based on the current month
-    if ($currentMonth >= 6) {
-        $startYear = $currentYear;       // Academic year starts this year
-        $endYear = $currentYear + 1;     // Academic year ends next year
-    } else {
-        $startYear = $currentYear - 1;   // Academic year started last year
-        $endYear = $currentYear;         // Academic year ends this year
-    }
+        // Determine the academic year based on the current month
+        if ($currentMonth >= 6) {
+            $startYear = $currentYear;       // Academic year starts this year
+            $endYear = $currentYear + 1;     // Academic year ends next year
+        } else {
+            $startYear = $currentYear - 1;   // Academic year started last year
+            $endYear = $currentYear;         // Academic year ends this year
+        }
 
-    // Initialize months array with all months in the academic year (June-April)
-    $months = [];
-    $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
-    $endDate = strtotime("$endYear-04-30");        // End of academic year (April 30)
+        // Initialize months array with all months in the academic year (June-April)
+        $months = [];
+        $currentDate = strtotime("$startYear-06-01");  // Start of academic year (June 1)
+        $endDate = strtotime("$endYear-04-30");        // End of academic year (April 30)
 
-    while ($currentDate <= $endDate) {
-        $monthKey = date('Y-m', $currentDate);
-        $monthLabel = date('F', $currentDate);      // e.g., "June", "July"
-        $months[$monthKey] = [
-            'month' => $monthLabel,
-            'avg_score' => 0,                      // Initialize average score to 0 for each month
-            'quiz_ids' => []
-        ];
-        $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
-    }
+        while ($currentDate <= $endDate) {
+            $monthKey = date('Y-m', $currentDate);
+            $monthLabel = date('F', $currentDate);      // e.g., "June", "July"
+            $months[$monthKey] = [
+                'month' => $monthLabel,
+                'avg_score' => 0,                      // Initialize average score to 0 for each month
+                'quiz_ids' => []
+            ];
+            $currentDate = strtotime("+1 month", $currentDate);  // Move to next month
+        }
 
-    // Query to get all quizzes within the academic year range
-    $query = $this->conn->prepare("
+        // Query to get all quizzes within the academic year range
+        $query = $this->conn->prepare("
         SELECT 
             quiz.quiz_id, DATE_FORMAT(quiz.add_time, '%Y-%m') AS month
         FROM
@@ -2289,51 +2307,51 @@ class fetchClass extends db_connect
             month ASC
     ");
 
-    $startDate = "$startYear-06-01";
-    $endDate = "$endYear-04-30";
-    $query->bind_param("sss", $startDate, $endDate, $sectionId);
+        $startDate = "$startYear-06-01";
+        $endDate = "$endYear-04-30";
+        $query->bind_param("sss", $startDate, $endDate, $sectionId);
 
-    if ($query->execute()) {
-        $result = $query->get_result();
+        if ($query->execute()) {
+            $result = $query->get_result();
 
-        // Populate quiz IDs for each month
-        while ($row = $result->fetch_assoc()) {
-            $monthKey = $row['month'];
-            if (isset($months[$monthKey])) {
-                $months[$monthKey]['quiz_ids'][] = $row['quiz_id'];
-            }
-        }
-
-        // Calculate average score per month based on quizzes attempted by the student
-        foreach ($months as $monthKey => &$monthData) {
-            $totalScore = 0;
-            $quizCount = count($monthData['quiz_ids']);  // Total quizzes in the month
-
-            foreach ($monthData['quiz_ids'] as $quizId) {
-                $score = $this->fetchScoreByQuizId($quizId, $studentId);
-
-                if ($score !== null) { // Only add to total score if the student attempted it
-                    $totalScore += $score;
+            // Populate quiz IDs for each month
+            while ($row = $result->fetch_assoc()) {
+                $monthKey = $row['month'];
+                if (isset($months[$monthKey])) {
+                    $months[$monthKey]['quiz_ids'][] = $row['quiz_id'];
                 }
             }
 
-            // Calculate average score for the month, including unattempted quizzes in the count
-            if ($quizCount > 0) {
-                $monthData['avg_score'] = round($totalScore / $quizCount, 2);
+            // Calculate average score per month based on quizzes attempted by the student
+            foreach ($months as $monthKey => &$monthData) {
+                $totalScore = 0;
+                $quizCount = count($monthData['quiz_ids']);  // Total quizzes in the month
+
+                foreach ($monthData['quiz_ids'] as $quizId) {
+                    $score = $this->fetchScoreByQuizId($quizId, $studentId);
+
+                    if ($score !== null) { // Only add to total score if the student attempted it
+                        $totalScore += $score;
+                    }
+                }
+
+                // Calculate average score for the month, including unattempted quizzes in the count
+                if ($quizCount > 0) {
+                    $monthData['avg_score'] = round($totalScore / $quizCount, 2);
+                }
             }
+
+            // Prepare data for output
+            $data = [
+                'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
+                'scores' => array_column($months, 'avg_score')  // Average scores
+            ];
+
+            return $data;
+        } else {
+            return null;  // Return null in case of failure
         }
-
-        // Prepare data for output
-        $data = [
-            'months' => array_column($months, 'month'),  // Month labels (June, July, etc.)
-            'scores' => array_column($months, 'avg_score')  // Average scores
-        ];
-
-        return $data;
-    } else {
-        return null;  // Return null in case of failure
     }
-}
 
 
     public function studentFetchScoresByMonthWithFilter($studentId, $year, $gradeLevel)
@@ -3286,7 +3304,7 @@ class fetchClass extends db_connect
                 student.student_id,
                 student.lrn,
                 CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
-                AVG(score.score) AS average_score,
+                AVG(grade.grade) AS average_grade,
                 level.grade_level,
                 section.section
             FROM 
@@ -3300,15 +3318,13 @@ class fetchClass extends db_connect
             INNER JOIN 
                 subject_tbl subject ON record.section_id = subject.section_id
             INNER JOIN 
-                quiz_tbl quiz ON quiz.subject_id = subject.subject_id
-            LEFT JOIN 
-                score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+                grade_tbl grade ON subject.subject_id = grade.subject_id AND grade.student_id = student.student_id
             WHERE 
-                score.score IS NOT NULL
+                grade.grade IS NOT NULL
             GROUP BY 
                 full_name
             ORDER BY 
-                average_score DESC
+                average_grade DESC
             LIMIT 10
         ");
 
@@ -3318,7 +3334,7 @@ class fetchClass extends db_connect
                 student.student_id,
                 student.lrn,
                 CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
-                AVG(score.score) AS average_score,
+                AVG(grade.grade) AS average_grade,
                 level.grade_level,
                 section.section
             FROM 
@@ -3332,17 +3348,15 @@ class fetchClass extends db_connect
             INNER JOIN 
                 subject_tbl subject ON record.section_id = subject.section_id
             INNER JOIN 
-                quiz_tbl quiz ON quiz.subject_id = subject.subject_id
-            LEFT JOIN 
-                score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+                grade_tbl grade ON subject.subject_id = grade.subject_id AND grade.student_id = student.student_id
             WHERE 
-                score.score IS NOT NULL
+                grade.grade IS NOT NULL
             AND
                 level.grade_level = ?
             GROUP BY 
                 full_name
             ORDER BY 
-                average_score DESC
+                average_grade DESC
             LIMIT 10
         ");
             $query->bind_param("s", $gradeLevel);
@@ -3352,7 +3366,7 @@ class fetchClass extends db_connect
                 student.student_id,
                 student.lrn,
                 CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
-                AVG(score.score) AS average_score,
+                AVG(grade.grade) AS average_grade,
                 level.grade_level,
                 section.section
             FROM 
@@ -3366,17 +3380,15 @@ class fetchClass extends db_connect
             INNER JOIN 
                 subject_tbl subject ON record.section_id = subject.section_id
             INNER JOIN 
-                quiz_tbl quiz ON quiz.subject_id = subject.subject_id
-            LEFT JOIN 
-                score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+                grade_tbl grade ON subject.subject_id = grade.subject_id AND grade.student_id = student.student_id
             WHERE 
-                score.score IS NOT NULL
+                grade.grade IS NOT NULL
             AND
                 section.year = ?
             GROUP BY 
                 full_name
             ORDER BY 
-                average_score DESC
+                average_grade DESC
             LIMIT 10
         ");
             $query->bind_param("i", $year);
@@ -3386,7 +3398,7 @@ class fetchClass extends db_connect
                 student.student_id,
                 student.lrn,
                 CONCAT(student.student_fname, ' ', student.student_lname) AS full_name,
-                AVG(score.score) AS average_score,
+                AVG(grade.grade) AS average_grade,
                 level.grade_level,
                 section.section
             FROM 
@@ -3399,12 +3411,10 @@ class fetchClass extends db_connect
                 section_tbl section ON record.section_id = section.section_id
             INNER JOIN 
                 subject_tbl subject ON record.section_id = subject.section_id
-            INNER JOIN 
-                quiz_tbl quiz ON quiz.subject_id = subject.subject_id
-            LEFT JOIN 
-                score_tbl score ON quiz.quiz_id = score.quiz_id AND score.student_id = student.student_id
+            IINNER JOIN 
+                grade_tbl grade ON subject.subject_id = grade.subject_id AND grade.student_id = student.student_id
             WHERE 
-                score.score IS NOT NULL
+                grade.grade IS NOT NULL
             AND
                 section.year = ?
             AND
@@ -3412,7 +3422,7 @@ class fetchClass extends db_connect
             GROUP BY 
                 full_name
             ORDER BY 
-                average_score DESC
+                average_grade DESC
             LIMIT 10
         ");
             $query->bind_param("is", $year, $gradeLevel);
@@ -3426,7 +3436,7 @@ class fetchClass extends db_connect
                     'student_id' => $row['student_id'],
                     'lrn' => $row['lrn'],
                     'full_name' => $row['full_name'],
-                    'average_score' => round($row['average_score'], 2),
+                    'average_grade' => round($row['average_grade'], 2),
                     'grade_level' => $row['grade_level'],
                     'section' => $row['section'],
                 ];

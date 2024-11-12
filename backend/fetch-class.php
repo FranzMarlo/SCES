@@ -239,7 +239,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($submitType === 'fetchLineChartData') {
         session_start();
         $studentId = $_SESSION['student_id'];
-
         $data = $fetchDb->studentFetchScoresPerMonth($studentId);
 
         echo json_encode([

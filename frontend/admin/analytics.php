@@ -32,12 +32,13 @@ $page = '';
                     <div class="filter-part">
                         <select id="yearFilterDropdown" class="filter-dropdown">
                             <option value="All">Overtime</option>
-                            <option value="2024">Current SY</option>
-                            <option value="2019">2019-2020</option>
-                            <option value="2020">2020-2021</option>
-                            <option value="2021">2021-2022</option>
-                            <option value="2022">2022-2023</option>
-                            <option value="2023">2023-2024</option>
+                            <option value="<?php echo date("Y"); ?>">Current SY</option>
+                            <?php
+                            $currentYear = date("Y") - 1;
+                            for ($year = $currentYear; $year >= 2019; $year--) {
+                                echo "<option value='$year'>$year-" . ($year + 1) . "</option>";
+                            }
+                            ?>
                         </select>
                         <select id="gradeFilterDropdown" class="filter-dropdown">
                             <option value="All">All Grades</option>

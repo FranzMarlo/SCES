@@ -285,7 +285,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const headers =
       year !== "All" && year <= 2023
         ? ["Full Name", "GWA", "Grade & Section"]
-        : ["Full Name", "Average Score", "Grade & Section", "View Student"];
+        : ["Full Name", "Average Grade", "Grade & Section", "View Student"];
 
     headers.forEach((headerText) => {
       const th = document.createElement("th");
@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", function () {
           } else {
             tr.innerHTML = `
                         <td class="text-center" data-label="Full Name">${row.full_name}</td>
-                        <td class="text-center" data-label="Average Score">${row.average_score}</td>
+                        <td class="text-center" data-label="Average Score">${row.average_grade}</td>
                         <td class="text-center" data-label="Grade & Section">${row.grade_level} - ${row.section}</td>
                         <td class="text-center" data-label="View Student">
                             <div class="center-image">
