@@ -49,6 +49,18 @@ $("#studLogin").on("submit", function (e) {
             });
           }
         );
+      } else if (response == "454") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Account Disabled",
+              text: "Your account has been disabled by an admin, if this is wrong please contact your teacher.",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
       } else {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
@@ -945,6 +957,18 @@ $("#adminLogin").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Please Enter Valid Email",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "454") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Account Disabled",
+              text: "Your account has been disabled by an admin, if this is wrong please contact an admin.",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -1970,6 +1994,18 @@ $("#facultyLogin").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Please Enter Valid Email",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "454") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "error",
+              title: "Account Disabled",
+              text: "Your account has been disabled by an admin, if this is wrong please contact an admin.",
               confirmButtonColor: "#4CAF50",
             });
           }

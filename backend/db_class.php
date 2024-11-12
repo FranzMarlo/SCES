@@ -18,7 +18,6 @@ class globalClass extends db_connect
             $result = $query->get_result();
             if ($result->num_rows > 0) {
                 $user = $result->fetch_assoc();
-
                 if (password_verify($password, $user['password'])) {
                     return $user;
                 }
@@ -3002,7 +3001,7 @@ class globalClass extends db_connect
         $query->bind_param("ssi", $email, $token, $expires);
         return $query->execute();
     }
-    
+
     public function checkFacultyTokenExpiry($email, $token)
     {
         $query = $this->conn->prepare("SELECT expires FROM faculty_pass_reset WHERE email = ? AND token = ?");
@@ -3037,7 +3036,7 @@ class globalClass extends db_connect
         $query->bind_param("ssi", $email, $token, $expires);
         return $query->execute();
     }
-    
+
     public function checkAdminTokenExpiry($email, $token)
     {
         $query = $this->conn->prepare("SELECT expires FROM admin_pass_reset WHERE email = ? AND token = ?");
@@ -3095,6 +3094,42 @@ class globalClass extends db_connect
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function getStudentAccountStatus($studentId)
+    {
+        $query = $this->conn->prepare("SELECT `disabled` FROM `login_tbl` WHERE `student_id` = ?");
+        $query->bind_param("s", $studentId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $data = $result->fetch_assoc();
+            return $data['disabled'];
+        }
+    }
+
+    public function getFacultyAccountStatus($teacherId)
+    {
+        $query = $this->conn->prepare("SELECT `disabled` FROM `faculty_tbl` WHERE `teacher_id` = ?");
+        $query->bind_param("s", $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $data = $result->fetch_assoc();
+            return $data['disabled'];
+        }
+    }
+
+    public function getAdminAccountStatus($teacherId)
+    {
+        $query = $this->conn->prepare("SELECT `disabled` FROM `admin_tbl` WHERE `teacher_id` = ?");
+        $query->bind_param("s", $teacherId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $data = $result->fetch_assoc();
+            return $data['disabled'];
         }
     }
 }

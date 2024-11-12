@@ -953,6 +953,9 @@
     }
   }
   @media (width < 600px) {
+    #toggleAccountStatus span{
+      display: none;
+    }
     .add-btn {
       font-size: 0.7rem;
     }
@@ -1120,8 +1123,15 @@
     .stats-col span {
       font-size: 0.8rem;
     }
+    .tab-controller{
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      padding-bottom: 0;
+      row-gap: 5px;
+    }
     #toggleAccountStatus span{
-      display: none;
+      display: block;
     }
   }
   @media (width < 375px) {

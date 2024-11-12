@@ -2,6 +2,7 @@
 
 if (isset($_SESSION['student_id'])) {
     $studentId = $_SESSION['student_id'];
+    $getStudentData = $db->getStudentData($studentId);
     $lrn = $_SESSION['lrn'];
     $studentFname = $_SESSION['student_fname'];
     $studentMname = $_SESSION['student_mname'];
@@ -18,15 +19,21 @@ if (isset($_SESSION['student_id'])) {
     $barangay = $_SESSION['barangay'];
     $street = $_SESSION['street'];
     $image = $_SESSION['profile_image'];
-    $sectionId = $_SESSION['section_id'];
-    $level_id = $_SESSION['level_id'];
-    $section = $_SESSION['section'];
-    $gradeLevel = $_SESSION['grade_level'];
     $passwordChange = $_SESSION['password_change'];
     $emailVerification = $_SESSION['email_verification'];
     $middleInitial = getMiddleInitial($studentMname);
     $suffix = getSuffix($studentSuffix);
     $firstName = getFirstName($studentFname);
+
+    $getGradeLevel = $db->getGradeLevel($getStudentData['level_id']);
+    $getSection = $db->getSection($getStudentData['section_id']);
+    $sectionId = $getStudentData['section_id'];
+    $level_id = $getStudentData['level_id'];
+    $gradeLevel = $getGradeLevel;
+    $section = $getSection;
+
+    $accountStatus = $db->getStudentAccountStatus($studentId);
+
 } else {
     header('Location: /SCES/frontend/student/login.php');
 }

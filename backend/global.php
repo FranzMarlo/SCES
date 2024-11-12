@@ -21,29 +21,18 @@ if (isset($_POST['submitType'])) {
             $result = $db->studentLogin($email, $password);
 
             if ($result !== false) {
+                $disabled = $result['disabled'];
+                if ($disabled == 'True') {
+                    echo '454';
+                    exit();
+                }
                 $studentId = $result['student_id'];
                 $getStudentData = $db->getStudentData($studentId);
 
                 if ($getStudentData !== false) {
-                    $getGradeLevel = $db->getGradeLevel($getStudentData['level_id']);
-                    if ($getGradeLevel !== false) {
-                        $gradeLevel = $getGradeLevel;
-                    } else {
-                        echo '400';
-                        exit();
-                    }
-                    $getSection = $db->getSection($getStudentData['section_id']);
-                    if ($getSection !== false) {
-                        $section = $getSection;
-                    } else {
-                        echo '400';
-                        exit();
-                    }
                     session_start();
                     $_SESSION['student_id'] = $getStudentData['student_id'];
                     $_SESSION['lrn'] = $getStudentData['lrn'];
-                    $_SESSION['level_id'] = $getStudentData['level_id'];
-                    $_SESSION['section_id'] = $getStudentData['section_id'];
                     $_SESSION['student_fname'] = $getStudentData['student_fname'];
                     $_SESSION['student_mname'] = $getStudentData['student_mname'];
                     $_SESSION['student_lname'] = $getStudentData['student_lname'];
@@ -58,8 +47,6 @@ if (isset($_POST['submitType'])) {
                     $_SESSION['barangay'] = $getStudentData['barangay'];
                     $_SESSION['street'] = $getStudentData['street'];
                     $_SESSION['profile_image'] = $getStudentData['profile_image'];
-                    $_SESSION['section'] = $section;
-                    $_SESSION['grade_level'] = $gradeLevel;
                     $_SESSION['email_verification'] = $result['email_verification'];
                     $_SESSION['password_change'] = $result['password_change'];
                     echo '200';
@@ -143,24 +130,8 @@ if (isset($_POST['submitType'])) {
                         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                         $signUpResult = $db->studentSignUp($gradeLevelId, $sectionId, $firstName, $middleName, $lastName, $studSuffix, $studentLRN, $age, $gender, $email, $hashedPassword, 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'Not Set', 'default-profile.png', 'Not Verified');
                         if ($signUpResult !== false) {
-                            $getGradeLevel = $db->getGradeLevel($gradeLevelId);
-                            if ($getGradeLevel !== false) {
-                                $gradeLevel = $getGradeLevel;
-                            } else {
-                                echo '400';
-                                exit();
-                            }
-                            $getSection = $db->getSection($sectionId);
-                            if ($getSection !== false) {
-                                $section = $getSection;
-                            } else {
-                                echo '400';
-                                exit();
-                            }
                             session_start();
                             $_SESSION['student_id'] = $signUpResult;
-                            $_SESSION['level_id'] = $gradeLevelId;
-                            $_SESSION['section_id'] = $sectionId;
                             $_SESSION['student_fname'] = $firstName;
                             $_SESSION['student_mname'] = $middleName;
                             $_SESSION['student_lname'] = $lastName;
@@ -176,8 +147,6 @@ if (isset($_POST['submitType'])) {
                             $_SESSION['barangay'] = 'Not Set';
                             $_SESSION['street'] = 'Not Set';
                             $_SESSION['profile_image'] = 'default-profile.png';
-                            $_SESSION['section'] = $section;
-                            $_SESSION['grade_level'] = $gradeLevel;
                             $_SESSION['email_verification'] = 'Not Verified';
                             $_SESSION['password_change'] = NULL;
                             echo '200';
@@ -437,6 +406,11 @@ if (isset($_POST['submitType'])) {
             $result = $db->adminLogin($email, $password);
 
             if ($result !== false) {
+                $disabled = $result['disabled'];
+                if ($disabled == 'True') {
+                    echo '454';
+                    exit();
+                }
                 $teacherId = $result['teacher_id'];
                 $getTeacherData = $db->getTeacherData($teacherId);
 
@@ -879,6 +853,11 @@ if (isset($_POST['submitType'])) {
             $result = $db->facultyLogin($email, $password);
 
             if ($result !== false) {
+                $disabled = $result['disabled'];
+                if ($disabled == 'True') {
+                    echo '454';
+                    exit();
+                }
                 $teacherId = $result['teacher_id'];
                 $getTeacherData = $db->getTeacherData($teacherId);
 
