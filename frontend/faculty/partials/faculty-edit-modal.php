@@ -1,53 +1,85 @@
-<div id="adminChangeAvatarModal" class="modal">
+<div id="facultyChangeAvatarModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeAvatarModal">&times;</span>
         <h2>Change Avatar</h2>
         <div class="current-avatar">
-            <img src="/SCES/storage/admin/images/<?php echo $image; ?>" alt="user icon" id="avatar-preview">
+            <img src="/SCES/storage/faculty/images/<?php echo $image; ?>" alt="user icon" id="avatar-preview">
             <img src="/SCES/assets/images/change-avatar.png" alt="change user icon" id="change-user-icon">
         </div>
-        <form id="adminChangeAvatarForm" enctype="multipart/form-data">
+        <form id="facultyChangeAvatarForm" enctype="multipart/form-data">
             <input type="file" id="new-avatar" name="new-avatar" accept="image/*" style="display: none;">
             <button type="submit" class="save-btn">Save</button>
         </form>
     </div>
 </div>
 
-<div id="adminEditProfileModal" class="modal">
+<div id="facultyEditProfileModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeModal">&times;</span>
         <h2>Edit Profile Information</h2>
-        <form id="adminEditProfileForm">
+        <form id="facultyEditProfileForm">
             <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($teacherFname); ?>">
+            <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($teacherFname); ?>" placeholder="<?php echo htmlspecialchars($teacherFname); ?>">
 
             <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($teacherLname); ?>">
+            <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($teacherLname); ?>" placeholder="<?php echo htmlspecialchars($teacherLname); ?>">
 
             <button type="submit" class="save-btn">Save</button>
         </form>
     </div>
 </div>
 
-<div id="adminEditPersonalModal" class="modal" novalidate>
+<div id="facultyEditPersonalModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closePersonalModal">&times;</span>
         <h2>Edit Personal Information</h2>
-        <form id="adminEditPersonalForm">
+        <form id="facultyEditPersonalForm">
             <label for="personalFirstName">First Name:</label>
             <input type="text" id="personalFirstName" name="personalFirstName"
-                value="<?php echo htmlspecialchars($teacherFname); ?>">
+                value="<?php echo htmlspecialchars($teacherFname); ?>"
+                placeholder="<?php echo htmlspecialchars($teacherFname); ?>">
 
             <label for="personalLastName">Last Name:</label>
             <input type="text" id="personalLastName" name="personalLastName"
-                value="<?php echo htmlspecialchars($teacherLname); ?>">
+                value="<?php echo htmlspecialchars($teacherLname); ?>"
+                placeholder="<?php echo htmlspecialchars($teacherLname); ?>">
 
             <label for="personalMiddleName">Middle Name:</label>
             <input type="text" id="personalMiddleName" name="personalMiddleName"
-                value="<?php echo htmlspecialchars($teacherMname); ?>">
+                value="<?php echo htmlspecialchars($teacherMname); ?>"
+                placeholder="<?php echo htmlspecialchars($teacherMname); ?>">
+
+                <label for="personalSuffix">Suffix:</label>
+                <select name="personalSuffix" id="personalSuffix">
+                <option value="" disabled>Select Suffix</option>
+                <option value="N/A" <?php if ($teacherSuffix == 'N/A')
+                    echo 'selected'; ?>>None</option>
+                <option value="Sr." <?php if ($teacherSuffix == 'Sr.')
+                    echo 'selected'; ?>>Sr.</option>
+                <option value="Jr." <?php if ($teacherSuffix == 'Jr.')
+                    echo 'selected'; ?>>Jr.</option>
+                <option value="II" <?php if ($teacherSuffix == 'II')
+                    echo 'selected'; ?>>II</option>
+                <option value="III" <?php if ($teacherSuffix == 'III')
+                    echo 'selected'; ?>>III</option>
+                <option value="IV" <?php if ($teacherSuffix == 'IV')
+                    echo 'selected'; ?>>IV</option>
+                <option value="V" <?php if ($teacherSuffix == 'V')
+                    echo 'selected'; ?>>V</option>
+                <option value="VI" <?php if ($teacherSuffix == 'VI')
+                    echo 'selected'; ?>>VI</option>
+                <option value="VII" <?php if ($teacherSuffix == 'VII')
+                    echo 'selected'; ?>>VII</option>
+                <option value="VIII" <?php if ($teacherSuffix == 'VIII')
+                    echo 'selected'; ?>>VIII</option>
+                <option value="IX" <?php if ($teacherSuffix == 'IX')
+                    echo 'selected'; ?>>IX</option>
+                <option value="X" <?php if ($teacherSuffix == 'X')
+                    echo 'selected'; ?>>X</option>
+              </select>
 
             <label for="personalAge">Age:</label>
-            <input type="number" id="personalAge" name="personalAge" value="<?php echo htmlspecialchars($age); ?>">
+            <input type="number" id="personalAge" name="personalAge" value="<?php echo htmlspecialchars($age); ?>" placeholder="<?php echo htmlspecialchars($age); ?>">
 
             <label for="personalGender">Gender:</label>
             <select id="personalGender" name="personalGender">
@@ -64,11 +96,11 @@
     </div>
 </div>
 
-<div id="adminEditBackgroundModal" class="modal" novalidate>
+<div id="facultyEditBackgroundModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeBackgroundModal">&times;</span>
         <h2>Edit Background Information</h2>
-        <form id="adminEditBackgroundForm">
+        <form id="facultyEditBackgroundForm">
             <label for="city">City:</label>
             <select id="city" name="city" data-initial-city="<?php echo htmlspecialchars($city); ?>">
                 <option value="Not Set" disabled <?php if ($city == 'Not Set')
@@ -153,22 +185,23 @@
             </select>
 
             <label for="street">Street:</label>
-            <input type="text" id="street" name="street" value="<?php echo htmlspecialchars($street); ?>">
+            <input type="text" id="street" name="street" value="<?php echo htmlspecialchars($street); ?>" placeholder="<?php echo htmlspecialchars($street); ?>">
 
             <label for="contactNumber">Contact Number:</label>
             <input type="text" id="contactNumber" name="contactNumber"
-                value="<?php echo htmlspecialchars($contactNumber); ?>">
+                value="<?php echo htmlspecialchars($contactNumber); ?>"
+                placeholder="<?php echo htmlspecialchars($contactNumber); ?>">
 
             <button type="submit" class="save-btn">Save</button>
         </form>
     </div>
 </div>
 
-<div id="adminPasswordModal" class="modal" novalidate>
+<div id="facultyPasswordModal" class="modal" novalidate>
     <div class="modal-content">
         <span class="close-btn" id="closePasswordModal">&times;</span>
         <h2>Update Password</h2>
-        <form id="adminUpdatePassword">
+        <form id="facultyUpdatePassword">
             <label for="currentPassword">Current Password:</label>
             <div class="input-container">
                 <input type="password" id="currentPassword" name="currentPassword" placeholder="Enter Current Password">

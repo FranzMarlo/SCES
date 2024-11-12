@@ -19,32 +19,36 @@
         <h2>Edit Profile Information</h2>
         <form id="editProfileForm">
             <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($studentFname); ?>">
+            <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($studentFname); ?>" placeholder="<?php echo htmlspecialchars($studentFname); ?>">
 
             <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($studentLname); ?>">
+            <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($studentLname); ?>" placeholder="<?php echo htmlspecialchars($studentLname); ?>">
 
             <button type="submit" class="save-btn">Save</button>
         </form>
     </div>
 </div>
 
-<div id="editPersonalModal" class="modal" novalidate>
+<div id="editPersonalModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closePersonalModal">&times;</span>
         <h2>Edit Personal Information</h2>
         <form id="editPersonalForm">
             <label for="personalFirstName">First Name:</label>
             <input type="text" id="personalFirstName" name="personalFirstName"
-                value="<?php echo htmlspecialchars($studentFname); ?>">
+                value="<?php echo htmlspecialchars($studentFname); ?>"
+                placeholder="<?php echo htmlspecialchars($studentFname); ?>">
 
             <label for="personalLastName">Last Name:</label>
             <input type="text" id="personalLastName" name="personalLastName"
-                value="<?php echo htmlspecialchars($studentLname); ?>">
+                value="<?php echo htmlspecialchars($studentLname); ?>"
+                placeholder="<?php echo htmlspecialchars($studentLname); ?>">
 
             <label for="personalMiddleName">Middle Name:</label>
             <input type="text" id="personalMiddleName" name="personalMiddleName"
-                value="<?php echo htmlspecialchars($studentMname); ?>">
+                value="<?php echo htmlspecialchars($studentMname); ?>"
+                placeholder="<?php echo htmlspecialchars($studentMname); ?>"
+                >
 
             <label for="personalSuffix">Suffix:</label>
                 <select name="personalSuffix" id="personalSuffix">
@@ -76,7 +80,7 @@
               </select>
 
             <label for="personalAge">Age:</label>
-            <input type="number" id="personalAge" name="personalAge" value="<?php echo htmlspecialchars($age); ?>">
+            <input type="number" id="personalAge" name="personalAge" value="<?php echo htmlspecialchars($age); ?>" placeholder="<?php echo htmlspecialchars($age); ?>">
 
             <label for="personalGender">Gender:</label>
             <select id="personalGender" name="personalGender">
@@ -182,15 +186,17 @@
             </select>
 
             <label for="street">Street:</label>
-            <input type="text" id="street" name="street" value="<?php echo htmlspecialchars($street); ?>">
+            <input type="text" id="street" name="street" value="<?php echo htmlspecialchars($street); ?>" placeholder="<?php echo htmlspecialchars($street); ?>">
 
             <label for="guardianFullName">Guardian Full Name:</label>
             <input type="text" id="guardianFullName" name="guardianFullName"
-                value="<?php echo htmlspecialchars($guardianName); ?>">
+                value="<?php echo htmlspecialchars($guardianName); ?>"
+                placeholder="<?php echo htmlspecialchars($guardianName); ?>">
 
             <label for="guardianContact">Guardian Contact Number:</label>
             <input type="text" id="guardianContact" name="guardianContact"
-                value="<?php echo htmlspecialchars($guardianContact); ?>">
+                value="<?php echo htmlspecialchars($guardianContact); ?>"
+                placeholder="<?php echo htmlspecialchars($guardianContact); ?>">
 
             <button type="submit" class="save-btn">Save</button>
         </form>

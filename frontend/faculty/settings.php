@@ -79,6 +79,10 @@ $page = '';
                             </div>
                             <div class="info-part">
                                 <div class="info-data">
+                                    <span>Suffix</span>
+                                    <p><?php echo htmlspecialchars($teacherSuffix); ?></p>
+                                </div>
+                                <div class="info-data">
                                     <span>Age</span>
                                     <p><?php echo ($age == 0) ? 'Not Set' : htmlspecialchars($age); ?></p>
                                 </div>
@@ -86,11 +90,6 @@ $page = '';
                                     <span>Gender</span>
                                     <p><?php echo htmlspecialchars($gender); ?></p>
                                 </div>
-                                <div class="info-data">
-                                    <span>Email Address</span>
-                                    <p><?php echo htmlspecialchars($email); ?></p>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -120,6 +119,10 @@ $page = '';
                                 </div>
                             </div>
                             <div class="info-part">
+                                <div class="info-data">
+                                    <span>Email Address</span>
+                                    <p><?php echo htmlspecialchars($email); ?></p>
+                                </div>
                                 <div class="info-data">
                                     <span>Contact Number</span>
                                     <p><?php echo htmlspecialchars($contactNumber); ?></p>
@@ -171,6 +174,6 @@ $page = '';
     </div>
 
     <?php
-    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/faculty-edit-modal.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-edit-modal.php';
     include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-footer.php';
     ?>

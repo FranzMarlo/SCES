@@ -204,22 +204,24 @@ if (isset($_POST['submitType'])) {
             $lastName == $_SESSION['student_lname']
         ) {
             echo '100';
+            exit();
         } else if (empty($firstName)) {
             echo '452';
+            exit();
         } else if (empty($lastName)) {
             echo '454';
+            exit();
         } else {
             $editProfileInfo = $db->editProfileForm($firstName, $lastName, $studentId);
             if ($editProfileInfo !== false) {
                 $_SESSION['student_fname'] = $firstName;
                 $_SESSION['student_lname'] = $lastName;
                 echo '200';
+                exit();
             } else {
                 echo '400';
-
+                exit();
             }
-
-
         }
     } else if ($_POST['submitType'] === 'editPersonalForm') {
         session_start();
@@ -289,6 +291,7 @@ if (isset($_POST['submitType'])) {
         $street = validate($_POST['street']);
         $guardianFullName = validate($_POST['guardianFullName']);
         $guardianContact = validate($_POST['guardianContact']);
+        $phonePattern = '/^(09|\+639)\d{9}$/';
         if (
             $city == $_SESSION['city'] &&
             $barangay == $_SESSION['barangay'] &&
@@ -297,17 +300,26 @@ if (isset($_POST['submitType'])) {
             $guardianContact == $_SESSION['guardian_contact']
         ) {
             echo '100';
+            exit();
         } else if (empty($city) || $city == "Not Set") {
             echo '465';
+            exit();
         } else if (empty($barangay) || $barangay == "Not Set") {
             echo '466';
+            exit();
         } else if (empty($street) || $street == "Not Set") {
             echo '467';
+            exit();
         } else if (empty($guardianFullName) || $guardianFullName == "Not Set") {
             echo '473';
+            exit();
         } else if (empty($guardianContact) || $guardianContact == "Not Set") {
             echo '474';
-        } else {
+            exit();
+        } else if (!preg_match($phonePattern, $guardianContact)) {
+            echo '464';
+            exit();
+        }else {
             $editBackgroundInfo = $db->editBackgroundForm($city, $barangay, $street, $guardianFullName, $guardianContact, $studentId);
             if ($editBackgroundInfo !== false) {
                 $_SESSION['city'] = $city;
@@ -316,8 +328,10 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['guardian_name'] = $guardianFullName;
                 $_SESSION['guardian_contact'] = $guardianContact;
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'uploadAvatar') {
@@ -344,19 +358,23 @@ if (isset($_POST['submitType'])) {
                     if ($updateAvatar !== false) {
                         $_SESSION['profile_image'] = $newFileName;
                         echo '200';
+                        exit();
                     } else {
                         echo '400';
+                        exit();
                     }
                 } else {
                     echo '475';
+                    exit();
                 }
             } else {
                 echo '476';
+                exit();
             }
         } else {
             echo '476';
+            exit();
         }
-        exit;
     } else if ($_POST['submitType'] === 'updatePassword') {
         session_start();
         $studentId = $_SESSION['student_id'];
@@ -366,20 +384,27 @@ if (isset($_POST['submitType'])) {
 
         if (empty($currentPassword)) {
             echo '479';
+            exit();
         } else if (empty($newPassword)) {
             echo '480';
+            exit();
         } else if (empty($confirmPassword)) {
             echo '481';
+            exit();
         } else if (strlen($newPassword) < 6) {
             echo '460';
+            exit();
         } else if ($newPassword != $confirmPassword) {
             echo '462';
+            exit();
         } else {
             $hashedPassword = $db->studentGetPassword($studentId);
             if (!password_verify($currentPassword, $hashedPassword)) {
                 echo '482';
+                exit();
             } else if (password_verify($newPassword, $hashedPassword)) {
                 echo '483';
+                exit();
             } else {
                 $currentDate = date("Y-m-d");
                 $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
@@ -388,8 +413,10 @@ if (isset($_POST['submitType'])) {
                     $_SESSION['password'] = $newPasswordHash;
                     $_SESSION['password_change'] = $currentDate;
                     echo '200';
+                    exit();
                 } else {
                     echo '400';
+                    exit();
                 }
             }
         }
@@ -556,19 +583,23 @@ if (isset($_POST['submitType'])) {
             $lastName == $_SESSION['teacher_lname']
         ) {
             echo '100';
+            exit();
         } else if (empty($firstName)) {
             echo '452';
+            exit();
         } else if (empty($lastName)) {
             echo '454';
+            exit();
         } else {
             $editProfileInfo = $db->adminEditProfileForm($firstName, $lastName, $teacherId);
             if ($editProfileInfo !== false) {
                 $_SESSION['teacher_fname'] = $firstName;
                 $_SESSION['teacher_lname'] = $lastName;
                 echo '200';
+                exit();
             } else {
                 echo '400';
-
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'adminEditPersonalForm') {
@@ -577,6 +608,7 @@ if (isset($_POST['submitType'])) {
         $firstName = validate($_POST['firstName']);
         $lastName = validate($_POST['lastName']);
         $middleName = validate($_POST['middleName']);
+        $suffix = validate($_POST['suffix']);
         $age = validate($_POST['age']);
         $gender = validate($_POST['gender']);
 
@@ -584,35 +616,50 @@ if (isset($_POST['submitType'])) {
             $firstName == $_SESSION['teacher_fname'] &&
             $lastName == $_SESSION['teacher_lname'] &&
             $middleName == $_SESSION['teacher_mname'] &&
+            $suffix == $_SESSION['teacher_suffix'] &&
             $age == $_SESSION['age'] &&
             $gender == $_SESSION['gender']
         ) {
             echo '100';
+            exit();
         } else if (empty($firstName)) {
             echo '452';
+            exit();
         } else if (empty($lastName)) {
             echo '454';
+            exit();
         } else if (empty($middleName)) {
             echo '453';
+            exit();
+        } else if (empty($suffix)) {
+            echo '464';
+            exit();
         } else if (empty($age)) {
             echo '469';
+            exit();
         } else if ($age < 5) {
             echo '470';
+            exit();
         } else if ($age > 100) {
             echo '471';
+            exit();
         } else if (empty($gender)) {
             echo '472';
+            exit();
         } else {
-            $editPersonalInfo = $db->adminEditPersonalForm($firstName, $lastName, $middleName, $age, $gender, $teacherId);
+            $editPersonalInfo = $db->adminEditPersonalForm($firstName, $lastName, $middleName, $age, $gender, $suffix, $teacherId);
             if ($editPersonalInfo !== false) {
                 $_SESSION['teacher_fname'] = $firstName;
                 $_SESSION['teacher_lname'] = $lastName;
                 $_SESSION['teacher_mname'] = $middleName;
+                $_SESSION['teacher_suffix'] = $suffix;
                 $_SESSION['age'] = $age;
                 $_SESSION['gender'] = $gender;
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'adminEditBackgroundForm') {
@@ -622,6 +669,8 @@ if (isset($_POST['submitType'])) {
         $barangay = $_POST['barangay'];
         $street = validate($_POST['street']);
         $contactNumber = validate($_POST['contactNumber']);
+        $phonePattern = '/^(09|\+639)\d{9}$/';
+
         if (
             $city == $_SESSION['city'] &&
             $barangay == $_SESSION['barangay'] &&
@@ -629,14 +678,22 @@ if (isset($_POST['submitType'])) {
             $contactNumber == $_SESSION['contact_number']
         ) {
             echo '100';
+            exit();
         } else if (empty($city) || $city == "Not Set") {
             echo '465';
+            exit();
         } else if (empty($barangay) || $barangay == "Not Set") {
             echo '466';
+            exit();
         } else if (empty($street) || $street == "Not Set") {
             echo '467';
+            exit();
         } else if (empty($contactNumber) || $contactNumber == "Not Set") {
             echo '474';
+            exit();
+        } else if (!preg_match($phonePattern, $contactNumber)) {
+            echo '464';
+            exit();
         } else {
             $editBackgroundInfo = $db->adminEditBackgroundForm($city, $barangay, $street, $contactNumber, $teacherId);
             if ($editBackgroundInfo !== false) {
@@ -645,8 +702,10 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['street'] = $street;
                 $_SESSION['contact_number'] = $contactNumber;
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'adminUploadAvatar') {
@@ -673,19 +732,23 @@ if (isset($_POST['submitType'])) {
                     if ($updateAvatar !== false) {
                         $_SESSION['image_profile'] = $newFileName;
                         echo '200';
+                        exit();
                     } else {
                         echo '400';
+                        exit();
                     }
                 } else {
                     echo '475';
+                    exit();
                 }
             } else {
                 echo '476';
+                exit();
             }
         } else {
             echo '476';
+            exit();
         }
-        exit;
     } else if ($_POST['submitType'] === 'adminUpdatePassword') {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
@@ -695,20 +758,27 @@ if (isset($_POST['submitType'])) {
 
         if (empty($currentPassword)) {
             echo '479';
+            exit();
         } else if (empty($newPassword)) {
             echo '480';
+            exit();
         } else if (empty($confirmPassword)) {
             echo '481';
+            exit();
         } else if (strlen($newPassword) < 6) {
             echo '460';
+            exit();
         } else if ($newPassword != $confirmPassword) {
             echo '462';
+            exit();
         } else {
             $hashedPassword = $db->adminGetPassword($teacherId);
             if (!password_verify($currentPassword, $hashedPassword)) {
                 echo '482';
+                exit();
             } else if (password_verify($newPassword, $hashedPassword)) {
                 echo '483';
+                exit();
             } else {
                 $currentDate = date("Y-m-d");
                 $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
@@ -717,8 +787,10 @@ if (isset($_POST['submitType'])) {
                     $_SESSION['password'] = $newPasswordHash;
                     $_SESSION['password_change'] = $currentDate;
                     echo '200';
+                    exit();
                 } else {
                     echo '400';
+                    exit();
                 }
             }
         }
@@ -736,12 +808,16 @@ if (isset($_POST['submitType'])) {
         $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $sectionId, $lessonNumber);
         if (empty($lessonNumber)) {
             echo '484';
+            exit();
         } else if ($checkNumber->num_rows > 0) {
             echo '490';
+            exit();
         } else if (empty($lessonTitle)) {
             echo '485';
+            exit();
         } else if (empty($quarter) || $quarter == 'Not Set') {
             echo '486';
+            exit();
         } else {
             if (isset($_FILES['lessonFile']) && $_FILES['lessonFile']['error'] === UPLOAD_ERR_OK) {
                 $file = $_FILES['lessonFile'];
@@ -768,17 +844,22 @@ if (isset($_POST['submitType'])) {
 
                         if ($result) {
                             echo '200';
+                            exit();
                         } else {
                             echo '400';
+                            exit();
                         }
                     } else {
                         echo '487';
+                        exit();
                     }
                 } else {
                     echo '488';
+                    exit();
                 }
             } else {
                 echo '489';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'facultyLogin') {
@@ -944,18 +1025,23 @@ if (isset($_POST['submitType'])) {
             $lastName == $_SESSION['teacher_lname']
         ) {
             echo '100';
+            exit();
         } else if (empty($firstName)) {
             echo '452';
+            exit();
         } else if (empty($lastName)) {
             echo '454';
+            exit();
         } else {
             $editProfileInfo = $db->adminEditProfileForm($firstName, $lastName, $teacherId);
             if ($editProfileInfo !== false) {
                 $_SESSION['teacher_fname'] = $firstName;
                 $_SESSION['teacher_lname'] = $lastName;
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
 
             }
         }
@@ -965,6 +1051,7 @@ if (isset($_POST['submitType'])) {
         $firstName = validate($_POST['firstName']);
         $lastName = validate($_POST['lastName']);
         $middleName = validate($_POST['middleName']);
+        $suffix = validate($_POST['suffix']);
         $age = validate($_POST['age']);
         $gender = validate($_POST['gender']);
 
@@ -972,35 +1059,50 @@ if (isset($_POST['submitType'])) {
             $firstName == $_SESSION['teacher_fname'] &&
             $lastName == $_SESSION['teacher_lname'] &&
             $middleName == $_SESSION['teacher_mname'] &&
+            $suffix == $_SESSION['teacher_suffix'] &&
             $age == $_SESSION['age'] &&
             $gender == $_SESSION['gender']
         ) {
             echo '100';
+            exit();
         } else if (empty($firstName)) {
             echo '452';
+            exit();
         } else if (empty($lastName)) {
             echo '454';
+            exit();
         } else if (empty($middleName)) {
             echo '453';
+            exit();
+        } else if (empty($suffix)) {
+            echo '464';
+            exit();
         } else if (empty($age)) {
             echo '469';
+            exit();
         } else if ($age < 5) {
             echo '470';
+            exit();
         } else if ($age > 100) {
             echo '471';
+            exit();
         } else if (empty($gender)) {
             echo '472';
+            exit();
         } else {
-            $editPersonalInfo = $db->adminEditPersonalForm($firstName, $lastName, $middleName, $age, $gender, $teacherId);
+            $editPersonalInfo = $db->adminEditPersonalForm($firstName, $lastName, $middleName, $age, $gender, $suffix, $teacherId);
             if ($editPersonalInfo !== false) {
                 $_SESSION['teacher_fname'] = $firstName;
                 $_SESSION['teacher_lname'] = $lastName;
                 $_SESSION['teacher_mname'] = $middleName;
+                $_SESSION['teacher_suffix'] = $suffix;
                 $_SESSION['age'] = $age;
                 $_SESSION['gender'] = $gender;
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'facultyEditBackgroundForm') {
@@ -1010,6 +1112,7 @@ if (isset($_POST['submitType'])) {
         $barangay = $_POST['barangay'];
         $street = validate($_POST['street']);
         $contactNumber = validate($_POST['contactNumber']);
+        $phonePattern = '/^(09|\+639)\d{9}$/';
         if (
             $city == $_SESSION['city'] &&
             $barangay == $_SESSION['barangay'] &&
@@ -1017,14 +1120,22 @@ if (isset($_POST['submitType'])) {
             $contactNumber == $_SESSION['contact_number']
         ) {
             echo '100';
+            exit();
         } else if (empty($city) || $city == "Not Set") {
             echo '465';
+            exit();
         } else if (empty($barangay) || $barangay == "Not Set") {
             echo '466';
+            exit();
         } else if (empty($street) || $street == "Not Set") {
             echo '467';
+            exit();
         } else if (empty($contactNumber) || $contactNumber == "Not Set") {
             echo '474';
+            exit();
+        } else if (!preg_match($phonePattern, $contactNumber)) {
+            echo '464';
+            exit();
         } else {
             $editBackgroundInfo = $db->adminEditBackgroundForm($city, $barangay, $street, $contactNumber, $teacherId);
             if ($editBackgroundInfo !== false) {
@@ -1033,8 +1144,10 @@ if (isset($_POST['submitType'])) {
                 $_SESSION['street'] = $street;
                 $_SESSION['contact_number'] = $contactNumber;
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'facultyUploadAvatar') {
@@ -1061,19 +1174,23 @@ if (isset($_POST['submitType'])) {
                     if ($updateAvatar !== false) {
                         $_SESSION['image_profile'] = $newFileName;
                         echo '200';
+                        exit();
                     } else {
                         echo '400';
+                        exit();
                     }
                 } else {
                     echo '475';
+                    exit();
                 }
             } else {
                 echo '476';
+                exit();
             }
         } else {
             echo '476';
+            exit();
         }
-        exit;
     } else if ($_POST['submitType'] === 'facultyUpdatePassword') {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
@@ -1083,20 +1200,27 @@ if (isset($_POST['submitType'])) {
 
         if (empty($currentPassword)) {
             echo '479';
+            exit();
         } else if (empty($newPassword)) {
             echo '480';
+            exit();
         } else if (empty($confirmPassword)) {
             echo '481';
+            exit();
         } else if (strlen($newPassword) < 6) {
             echo '460';
+            exit();
         } else if ($newPassword != $confirmPassword) {
             echo '462';
+            exit();
         } else {
             $hashedPassword = $db->facultyGetPassword($teacherId);
             if (!password_verify($currentPassword, $hashedPassword)) {
                 echo '482';
+                exit();
             } else if (password_verify($newPassword, $hashedPassword)) {
                 echo '483';
+                exit();
             } else {
                 $currentDate = date("Y-m-d");
                 $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
@@ -1105,8 +1229,10 @@ if (isset($_POST['submitType'])) {
                     $_SESSION['password'] = $newPasswordHash;
                     $_SESSION['password_change'] = $currentDate;
                     echo '200';
+                    exit();
                 } else {
                     echo '400';
+                    exit();
                 }
             }
         }
@@ -1124,12 +1250,16 @@ if (isset($_POST['submitType'])) {
         $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $teacherId, $lessonNumber);
         if (empty($lessonNumber)) {
             echo '484';
+            exit();
         } else if ($checkNumber->num_rows > 0) {
             echo '490';
+            exit();
         } else if (empty($lessonTitle)) {
             echo '485';
+            exit();
         } else if (empty($quarter) || $quarter == 'Not Set') {
             echo '486';
+            exit();
         } else {
             if (isset($_FILES['lessonFile']) && $_FILES['lessonFile']['error'] === UPLOAD_ERR_OK) {
                 $file = $_FILES['lessonFile'];
@@ -1156,17 +1286,22 @@ if (isset($_POST['submitType'])) {
 
                         if ($result) {
                             echo '200';
+                            exit();
                         } else {
                             echo '400';
+                            exit();
                         }
                     } else {
                         echo '487';
+                        exit();
                     }
                 } else {
                     echo '488';
+                    exit();
                 }
             } else {
                 echo '489';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'addQuiz') {
@@ -1180,22 +1315,29 @@ if (isset($_POST['submitType'])) {
 
         if (empty($quizNumber)) {
             echo json_encode(['status' => '482']);
+            exit();
         } else if ($checkNumber->num_rows > 0) {
             echo json_encode(['status' => '483']);
+            exit();
         } else if (empty($quizTitle)) {
             echo json_encode(['status' => '484']);
+            exit();
         } else if (empty($subjectId)) {
             echo json_encode(['status' => '485']);
+            exit();
         } else if (empty($lessonId)) {
             echo json_encode(['status' => '486']);
+            exit();
         } else {
             $addQuiz = $db->addQuiz($subjectId, $lessonId, $quizNumber, $quizTitle, 0);
 
             if ($addQuiz != false) {
                 $quizId = $addQuiz;
                 echo json_encode(['status' => '200', 'quizId' => $quizId]);
+                exit();
             } else {
                 echo json_encode(['status' => '400']);
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'addQuestion') {
@@ -1209,22 +1351,31 @@ if (isset($_POST['submitType'])) {
         $correctAnswer = validate($_POST['correctAnswer']);
         if (empty($question)) {
             echo '482';
+            exit();
         } else if (empty($choice1)) {
             echo '483';
+            exit();
         } else if (empty($choice2)) {
             echo '484';
+            exit();
         } else if ((empty($choice3) || empty($choice4)) && (empty($choice1) || empty($choice2))) {
             echo '485';
+            exit();
         } else if (empty($correctAnswer)) {
             echo '486';
+            exit();
         } else if ($correctAnswer == 'choice1' && empty($choice1)) {
             echo '487';
+            exit();
         } else if ($correctAnswer == 'choice2' && empty($choice2)) {
             echo '487';
+            exit();
         } else if ($correctAnswer == 'choice3' && empty($choice3)) {
             echo '487';
+            exit();
         } else if ($correctAnswer == 'choice4' && empty($choice4)) {
             echo '487';
+            exit();
         } else {
             $addQuestion = $db->addQuestion($quizId, $question);
             if ($addQuestion != false) {
@@ -1272,24 +1423,34 @@ if (isset($_POST['submitType'])) {
         $correct_value = validate($_POST['correct_value']);
         if ($choice1_update == $choice1_value && $choice2_update == $choice2_value && $choice3_update == $choice3_value && $choice4_update == $choice4_value && $correctChoice == $correct_value) {
             echo '481';
+            exit();
         } else if (empty($editQuestionText)) {
             echo '482';
+            exit();
         } else if (empty($choice1_update)) {
             echo '483';
+            exit();
         } else if (empty($choice2_update)) {
             echo '484';
+            exit();
         } else if ((empty($choice3_update) || empty($choice4_update)) && (empty($choice1_update) || empty($choice2_update))) {
             echo '485';
+            exit();
         } else if (empty($correctChoice)) {
             echo '486';
+            exit();
         } else if ($correctChoice == 'choice1' && empty($choice1_update)) {
             echo '487';
+            exit();
         } else if ($correctChoice == 'choice2' && empty($choice2_update)) {
             echo '487';
+            exit();
         } else if ($correctChoice == 'choice3' && empty($choice3_update)) {
             echo '487';
+            exit();
         } else if ($correctChoice == 'choice4' && empty($choice4_update)) {
             echo '487';
+            exit();
         } else {
             $editQuestion = $db->editQuestion($editQuestionId, $editQuestionText);
             if ($editQuestion != false) {
@@ -1320,8 +1481,10 @@ if (isset($_POST['submitType'])) {
                 }
 
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'editQuiz') {
@@ -1339,22 +1502,30 @@ if (isset($_POST['submitType'])) {
 
         if ($editQuizTitle == $editQuizTitleHolder && $editQuizNumber == $editQuizNumberHolder && $editSubject == $editSubjectHolder && $editLesson == $editLessonHolder) {
             echo '481';
+            exit();
         } else if (empty($editQuizTitle)) {
             echo '482';
+            exit();
         } else if (empty($editQuizNumber)) {
             echo '483';
+            exit();
         } else if ($checkNumber->num_rows > 0) {
             echo '484';
+            exit();
         } else if (empty($editSubject)) {
             echo '485';
+            exit();
         } else if (empty($editLesson)) {
             echo '486';
+            exit();
         } else {
             $editQuiz = $db->editQuiz($editQuizId, $editQuizTitle, $editQuizNumber, $editSubject, $editLesson);
             if ($editQuiz != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'enableQuiz') {
@@ -1364,12 +1535,15 @@ if (isset($_POST['submitType'])) {
         $quizStatus = $quiz['status'];
         if ($quizStatus == 'Active') {
             echo '482';
+            exit();
         } else {
             $enableQuiz = $db->toggleQuizStatus($quizId, 'Active', $dueDate);
             if ($enableQuiz != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'disableQuiz') {
@@ -1380,12 +1554,15 @@ if (isset($_POST['submitType'])) {
         $quizStatus = $quiz['status'];
         if ($quizStatus == 'Inactive') {
             echo '482';
+            exit();
         } else {
             $enableQuiz = $db->toggleQuizStatus($quizId, 'Inactive', null);
             if ($enableQuiz != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'removeQuestion') {
@@ -1400,11 +1577,14 @@ if (isset($_POST['submitType'])) {
                 $itemCount = $db->getItemCount($quizId);
                 $updateQuizItemCount = $db->updateQuizItemCount($quizId, $itemCount - 1);
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         } else {
             echo '481';
+            exit();
         }
     } else if ($_POST['submitType'] === 'submitQuiz') {
         session_start();
@@ -1484,14 +1664,19 @@ if (isset($_POST['submitType'])) {
         $checkGrade = $db->checkGrade($studentId, $subjectId, $quarter);
         if ($checkGrade->num_rows > 0) {
             echo '491';
+            exit();
         } else if (empty($studentGrade)) {
             echo '492';
+            exit();
         } else if ($studentGrade < 0) {
             echo '493';
+            exit();
         } else if ($studentGrade > 100) {
             echo '494';
+            exit();
         } else if (empty($quarter) || $quarter == 'Not Set') {
             echo '495';
+            exit();
         } else {
             if ($studentGrade >= 90) {
                 $remarks = 'Outstanding';
@@ -1507,8 +1692,10 @@ if (isset($_POST['submitType'])) {
             $addGrade = $db->addGrade($studentId, $subjectId, $studentGrade, $remarks, $quarter);
             if ($addGrade != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'editGrade') {
@@ -1521,14 +1708,19 @@ if (isset($_POST['submitType'])) {
         $checkGrade = $db->checkGrade($studentId, $subjectId, $quarter);
         if ($checkGrade->num_rows > 0 && $editQuarter != $quarter) {
             echo '491';
+            exit();
         } else if (empty($editGrade)) {
             echo '492';
+            exit();
         } else if ($editGrade < 0) {
             echo '493';
+            exit();
         } else if ($editGrade > 100) {
             echo '494';
+            exit();
         } else if (empty($quarter) || $quarter == 'Not Set') {
             echo '495';
+            exit();
         } else {
             if ($editGrade >= 90) {
                 $remarks = 'Outstanding';
@@ -1544,8 +1736,10 @@ if (isset($_POST['submitType'])) {
             $updateGrade = $db->editGrade($gradeId, $editGrade, $remarks, $quarter);
             if ($updateGrade != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'addFacultyList') {
@@ -1556,20 +1750,27 @@ if (isset($_POST['submitType'])) {
         $role = strtoupper(validate($_POST['teacherRole']));
         if (empty($teacherLname)) {
             echo '491';
+            exit();
         } else if (empty($teacherFname)) {
             echo '492';
+            exit();
         } else if (empty($teacherMname)) {
             echo '493';
+            exit();
         } else if (empty($teacherSuffix)) {
             echo '494';
+            exit();
         } else if (empty($role)) {
             echo '495';
+            exit();
         } else {
             $addFaculty = $db->addFacultyList($teacherLname, $teacherFname, $teacherMname, $teacherSuffix, $role);
             if ($addFaculty != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'addStudentList') {
@@ -1585,28 +1786,40 @@ if (isset($_POST['submitType'])) {
         $checkLRN = $db->checkLRN($studLRN);
         if ($checkLRN->num_rows > 0) {
             echo '489';
+            exit();
         } else if (empty($studLRN)) {
             echo '490';
+            exit();
         } else if (empty($studLname)) {
             echo '491';
+            exit();
         } else if (empty($studFname)) {
             echo '492';
+            exit();
         } else if (empty($studMname)) {
             echo '493';
+            exit();
         } else if (empty($studSuffix)) {
             echo '494';
+            exit();
         } else if (empty($studAge) || $studAge == 0) {
             echo '495';
+            exit();
         } else if ($studAge <= 0) {
             echo '496';
+            exit();
         } else if ($studAge > 100) {
             echo '497';
+            exit();
         } else if (empty($studGender)) {
             echo '498';
+            exit();
         } else if (empty($studGradeLevel)) {
             echo '499';
+            exit();
         } else if (empty($studSection)) {
             echo '500';
+            exit();
         } else {
             if ($studSuffix != 'N/A') {
                 $studFname = $studFname . ' ' . $studSuffix;
@@ -1616,8 +1829,10 @@ if (isset($_POST['submitType'])) {
             $addStudent = $db->addStudentList($studLRN, $studLname, $studFname, $studMname, $studAge, $studGender, $studGradeLevel, $studSection);
             if ($addStudent != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'addSubjectData') {
@@ -1628,14 +1843,19 @@ if (isset($_POST['submitType'])) {
         $checkSubject = $db->checkSubjectBySection($addSection, $addSubject);
         if ($checkSubject->num_rows > 0) {
             echo '490';
+            exit();
         } else if (empty($addGradeLevel)) {
             echo '491';
+            exit();
         } else if (empty($addSubject)) {
             echo '492';
+            exit();
         } else if (empty($addSection)) {
             echo '493';
+            exit();
         } else if (empty($addTeacher)) {
             echo '494';
+            exit();
         } else {
             $subjectData = $db->getSubjectData($addSubject);
             if ($subjectData != false) {
@@ -1646,11 +1866,14 @@ if (isset($_POST['submitType'])) {
                 $addSubject = $db->addSubject($addTeacher, $addGradeLevel, $addSubject, $subject_title, $addSection, $icon, $subject_code, $code);
                 if ($addSubject != false) {
                     echo '200';
+                    exit();
                 } else {
                     echo '400';
+                    exit();
                 }
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'editSubjectData') {
@@ -1671,16 +1894,22 @@ if (isset($_POST['submitType'])) {
             $editSectionIdHolder == $editSection
         ) {
             echo '201';
+            exit();
         } else if ($checkSubject->num_rows > 0 && ($editSection != $editSectionIdHolder || $editSubjectHolder != $editSubject)) {
             echo '490';
+            exit();
         } else if (empty($editGradeLevel)) {
             echo '491';
+            exit();
         } else if (empty($editSubject)) {
             echo '492';
+            exit();
         } else if (empty($editSection)) {
             echo '493';
+            exit();
         } else if (empty($editTeacher)) {
             echo '494';
+            exit();
         } else {
             $subjectData = $db->getSubjectData($editSubject);
             if ($subjectData != false) {
@@ -1690,11 +1919,14 @@ if (isset($_POST['submitType'])) {
                 $addSubject = $db->updateSubject($editSubjectIdHolder, $editTeacher, $editGradeLevel, $editSubject, $subject_title, $editSection, $icon, $subject_code);
                 if ($addSubject != false) {
                     echo '200';
+                    exit();
                 } else {
                     echo '400';
+                    exit();
                 }
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'archiveSubject') {
@@ -1703,12 +1935,15 @@ if (isset($_POST['submitType'])) {
         $subjectStatus = $subject['archived'];
         if ($subjectStatus == 'Yes') {
             echo '482';
+            exit();
         } else {
             $toggleSubject = $db->archiveSubject($subjectId, 'Yes');
             if ($toggleSubject != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'toggleArchivedSubject') {
@@ -1717,12 +1952,15 @@ if (isset($_POST['submitType'])) {
         $subjectStatus = $subject['archived'];
         if ($subjectStatus == 'No') {
             echo '482';
+            exit();
         } else {
             $toggleSubject = $db->archiveSubject($subjectId, 'No');
             if ($toggleSubject != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'addSectionData') {
@@ -1732,12 +1970,16 @@ if (isset($_POST['submitType'])) {
         $checkSection = $db->checkSectionName($addSection, $addGradeLevel);
         if ($checkSection->num_rows > 0) {
             echo '490';
+            exit();
         } else if (empty($addGradeLevel)) {
             echo '491';
+            exit();
         } else if (empty($addSection)) {
             echo '492';
+            exit();
         } else if (empty($addTeacher)) {
             echo '493';
+            exit();
         } else {
             $levelData = $db->getLevelData($addGradeLevel);
             if ($levelData != false) {
@@ -1745,11 +1987,14 @@ if (isset($_POST['submitType'])) {
                 $addSection = $db->addSection($addTeacher, $addGradeLevel, $addSection, $short);
                 if ($addSection != false) {
                     echo '200';
+                    exit();
                 } else {
                     echo '400';
+                    exit();
                 }
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'editSectionData') {
@@ -1767,20 +2012,27 @@ if (isset($_POST['submitType'])) {
             $editSectionHolder == $editSection
         ) {
             echo '201';
+            exit();
         } else if ($checkSection->num_rows > 0 && ($editSection != $editSectionHolder || $editLevelIdHolder != $editGradeLevel)) {
             echo '490';
+            exit();
         } else if (empty($editGradeLevel)) {
             echo '491';
+            exit();
         } else if (empty($editSection)) {
             echo '492';
+            exit();
         } else if (empty($editTeacher)) {
             echo '493';
+            exit();
         } else {
             $editSection = $db->updateSection($editSectionIdHolder, $editTeacher, $editGradeLevel, $editSection);
             if ($editSection != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'archiveSection') {
@@ -1789,12 +2041,15 @@ if (isset($_POST['submitType'])) {
         $sectionStatus = $section['archived'];
         if ($sectionStatus == 'True') {
             echo '482';
+            exit();
         } else {
             $toggleSection = $db->archiveSection($sectionId, 'True');
             if ($toggleSection != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'toggleArchivedSection') {
@@ -1803,12 +2058,15 @@ if (isset($_POST['submitType'])) {
         $sectionStatus = $section['archived'];
         if ($sectionStatus == 'False') {
             echo '482';
+            exit();
         } else {
             $toggleSection = $db->archiveSection($sectionId, 'False');
             if ($toggleSection != false) {
                 echo '200';
+                exit();
             } else {
                 echo '400';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'promoteStudent') {
@@ -1819,6 +2077,7 @@ if (isset($_POST['submitType'])) {
         $sectionId = $_POST['currentSectionId'];
         if (empty($promoteSection)) {
             echo '483';
+            exit();
         } else {
             $studentData = $db->getStudentJoinedDetails($studentId);
             $studentLname = strtoupper($studentData['student_lname']);
@@ -1837,14 +2096,18 @@ if (isset($_POST['submitType'])) {
                     $addStudentRecord = $db->addStudentRecord($studentId, $studentLRN, $promoteSection, $promoteLevel);
                     if ($addStudentRecord != false) {
                         echo '200';
+                        exit();
                     } else {
                         echo '400';
+                        exit();
                     }
                 } else {
                     echo '485';
+                    exit();
                 }
             } else {
                 echo '484';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'retainStudent') {
@@ -1855,6 +2118,7 @@ if (isset($_POST['submitType'])) {
         $sectionId = $_POST['retainSectionId'];
         if (empty($retainSection)) {
             echo '483';
+            exit();
         } else {
             $studentData = $db->getStudentJoinedDetails($studentId);
             $studentLname = strtoupper($studentData['student_lname']);
@@ -1873,14 +2137,18 @@ if (isset($_POST['submitType'])) {
                     $addStudentRecord = $db->addStudentRecord($studentId, $studentLRN, $retainSection, $retainLevel);
                     if ($addStudentRecord != false) {
                         echo '200';
+                        exit();
                     } else {
                         echo '400';
+                        exit();
                     }
                 } else {
                     echo '485';
+                    exit();
                 }
             } else {
                 echo '484';
+                exit();
             }
         }
     } else if ($_POST['submitType'] === 'studentForgotPass') {

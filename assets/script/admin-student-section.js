@@ -1784,7 +1784,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (level === "G0005") {
       return "G0006";
     } else {
-      return "G0001";
+      return "G0007";
     }
   }
 
@@ -1822,6 +1822,14 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function promoteStudent(studentId, newLevel) {
+    if (newLevel == "G0007") {
+      showAlert(
+        "error",
+        "Student Already Reached The Highest Grade Level",
+        "System only supports students from Grade 1 to Grade 6"
+      );
+      return;
+    }
     fetch("/SCES/backend/fetch-class.php", {
       method: "POST",
       headers: {

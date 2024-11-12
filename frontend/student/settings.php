@@ -176,6 +176,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
 	</div>
 	</div>
 	<?php
-	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/student-edit-modal.php';
+	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-edit-modal.php';
 	include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-footer.php';
 	?>

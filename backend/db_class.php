@@ -882,10 +882,10 @@ class globalClass extends db_connect
         }
     }
 
-    public function adminEditPersonalForm($firstName, $lastName, $middleName, $age, $gender, $teacherId)
+    public function adminEditPersonalForm($firstName, $lastName, $middleName, $age, $gender, $suffix, $teacherId)
     {
-        $query = $this->conn->prepare("UPDATE teacher_tbl SET teacher_fname = ?, teacher_lname = ?, teacher_mname = ?, age = ?, gender = ? WHERE teacher_id = ?");
-        $query->bind_param("sssiss", $firstName, $lastName, $middleName, $age, $gender, $teacherId);
+        $query = $this->conn->prepare("UPDATE teacher_tbl SET teacher_fname = ?, teacher_lname = ?, teacher_mname = ?, teacher_suffix = ?, age = ?, gender = ? WHERE teacher_id = ?");
+        $query->bind_param("ssssiss", $firstName, $lastName, $middleName, $suffix, $age, $gender, $teacherId);
 
         if ($query->execute()) {
             return true;

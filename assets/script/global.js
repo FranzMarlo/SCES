@@ -606,6 +606,17 @@ $("#editBackgroundForm").on("submit", function (e) {
             });
           }
         );
+      } else if (response == "464") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Valid Phone Number",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
       } else if (response == "465") {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
@@ -1287,6 +1298,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
   var firstName = $("#personalFirstName").val();
   var lastName = $("#personalLastName").val();
   var middleName = $("#personalMiddleName").val();
+  var suffix = $("#personalSuffix").val();
   var age = $("#personalAge").val();
   var gender = $("#personalGender").val();
 
@@ -1298,6 +1310,7 @@ $("#adminEditPersonalForm").on("submit", function (e) {
       firstName: firstName,
       lastName: lastName,
       middleName: middleName,
+      suffix: suffix,
       age: age,
       gender: gender,
     },
@@ -1412,6 +1425,18 @@ $("#adminEditPersonalForm").on("submit", function (e) {
             });
           }
         );
+      } else if (response == "464") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Suffix",
+              text: "Select None if not applicable",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
       } else {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
@@ -1519,6 +1544,17 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Please Enter Your Contact Number",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "464") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Valid Phone Number",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -2287,6 +2323,7 @@ $("#facultyEditPersonalForm").on("submit", function (e) {
   var firstName = $("#personalFirstName").val();
   var lastName = $("#personalLastName").val();
   var middleName = $("#personalMiddleName").val();
+  var suffix = $("#personalSuffix").val();
   var age = $("#personalAge").val();
   var gender = $("#personalGender").val();
 
@@ -2298,6 +2335,7 @@ $("#facultyEditPersonalForm").on("submit", function (e) {
       firstName: firstName,
       lastName: lastName,
       middleName: middleName,
+      suffix: suffix,
       age: age,
       gender: gender,
     },
@@ -2412,6 +2450,18 @@ $("#facultyEditPersonalForm").on("submit", function (e) {
             });
           }
         );
+      } else if (response == "464") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Suffix",
+              text: "Select None if not applicable",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
       } else {
         $.getScript(
           "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
@@ -2519,6 +2569,17 @@ $("#facultyEditBackgroundForm").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Please Enter Your Contact Number",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "464") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Enter Valid Phone Number",
               confirmButtonColor: "#4CAF50",
             });
           }
