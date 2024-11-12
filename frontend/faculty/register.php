@@ -45,8 +45,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/head.php';
               <select name="suffix" id="suffix">
                 <option value="" disabled selected>Select Suffix</option>
                 <option value="N/A">None</option>
-                <option value="Sr">Sr.</option>
-                <option value="Jr">Jr.</option>
+                <option value="Sr.">Sr.</option>
+                <option value="Jr.">Jr.</option>
                 <option value="II">II</option>
                 <option value="III">III</option>
                 <option value="IV">IV</option>

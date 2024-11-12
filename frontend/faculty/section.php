@@ -47,7 +47,7 @@ $page = '';
                                     data-section-year="<?php echo htmlspecialchars($section['year']); ?>"
                                     data-section-section="<?php echo htmlspecialchars($section['section']); ?>"
                                     data-section-level="<?php echo htmlspecialchars($section['grade_level']); ?>">
-                                    <a href="/SCES/frontend/admin/student-section.php?section=<?php echo $section['section_id']; ?>"
+                                    <a href="/SCES/frontend/faculty/student-section.php?section=<?php echo $section['section_id']; ?>"
                                         class="hidden-link"></a>
                                     <div class="icon-box <?php echo $section['short']; ?>" onclick="sectionLink(this)">
                                         <button class="section-btn" onclick="sectionBtn(event, this)">

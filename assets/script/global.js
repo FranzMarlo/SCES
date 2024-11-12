@@ -400,6 +400,7 @@ $("#editPersonalForm").on("submit", function (e) {
   var firstName = $("#personalFirstName").val();
   var lastName = $("#personalLastName").val();
   var middleName = $("#personalMiddleName").val();
+  var suffix = $("#personalSuffix").val();
   var age = $("#personalAge").val();
   var gender = $("#personalGender").val();
 
@@ -411,6 +412,7 @@ $("#editPersonalForm").on("submit", function (e) {
       firstName: firstName,
       lastName: lastName,
       middleName: middleName,
+      suffix: suffix,
       age: age,
       gender: gender,
     },
@@ -520,6 +522,18 @@ $("#editPersonalForm").on("submit", function (e) {
             Swal.fire({
               icon: "warning",
               title: "Please Select Your Gender",
+              confirmButtonColor: "#4CAF50",
+            });
+          }
+        );
+      } else if (response == "464") {
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "warning",
+              title: "Please Select Suffix",
+              text: "Select None if not applicable",
               confirmButtonColor: "#4CAF50",
             });
           }

@@ -197,10 +197,10 @@ class globalClass extends db_connect
         }
     }
 
-    public function editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $studentId)
+    public function editPersonalForm($firstName, $lastName, $middleName, $age, $gender, $suffix, $studentId)
     {
-        $query = $this->conn->prepare("UPDATE student_tbl SET student_fname = ?, student_lname = ?, student_mname = ?, age = ?, gender = ? WHERE student_id = ?");
-        $query->bind_param("sssisi", $firstName, $lastName, $middleName, $age, $gender, $studentId);
+        $query = $this->conn->prepare("UPDATE student_tbl SET student_fname = ?, student_lname = ?, student_mname = ?, student_suffix = ?, age = ?, gender = ? WHERE student_id = ?");
+        $query->bind_param("ssssisi", $firstName, $lastName, $middleName, $suffix, $age, $gender, $studentId);
 
         if ($query->execute()) {
             return true;

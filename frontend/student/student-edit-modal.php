@@ -46,6 +46,35 @@
             <input type="text" id="personalMiddleName" name="personalMiddleName"
                 value="<?php echo htmlspecialchars($studentMname); ?>">
 
+            <label for="personalSuffix">Suffix:</label>
+                <select name="personalSuffix" id="personalSuffix">
+                <option value="" disabled>Select Suffix</option>
+                <option value="N/A" <?php if ($studentSuffix == 'N/A')
+                    echo 'selected'; ?>>None</option>
+                <option value="Sr." <?php if ($studentSuffix == 'Sr.')
+                    echo 'selected'; ?>>Sr.</option>
+                <option value="Jr." <?php if ($studentSuffix == 'Jr.')
+                    echo 'selected'; ?>>Jr.</option>
+                <option value="II" <?php if ($studentSuffix == 'II')
+                    echo 'selected'; ?>>II</option>
+                <option value="III" <?php if ($studentSuffix == 'III')
+                    echo 'selected'; ?>>III</option>
+                <option value="IV" <?php if ($studentSuffix == 'IV')
+                    echo 'selected'; ?>>IV</option>
+                <option value="V" <?php if ($studentSuffix == 'V')
+                    echo 'selected'; ?>>V</option>
+                <option value="VI" <?php if ($studentSuffix == 'VI')
+                    echo 'selected'; ?>>VI</option>
+                <option value="VII" <?php if ($studentSuffix == 'VII')
+                    echo 'selected'; ?>>VII</option>
+                <option value="VIII" <?php if ($studentSuffix == 'VIII')
+                    echo 'selected'; ?>>VIII</option>
+                <option value="IX" <?php if ($studentSuffix == 'IX')
+                    echo 'selected'; ?>>IX</option>
+                <option value="X" <?php if ($studentSuffix == 'X')
+                    echo 'selected'; ?>>X</option>
+              </select>
+
             <label for="personalAge">Age:</label>
             <input type="number" id="personalAge" name="personalAge" value="<?php echo htmlspecialchars($age); ?>">
 
