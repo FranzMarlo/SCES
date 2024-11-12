@@ -56,7 +56,7 @@ $("#studLogin").on("submit", function (e) {
             Swal.fire({
               icon: "error",
               title: "Account Disabled",
-              text: "Your account has been disabled by an admin, if this is wrong please contact your teacher.",
+              text: "Your account has been disabled, if this is wrong please contact your adviser.",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -968,7 +968,7 @@ $("#adminLogin").on("submit", function (e) {
             Swal.fire({
               icon: "error",
               title: "Account Disabled",
-              text: "Your account has been disabled by an admin, if this is wrong please contact an admin.",
+              text: "Your account has been disabled, if this is wrong please contact an admin.",
               confirmButtonColor: "#4CAF50",
             });
           }
@@ -2005,7 +2005,7 @@ $("#facultyLogin").on("submit", function (e) {
             Swal.fire({
               icon: "error",
               title: "Account Disabled",
-              text: "Your account has been disabled by an admin, if this is wrong please contact an admin.",
+              text: "Your account has been disabled, if this is wrong please contact an admin.",
               confirmButtonColor: "#4CAF50",
             });
           }

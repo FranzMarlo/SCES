@@ -23,6 +23,7 @@ if (isset($_SESSION['teacher_id'])) {
     $middleInitial = getMiddleInitial($teacherMname);
     $suffix = getSuffix($teacherSuffix);
     $firstName = getFirstName($teacherFname);
+    $accountStatus = $db->getAdminAccountStatus($teacherId);
     if ($role != 'Admin') {
         header('Location: /SCES/frontend/faculty/login.php');
     }

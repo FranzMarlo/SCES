@@ -11,7 +11,7 @@ if ($accountStatus === 'True') {
             Swal.fire({
                 icon: 'warning',
                 title: 'Account Disabled',
-                text: 'Your account has been disabled. Please contact your adviser.',
+                text: 'Your account has been disabled. If this is wrong, please contact your adviser.',
                 confirmButtonText: 'OK',
                 confirmButtonColor: '#4CAF50',
                 allowOutsideClick: false,
