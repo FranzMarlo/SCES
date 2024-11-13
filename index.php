@@ -12,7 +12,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/partials/head.php';
       <i class="fa-solid fa-bars"></i>
     </label>
     <div class="label-part">
-      <img src="assets/images/logo.png" alt="SCES logo" class="logo" />
+      <img src="assets/images/logo.png" alt="SCES logo" class="img-logo" />
       <label class="logo">SCES</label>
     </div>
     <ul>

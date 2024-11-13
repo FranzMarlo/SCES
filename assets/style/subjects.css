@@ -134,9 +134,6 @@
   }
 }
 @media (width < 992px) {
-  .subject-box {
-    justify-content: center;
-  }
   .subject-box a{
     height: fit-content;
   }
@@ -154,7 +151,7 @@
   .subject-box {
     gap: 20px;
     padding: 20px;
-    justify-content: flex-start;
+    flex-direction: column;
   }
   .subject-box a {
     width: 30%;

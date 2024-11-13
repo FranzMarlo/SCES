@@ -7,6 +7,7 @@ body {
   width: 100%;
 }
 nav {
+  max-width: 1600px;
   padding: 15px 20px;
   background: #fff;
   min-height: 80px;
@@ -19,14 +20,13 @@ nav {
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 10px;
 }
-label.logo {
-  padding-left: 10px;
+.logo {
   font-size: 35px;
-  line-height: 80px;
   font-weight: bold;
 }
-img.logo {
+.img-logo {
   float: left;
   height: 4rem;
 }
@@ -171,6 +171,9 @@ nav ul li a:hover {
   }
 }
 @media (max-width: 992px) {
+  .img-logo {
+    height: 3rem;
+  }
   label.logo {
     font-size: 25px;
   }
