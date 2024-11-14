@@ -703,6 +703,9 @@ table.dataTable tbody td.dataTables_empty {
   .stats-col span {
     font-size: 0.9rem;
   }
+  .table-responsive {
+    max-width: 330px;
+  }
 }
 @media (width < 375px) {
   .table-responsive {

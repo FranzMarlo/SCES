@@ -1133,6 +1133,9 @@
     #toggleAccountStatus span{
       display: block;
     }
+    .table-responsive {
+      max-width: 330px;
+    }
   }
   @media (width < 375px) {
     .modal-content-quiz {

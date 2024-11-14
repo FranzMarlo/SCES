@@ -1064,6 +1064,12 @@ select option {
   .stats-col span {
     font-size: 0.8rem;
   }
+  .full-graph {
+    height: 280px;
+  }
+  .table-responsive {
+    max-width: 330px;
+  }
 }
 @media (width < 375px) {
   .modal-content-quiz {

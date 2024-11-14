@@ -859,6 +859,9 @@ table.dataTable tbody td.dataTables_empty {
   }
 }
 @media (width < 425px) {
+  .table-responsive {
+    max-width: 330px;
+  }
   .header-text h1 {
     max-width: 250px;
     font-size: 1.1rem;

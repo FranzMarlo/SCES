@@ -1111,6 +1111,9 @@ select option {
   }
 }
 @media (width < 425px) {
+  .table-responsive {
+    max-width: 330px;
+  }
   .graph {
     height: 300px;
   }

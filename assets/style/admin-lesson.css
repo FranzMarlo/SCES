@@ -1443,6 +1443,9 @@ table.dataTable tbody td.dataTables_empty {
   .icon-container {
     left: 73%;
   }
+  .table-responsive {
+    max-width: 330px;
+  }
 }
 @media (width < 375px) {
   .modal-content-quiz {
