@@ -68,10 +68,12 @@ const modal = document.getElementById("infoModal");
 
   function openModal() {
     modal.style.display = "block";
+    document.body.style.overflow = 'hidden';
   }
 
   function closeModalHandler() {
     modal.style.display = "none";
+    document.body.style.overflow = 'auto';
   }
 
   closeModal.addEventListener("click", closeModalHandler);

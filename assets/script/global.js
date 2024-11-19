@@ -12,67 +12,18 @@ $("#studLogin").on("submit", function (e) {
       password: password,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
         window.location.href = "/SCES/frontend/student/dashboard.php";
       } else if (response == "451") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Email",
-              text: "Ensure that the email you are using is registered in the platform",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Email", "Ensure that the email you are using is registered in the platform");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Password");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Email");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Account Disabled",
-              text: "Your account has been disabled, if this is wrong please contact your adviser.",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Account Disabled", "Your account has been disabled, if this is wrong please contact your adviser.");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Login Failed",
-              text: "Invalid Credentials",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Login Failed", "Please check your email and password and try again");
       }
     },
   });
@@ -108,216 +59,42 @@ $("#studSignUp").on("submit", function (e) {
       confirmPassword: confirmPassword,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Sign Up Succesful",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = "/SCES/frontend/student/dashboard.php";
-              }
-            });
-          }
-        );
+        showRedirectAlert("success", "Sign Up Succesful", "", "/SCES/frontend/student/dashboard.php");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name Cannot Be Empty");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Middle Name Cannot Be Empty",
-              text: "If middle name is not applicable, please enter N/A",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Middle Name Cannot Be Empty", "If middle name is not applicable, please enter N/A");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name Cannot Be Empty");
       } else if (response == "455") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Grade Level",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Grade Level");
       } else if (response == "456") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Section");
       } else if (response == "457") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Email Cannot Be Empty");
       } else if (response == "458") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Email");
       } else if (response == "459") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Password Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Password Cannot Be Empty");
       } else if (response == "460") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Password Should Be At Least 6 Characters",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Password Should Be At Least 6 Characters");
       } else if (response == "461") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Confirm Your Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Confirm Your Password");
       } else if (response == "462") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Passwords Don't Match Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Password Does Not Match Please Try Again");
       } else if (response == "463") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Already In Use",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Email Already In Use");
       } else if (response == "464") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Suffix",
-              text: "Select None if not applicable",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Suffix", "Select None if not applicable");
       } else if (response == "465") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your LRN",
-              text: "LRN or Learner Reference Number is provided by your school and can be seen on your school ID",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your LRN", "LRN or Learner Reference Number is provided by your school and can be seen on your school ID");
       } else if (response == "466") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Invalid Student Details",
-              text: "Please register with your LRN and current Grade & Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Invalid Student Details", "Please register with your LRN and current Grade & Section");
       } else if (response == "467") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "LRN Already Registered In The System",
-              text: "Please proceed to login if you are already registered. If this is wrong, please contact your adviser",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "LRN Already Registered In The System", "Please proceed to login if you are already registered. If this is wrong, please contact your adviser");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Sign Up Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Sign Up Failed", "Please Try Again");
       }
     },
   });
@@ -337,71 +114,16 @@ $("#editProfileForm").on("submit", function (e) {
       lastName: lastName,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Profile Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Updated");
       } else if (response == "100") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name Cannot Be Empty");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name Cannot Be Empty");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Profile Failed Please Try Again");
       }
     },
   });
@@ -429,138 +151,28 @@ $("#editPersonalForm").on("submit", function (e) {
       gender: gender,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Profile Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Updated");
       } else if (response == "100") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name Cannot Be Empty");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Middle Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Middle Name Cannot Be Empty");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name Cannot Be Empty");
       } else if (response == "469") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Age Cannot Be Zero Or Null",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Age Cannot Be Zero Or Null");
       } else if (response == "470") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Age Shall Be At Least 5",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Age Shall Be At Least 5");
       } else if (response == "471") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Age Cannot Be Higher Than 100",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Age Cannot Be Higher Than 100");
       } else if (response == "472") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your Gender",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your Gender");
       } else if (response == "464") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Suffix",
-              text: "Select None if not applicable",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Suffix", "Select None if not applicable");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Profile Failed Please Try Again");
       }
     },
   });
@@ -586,115 +198,24 @@ $("#editBackgroundForm").on("submit", function (e) {
       guardianContact: guardianContact,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Profile Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Updated");
       } else if (response == "100") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "464") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Phone Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Phone Number");
       } else if (response == "465") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your City Address",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your City Address");
       } else if (response == "466") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your Barangay Address",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your Barangay Address");
       } else if (response == "467") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Street Address Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Street Address Cannot Be Empty");
       } else if (response == "473") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Guardian's Full Name",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Guardian's Full Name");
       } else if (response == "474") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Guardian's Contact Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Guardian's Contact Number");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Profile Failed Please Try Again");
       }
     },
   });
@@ -713,71 +234,16 @@ $("#changeAvatarForm").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "User Icon Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Picture Updated");
       } else if (response == "475") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Error In Moving The Uploaded File Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error In Moving The Uploaded File Please Try Again");
       } else if (response == "476") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Upload Valid Image File",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Upload Valid Image File");
       } else if (response == "477") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Error In Uploading File Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error In Uploading File Please Try Again");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again Later",
-              confirmButtonColor: "#4CAF50",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("error", "Update Profile Failed Please Try Again Later");
       }
     },
   });
@@ -799,112 +265,24 @@ $("#updatePassword").on("submit", function (e) {
       confirmPassword: confirmPassword,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Password Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Password Updated");
       } else if (response == "479") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Current Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Current Password");
       } else if (response == "480") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter New Password");
       } else if (response == "481") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Confirm New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Confirm New Password");
       } else if (response == "462") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Passwords Don't Match Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Passwords Don't Match Please Try Again");
       } else if (response == "482") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Current Password Incorrect Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", " Incorrect Current Password Please Try Again");
       } else if (response == "483") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Use A New Different Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Use A New Different Password");
       } else if (response == "460") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Password Should Be At Least 6 Characters",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Password Should Be At Least 6 Characters");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Password Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Password Failed", "Please Try Again Later");
       }
     },
   });
@@ -924,67 +302,18 @@ $("#adminLogin").on("submit", function (e) {
       password: password,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
         window.location.href = "/SCES/frontend/admin/dashboard.php";
       } else if (response == "451") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Email",
-              text: "Ensure that the email you are using is registered in the platform",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Email", "Ensure that the email you are using is registered in the platform");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Password");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Email");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Account Disabled",
-              text: "Your account has been disabled, if this is wrong please contact an admin.",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Account Disabled", "Your account has been disabled, if this is wrong please contact an admin.");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Login Failed",
-              text: "Invalid Credentials",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Login Failed", "Please check your email and password and try again");
       }
     },
   });
@@ -1017,216 +346,40 @@ $("#adminSignUp").on("submit", function (e) {
       confirmPassword: confirmPassword,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Sign Up Succesful",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = "/SCES/frontend/admin/dashboard.php";
-              }
-            });
-          }
-        );
+        showRedirectAlert("success", "Sign Up Succesful", "", "/SCES/frontend/admin/dashboard.php");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name Cannot Be Empty");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Middle Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Middle Name Cannot Be Empty", "If middle name is not applicable, please enter N/A");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name Cannot Be Empty");
       } else if (response == "455") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Suffix",
-              text: "Select None if not applicable",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "456") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please enter control number",
-              text: "Your control number is provided by your admin",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Suffix", "Select None if not applicable");
       } else if (response == "472") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your Gender",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your Gender");
       } else if (response == "457") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Email Cannot Be Empty");
       } else if (response == "458") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Email");
       } else if (response == "459") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Password Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Password Cannot Be Empty");
       } else if (response == "460") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Password Should Be At Least 6 Characters",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Password Should Be At Least 6 Characters");
       } else if (response == "461") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Confirm Your Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Confirm Your Password");
       } else if (response == "462") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Passwords Don't Match Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Password Does Not Match Please Try Again");
       } else if (response == "463") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Already In Use",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Email Already In Use");
       } else if (response == "464") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Admin Data Not Found",
-              text: "Please check your control number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Admin Data Not Found", "Please check your control number");
       } else if (response == "465") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Control Number Already Registered In The System",
-              text: "If this is wrong, please contact an admin",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Control Number Already Registered In The System", "If this is wrong, please contact an admin");
       } else if (response == "466") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Control Number",
-              text: "Your control number is provided by your admin",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please enter control number", "Your control number is provided by your admin");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Sign Up Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Sign Up Failed", "Please Try Again");
       }
     },
   });
@@ -1246,72 +399,16 @@ $("#adminEditProfileForm").on("submit", function (e) {
       lastName: lastName,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Profile Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Updated");
       } else if (response == "100") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name Cannot Be Empty");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name Cannot Be Empty");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Profile Failed Please Try Again");
       }
     },
   });
@@ -1339,139 +436,28 @@ $("#adminEditPersonalForm").on("submit", function (e) {
       gender: gender,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Profile Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Updated");
       } else if (response == "100") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name Cannot Be Empty");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Middle Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Middle Name Cannot Be Empty");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name Cannot Be Empty");
       } else if (response == "469") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Age Cannot Be Zero Or Null",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Age Cannot Be Zero Or Null");
       } else if (response == "470") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Age Shall Be At Least 5",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Age Shall Be At Least 18");
       } else if (response == "471") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Age Cannot Be Higher Than 100",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Age Cannot Be Higher Than 100");
       } else if (response == "472") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your Gender",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your Gender");
       } else if (response == "464") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Suffix",
-              text: "Select None if not applicable",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Suffix", "Select None if not applicable");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Profile Failed Please Try Again");
       }
     },
   });
@@ -1495,105 +481,22 @@ $("#adminEditBackgroundForm").on("submit", function (e) {
       contactNumber: contactNumber,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Profile Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Updated");
       } else if (response == "100") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "465") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your City Address",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your City Address");
       } else if (response == "466") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your Barangay Address",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your Barangay Address");
       } else if (response == "467") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Street Address Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Street Address Cannot Be Empty");
       } else if (response == "474") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Contact Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Contact Number");
       } else if (response == "464") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Phone Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Phone Number");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Profile Failed Please Try Again");
       }
     },
   });
@@ -1612,72 +515,16 @@ $("#adminChangeAvatarForm").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "User Icon Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Picture Updated");
       } else if (response == "475") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Error In Moving The Uploaded File Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error In Moving The Uploaded File Please Try Again");
       } else if (response == "476") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Upload Valid Image File",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Upload Valid Image File");
       } else if (response == "477") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Error In Uploading File Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error In Uploading File Please Try Again");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again Later",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("error", "Update Profile Failed Please Try Again Later");
       }
     },
   });
@@ -1699,112 +546,24 @@ $("#adminUpdatePassword").on("submit", function (e) {
       confirmPassword: confirmPassword,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Password Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Password Updated");
       } else if (response == "479") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Current Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Current Password");
       } else if (response == "480") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter New Password");
       } else if (response == "481") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Confirm New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Confirm New Password");
       } else if (response == "462") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Passwords Don't Match Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Passwords Don't Match Please Try Again");
       } else if (response == "482") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Current Password Incorrect Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", " Incorrect Current Password Please Try Again");
       } else if (response == "483") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Use A New Different Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Use A New Different Password");
       } else if (response == "460") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Password Should Be At Least 6 Characters",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Password Should Be At Least 6 Characters");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Password Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Password Failed", "Please Try Again Later");
       }
     },
   });
@@ -1833,115 +592,24 @@ $("#adminAddLesson").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Lesson Added",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Lesson Added");
       } else if (response == "484") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Lesson Number Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Lesson Number Cannot Be Empty");
       } else if (response == "485") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Lesson Title Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Lesson Title Cannot Be Empty");
       } else if (response == "486") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Lesson Quarter",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Lesson Quarter");
       } else if (response == "487") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "PDF File Upload Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "PDF File Upload Failed", "Please Try Again");
       } else if (response == "488") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "File Type Not Supported",
-              text: "Please Upload PDF Files Only",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "File Type Not Supported", "Please Upload PDF Files Only");
       } else if (response == "489") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Attach A PDF File",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Attach A PDF File");
       } else if (response == "490") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Lesson Number Exists",
-              text: "Please Enter A Different Lesson Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Lesson Number Exists", "Please Enter A Different Lesson Number");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Lesson Upload Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Lesson Upload Failed", "Please Try Again Later");
       }
     },
   });
@@ -1961,67 +629,18 @@ $("#facultyLogin").on("submit", function (e) {
       password: password,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
         window.location.href = "/SCES/frontend/faculty/dashboard.php";
       } else if (response == "451") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Email",
-              text: "Ensure that the email you are using is registered in the platform",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Email", "Ensure that the email you are using is registered in the platform");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Password");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Email");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Account Disabled",
-              text: "Your account has been disabled, if this is wrong please contact an admin.",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Account Disabled", "Your account has been disabled, if this is wrong please contact an admin.");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Login Failed",
-              text: "Invalid Credentials",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Login Failed", "Please check your email and password and try again");
       }
     },
   });
@@ -2054,216 +673,40 @@ $("#facultySignUp").on("submit", function (e) {
       confirmPassword: confirmPassword,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Sign Up Succesful",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = "/SCES/frontend/faculty/dashboard.php";
-              }
-            });
-          }
-        );
+        showRedirectAlert("success", "Sign Up Succesful", "", "/SCES/frontend/faculty/dashboard.php");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name Cannot Be Empty");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Middle Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Middle Name Cannot Be Empty", "If middle name is not applicable, please enter N/A");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name Cannot Be Empty");
       } else if (response == "455") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Suffix",
-              text: "Select None if not applicable",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
-      } else if (response == "456") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please enter control number",
-              text: "Your control number is provided by your admin",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Suffix", "Select None if not applicable");
       } else if (response == "472") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your Gender",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your Gender");
       } else if (response == "457") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Email Cannot Be Empty");
       } else if (response == "458") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Email");
       } else if (response == "459") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Password Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Password Cannot Be Empty");
       } else if (response == "460") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Password Should Be At Least 6 Characters",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Password Should Be At Least 6 Characters");
       } else if (response == "461") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Confirm Your Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Confirm Your Password");
       } else if (response == "462") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Passwords Don't Match Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Password Does Not Match Please Try Again");
       } else if (response == "463") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Email Already In Use",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Email Already In Use");
       } else if (response == "464") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Faculty Data Not Found",
-              text: "Please check your control number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Faculty Data Not Found", "Please check your control number");
       } else if (response == "465") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Control Number Already Registered In The System",
-              text: "If this is wrong, please contact your admin",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Control Number Already Registered In The System", "If this is wrong, please contact an admin");
       } else if (response == "466") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Control Number",
-              text: "Your control number is provided by your admin",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please enter control number", "Your control number is provided by your admin");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Sign Up Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Sign Up Failed", "Please Try Again");
       }
     },
   });
@@ -2283,72 +726,16 @@ $("#facultyEditProfileForm").on("submit", function (e) {
       lastName: lastName,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Profile Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Updated");
       } else if (response == "100") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name Cannot Be Empty");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name Cannot Be Empty");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Profile Failed Please Try Again");
       }
     },
   });
@@ -2376,139 +763,28 @@ $("#facultyEditPersonalForm").on("submit", function (e) {
       gender: gender,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Profile Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Updated");
       } else if (response == "100") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name Cannot Be Empty");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Middle Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Middle Name Cannot Be Empty");
       } else if (response == "454") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name Cannot Be Empty");
       } else if (response == "469") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Age Cannot Be Zero Or Null",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Age Cannot Be Zero Or Null");
       } else if (response == "470") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Age Shall Be At Least 5",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Age Shall Be At Least 18");
       } else if (response == "471") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Age Cannot Be Higher Than 100",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Age Cannot Be Higher Than 100");
       } else if (response == "472") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your Gender",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your Gender");
       } else if (response == "464") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Suffix",
-              text: "Select None if not applicable",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Suffix", "Select None if not applicable");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Profile Failed Please Try Again");
       }
     },
   });
@@ -2532,105 +808,22 @@ $("#facultyEditBackgroundForm").on("submit", function (e) {
       contactNumber: contactNumber,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Profile Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Updated");
       } else if (response == "100") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "465") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your City Address",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your City Address");
       } else if (response == "466") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Your Barangay Address",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Your Barangay Address");
       } else if (response == "467") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Street Address Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Street Address Cannot Be Empty");
       } else if (response == "474") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Contact Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Contact Number");
       } else if (response == "464") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Phone Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Phone Number");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Profile Failed Please Try Again");
       }
     },
   });
@@ -2649,72 +842,16 @@ $("#facultyChangeAvatarForm").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "User Icon Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Profile Picture Updated");
       } else if (response == "475") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Error In Moving The Uploaded File Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error In Moving The Uploaded File Please Try Again");
       } else if (response == "476") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Upload Valid Image File",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Upload Valid Image File");
       } else if (response == "477") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Error In Uploading File Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error In Uploading File Please Try Again");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Profile Failed Please Try Again Later",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("error", "Update Profile Failed Please Try Again Later");
       }
     },
   });
@@ -2736,112 +873,24 @@ $("#facultyUpdatePassword").on("submit", function (e) {
       confirmPassword: confirmPassword,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Password Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Password Updated");
       } else if (response == "479") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Current Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Current Password");
       } else if (response == "480") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter New Password");
       } else if (response == "481") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Confirm New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Confirm New Password");
       } else if (response == "462") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Passwords Don't Match Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Passwords Don't Match Please Try Again");
       } else if (response == "482") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Current Password Incorrect Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", " Incorrect Current Password Please Try Again");
       } else if (response == "483") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Use A New Different Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Use A New Different Password");
       } else if (response == "460") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Password Should Be At Least 6 Characters",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Password Should Be At Least 6 Characters");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Password Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Update Password Failed", "Please Try Again Later");
       }
     },
   });
@@ -2871,115 +920,24 @@ $("#facultyAddLesson").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Lesson Added",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Lesson Added");
       } else if (response == "484") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Lesson Number Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Lesson Number Cannot Be Empty");
       } else if (response == "485") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Lesson Title Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Lesson Title Cannot Be Empty");
       } else if (response == "486") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Lesson Quarter",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Lesson Quarter");
       } else if (response == "487") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "PDF File Upload Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "PDF File Upload Failed", "Please Try Again");
       } else if (response == "488") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "File Type Not Supported",
-              text: "Please Upload PDF Files Only",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "File Type Not Supported", "Please Upload PDF Files Only");
       } else if (response == "489") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Attach A PDF File",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Attach A PDF File");
       } else if (response == "490") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Lesson Number Exists",
-              text: "Please Enter A Different Lesson Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Lesson Number Exists", "Please Enter A Different Lesson Number");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Lesson Upload Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Lesson Upload Failed", "Please Try Again Later");
       }
     },
   });
@@ -3025,72 +983,17 @@ $("#addGradeForm").on("submit", function (e) {
           }
         );
       } else if (response == "491") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Subject Grade For Selected Quarter Already Uploaded",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Subject Grade For Selected Quarter Already Uploaded");
       } else if (response == "492") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Subject Grade For Student Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Subject Grade For Student Cannot Be Empty");
       } else if (response == "493") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Subject Grade For Student Cannot Be Lower Than 0",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Subject Grade For Student Cannot Be Lower Than 0");
       } else if (response == "494") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Subject Grade For Student Cannot Be Higher Than 100",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Subject Grade For Student Cannot Be Higher Than 100");
       } else if (response == "495") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Quarter For Subject Grade",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Quarter For Subject Grade");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Grade Upload Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Grade Upload Failed", "Please Try Again");
       }
     },
   });
@@ -3133,72 +1036,17 @@ $("#editGradeForm").on("submit", function (e) {
           }
         );
       } else if (response == "491") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Subject Grade For Selected Quarter Already Uploaded",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Subject Grade For Selected Quarter Already Uploaded");
       } else if (response == "492") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Subject Grade For Student Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Subject Grade For Student Cannot Be Empty");
       } else if (response == "493") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Subject Grade For Student Cannot Be Lower Than 0",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Subject Grade For Student Cannot Be Lower Than 0");
       } else if (response == "494") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Subject Grade For Student Cannot Be Higher Than 100",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Subject Grade For Student Cannot Be Higher Than 100");
       } else if (response == "495") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Quarter For Subject Grade",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Quarter For Subject Grade");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Grade Upload Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Grade Upload Failed", "Please Try Again");
       }
     },
   });
@@ -3217,90 +1065,20 @@ $("#addTeacherForm").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Teacher Inserted To Masterlist",
-              text: "You can share the control number generated for their registration",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("success", "Teacher Inserted To Masterlist", "You can share the control number generated for their registration");
       } else if (response == "491") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name For Teacher Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name For Teacher Cannot Be Empty");
       } else if (response == "492") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name For Teacher Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name For Teacher Cannot Be Empty");
       } else if (response == "493") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Middle Name For Teacher Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Middle Name For Teacher Cannot Be Empty");
       } else if (response == "494") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Suffix",
-              text: "Select 'None' if not applicable",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Suffix", "Select 'None' if not applicable");
       } else if (response == "495") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Role For Teacher",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Role For Teacher");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Teacher Adding Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Teacher Adding Failed", "Please Try Again");
       }
     },
   });
@@ -3319,167 +1097,34 @@ $("#addStudentForm").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Student Inserted To Masterlist",
-              text: "Student can now register in the system by referencing their LRN",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("success", "Student Inserted To Masterlist", "Student can now register in the system by referencing their LRN");
       } else if (response == "489") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Student LRN Already Exists In The Masterlist",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Student LRN Already Exists In The Masterlist");
       } else if (response == "490") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "LRN Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "LRN Cannot Be Empty");
       } else if (response == "491") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Last Name For Student Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Last Name For Student Cannot Be Empty");
       } else if (response == "492") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "First Name For Student Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "First Name For Student Cannot Be Empty");
       } else if (response == "493") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Middle Name For Student Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Middle Name For Student Cannot Be Empty");
       } else if (response == "494") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Suffix",
-              text: "Select 'None' if not applicable",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Suffix", "Select 'None' if not applicable");
       } else if (response == "495") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Student Age Cannot Be Empty Or Zero",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Student Age Cannot Be Empty Or Zero");
       } else if (response == "496") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Student Age Cannot Be Lower Than Zero",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Student Age Cannot Be Lower Than Zero");
       } else if (response == "497") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Student Age Cannot Be Higher Than 100",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Student Age Cannot Be Higher Than 100");
       } else if (response == "498") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Gender Of Student",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Gender Of Student");
       } else if (response == "499") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Grade Level Of Student",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Grade Level Of Student");
       } else if (response == "500") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter The Section Of The Student",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter The Section Of The Student");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Student Adding Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Student Adding Failed", "Please Try Again");
       }
     },
   });
@@ -3504,91 +1149,20 @@ $("#addQuiz").on("submit", function (e) {
     },
     dataType: "json",
     success: function (response) {
-      console.log(response);
       if (response.status == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Quiz Added Successfully",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = `?active=2&quiz_id=${response.quizId}`;
-              }
-            });
-          }
-        );
+        showRedirectAlert("success", "Quiz Added Successfully", "", `?active=2&quiz_id=${response.quizId}`);
       } else if (response.status == "482") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Quiz Number Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Quiz Number Cannot Be Empty");
       } else if (response.status == "483") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Quiz Number Exists",
-              text: "Enter A Different Quiz Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter A Different Quiz Number");
       } else if (response.status == "484") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Quiz Title Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Quiz Title Cannot Be Empty");
       } else if (response.status == "485") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Subject Of Quiz",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Subject Of Quiz");
       } else if (response.status == "486") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Lesson Of Quiz",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Lesson Of Quiz");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Quiz Upload Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Quiz Upload Failed", "Please Try Again");
       }
     },
   });
@@ -3619,100 +1193,21 @@ $("#addQuestion").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Question Added To Quiz Successfully",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Question Added To Quiz Successfully");
       } else if (response == "482") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter A Valid Question For Quiz",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter A Valid Question For Quiz");
       } else if (response == "483") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter The First Answer Choice For Question",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter The First Answer Choice For Question");
       } else if (response == "484") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter The Second Answer Choice For Question",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter The Second Answer Choice For Question");
       } else if (response == "485") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter At Least 2 Answer Choice For Question",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter At Least 2 Answer Choice For Question");
       } else if (response == "486") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select The Correct Answer Choice For Question",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select The Correct Answer Choice For Question");
       } else if (response == "487") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Valid Correct Answer",
-              text: "Correct Answer Cannot Be Null Please Check Your Input",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Valid Correct Answer", "Correct Answer Cannot Be Null Please Check Your Input");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Question Upload Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Question Upload Failed", "Please Try Again");
       }
     },
   });
@@ -3759,118 +1254,24 @@ $("#editQuestion").on("submit", function (e) {
       correct_value: correct_value,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Question Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Question Updated");
       } else if (response == "481") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "482") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter A Valid Question For Quiz",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter A Valid Question For Quiz");
       } else if (response == "483") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter The First Answer Choice For Question",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter The First Answer Choice For Question");
       } else if (response == "484") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter The Second Answer Choice For Question",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter The Second Answer Choice For Question");
       } else if (response == "485") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter At Least 2 Answer Choice For Question",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter At Least 2 Answer Choice For Question");
       } else if (response == "486") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select The Correct Answer Choice For Question",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select The Correct Answer Choice For Question");
       } else if (response == "487") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Valid Correct Answer",
-              text: "Correct Answer Cannot Be Null Please Check Your Input",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Valid Correct Answer", "Correct Answer Cannot Be Null Please Check Your Input");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Question Upload Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error Updating Question", "Please Try Again");
       }
     },
   });
@@ -3908,105 +1309,21 @@ $("#editQuiz").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Quiz Updated Successfully",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("success", "Quiz Updated Successfully");
       } else if (response == "481") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Change Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.reload();
-              }
-            });
-          }
-        );
+        showReloadAlert("info", "No Change Has Been Made");
       } else if (response == "482") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Quiz Title Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Quiz Title Cannot Be Empty");
       } else if (response == "483") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Quiz Number Cannot Be Empty",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Quiz Number Cannot Be Empty");
       } else if (response == "484") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Quiz Number Exists",
-              text: "Enter A Different Quiz Number",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Quiz Number Exists", "Please Enter A Different Quiz Number");
       } else if (response == "485") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Subject Of Quiz",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Subject Of Quiz");
       } else if (response == "486") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Lesson Of Quiz",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Lesson Of Quiz");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Quiz Update Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error Updating Quiz", "Please Try Again");
       }
     },
   });
@@ -4025,88 +1342,20 @@ $("#addSubjectForm").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Subject Added Succesfully",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("success", "Subject Added Successfully");
       } else if (response == "490") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Subject Already Exists For Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Subject Already Exists For Section");
       } else if (response == "491") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Grade Level For Subject",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Grade Level For Subject");
       } else if (response == "492") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select A Subject",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select A Subject");
       } else if (response == "493") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Section For Subject",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Section For Subject");
       } else if (response == "494") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Teacher For Subject",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Teacher For Subject");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Subject Adding Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error Adding Subject", "Please Try Again");
       }
     },
   });
@@ -4125,102 +1374,22 @@ $("#editSubjectForm").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Subject Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("success", "Subject Updated Successfully");
       } else if (response == "201") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "490") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Subject Already Exists For Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Subject Already Exists For Section");
       } else if (response == "491") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Grade Level For Subject",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Grade Level For Subject");
       } else if (response == "492") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select A Subject",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select A Subject");
       } else if (response == "493") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Section For Subject",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Section For Subject");
       } else if (response == "494") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Teacher For Subject",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Teacher For Subject");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Subject Adding Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error Updating Subject", "Please Try Again");
       }
     },
   });
@@ -4241,75 +1410,17 @@ $("#addSectionForm").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Section Added Successfully",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("success", "Section Added Successfully");
       } else if (response == "490") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Section Name Already In Use For Grade Level",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Section Name Already In Use For Grade Level");
       } else if (response == "491") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Grade Level For Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Grade Level For Section");
       } else if (response == "492") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Name For New Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Name For New Section");
       } else if (response == "493") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Adviser For Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Adviser For Section");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Section Adding Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error Adding Section", "Please Try Again");
       }
     },
   });
@@ -4330,89 +1441,19 @@ $("#editSectionForm").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Section Updated",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("success", "Section Updated Successfully");
       } else if (response == "201") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "info",
-              title: "No Changes Has Been Made",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("info", "No Changes Has Been Made");
       } else if (response == "490") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Section Name Already In Use For Grade Level",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Section Name Already In Use For Grade Level");
       } else if (response == "491") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Grade Level For Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Grade Level For Section");
       } else if (response == "492") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Name For Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Name For Section");
       } else if (response == "493") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select Adviser For Section",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select Adviser For Section");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Section Adding Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Error Updating Section", "Please Try Again");
       }
     },
   });
@@ -4433,72 +1474,15 @@ $("#promoteStudentForm").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Student Promoted To Next Grade Level",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("success", "Student Promoted To Next Grade Level");
       } else if (response == "483") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select New Section For Student",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select New Section For Student");
       } else if (response == "484") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Updating Student Records Failed",
-              text: "Please Try Again Later",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("error", "Updating Student Records Failed", "Please Try Again Later");
       } else if (response == "485") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Updating Student Section Failed",
-              text: "Please Try Again Later",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("error", "Updating Student Section Failed", "Please Try Again Later");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Updating Student Section Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Operation Failed", "Please Try Again Later");
       }
     },
   });
@@ -4519,72 +1503,15 @@ $("#retainStudentForm").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Student Assigned To New Section For Grade Level",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("success", "Student Assigned To New Section For Grade Level");
       } else if (response == "483") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Select New Section For Student",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Select New Section For Student");
       } else if (response == "484") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Updating Student Records Failed",
-              text: "Please Try Again Later",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("error", "Updating Student Records Failed", "Please Try Again Later");
       } else if (response == "485") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Updating Student Section Failed",
-              text: "Please Try Again Later",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              window.location.reload();
-            });
-          }
-        );
+        showReloadAlert("error", "Updating Student Section Failed", "Please Try Again Later");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Updating Student Section Failed",
-              text: "Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Operation Failed", "Please Try Again Later");
       }
     },
   });
@@ -4601,86 +1528,29 @@ $("#studForgotPass").on("submit", function (e) {
       email: email,
     },
     success: function (response) {
-      console.log(response);
       if (response == "200") {
         $.ajax({
           type: "POST",
           url: "/SCES/backend/student/send-password-link.php",
           success: function (sendEmailResponse) {
             if (sendEmailResponse === "200") {
-              Swal.fire({
-                icon: "success",
-                title: "Email Sent",
-                text: "The password reset link has been sent to your email",
-                confirmButtonColor: "#4CAF50",
-                allowOutsideClick: false,
-              });
+              showAlert("success", "Email Sent", "The password reset link has been sent to your email");
             } else {
-              Swal.fire({
-                icon: "error",
-                title: "Failed to Send Email",
-                text: "Please try again later.",
-                confirmButtonColor: "#4CAF50",
-              });
+              showAlert("error", "Failed to Send Email", "Please try again later");
             }
           },
           error: function () {
-            Swal.fire({
-              icon: "error",
-              title: "Server Error",
-              text: "Unable to complete your request. Please try again later.",
-              confirmButtonColor: "#4CAF50",
-            });
+            showAlert("error", "Server Error", "Unable to complete your request. Please try again later.");
           },
         });
       } else if (response == "450") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Email",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Email");
       } else if (response == "451") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Email");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Account Recovery Cannot Be Processed",
-              text: "Registered email is unverified",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Account Recovery Cannot Be Processed", "Registered email is unverified");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Account Not Found",
-              text: "Please enter the email used in your registration",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Account Not Found", "Please enter the email used in your registration");
       }
     },
   });
@@ -4703,78 +1573,17 @@ $("#studChangePass").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Password Changed",
-              text: "Please login with your new password",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = "/SCES/frontend/student/login.php";
-              }
-            });
-          }
-        );
+        showRedirectAlert("success", "Password Changed", "Please login with your new password", "/SCES/frontend/student/login.php");
       } else if (response == "450") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter New Password");
       } else if (response == "451") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Password Must Be At Least 6 Characters",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Password Must Be At Least 6 Characters");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Confirm Your New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Confirm Your New Password");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Passwords Don't Match Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Passwords Don't Match Please Try Again");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Password Failed",
-              text: "Please try again later",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Change Password Failed", "Please try again later");
       }
     },
   });
@@ -4798,79 +1607,23 @@ $("#facultyForgotPass").on("submit", function (e) {
           url: "/SCES/backend/faculty/send-password-link.php",
           success: function (sendEmailResponse) {
             if (sendEmailResponse === "200") {
-              Swal.fire({
-                icon: "success",
-                title: "Email Sent",
-                text: "The password reset link has been sent to your email",
-                confirmButtonColor: "#4CAF50",
-                allowOutsideClick: false,
-              });
+              showAlert("success", "Email Sent", "The password reset link has been sent to your email");
             } else {
-              Swal.fire({
-                icon: "error",
-                title: "Failed to Send Email",
-                text: "Please try again later.",
-                confirmButtonColor: "#4CAF50",
-              });
+              showAlert("error", "Failed to Send Email", "Please try again later");
             }
           },
           error: function () {
-            Swal.fire({
-              icon: "error",
-              title: "Server Error",
-              text: "Unable to complete your request. Please try again later.",
-              confirmButtonColor: "#4CAF50",
-            });
+            showAlert("error", "Server Error", "Unable to complete your request. Please try again later.");
           },
         });
       } else if (response == "450") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Email",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Email");
       } else if (response == "451") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Email");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Account Recovery Cannot Be Processed",
-              text: "Registered email is unverified",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Account Recovery Cannot Be Processed", "Registered email is unverified");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Account Not Found",
-              text: "Please enter the email used in your registration",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Account Not Found", "Please enter the email used in your registration");
       }
     },
   });
@@ -4893,78 +1646,17 @@ $("#facultyChangePass").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Password Changed",
-              text: "Please login with your new password",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = "/SCES/frontend/faculty/login.php";
-              }
-            });
-          }
-        );
+        showRedirectAlert("success", "Password Changed", "Please login with your new password", "/SCES/frontend/faculty/login.php");
       } else if (response == "450") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter New Password");
       } else if (response == "451") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Password Must Be At Least 6 Characters",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Password Must Be At Least 6 Characters");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Confirm Your New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Confirm Your New Password");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Passwords Don't Match Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Passwords Don't Match Please Try Again");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Password Failed",
-              text: "Please try again later",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Change Password Failed", "Please try again later");
       }
     },
   });
@@ -4988,79 +1680,23 @@ $("#adminForgotPass").on("submit", function (e) {
           url: "/SCES/backend/admin/send-password-link.php",
           success: function (sendEmailResponse) {
             if (sendEmailResponse === "200") {
-              Swal.fire({
-                icon: "success",
-                title: "Email Sent",
-                text: "The password reset link has been sent to your email",
-                confirmButtonColor: "#4CAF50",
-                allowOutsideClick: false,
-              });
+              showAlert("success", "Email Sent", "The password reset link has been sent to your email");
             } else {
-              Swal.fire({
-                icon: "error",
-                title: "Failed to Send Email",
-                text: "Please try again later.",
-                confirmButtonColor: "#4CAF50",
-              });
+              showAlert("error", "Failed to Send Email", "Please try again later");
             }
           },
           error: function () {
-            Swal.fire({
-              icon: "error",
-              title: "Server Error",
-              text: "Unable to complete your request. Please try again later.",
-              confirmButtonColor: "#4CAF50",
-            });
+            showAlert("error", "Server Error", "Unable to complete your request. Please try again later.");
           },
         });
       } else if (response == "450") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Your Email",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Your Email");
       } else if (response == "451") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter Valid Email",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            });
-          }
-        );
+        showAlert("warning", "Please Enter Valid Email");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Account Recovery Cannot Be Processed",
-              text: "Registered email is unverified",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Account Recovery Cannot Be Processed", "Registered email is unverified");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Account Not Found",
-              text: "Please enter the email used in your registration",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Account Not Found", "Please enter the email used in your registration");
       }
     },
   });
@@ -5083,78 +1719,17 @@ $("#adminChangePass").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "success",
-              title: "Password Changed",
-              text: "Please login with your new password",
-              confirmButtonColor: "#4CAF50",
-              allowOutsideClick: false,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = "/SCES/frontend/admin/login.php";
-              }
-            });
-          }
-        );
+        showRedirectAlert("success", "Password Changed", "Please login with your new password", "/SCES/frontend/admin/login.php");
       } else if (response == "450") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Enter New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Enter New Password");
       } else if (response == "451") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Password Must Be At Least 6 Characters",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Password Must Be At Least 6 Characters");
       } else if (response == "452") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "Please Confirm Your New Password",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "Please Confirm Your New Password");
       } else if (response == "453") {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "warning",
-              title: "New Passwords Don't Match Please Try Again",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("warning", "New Passwords Don't Match Please Try Again");
       } else {
-        $.getScript(
-          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
-          function () {
-            Swal.fire({
-              icon: "error",
-              title: "Update Password Failed",
-              text: "Please try again later",
-              confirmButtonColor: "#4CAF50",
-            });
-          }
-        );
+        showAlert("error", "Change Password Failed", "Please try again later");
       }
     },
   });
@@ -5212,8 +1787,51 @@ function facultyLogoutFunc() {
   });
 }
 
-setInterval(function () {
-  fetch("/SCES/backend/update-quiz.php").catch((error) =>
-    console.error("Error in updating quiz status:", error)
+function showAlert(icon, title, text=""){
+  $.getScript("/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js", function () {
+    Swal.fire({
+      icon: icon,
+      title: title,
+      text: text,
+      confirmButtonColor: "#4CAF50",
+    });
+  });
+}
+
+function showRedirectAlert(icon, title, text = "", redirectUrl = null) {
+  $.getScript(
+    "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+    function () {
+      Swal.fire({
+        icon: icon,
+        title: title,
+        text: text,
+        confirmButtonColor: "#4CAF50",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed && redirectUrl) {
+          window.location.href = redirectUrl;
+        }
+      });
+    }
   );
-}, 10000);
+}
+
+function showReloadAlert(icon, title, text = "") {
+  $.getScript(
+    "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+    function () {
+      Swal.fire({
+        icon: icon,
+        title: title,
+        text: text,
+        confirmButtonColor: "#4CAF50",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    }
+  );
+}

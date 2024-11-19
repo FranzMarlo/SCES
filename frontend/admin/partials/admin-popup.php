@@ -115,6 +115,8 @@
         </div>
     </div>
     <div class="menu-part">
-        <img src="/SCES/storage/admin/images/<?php echo $image; ?>" alt="admin icon" class="user-icon">
+        <a href="/SCES/frontend/admin/profile.php?active=1">
+            <img src="/SCES/storage/admin/images/<?php echo $image; ?>" alt="admin icon" class="user-icon">
+        </a>
     </div>
 </div>

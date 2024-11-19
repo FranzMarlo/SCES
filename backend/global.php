@@ -611,7 +611,7 @@ if (isset($_POST['submitType'])) {
         } else if (empty($age)) {
             echo '469';
             exit();
-        } else if ($age < 5) {
+        } else if ($age < 18) {
             echo '470';
             exit();
         } else if ($age > 100) {
@@ -1059,7 +1059,7 @@ if (isset($_POST['submitType'])) {
         } else if (empty($age)) {
             echo '469';
             exit();
-        } else if ($age < 5) {
+        } else if ($age < 18) {
             echo '470';
             exit();
         } else if ($age > 100) {

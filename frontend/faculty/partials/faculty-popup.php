@@ -19,7 +19,7 @@
                 </li>
                 <li class="<?= $current_page == 'profile.php' ? 'active' : '' ?>">
                     <a href="/SCES/frontend/faculty/profile.php">
-                    <i class="fa-solid fa-user icon"></i>
+                        <i class="fa-solid fa-user icon"></i>
                         <span class="text">My Profile</span>
                     </a>
                 </li>
@@ -109,6 +109,8 @@
         </div>
     </div>
     <div class="menu-part">
-        <img src="/SCES/storage/faculty/images/<?php echo $image; ?>" alt="faculty icon" class="user-icon">
+        <a href="/SCES/frontend/faculty/profile.php?active=1">
+            <img src="/SCES/storage/faculty/images/<?php echo $image; ?>" alt="faculty icon" class="user-icon">
+        </a>
     </div>
 </div>
