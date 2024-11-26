@@ -18,13 +18,13 @@ def classify_remarks(success_rate):
     if success_rate >= 90:
         return "Outstanding"
     elif 85 <= success_rate < 90:
-        return "Very Good"
+        return "Very Satisfactory"
     elif 80 <= success_rate < 85:
-        return "Good"
+        return "Satisfactory"
     elif 75 <= success_rate < 80:
-        return "Fair"
+        return "Fairly Satisfactory"
     else:
-        return "Failed"
+        return "Did Not Meet Expectations"
 
 @app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():

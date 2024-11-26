@@ -746,18 +746,6 @@ document.addEventListener("DOMContentLoaded", function () {
           { data: "grade", className: "text-center" },
           {
             data: "remarks",
-            render: function (data) {
-              var className = "";
-              if (["Outstanding", "Very Good", "Good"].includes(data)) {
-                className = "passed";
-              } else if (data === "Fair") {
-                className = "fair";
-              } else if (data === "Failed") {
-                className = "failed";
-              }
-              return `<span class="${className}">${data}</span>`;
-            },
-            width: "100px",
             className: "text-center",
           },
           { data: "quarter", className: "text-center" },
@@ -1398,6 +1386,53 @@ document.addEventListener("DOMContentLoaded", function () {
             },
           },
         });
+
+        // Add interpretation based on data
+        const interpretationSpan = document.getElementById("interpretation");
+        if (data.barData.length > 1) {
+          let trends = [];
+          let overallTrend = 0;
+
+          for (let i = 1; i < data.barData.length; i++) {
+            const gradeFrom = data.labels[i - 1];
+            const gradeTo = data.labels[i];
+            const scoreFrom = data.barData[i - 1];
+            const scoreTo = data.barData[i];
+            const diff = scoreTo - scoreFrom;
+            overallTrend += diff;
+
+            if (diff > 0) {
+              trends.push(
+                `An improvement of GWA from ${scoreFrom} to ${scoreTo} in ${gradeTo}`
+              );
+            } else if (diff < 0) {
+              trends.push(
+                `A decline of GWA from ${scoreFrom} to ${scoreTo} in ${gradeTo}`
+              );
+            } else {
+              trends.push(
+                `No changes between the GWA ${scoreFrom} in ${gradeFrom} and ${scoreTo} in ${gradeTo}`
+              );
+            }
+          }
+
+          let overallMessage =
+            overallTrend > 0
+              ? "an overall improvement in performance."
+              : overallTrend < 0
+              ? "an overall decline in performance."
+              : "no significant change in performance.";
+
+          interpretationSpan.textContent = `As the student progresses through grade levels, the Bar Graph depicts: ${trends.join(
+            ". "
+          )}. Overall, the student exhibits ${overallMessage}`;
+        } else if (data.barData.length === 1) {
+          interpretationSpan.textContent =
+            "Only one grade level data is available. Unable to analyze transitions.";
+        } else {
+          interpretationSpan.textContent =
+            "No data available for this student.";
+        }
       },
     });
   }

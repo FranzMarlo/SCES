@@ -2,7 +2,7 @@
 define("db_host", "localhost");
 define("db_user", "root");
 define("db_pass", "");
-define("db_name", "sces");
+define("db_name", "sces_db");
 
 class db_connect
 {

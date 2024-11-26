@@ -18,7 +18,7 @@
   width: 100%;
   padding: 20px;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   background: #f5f5f5;
   min-height: 600px;
   gap: 20px;
@@ -41,7 +41,7 @@
   font-size: 16px;
   width: 160px;
   border-radius: 20px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fbe1f0;
   cursor: pointer;
@@ -65,7 +65,7 @@
   flex-direction: row;
   align-items: center;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   width: 24%;
   padding: 20px;
 }
@@ -80,7 +80,7 @@
   margin-right: 10px;
 }
 .stats-col p {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
 }
 .stats-col span {
   font-weight: bold;
@@ -126,7 +126,7 @@
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .data-table thead th {
   text-align: center !important;
@@ -188,7 +188,7 @@ table.dataTable tbody td.dataTables_empty {
   border-radius: 50%;
   padding: 5px 10px;
   font-size: 1rem;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   cursor: pointer;
 }
 .modal {
@@ -214,7 +214,7 @@ table.dataTable tbody td.dataTables_empty {
   flex-direction: column;
   background-color: #fefefe;
   margin: 10px auto;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   width: 60%;
   border-radius: 30px;
   max-width: 1200px;
@@ -277,7 +277,7 @@ table.dataTable tbody td.dataTables_empty {
 .head-row img {
   height: 120px;
   width: 120px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 10px;
   margin-right: 15px;
 }
@@ -312,7 +312,7 @@ table.dataTable tbody td.dataTables_empty {
   display: flex;
   flex-direction: row;
   padding: 10px 20px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
   width: fit-content;
   font-size: 1rem;
@@ -323,7 +323,7 @@ table.dataTable tbody td.dataTables_empty {
   display: flex;
   flex-direction: row;
   padding: 10px 20px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
   width: fit-content;
   font-size: 1rem;
@@ -355,7 +355,7 @@ table.dataTable tbody td.dataTables_empty {
   width: 100%;
   display: flex;
   flex-direction: column;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
   padding: 20px;
 }
@@ -395,7 +395,7 @@ table.dataTable tbody td.dataTables_empty {
 .modal-stats-box {
   width: 49%;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -411,7 +411,7 @@ table.dataTable tbody td.dataTables_empty {
   flex-direction: column;
   width: 23%;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   padding: 20px;
   align-items: center;
   justify-content: center;
@@ -442,7 +442,7 @@ table.dataTable tbody td.dataTables_empty {
   flex-direction: column;
   width: 100%;
   max-width: 1100px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 20px;
   overflow: hidden;
 }
@@ -466,7 +466,22 @@ table.dataTable tbody td.dataTables_empty {
 .table tbody tr {
   border: none;
 }
-@media (width < 1199px) {
+.full-text{
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 30px;
+  padding: 10px 15px;
+  text-align: justify;
+}
+#interpretation{
+  width: 100%;
+  font-size: 1.1rem;
+}
+#lvlInterpretation{
+  width: 100%;
+  font-size: 1.1rem;
+}
+@media (max-width: 1200px) {
   .title-box img {
     height: 2.1rem;
   }
@@ -483,7 +498,7 @@ table.dataTable tbody td.dataTables_empty {
     font-size: 1rem;
   }
 }
-@media (width < 992px) {
+@media (max-width: 992px) {
   .graph {
     height: 300px;
   }
@@ -540,7 +555,7 @@ table.dataTable tbody td.dataTables_empty {
     display: none;
   }
 }
-@media (width < 768px) {
+@media (max-width: 768px) {
   .stats-container {
     flex-wrap: wrap;
     row-gap: 20px;
@@ -581,8 +596,20 @@ table.dataTable tbody td.dataTables_empty {
   .panel-col span {
     font-size: 1.3rem;
   }
+  #interpretation{
+    font-size: 1rem;
+  }
+  #lvlInterpretation{
+    font-size: 1rem;
+  }
 }
-@media (width < 600px) {
+@media (max-width: 600px) {
+    #interpretation{
+    font-size: 0.9rem;
+  }
+  #lvlInterpretation{
+    font-size: 0.9rem;
+  }
   .modal-stats-box {
     width: 100%;
   }
@@ -677,7 +704,7 @@ table.dataTable tbody td.dataTables_empty {
     font-size: 1rem;
   }
 }
-@media (width < 500px) {
+@media (max-width: 500px) {
   .panel-tab {
     padding: 10px;
     gap: 10px;
@@ -686,12 +713,12 @@ table.dataTable tbody td.dataTables_empty {
     max-width: 400px;
   }
 }
-@media (width < 460px) {
+@media (max-width: 460px) {
   .table-responsive {
     max-width: 380px;
   }
 }
-@media (width < 425px) {
+@media (max-width: 425px) {
   .filter-container {
     flex-direction: column;
     align-items: flex-start;
@@ -707,7 +734,7 @@ table.dataTable tbody td.dataTables_empty {
     max-width: 330px;
   }
 }
-@media (width < 375px) {
+@media (max-width: 375px) {
   .table-responsive {
     max-width: 280px;
   }

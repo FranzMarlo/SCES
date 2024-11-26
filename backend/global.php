@@ -59,9 +59,9 @@ if (isset($_POST['submitType'])) {
         }
     } else if ($_POST['submitType'] === 'studentSignUp') {
 
-        $firstName = ucwords(validate($_POST['firstName']));
-        $middleName = ucwords(validate($_POST['middleName']));
-        $lastName = ucwords(validate($_POST['lastName']));
+        $firstName = ucwords(strtolower(validate($_POST['firstName'])));
+        $middleName = ucwords(strtolower(validate($_POST['middleName'])));
+        $lastName = ucwords(strtolower(validate($_POST['lastName'])));
         $studSuffix = validate($_POST['studSuffix']);
         $studentLRN = validate($_POST['studentLRN']);
         $gradeLevelId = validate($_POST['gradeLevel']);
@@ -165,8 +165,8 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'editProfileForm') {
         session_start();
         $studentId = $_SESSION['student_id'];
-        $firstName = validate($_POST['firstName']);
-        $lastName = validate($_POST['lastName']);
+        $firstName = ucwords(strtolower(validate($_POST['firstName'])));
+        $lastName = ucwords(strtolower(validate($_POST['lastName'])));
 
         if (
             $firstName == $_SESSION['student_fname'] &&
@@ -195,9 +195,9 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'editPersonalForm') {
         session_start();
         $studentId = $_SESSION['student_id'];
-        $firstName = validate($_POST['firstName']);
-        $lastName = validate($_POST['lastName']);
-        $middleName = validate($_POST['middleName']);
+        $firstName = ucwords(strtolower(validate($_POST['firstName'])));
+        $lastName = ucwords(strtolower(validate($_POST['lastName'])));
+        $middleName = ucwords(strtolower(validate($_POST['middleName'])));
         $suffix = validate($_POST['suffix']);
         $age = validate($_POST['age']);
         $gender = validate($_POST['gender']);
@@ -257,8 +257,8 @@ if (isset($_POST['submitType'])) {
         $studentId = $_SESSION['student_id'];
         $city = $_POST['city'];
         $barangay = $_POST['barangay'];
-        $street = validate($_POST['street']);
-        $guardianFullName = validate($_POST['guardianFullName']);
+        $street = ucwords(validate($_POST['street']));
+        $guardianFullName = ucwords(strtolower(validate($_POST['guardianFullName'])));
         $guardianContact = validate($_POST['guardianContact']);
         $phonePattern = '/^(09|\+639)\d{9}$/';
         if (
@@ -448,9 +448,9 @@ if (isset($_POST['submitType'])) {
         }
     } else if ($_POST['submitType'] === 'adminSignUp') {
 
-        $firstName = ucwords(validate($_POST['firstName']));
-        $middleName = ucwords(validate($_POST['middleName']));
-        $lastName = ucwords(validate($_POST['lastName']));
+        $firstName = ucwords(strtolower(validate($_POST['firstName'])));
+        $middleName = ucwords(strtolower(validate($_POST['middleName'])));
+        $lastName = ucwords(strtolower(validate($_POST['lastName'])));
         $suffix = validate($_POST['suffix']);
         $gender = validate($_POST['gender']);
         $controlNumber = validate($_POST['controlNumber']);
@@ -549,8 +549,8 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'adminEditProfileForm') {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
-        $firstName = validate($_POST['firstName']);
-        $lastName = validate($_POST['lastName']);
+        $firstName =  ucwords(strtolower(validate($_POST['firstName'])));
+        $lastName =  ucwords(strtolower(validate($_POST['lastName'])));
 
         if (
             $firstName == $_SESSION['teacher_fname'] &&
@@ -579,9 +579,9 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'adminEditPersonalForm') {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
-        $firstName = validate($_POST['firstName']);
-        $lastName = validate($_POST['lastName']);
-        $middleName = validate($_POST['middleName']);
+        $firstName = ucwords(strtolower(validate($_POST['firstName'])));
+        $lastName = ucwords(strtolower(validate($_POST['lastName'])));
+        $middleName = ucwords(strtolower(validate($_POST['middleName'])));
         $suffix = validate($_POST['suffix']);
         $age = validate($_POST['age']);
         $gender = validate($_POST['gender']);
@@ -641,7 +641,7 @@ if (isset($_POST['submitType'])) {
         $teacherId = $_SESSION['teacher_id'];
         $city = $_POST['city'];
         $barangay = $_POST['barangay'];
-        $street = validate($_POST['street']);
+        $street =  ucwords(validate($_POST['street']));
         $contactNumber = validate($_POST['contactNumber']);
         $phonePattern = '/^(09|\+639)\d{9}$/';
 
@@ -777,7 +777,7 @@ if (isset($_POST['submitType'])) {
         $subjectId = $_POST['subject_id'];
         $subject = $_POST['subject_title'];
         $lessonNumber = validate($_POST['lessonNumber']);
-        $lessonTitle = validate($_POST['lessonTitle']);
+        $lessonTitle = ucwords(strtolower(validate($_POST['lessonTitle'])));
         $quarter = validate($_POST['quarter']);
         $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $sectionId, $lessonNumber);
         if (empty($lessonNumber)) {
@@ -996,9 +996,8 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'facultyEditProfileForm') {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
-        $firstName = validate($_POST['firstName']);
-        $lastName = validate($_POST['lastName']);
-
+        $firstName = ucwords(strtolower(validate($_POST['firstName'])));
+        $lastName = ucwords(strtolower(validate($_POST['lastName'])));
         if (
             $firstName == $_SESSION['teacher_fname'] &&
             $lastName == $_SESSION['teacher_lname']
@@ -1027,9 +1026,9 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'facultyEditPersonalForm') {
         session_start();
         $teacherId = $_SESSION['teacher_id'];
-        $firstName = validate($_POST['firstName']);
-        $lastName = validate($_POST['lastName']);
-        $middleName = validate($_POST['middleName']);
+        $firstName = ucwords(strtolower(validate($_POST['firstName'])));
+        $lastName = ucwords(strtolower(validate($_POST['lastName'])));
+        $middleName = ucwords(strtolower(validate($_POST['middleName'])));
         $suffix = validate($_POST['suffix']);
         $age = validate($_POST['age']);
         $gender = validate($_POST['gender']);
@@ -1089,7 +1088,7 @@ if (isset($_POST['submitType'])) {
         $teacherId = $_SESSION['teacher_id'];
         $city = $_POST['city'];
         $barangay = $_POST['barangay'];
-        $street = validate($_POST['street']);
+        $street = ucwords(validate($_POST['street']));
         $contactNumber = validate($_POST['contactNumber']);
         $phonePattern = '/^(09|\+639)\d{9}$/';
         if (
@@ -1224,7 +1223,7 @@ if (isset($_POST['submitType'])) {
         $subjectId = $_POST['subject_id'];
         $subject = $_POST['subject_title'];
         $lessonNumber = validate($_POST['lessonNumber']);
-        $lessonTitle = validate($_POST['lessonTitle']);
+        $lessonTitle = ucwords(strtolower(validate($_POST['lessonTitle'])));
         $quarter = validate($_POST['quarter']);
         $checkNumber = $db->checkLessonNumber($levelId, $subjectId, $teacherId, $lessonNumber);
         if (empty($lessonNumber)) {
@@ -1287,7 +1286,7 @@ if (isset($_POST['submitType'])) {
         header('Content-Type: application/json');
         session_start();
         $quizNumber = validate($_POST['quizNumber']);
-        $quizTitle = validate($_POST['quizTitle']);
+        $quizTitle = ucwords(strtolower(validate($_POST['quizTitle'])));
         $subjectId = validate($_POST['subject']);
         $lessonId = validate($_POST['lesson']);
         $checkNumber = $db->checkQuizNumber($subjectId, $lessonId, $quizNumber);
@@ -1469,7 +1468,7 @@ if (isset($_POST['submitType'])) {
     } else if ($_POST['submitType'] === 'editQuiz') {
         session_start();
         $editQuizId = validate($_POST['editQuizId']);
-        $editQuizTitle = validate($_POST['editQuizTitle']);
+        $editQuizTitle = ucwords(strtolower(validate($_POST['editQuizTitle'])));
         $editQuizNumber = validate($_POST['editQuizNumber']);
         $editSubject = validate($_POST['editSubject']);
         $editLesson = validate($_POST['editLesson']);
@@ -1660,13 +1659,13 @@ if (isset($_POST['submitType'])) {
             if ($studentGrade >= 90) {
                 $remarks = 'Outstanding';
             } else if ($studentGrade >= 85) {
-                $remarks = 'Very Good';
+                $remarks = 'Very Satisfactory';
             } else if ($studentGrade >= 80) {
-                $remarks = 'Good';
+                $remarks = 'Satisfactory';
             } else if ($studentGrade >= 75) {
-                $remarks = 'Fair';
+                $remarks = 'Fairly Satisfactory';
             } else {
-                $remarks = 'Failed';
+                $remarks = 'Did Not Meet Expectations';
             }
             $addGrade = $db->addGrade($studentId, $subjectId, $studentGrade, $remarks, $quarter);
             if ($addGrade != false) {
@@ -1944,7 +1943,7 @@ if (isset($_POST['submitType'])) {
         }
     } else if ($_POST['submitType'] === 'addSectionData') {
         $addGradeLevel = validate($_POST['addGradeLevel']);
-        $addSection = ucwords(validate($_POST['addSection']));
+        $addSection = ucwords(strtolower(validate($_POST['addSection'])));
         $addTeacher = validate($_POST['addTeacher']);
         $checkSection = $db->checkSectionName($addSection, $addGradeLevel);
         if ($checkSection->num_rows > 0) {
@@ -1982,7 +1981,7 @@ if (isset($_POST['submitType'])) {
         $editSectionIdHolder = $_POST['editSectionIdHolder'];
         $editTeacherIdHolder = $_POST['editTeacherIdHolder'];
         $editGradeLevel = validate($_POST['editGradeLevel']);
-        $editSection = ucwords(validate($_POST['editSection']));
+        $editSection = ucwords(strtolower(validate($_POST['editSection'])));
         $editTeacher = validate($_POST['editTeacher']);
         $checkSection = $db->checkSectionName($editSection, $editGradeLevel);
         if (
@@ -2464,13 +2463,13 @@ function getGWARemarks($gwa)
     if ($gwa >= 90) {
         return 'OUTSTANDING';
     } else if ($gwa >= 85) {
-        return 'VERY GOOD';
+        return 'VERY SATISFACTORY';
     } else if ($gwa >= 80) {
-        return 'GOOD';
+        return 'SATISFACTORY';
     } else if ($gwa >= 75) {
-        return 'FAIR';
+        return 'FAIRLY SATISFACTORY';
     } else {
-        return 'FAILED';
+        return 'DID NOT MEET EXPECTATIONS';
     }
 }
 

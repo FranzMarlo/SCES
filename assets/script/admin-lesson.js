@@ -681,20 +681,7 @@ document.addEventListener("DOMContentLoaded", function () {
           { data: "subject", className: "text-center" },
           { data: "grade", className: "text-center" },
           {
-            data: "remarks",
-            render: function (data) {
-              var className = "";
-              if (["Outstanding", "Very Good", "Good"].includes(data)) {
-                className = "passed";
-              } else if (data === "Fair") {
-                className = "fair";
-              } else if (data === "Failed") {
-                className = "failed";
-              }
-              return `<span class="${className}">${data}</span>`;
-            },
-            width: "100px",
-            className: "text-center",
+            data: "remarks", className: "text-center",
           },
           { data: "quarter", className: "text-center" },
           {

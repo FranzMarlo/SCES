@@ -46,7 +46,7 @@
   flex-direction: column;
   padding: 20px;
   gap: 15px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .tab-controller {
   width: 100%;
@@ -60,7 +60,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   padding: 10px 20px;
   border-radius: 30px;
   width: fit-content;
@@ -75,7 +75,7 @@
 }
 .lesson-header {
   width: 100%;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
 }
 .header-bg {
@@ -136,7 +136,7 @@
   padding: 20px;
   gap: 15px;
   align-items: center;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .module-item span {
   font-size: 1rem;
@@ -150,7 +150,7 @@
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 2px 0 #9c9c9c;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   cursor: pointer;
 }
 .module-box .module-item:hover {
@@ -171,7 +171,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .lesson-title {
   display: flex;
@@ -349,7 +349,7 @@
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .data-table thead th {
   text-align: center !important;
@@ -424,7 +424,7 @@ table.dataTable tbody td.dataTables_empty {
   flex-direction: column;
   box-shadow: 0 0 2px 0 #9c9c9c;
   padding: 20px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .question-box {
   text-align: justify;
@@ -440,7 +440,7 @@ table.dataTable tbody td.dataTables_empty {
   border-radius: 30px;
   display: flex;
   align-items: center;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   background-color: #f9f9f9;
   font-size: 1.1rem;
 }
@@ -503,7 +503,7 @@ table.dataTable tbody td.dataTables_empty {
   border-radius: 50%;
   padding: 5px 10px;
   font-size: 1rem;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   cursor: pointer;
 }
 .more-btn:hover {
@@ -567,7 +567,7 @@ table.dataTable tbody td.dataTables_empty {
   width: 100%;
   box-shadow: 0 0 2px 0 #9c9c9c;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .close-btn {
   color: #000;
@@ -623,7 +623,7 @@ table.dataTable tbody td.dataTables_empty {
   display: flex;
   flex-direction: row;
   width: 100%;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
   padding: 10px 20px;
 }
@@ -645,12 +645,12 @@ table.dataTable tbody td.dataTables_empty {
   cursor: pointer;
   float: right;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .save-btn:hover {
   background-color: #45a049;
 }
-@media (width < 1199px) {
+@media (max-width: 1200px) {
   .modal-icon-container {
     left: 80%;
   }
@@ -679,7 +679,7 @@ table.dataTable tbody td.dataTables_empty {
     font-size: 1.1rem;
   }
 }
-@media (width < 992px) {
+@media (max-width: 992px) {
   .modal-direction span {
     font-size: 1.1rem;
   }
@@ -705,7 +705,7 @@ table.dataTable tbody td.dataTables_empty {
     width: 80%;
   }
 }
-@media (width < 768px) {
+@media (max-width: 768px) {
   .modal-icon-container img {
     height: 4.8rem;
   }
@@ -775,7 +775,7 @@ table.dataTable tbody td.dataTables_empty {
     max-width: 550px;
   }
 }
-@media (width < 600px) {
+@media (max-width: 600px) {
   .modal-icon-container {
     left: 70%;
   }
@@ -848,17 +848,17 @@ table.dataTable tbody td.dataTables_empty {
     font-size: 0.8rem;
   }
 }
-@media (width < 500px) {
+@media (max-width: 500px) {
   .table-responsive {
     max-width: 400px;
   }
 }
-@media (width < 460px) {
+@media (max-width: 460px) {
   .table-responsive {
     max-width: 380px;
   }
 }
-@media (width < 425px) {
+@media (max-width: 425px) {
   .table-responsive {
     max-width: 330px;
   }
@@ -877,7 +877,7 @@ table.dataTable tbody td.dataTables_empty {
     left: 73%;
   }
 }
-@media (width < 375px) {
+@media (max-width: 375px) {
   .question-box span {
     font-size: 0.8rem;
   }

@@ -48,8 +48,8 @@ function initializeDonutChart(data) {
       datasets: [
         {
           data: data,
-          backgroundColor: ["#46d2b7", "#ffffff"],
-          borderColor: ["#2ea993", "#000000"],
+          backgroundColor: ["#4caf50", "#ffffff"],
+          borderColor: ["#ccc", "#ccc"],
           borderWidth: 1,
         },
       ],
@@ -99,16 +99,6 @@ $.ajax({
 function initializeBarChart(labels, counts) {
   const barCtx = document.getElementById("myBarChart").getContext("2d");
 
-  // Define the colors array
-  const colors = [
-    "#ffd6e6",
-    "#d2ebc4",
-    "#fcfd95",
-    "#c5e3ff",
-    "#ddd1ff",
-    "#fec590",
-  ];
-
   new Chart(barCtx, {
     type: "bar",
     data: {
@@ -116,7 +106,7 @@ function initializeBarChart(labels, counts) {
       datasets: [
         {
           data: counts,
-          backgroundColor: colors,
+          backgroundColor: "#4caf50",
           borderColor: "#00000",
           borderWidth: 2,
         },

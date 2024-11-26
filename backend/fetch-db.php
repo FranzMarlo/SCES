@@ -929,6 +929,8 @@ class fetchClass extends db_connect
                 year, grade_level
             ORDER BY 
                 year ASC, grade_level ASC
+            LIMIT 
+                6
         ");
             $query->bind_param("s", $gradeLevel);
         } elseif ($gradeLevel === 'All') {
@@ -2858,46 +2860,47 @@ class fetchClass extends db_connect
     }
 
     public function facultyGetSubjectAverageScore($subjectId)
-    {
-        // Prepare the query to fetch students enrolled in the subject
-        $query = $this->conn->prepare("
+{
+    // Prepare the query to fetch students enrolled in the subject
+    $query = $this->conn->prepare("
         SELECT DISTINCT student.student_id
         FROM student_record student
         INNER JOIN section_tbl section ON student.section_id = section.section_id
         INNER JOIN subject_tbl subject ON section.section_id = subject.section_id
         WHERE subject.subject_id = ?
     ");
-        $query->bind_param("s", $subjectId);
+    $query->bind_param("s", $subjectId);
 
-        // Execute the query to get the student records
-        if ($query->execute()) {
-            $result = $query->get_result();
-            $students = $result->fetch_all(MYSQLI_ASSOC);
+    // Execute the query to get the student records
+    if ($query->execute()) {
+        $result = $query->get_result();
+        $students = $result->fetch_all(MYSQLI_ASSOC);
 
-            // Initialize variables for total score and student count
-            $totalScore = 0;
-            $studentCount = 0;
+        // Initialize variables for total score and student count
+        $totalScore = 0;
+        $studentCount = 0;
 
-            // Loop through each student and get their average score
-            foreach ($students as $student) {
-                // Get the average score for each student for this subject
-                $averageScore = $this->facultyGetAverageScoreBySubject($student['student_id'], $subjectId);
+        // Loop through each student and get their average score
+        foreach ($students as $student) {
+            // Get the average score for each student for this subject
+            $averageScore = $this->facultyGetAverageScoreBySubject($student['student_id'], $subjectId);
 
-                // Add the average score to the total score
-                $totalScore += $averageScore;
-                $studentCount++; // Increment the student count
-            }
-
-            // Calculate the subject average score if there are any students
-            if ($studentCount > 0) {
-                return $totalScore / $studentCount; // Return the average of all students
-            } else {
-                return 0; // No students, so return 0
-            }
+            // Add the average score to the total score
+            $totalScore += $averageScore;
+            $studentCount++; // Increment the student count
         }
 
-        return null; // Return null if the query fails
+        // Calculate the subject average score if there are any students
+        if ($studentCount > 0) {
+            return round($totalScore / $studentCount, 2); // Return the rounded average of all students
+        } else {
+            return 0; // No students, so return 0
+        }
     }
+
+    return null; // Return null if the query fails
+}
+
 
 
     public function facultyGetHighestStudentAverageScore($subjectId)

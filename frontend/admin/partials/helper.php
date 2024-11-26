@@ -1,47 +1,29 @@
 <?php
 
+function getDashboardIcon($gender)
+{
+    if ($gender == 'Female') {
+        return 'admin-female.png';
+    } else {
+        return 'admin-male.png';
+    }
+}
+
+function getCroppedIcon($gender)
+{
+    if ($gender == 'Female') {
+        return 'admin-female-cropped.png';
+    } else {
+        return 'admin-male-cropped.png';
+    }
+}
+
 function getProfileImage($gender)
 {
     if ($gender == 'Female') {
         return 'quiz-female-teacher.png';
     } else {
         return 'quiz-male-teacher.png';
-    }
-}
-
-function getLogoStyle($gender)
-{
-    if ($gender == 'Female') {
-        return 'pink';
-    } else {
-        return 'blue';
-    }
-}
-
-function getMottoStyle($gender)
-{
-    if ($gender == 'Female') {
-        return 'pink-bg';
-    } else {
-        return 'blue-bg';
-    }
-}
-
-function getIdBg($gender)
-{
-    if ($gender == 'Female') {
-        return 'female';
-    } else {
-        return 'male';
-    }
-}
-
-function getProfileBg($gender)
-{
-    if ($gender == 'Female') {
-        return 'male';
-    } else {
-        return 'female';
     }
 }
 

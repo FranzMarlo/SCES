@@ -358,8 +358,8 @@ document.addEventListener("DOMContentLoaded", function () {
               {
                 label: "Average Score",
                 data: data.lineData,
-                backgroundColor: "#ddd1ff",
-                borderColor: "#c4adfe",
+                backgroundColor: "#c5e3ff",
+                borderColor: "#9BC0E4FF",
                 borderWidth: 3,
                 fill: true,
               },
@@ -412,18 +412,6 @@ document.addEventListener("DOMContentLoaded", function () {
     success: function (data) {
       var ctxBar = document.getElementById("barChart").getContext("2d");
 
-      var colors = [
-        "#ffd6e6",
-        "#d2ebc4",
-        "#fcfd95",
-        "#c5e3ff",
-        "#ddd1ff",
-        "#fec590",
-      ];
-
-      var backgroundColors = data.labels.map((label, index) => {
-        return colors[index % colors.length];
-      });
 
       var barChart = new Chart(ctxBar, {
         type: "bar",
@@ -433,8 +421,8 @@ document.addEventListener("DOMContentLoaded", function () {
             {
               label: "GWA",
               data: data.barData,
-              backgroundColor: backgroundColors,
-              borderColor: "#000",
+              backgroundColor: "#c5e3ff",
+              borderColor: "#ccc",
               borderWidth: 2,
             },
           ],

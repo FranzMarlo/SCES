@@ -29,7 +29,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                 </div>
                 <div class="profile-container">
                     <div class="profile-bg">
-                        <div class="id-box <?php echo htmlspecialchars(getIdBg($gender)); ?>">
+                        <div class="id-box">
                             <div class="id-image">
                                 <img src="/SCES/storage/student/images/<?php echo $image; ?>" alt="user icon">
                                 <span><?php echo htmlspecialchars($studentId); ?></span>
@@ -38,9 +38,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                                 <div class="id-logo">
                                     <div class="logo">
                                         <img src="/SCES/assets/images/logo.png" alt="SCES Logo" />
-                                        <span class="<?php echo htmlspecialchars(getLogoStyle($gender)); ?>">SCES</span>
+                                        <span class="blue">SCES</span>
                                     </div>
-                                    <div class="motto <?php echo htmlspecialchars(getMottoStyle($gender)); ?>">
+                                    <div class="motto blue-bg">
                                         <p>Serving with Compassion and Excellence towards Success</p>
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                         <div class="table-responsive">
                             <table id="quizScoresTable" class="display data-table">
                                 <thead>
-                                    <tr class="<?php echo htmlspecialchars(getMottoStyle($gender)); ?>">
+                                    <tr class="blue-bg">
                                         <th>Quiz No.</th>
                                         <th>Subject</th>
                                         <th>Title</th>
@@ -200,7 +200,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
                         <div class="table-responsive">
                             <table id="gradesTable" class="display data-table">
                                 <thead>
-                                    <tr class="<?php echo htmlspecialchars(getMottoStyle($gender)); ?>">
+                                    <tr class="blue-bg">
                                         <th>Subject</th>
                                         <th>Grade</th>
                                         <th>Remarks</th>

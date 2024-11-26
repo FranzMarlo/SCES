@@ -26,8 +26,8 @@ $page = '';
                     <h1>My Profile</h1>
                 </div>
                 <div class="profile-container">
-                    <div class="profile-bg <?php echo htmlspecialchars(getProfileBg($gender)); ?>">
-                        <div class="id-box <?php echo htmlspecialchars(getIdBg($gender)); ?>">
+                    <div class="profile-bg female">
+                        <div class="id-box male">
                             <div class="id-image">
                                 <img src="/SCES/storage/admin/images/<?php echo $image; ?>" alt="user icon">
                                 <span><?php echo htmlspecialchars($teacherId); ?></span>
@@ -36,9 +36,9 @@ $page = '';
                                 <div class="id-logo">
                                     <div class="logo">
                                         <img src="/SCES/assets/images/logo.png" alt="SCES Logo" />
-                                        <span class="<?php echo htmlspecialchars(getLogoStyle($gender)); ?>">SCES</span>
+                                        <span class="blue">SCES</span>
                                     </div>
-                                    <div class="motto <?php echo htmlspecialchars(getMottoStyle($gender)); ?>">
+                                    <div class="motto blue-bg">
                                         <p>Serving with Compassion and Excellence towards Success</p>
                                     </div>
                                 </div>

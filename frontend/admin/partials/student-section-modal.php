@@ -202,7 +202,8 @@
             </div>
             <div class="stats-container">
                 <div class="stats-box completed">
-                    <img id="studentPredictedPerformanceIcon" src="/SCES/assets/images/passed.png" alt="performance.png">
+                    <img id="studentPredictedPerformanceIcon" src="/SCES/assets/images/passed.png"
+                        alt="performance.png">
                     <div class="stats-col">
                         <p>Predicted Performance</p>
                         <span id="studentPredictedPerformance"></span>
@@ -217,7 +218,7 @@
                 </div>
             </div>
             <div class="stats-container">
-            <div class="stats-box average">
+                <div class="stats-box average">
                     <img src="/SCES/assets/images/gwa.png" alt="gwa.png">
                     <div class="stats-col">
                         <p>Predicted GWA</p>
@@ -239,6 +240,9 @@
                 <div class="graph">
                     <canvas id="studentBarChart"></canvas>
                 </div>
+            </div>
+            <div class="full-text">
+                <span id="interpretation"></span>
             </div>
             <div class="graph-container">
                 <div class="full-graph">
@@ -342,4 +346,3 @@
         </div>
     </div>
 </div>
-

@@ -11,13 +11,13 @@
   padding: 20px;
   display: flex;
   flex-direction: row;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .settings-container .side-panel {
   width: 25%;
   display: flex;
   flex-direction: column;
-  border-right: solid 2px #000;
+  border-right: solid 2px #ccc;
   row-gap: 10px;
   padding: 10px;
 }
@@ -35,7 +35,7 @@
 .settings-container .side-panel .panel-item.active {
   background-color: #fbe1f0;
   font-weight: bold;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .settings-container .main-panel {
   width: 75%;
@@ -58,7 +58,7 @@
   width: 100%;
   background-color: #fbe1f0;
   justify-content: space-between;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   padding: 5px;
 }
 .profile-part {
@@ -111,7 +111,7 @@ img#change-avatar-icon {
 }
 .edit-btn {
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   padding: 10px 20px;
   display: flex;
   flex-direction: row;
@@ -126,7 +126,7 @@ img#change-avatar-icon {
   display: flex;
   flex-direction: column;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   padding: 10px 15px;
   padding-left: 30px;
   width: 100%;
@@ -186,7 +186,7 @@ img#change-avatar-icon {
 }
 .security-data:hover {
   background-color: #fbe1f0;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   font-weight: bold;
 }
 .security-part {
@@ -238,7 +238,7 @@ img#change-avatar-icon {
   background-color: #fff;
   margin: 5% auto;
   padding: 20px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   width: 90%;
   max-width: 600px;
   border-radius: 30px;
@@ -280,7 +280,7 @@ input[type="password"] {
   padding: 10px 15px;
   margin: 5px 0 15px 0;
   display: inline-block;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
   box-sizing: border-box;
   font-size: 1rem;
@@ -290,7 +290,7 @@ select {
   padding: 10px 15px;
   margin: 5px 0 15px 0;
   display: inline-block;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
   background-color: #fff;
   color: #333;
@@ -305,7 +305,7 @@ select {
   font-size: 1rem;
 }
 select:focus {
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 select option {
   padding: 10px;
@@ -318,7 +318,7 @@ select option {
   cursor: pointer;
   float: right;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .save-btn:hover {
   background-color: #45a049;
@@ -362,7 +362,7 @@ select option {
   width: 50px;
   height: 50px;
 }
-@media (width < 1199px) {
+@media (max-width: 1200px) {
   .data-text {
     flex-direction: column;
   }
@@ -373,7 +373,7 @@ select option {
     width: 100%;
   }
 }
-@media (width < 992px) {
+@media (max-width: 992px) {
   .title-box {
     padding-left: 10px;
     font-size: 0.6rem;
@@ -385,7 +385,7 @@ select option {
     font-size: 1.4rem;
   }
 }
-@media (width < 768px) {
+@media (max-width: 768px) {
   .settings-container {
     flex-direction: column;
     padding: 10px;
@@ -421,7 +421,7 @@ select option {
     width: 50%;
   }
 }
-@media (width < 600px) {
+@media (max-width: 600px) {
   .settings-container .main-panel {
     padding: 5px;
     gap: 5px;
@@ -478,7 +478,7 @@ select option {
     width: 100%;
   }
 }
-@media (width < 425px) {
+@media (max-width: 425px) {
   .user-profile {
     flex-direction: column;
     width: 100%;

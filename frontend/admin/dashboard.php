@@ -1,5 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-head.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/helper.php';
 $page = 'SCES Admin';
 ?>
 <title>Home | SCES Online Learning Platform</title>
@@ -30,8 +31,8 @@ $page = 'SCES Admin';
           </div>
         </div>
         <div class="welcome-img">
-          <img src="/SCES/assets/images/admin-dashboard-icon.png" alt="admin dashboard icon" class="normal">
-          <img src="/SCES/assets/images/admin-dashboard-icon-cropped.png" alt="admin dashboard icon" class="cropped">
+          <img src="/SCES/assets/images/<?php echo getDashboardIcon($gender);?>" alt="admin dashboard icon" class="normal">
+          <img src="/SCES/assets/images/<?php echo getCroppedIcon($gender);?>" alt="admin dashboard icon" class="cropped">
         </div>
       </div>
       <div class="box-container">

@@ -21,7 +21,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
 }
 .profile-bg {
@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: row;
   border-radius: 20px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   min-width: 600px;
   padding: 20px;
 }
@@ -182,7 +182,7 @@
   font-weight: bold;
   padding: 10px 15px;
   cursor: pointer;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .side-controller .tab-item:hover {
   background-color: #fce344;
@@ -229,7 +229,7 @@
   border-radius: 30px;
   display: flex;
   align-items: center;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   background-color: #f9f9f9;
   font-size: 1.1rem;
 }
@@ -278,7 +278,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
   padding: 20px;
   margin-bottom: 20px;
@@ -316,7 +316,7 @@
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .data-table thead th {
   color: white;
@@ -415,7 +415,7 @@ table.dataTable tbody td.dataTables_empty {
   flex-direction: column;
   width: 23%;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   padding: 20px;
   align-items: center;
   justify-content: center;
@@ -473,7 +473,7 @@ table.dataTable tbody td.dataTables_empty {
   border-radius: 50%;
   padding: 5px 10px;
   font-size: 1rem;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   cursor: pointer;
 }
 .modal {
@@ -551,7 +551,7 @@ table.dataTable tbody td.dataTables_empty {
   cursor: pointer;
   float: right;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .save-btn:hover {
   background-color: #45a049;
@@ -582,7 +582,7 @@ table.dataTable tbody td.dataTables_empty {
   display: flex;
   flex-direction: row;
   width: 100%;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   border-radius: 30px;
   padding: 10px 20px;
 }
@@ -593,7 +593,7 @@ table.dataTable tbody td.dataTables_empty {
   width: 100%;
   box-shadow: 0 0 2px 0 #9c9c9c;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .modal-header-bg {
   position: relative;
@@ -641,7 +641,7 @@ table.dataTable tbody td.dataTables_empty {
   flex-direction: column;
   box-shadow: 0 0 2px 0 #9c9c9c;
   padding: 20px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
 }
 .question-box {
   text-align: justify;
@@ -658,7 +658,7 @@ table.dataTable tbody td.dataTables_empty {
   flex-wrap: wrap;
   padding: 50px;
   gap: 40px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   flex-direction: row;
   width: 100%;
 }
@@ -675,7 +675,7 @@ table.dataTable tbody td.dataTables_empty {
 .subject-icon {
   display: flex;
   border-radius: 30px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -689,7 +689,7 @@ table.dataTable tbody td.dataTables_empty {
   background-color: #f5f5f5;
   width: 35px;
   padding: 5px;
-  border: 2px solid #000;
+  border: 2px solid #ccc;
   position: absolute;
   cursor: pointer;
   top: 10px;
@@ -764,7 +764,7 @@ table.dataTable tbody td.dataTables_empty {
 .no-data-box h1 {
   font-size: 1.2rem;
 }
-@media (width < 1199px) {
+@media (max-width: 1200px) {
   .item-text {
     padding: 5px;
   }
@@ -825,7 +825,7 @@ table.dataTable tbody td.dataTables_empty {
     height: 350px;
   }
 }
-@media (width < 992px) {
+@media (max-width: 992px) {
   .subject-container {
     padding: 30px;
     gap: 30px;
@@ -889,7 +889,7 @@ table.dataTable tbody td.dataTables_empty {
     font-size: 1rem;
   }
 }
-@media (width < 768px) {
+@media (max-width: 768px) {
   .subject-container {
     gap: 25px;
     padding: 20px;
@@ -968,7 +968,7 @@ table.dataTable tbody td.dataTables_empty {
     max-width: 550px;
   }
 }
-@media (width < 600px) {
+@media (max-width: 600px) {
   .item {
     width: 31%;
     padding: 5px 10px;
@@ -1151,12 +1151,12 @@ table.dataTable tbody td.dataTables_empty {
     padding: 10px;
   }
 }
-@media (width < 500px) {
+@media (max-width: 500px) {
   .table-responsive {
     max-width: 400px;
   }
 }
-@media (width < 460px) {
+@media (max-width: 460px) {
   .profile-bg {
     height: 310px;
   }
@@ -1182,7 +1182,7 @@ table.dataTable tbody td.dataTables_empty {
     max-width: 380px;
   }
 }
-@media (width < 425px) {
+@media (max-width: 425px) {
   .subject-container {
     gap: 7px;
     padding: 7px;
@@ -1222,7 +1222,7 @@ table.dataTable tbody td.dataTables_empty {
     font-size: 1.5rem;
   }
 }
-@media (width < 375px) {
+@media (max-width: 375px) {
   .student-info span {
     font-size: 0.9rem;
   }
