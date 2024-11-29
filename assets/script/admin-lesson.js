@@ -135,33 +135,39 @@ document.addEventListener("DOMContentLoaded", function () {
       setActiveClass("analyticsTab");
     });
 
-    document.getElementById("moduleLessons").addEventListener("click", function () {
+  document
+    .getElementById("moduleLessons")
+    .addEventListener("click", function () {
       updateTabDisplay("lessonTab", 1);
       setActiveClass("lessonTab");
     });
-  
-    document.getElementById("moduleStudents").addEventListener("click", function () {
+
+  document
+    .getElementById("moduleStudents")
+    .addEventListener("click", function () {
       updateTabDisplay("studentTab", 2);
       initializeStudentsTable();
       setActiveClass("studentTab");
     });
-  
-    document.getElementById("moduleRecords").addEventListener("click", function () {
+
+  document
+    .getElementById("moduleRecords")
+    .addEventListener("click", function () {
       updateTabDisplay("recordsTab", 3);
       initializeRecordsTable();
       setActiveClass("recordsTab");
     });
-  
-    document
-      .getElementById("moduleAnalytics")
-      .addEventListener("click", function () {
-        updateTabDisplay("analyticsTab", 4);
-        populateSubjectPanelData();
-        fetchSubjectPieChartData();
-        initializeSubjectLineChart();
-        initializeRankingTable();
-        setActiveClass("analyticsTab");
-      });
+
+  document
+    .getElementById("moduleAnalytics")
+    .addEventListener("click", function () {
+      updateTabDisplay("analyticsTab", 4);
+      populateSubjectPanelData();
+      fetchSubjectPieChartData();
+      initializeSubjectLineChart();
+      initializeRankingTable();
+      setActiveClass("analyticsTab");
+    });
 
   // Initialize the active tab on page load
   window.addEventListener("load", activateTabFromParams);
@@ -401,6 +407,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       fetchDonutChartData(studentId);
       initializeLineChart(studentId);
+      initializeStudentFullBarChart(studentId);
       showTabContent("studentAnalyticsContainer");
       setActiveTab("studentAnalyticsTab");
     });
@@ -681,7 +688,8 @@ document.addEventListener("DOMContentLoaded", function () {
           { data: "subject", className: "text-center" },
           { data: "grade", className: "text-center" },
           {
-            data: "remarks", className: "text-center",
+            data: "remarks",
+            className: "text-center",
           },
           { data: "quarter", className: "text-center" },
           {
@@ -1020,6 +1028,196 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Error fetching data: ", error);
       },
     });
+  }
+
+  function initializeStudentFullBarChart(studentId) {
+    const ctxBar = document
+      .getElementById("studentFullBarChart")
+      .getContext("2d");
+  
+    if (Chart.getChart("studentFullBarChart")) {
+      Chart.getChart("studentFullBarChart").destroy();
+    }
+  
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        submitType: "studentSubjectFullBarChart",
+        student_id: studentId,
+        subject_id: subject_id, // Pass subject_id
+      },
+      success: function (data) {
+        if (!data.labels.length || !data.barData.length) {
+          $("#subjectInterpretation").text("No grades available to interpret.");
+          return;
+        }
+  
+        const colorMapping = {
+          fil: "#ff8080",
+          eng: "#ffb480",
+          math: "#e1e149",
+          sci: "#42d6a4",
+          esp: "#08cad1",
+          mt: "#59adf6",
+          ap: "#f0bad1",
+          mapeh: "#a3adff",
+          epp: "#d9ae9d",
+        };
+  
+        const baseColor =
+          colorMapping[data.subjectCode?.toLowerCase()] || "#cccccc";
+  
+        const grades = data.barData;
+        const labels = [...data.labels]; // Use existing labels
+  
+        let predictedGrade = null;
+        let missingMessage = "";
+  
+        // Ensure that labels include "1st Quarter" and "2nd Quarter"
+        const hasFirstQuarter = labels.includes("1st Quarter");
+        const hasSecondQuarter = labels.includes("2nd Quarter");
+  
+        if (hasFirstQuarter && hasSecondQuarter) {
+          // Prediction logic
+          if (grades.length <= 3) {
+            const changes = [];
+            for (let i = 1; i < grades.length; i++) {
+              changes.push(grades[i] - grades[i - 1]);
+            }
+  
+            const averageChange =
+              changes.reduce((sum, change) => sum + change, 0) / changes.length;
+            predictedGrade = Math.round(
+              grades[grades.length - 1] + averageChange
+            );
+            grades.push(predictedGrade);
+  
+            // Add the formatted label only for the predicted value
+            labels.push(formatQuarterLabel(grades.length));
+          }
+        } else {
+          // Prepare the message for missing quarters
+          const missingQuarters = [];
+          if (!hasFirstQuarter) missingQuarters.push("1st Quarter");
+          if (!hasSecondQuarter) missingQuarters.push("2nd Quarter");
+  
+          missingMessage = `Prediction skipped: Missing data for ${missingQuarters.join(
+            " and "
+          )}.`;
+        }
+  
+        // Generate the backgroundColor array
+        const backgroundColor = Array(grades.length - 1).fill(baseColor);
+        if (predictedGrade !== null) {
+          backgroundColor.push("#999999"); // Gray color for the predicted grade
+        }
+  
+        // Generate the chart
+        new Chart(ctxBar, {
+          type: "bar",
+          data: {
+            labels: labels, // Labels, including the formatted predicted label
+            datasets: [
+              {
+                label: "Grade",
+                data: grades, // Grades, including predicted grade
+                backgroundColor: backgroundColor, // Colors for each bar
+                borderColor: "#ccc",
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Grades by Quarter",
+                font: {
+                  size: 18,
+                },
+                padding: {
+                  top: 10,
+                  bottom: 10,
+                },
+              },
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100, // Assuming grades are out of 100
+              },
+            },
+          },
+        });
+  
+        // Interpretation logic
+        let interpretation = "";
+  
+        if (grades.length > 1) {
+          const changes = [];
+          for (let i = 1; i < grades.length - 1; i++) {
+            changes.push(grades[i] - grades[i - 1]);
+          }
+  
+          const allPositiveOrZero = changes.every((change) => change >= 0);
+          const allNegativeOrZero = changes.every((change) => change <= 0);
+  
+          if (allPositiveOrZero) {
+            interpretation =
+              "The student's grades have shown consistent improvement across quarters.";
+          } else if (allNegativeOrZero) {
+            interpretation =
+              "The student's grades have consistently declined across quarters.";
+          } else if (changes.every((change) => change === 0)) {
+            interpretation =
+              "The student's grades have remained consistent across quarters.";
+          } else {
+            interpretation =
+              "The student's grades have varied across quarters.";
+          }
+  
+          if (predictedGrade !== null) {
+            interpretation += ` The predicted grade for the next quarter is ${predictedGrade}.`;
+          }
+        } else {
+          interpretation = "Insufficient number of grades to determine trends.";
+        }
+  
+        // Append the prediction skipped message if applicable
+        if (missingMessage) {
+          interpretation += ` ${missingMessage}`;
+        }
+  
+        // Set the final interpretation text
+        $("#subjectInterpretation").text(interpretation);
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data for student full bar chart:", error);
+        $("#subjectInterpretation").text(
+          "Unable to load data for interpretation."
+        );
+      },
+    });
+  
+
+    // Function to format the predicted quarter label
+    function formatQuarterLabel(quarterNumber) {
+      switch (quarterNumber) {
+        case 3:
+          return "3rd Quarter";
+        case 4:
+          return "4th Quarter";
+        default:
+          return `${quarterNumber} Quarter`;
+      }
+    }
   }
 
   function initializeRecordsTable() {
@@ -1627,24 +1825,24 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
     });
-    addGradeBtn.onclick = function () {
-      var studentId = document
-        .getElementById("studentRecordsTab")
-        .getAttribute("data-student-id");
-      document.getElementById("gradeStudentId").value = studentId;
-      document.getElementById("studentModal").style.display = "none";
-      addGradeModal.style.display = "flex";
-    };
-    closeGradeModal.onclick = function () {
+  addGradeBtn.onclick = function () {
+    var studentId = document
+      .getElementById("studentRecordsTab")
+      .getAttribute("data-student-id");
+    document.getElementById("gradeStudentId").value = studentId;
+    document.getElementById("studentModal").style.display = "none";
+    addGradeModal.style.display = "flex";
+  };
+  closeGradeModal.onclick = function () {
+    document.getElementById("studentModal").style.display = "flex";
+    addGradeModal.style.display = "none";
+    addGradeForm.reset();
+  };
+  window.onclick = function (event) {
+    if (event.target == addGradeModal) {
       document.getElementById("studentModal").style.display = "flex";
       addGradeModal.style.display = "none";
       addGradeForm.reset();
-    };
-    window.onclick = function (event) {
-      if (event.target == addGradeModal) {
-        document.getElementById("studentModal").style.display = "flex";
-        addGradeModal.style.display = "none";
-        addGradeForm.reset();
-      }
-    };
+    }
+  };
 });

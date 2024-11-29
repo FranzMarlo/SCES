@@ -1,0 +1,104 @@
+#studentFullBarChart {
+  width: 100%;
+}
+.full-text{
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 30px;
+  padding: 10px 15px;
+  text-align: justify;
+}
+.filter-container .title-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+.filter-container .title-box img {
+  height: 2.3rem;
+  margin-right: 15px;
+}
+.filter-container .title-box h1 {
+  font-size: 1.4rem;
+}
+.filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.filter-part {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+}
+.filter-dropdown {
+  padding: 10px;
+  font-size: 14px;
+  width: 160px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.filter-dropdown:focus,
+.filter-dropdown:hover {
+  border-color: #000;
+  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.2);
+  outline: none;
+}
+#subjectInterpretation {
+  width: 100%;
+  font-size: 1.1rem;
+}
+@media(max-width: 1200px){
+  .filter-container .title-box img {
+    height: 2.1rem;
+  }
+  .filter-container .title-box h1 {
+    font-size: 1.3rem;
+  }
+}
+@media (max-width: 992px) {
+  .filter-dropdown {
+    width: 130px;
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+@media (max-width: 768px) {
+  .filter-dropdown {
+    width: 110px;
+    font-size: 12px;
+    padding: 7px;
+  }
+  #subjectInterpretation {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  #subjectInterpretation {
+    font-size: 0.9rem;
+  }
+  .filter-part {
+    gap: 10px;
+  }
+  .filter-dropdown {
+    width: 90px;
+    font-size: 10px;
+    padding: 6px;
+  }
+  .filter-container .title-box h1 {
+    font-size: 1.1rem;
+  }
+}
+@media (max-width: 425px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

@@ -199,6 +199,7 @@ body {
   align-items: center;
   padding: 20px;
   border: 2px solid #ccc;
+  background-color: #ADE1FB;
 }
 .box-icon img {
   margin-bottom: 10px;
@@ -212,18 +213,6 @@ body {
 }
 .box-text span {
   font-size: 1.1rem;
-}
-.students {
-  background-color: #faefaa;
-}
-.teachers {
-  background-color: #c3e9e1;
-}
-.subjects {
-  background-color: #f8dde8;
-}
-.quizzes {
-  background-color: #dce8fe;
 }
 .chart-container {
   margin-top: 10px;

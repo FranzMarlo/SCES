@@ -421,7 +421,7 @@ document.addEventListener("DOMContentLoaded", function () {
             {
               label: "GWA",
               data: data.barData,
-              backgroundColor: "#c5e3ff",
+              backgroundColor: "#8FC9FFFF",
               borderColor: "#ccc",
               borderWidth: 2,
             },

@@ -724,7 +724,7 @@ class fetchClass extends db_connect
     }
 
     public function studentFetchScoresPerMonth($studentId)
-    {   
+    {
         $studentData = $this->getStudentDetails($studentId);
         $sectionId = $studentData['section_id'];
         $currentMonth = date('n');
@@ -2762,7 +2762,160 @@ class fetchClass extends db_connect
         }
     }
 
+    public function studentSubjectGrade($studentId, $subjectId)
+    {
+        $query = $this->conn->prepare("
+        SELECT 
+            g.grade,
+            g.quarter,
+            s.subject_code
+        FROM
+            grade_tbl g
+        INNER JOIN
+            subject_tbl s
+        ON
+            g.subject_id = s.subject_id
+        WHERE
+            g.student_id = ?
+        AND
+            g.subject_id = ?
+        ORDER BY 
+            quarter
+    ");
 
+        $query->bind_param("ss", $studentId, $subjectId);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $data = [];
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data; // Return the fetched data
+        }
+
+        return [];
+    }
+
+    public function studentGradeBySubject($studentId, $subject = null, $quarter = null)
+    {
+        $params = [$studentId];
+        $types = "s"; // Initial type for student ID
+        $queryStr = "";
+
+        // Case 1: All subjects and all quarters
+        if (($subject === null || $subject === 'All') && ($quarter === null || $quarter === 'All')) {
+            $queryStr = "
+            SELECT 
+                subj.subject_code AS subject_label,
+                subj.subject_code AS subject_code,
+                subj.subject_id AS subject_id,
+                AVG(grade.grade) AS average_grade
+            FROM
+                subject_tbl subj
+            INNER JOIN
+                grade_tbl grade ON subj.subject_id = grade.subject_id
+            WHERE
+                grade.student_id = ?
+            GROUP BY subj.subject_code
+            ORDER BY subj.subject ASC";
+        }
+
+        // Case 2: Specific subject and all quarters
+        elseif (($subject !== null && $subject !== 'All') && ($quarter === null || $quarter === 'All')) {
+            $queryStr = "
+            SELECT 
+                subj.subject AS subject_label,
+                subj.subject_code AS subject_code,
+                subj.subject_id AS subject_id,
+                AVG(grade.grade) AS average_grade
+            FROM
+                subject_tbl subj
+            INNER JOIN
+                grade_tbl grade ON subj.subject_id = grade.subject_id
+            WHERE
+                grade.student_id = ? AND subj.subject_code = ?
+            GROUP BY subj.subject
+            ORDER BY subj.subject ASC";
+
+            $params[] = $subject;
+            $types .= "s";
+        }
+
+        // Case 3: All subjects for a specific quarter
+        elseif (($subject === null || $subject === 'All') && ($quarter !== null && $quarter !== 'All')) {
+            $queryStr = "
+            SELECT 
+                subj.subject_code AS subject_label,
+                subj.subject_code AS subject_code,
+                subj.subject_id AS subject_id,
+                AVG(grade.grade) AS average_grade
+            FROM
+                subject_tbl subj
+            INNER JOIN
+                grade_tbl grade ON subj.subject_id = grade.subject_id
+            WHERE
+                grade.student_id = ? AND grade.quarter = ?
+            GROUP BY subj.subject_code
+            ORDER BY subj.subject ASC";
+
+            $params[] = $quarter;
+            $types .= "s";
+        }
+
+        // Case 4: Specific subject and specific quarter
+        elseif (($subject !== null && $subject !== 'All') && ($quarter !== null && $quarter !== 'All')) {
+            $queryStr = "
+            SELECT 
+                subj.subject AS subject_label,
+                subj.subject_code AS subject_code,
+                subj.subject_id AS subject_id,
+                grade.grade AS individual_grade
+            FROM
+                subject_tbl subj
+            INNER JOIN
+                grade_tbl grade ON subj.subject_id = grade.subject_id
+            WHERE
+                grade.student_id = ? AND subj.subject_code = ? AND grade.quarter = ?
+            GROUP BY subj.subject, grade.quarter
+            ORDER BY subj.subject ASC";
+
+            $params[] = $subject;
+            $params[] = $quarter;
+            $types .= "ss";
+        }
+
+        // Prepare and execute the query
+        $query = $this->conn->prepare($queryStr);
+        $query->bind_param($types, ...$params);
+
+        if ($query->execute()) {
+            $result = $query->get_result();
+
+            $subjects = [];
+            $scores = [];
+            $subjectCodes = [];
+
+            while ($row = $result->fetch_assoc()) {
+                $subjects[] = $row['subject_label'];
+                $subjectCodes[] = $row['subject_code'];
+
+                if (isset($row['average_grade'])) {
+                    $scores[] = $row['average_grade'] ? (int) round($row['average_grade']) : 0; // For cases 1, 2, and 3
+                } elseif (isset($row['individual_grade'])) {
+                    $scores[] = (int) $row['individual_grade']; // For case 4
+                }
+            }
+
+            return [
+                'subjects' => $subjects,
+                'scores' => $scores,
+                'subjectCodes' => $subjectCodes,
+            ];
+        } else {
+            return null;
+        }
+    }
 
     public function getSectionQuizRecords($sectionId)
     {
@@ -2860,46 +3013,46 @@ class fetchClass extends db_connect
     }
 
     public function facultyGetSubjectAverageScore($subjectId)
-{
-    // Prepare the query to fetch students enrolled in the subject
-    $query = $this->conn->prepare("
+    {
+        // Prepare the query to fetch students enrolled in the subject
+        $query = $this->conn->prepare("
         SELECT DISTINCT student.student_id
         FROM student_record student
         INNER JOIN section_tbl section ON student.section_id = section.section_id
         INNER JOIN subject_tbl subject ON section.section_id = subject.section_id
         WHERE subject.subject_id = ?
     ");
-    $query->bind_param("s", $subjectId);
+        $query->bind_param("s", $subjectId);
 
-    // Execute the query to get the student records
-    if ($query->execute()) {
-        $result = $query->get_result();
-        $students = $result->fetch_all(MYSQLI_ASSOC);
+        // Execute the query to get the student records
+        if ($query->execute()) {
+            $result = $query->get_result();
+            $students = $result->fetch_all(MYSQLI_ASSOC);
 
-        // Initialize variables for total score and student count
-        $totalScore = 0;
-        $studentCount = 0;
+            // Initialize variables for total score and student count
+            $totalScore = 0;
+            $studentCount = 0;
 
-        // Loop through each student and get their average score
-        foreach ($students as $student) {
-            // Get the average score for each student for this subject
-            $averageScore = $this->facultyGetAverageScoreBySubject($student['student_id'], $subjectId);
+            // Loop through each student and get their average score
+            foreach ($students as $student) {
+                // Get the average score for each student for this subject
+                $averageScore = $this->facultyGetAverageScoreBySubject($student['student_id'], $subjectId);
 
-            // Add the average score to the total score
-            $totalScore += $averageScore;
-            $studentCount++; // Increment the student count
+                // Add the average score to the total score
+                $totalScore += $averageScore;
+                $studentCount++; // Increment the student count
+            }
+
+            // Calculate the subject average score if there are any students
+            if ($studentCount > 0) {
+                return round($totalScore / $studentCount, 2); // Return the rounded average of all students
+            } else {
+                return 0; // No students, so return 0
+            }
         }
 
-        // Calculate the subject average score if there are any students
-        if ($studentCount > 0) {
-            return round($totalScore / $studentCount, 2); // Return the rounded average of all students
-        } else {
-            return 0; // No students, so return 0
-        }
+        return null; // Return null if the query fails
     }
-
-    return null; // Return null if the query fails
-}
 
 
 

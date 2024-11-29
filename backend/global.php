@@ -112,7 +112,7 @@ if (isset($_POST['submitType'])) {
             echo '462';
             exit();
         } else {
-            $checkLRN = $db->checkStudentLRN($lastName, $studentLRN, $sectionId, $gradeLevelId);
+            $checkLRN = $db->checkStudentLRN($lastName, $studentLRN, $sectionId, $gradeLevelId, $firstName, $middleName, $studSuffix);
             if ($checkLRN->num_rows > 0) {
                 $checkEmail = $db->checkEmail($email);
                 if ($checkEmail->num_rows > 0) {
@@ -503,7 +503,7 @@ if (isset($_POST['submitType'])) {
                 echo '463';
                 exit();
             } else {
-                $checkTRN = $db->checkAdminTRN($lastName, $controlNumber, $role);
+                $checkTRN = $db->checkAdminTRN($lastName, $firstName, $suffix, $controlNumber, $role);
                 if ($checkTRN->num_rows > 0) {
                     $verifyTRN = $db->verifyTRN($controlNumber);
                     if ($verifyTRN->num_rows > 0) {
@@ -950,7 +950,7 @@ if (isset($_POST['submitType'])) {
                 echo '463';
                 exit();
             } else {
-                $checkTRN = $db->checkFacultyTRN($lastName, $controlNumber, $role);
+                $checkTRN = $db->checkFacultyTRN($lastName, $firstName, $suffix, $controlNumber, $role);
                 if ($checkTRN->num_rows > 0) {
                     $verifyTRN = $db->verifyTRN($controlNumber);
                     if ($verifyTRN->num_rows > 0) {
@@ -1703,13 +1703,13 @@ if (isset($_POST['submitType'])) {
             if ($editGrade >= 90) {
                 $remarks = 'Outstanding';
             } else if ($editGrade >= 85) {
-                $remarks = 'Very Good';
+                $remarks = 'Very Satisfactory';
             } else if ($editGrade >= 80) {
-                $remarks = 'Good';
+                $remarks = 'Satisfactory';
             } else if ($editGrade >= 75) {
-                $remarks = 'Fair';
+                $remarks = 'Fairly Satisfactory';
             } else {
-                $remarks = 'Failed';
+                $remarks = 'Did Not Meet Expectations';
             }
             $updateGrade = $db->editGrade($gradeId, $editGrade, $remarks, $quarter);
             if ($updateGrade != false) {

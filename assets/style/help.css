@@ -11,7 +11,7 @@
 }
 .panel-box {
   width: 100%;
-  background-color: #fad9ec;
+  background-color: #c5e3ff;
   border-radius: 30px;
   display: flex;
   flex-direction: row;
@@ -36,7 +36,7 @@
   cursor: pointer;
 }
 .panel-item:hover {
-  background-color: #ffecf7;
+  background-color: #ade0fb;
 }
 .item-icon {
   margin-right: 15px;
@@ -83,13 +83,13 @@
   margin-bottom: 15px;
 }
 .faq {
-  background-color: #b9d1fd;
+  background-color: #ade0fb;
 }
 .guides {
-  background-color: #f6e577;
+  background-color: #ade0fb;
 }
 .updates {
-  background-color: #a2ddcd;
+  background-color: #ade0fb;
 }
 @media (max-width: 992px) {
   .content {

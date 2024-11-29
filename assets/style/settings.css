@@ -33,7 +33,7 @@
 }
 .settings-container .side-panel .panel-item:hover,
 .settings-container .side-panel .panel-item.active {
-  background-color: #fbe1f0;
+  background-color: #ade0fb;
   font-weight: bold;
   border: 2px solid #ccc;
 }
@@ -56,7 +56,7 @@
   flex-direction: row;
   border-radius: 30px;
   width: 100%;
-  background-color: #fbe1f0;
+  background-color: #ade0fb;
   justify-content: space-between;
   border: 2px solid #ccc;
   padding: 5px;
@@ -185,7 +185,7 @@ img#change-avatar-icon {
   min-height: 3rem;
 }
 .security-data:hover {
-  background-color: #fbe1f0;
+  background-color: #ade0fb;
   border: 2px solid #ccc;
   font-weight: bold;
 }

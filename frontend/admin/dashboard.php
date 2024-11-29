@@ -36,7 +36,7 @@ $page = 'SCES Admin';
         </div>
       </div>
       <div class="box-container">
-        <div class="box students">
+        <div class="box">
           <div class="box-icon">
             <img src="/SCES/assets/images/total-students-icon.png" alt="total students icon">
           </div>
@@ -45,7 +45,7 @@ $page = 'SCES Admin';
             <span><?php echo htmlspecialchars($totalStudents); ?></span>
           </div>
         </div>
-        <div class="box teachers">
+        <div class="box">
           <div class="box-icon">
             <img src="/SCES/assets/images/total-teachers-icon.png" alt="total teachers icon">
           </div>
@@ -54,7 +54,7 @@ $page = 'SCES Admin';
             <span><?php echo htmlspecialchars($totalTeachers); ?></span>
           </div>
         </div>
-        <div class="box subjects">
+        <div class="box">
           <div class="box-icon">
             <img src="/SCES/assets/images/total-subjects-icon.png" alt="total subjects icon">
           </div>
@@ -63,7 +63,7 @@ $page = 'SCES Admin';
             <span><?php echo htmlspecialchars($totalSubjects); ?></span>
           </div>
         </div>
-        <div class="box quizzes">
+        <div class="box">
           <div class="box-icon">
             <img src="/SCES/assets/images/total-quizzes-icon.png" alt="total quizzes icon">
           </div>

@@ -48,7 +48,7 @@ function initializeDonutChart(data) {
       datasets: [
         {
           data: data,
-          backgroundColor: ["#4caf50", "#ffffff"],
+          backgroundColor: ["#59ADF6", "#ffffff"],
           borderColor: ["#ccc", "#ccc"],
           borderWidth: 1,
         },
@@ -106,8 +106,8 @@ function initializeBarChart(labels, counts) {
       datasets: [
         {
           data: counts,
-          backgroundColor: "#4caf50",
-          borderColor: "#00000",
+          backgroundColor: "#59ADF6",
+          borderColor: "#ccc",
           borderWidth: 2,
         },
       ],

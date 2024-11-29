@@ -1,7 +1,7 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
 ?>
-<link rel="stylesheet" href="/SCES/assets/style/help.css" />
+<link rel="stylesheet" href="/SCES/assets/style/student-help.css" />
 <link rel="stylesheet" href="/SCES/assets/style/modal.css" />
 <title>Help | SCES Online Learning Platform</title>
 </head>
@@ -26,7 +26,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
           <div class="panel-part">
             <div class="panel-item" id="gettingStartedButton">
               <div class="item-icon">
-                <img src="/SCES/assets/images/start-help.png" alt="rocket png">
+                <img src="/SCES/assets/images/start-help-student.png" alt="rocket png">
               </div>
               <div class="item-text">
                 <h2>Getting Started</h2>
@@ -35,7 +35,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
             </div>
             <div class="panel-item" id="myAccountButton">
               <div class="item-icon">
-                <img src="/SCES/assets/images/account-help.png" alt="account help png">
+                <img src="/SCES/assets/images/account-help-student.png" alt="account help png">
               </div>
               <div class="item-text">
                 <h2>My Account</h2>
@@ -44,7 +44,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
             </div>
             <div class="panel-item" id="learningMaterialButton">
               <div class="item-icon">
-                <img src="/SCES/assets/images/lm-help.png" alt="rocket png">
+                <img src="/SCES/assets/images/lm-help-student.png" alt="rocket png">
               </div>
               <div class="item-text">
                 <h2>Learning Materials References</h2>
@@ -55,7 +55,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
           <div class="panel-part">
             <div class="panel-item" id="usageGuidesButton">
               <div class="item-icon">
-                <img src="/SCES/assets/images/usage-help.png" alt="rocket png">
+                <img src="/SCES/assets/images/usage-help-student.png" alt="rocket png">
               </div>
               <div class="item-text">
                 <h2>Usage Guides</h2>
@@ -64,7 +64,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-hea
             </div>
             <div class="panel-item" id="learningInquiriesButton">
               <div class="item-icon">
-                <img src="/SCES/assets/images/inquiries-help.png" alt="rocket png">
+                <img src="/SCES/assets/images/inquiries-help-student.png" alt="rocket png">
               </div>
               <div class="item-text">
                 <h2>Learning Inquiries</h2>

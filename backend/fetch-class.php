@@ -284,20 +284,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else if ($submitType === 'studentFullBarChart') {
         $studentId = $_POST['student_id'];
-        $sectionId = $_POST['section_id'];
+        $subject = $_POST['subject'] ?? null;
+        $quarter = $_POST['quarter'] ?? null;
 
-        // Call the studentAverageScoreBySubject method
-        $data = $fetchDb->studentAverageScoreBySubject($studentId, $sectionId);
+        // Fetch data based on provided parameters
+        $data = $fetchDb->studentGradeBySubject($studentId, $subject, $quarter);
 
         if ($data) {
-            // Return subjects as labels, scores as barData, and subject codes for colors
+            // Return subject_codes as labels and scores as bar data
             echo json_encode([
-                'labels' => $data['subjects'],
-                'barData' => $data['scores'],
+                'labels' => $data['subjects'],  // Use subjectCodes for labels
+                'barData' => $data['scores'],      // Use scores for bar data
                 'subjectCodes' => $data['subjectCodes']
             ]);
         } else {
-            // If no data is returned, return empty arrays
+            // Return empty arrays if no data is found
             echo json_encode([
                 'labels' => [],
                 'barData' => [],
@@ -1024,7 +1025,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         echo json_encode(['labels' => $labels, 'counts' => $counts]);
     } else if ($submitType === 'mainFacultyDashboardDonutChartData') {
-        
+
         session_start();
         $teacherId = $_SESSION['teacher_id'];
         $panelData = $fetchDb->mainFacultyQuizCompletion($teacherId);
@@ -1157,6 +1158,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         echo json_encode($response);
 
+    } else if ($submitType === 'studentSubjectFullBarChart') {
+        $studentId = $_POST['student_id'];
+        $subjectId = $_POST['subject_id'];
+
+        $gradesData = $fetchDb->studentSubjectGrade($studentId, $subjectId);
+
+        if (!empty($gradesData)) {
+            $labels = [];
+            $barData = [];
+            $subjectCode = null;
+
+            foreach ($gradesData as $grade) {
+                $labels[] = $grade['quarter'] . " Quarter"; 
+                $barData[] = (float) $grade['grade']; 
+                $subjectCode = $grade['subject_code'];
+            }
+
+            echo json_encode([
+                'labels' => $labels,
+                'barData' => $barData,
+                'subjectCode' => $subjectCode,
+            ]);
+        } else {
+            echo json_encode([
+                'labels' => [],
+                'barData' => [],
+                'subjectCode' => null,
+            ]);
+        }
     } else {
         echo json_encode(['error' => 'Invalid submit type']);
     }

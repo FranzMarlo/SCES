@@ -203,15 +203,15 @@
                 <div class="modal-stats-box completed">
                     <img id="studentPredictedPerformanceIcon" src="/SCES/assets/images/passed.png" alt="performance.png">
                     <div class="stats-col">
-                        <p>Predicted Performance</p>
-                        <span id="studentPredictedPerformance"></span>
+                        <span>Predicted Performance</span>
+                        <p id="studentPredictedPerformance"></p>
                     </div>
                 </div>
                 <div class="modal-stats-box pending">
                     <img src="/SCES/assets/images/success-rate.png" alt="success-rate.png">
                     <div class="stats-col">
-                        <p>Predicted Success Rate</p>
-                        <span id="studentPredictedSuccess"></span>
+                        <span>Predicted Success Rate</span>
+                        <p id="studentPredictedSuccess"></p>
                     </div>
                 </div>
             </div>
@@ -219,15 +219,15 @@
             <div class="modal-stats-box average">
                     <img src="/SCES/assets/images/gwa.png" alt="gwa.png">
                     <div class="stats-col">
-                        <p>Predicted GWA</p>
-                        <span id="studentPredictedGWA"></span>
+                        <span>Predicted GWA</span>
+                        <p id="studentPredictedGWA"></p>
                     </div>
                 </div>
                 <div class="modal-stats-box quiz-score">
                     <img id="studentPredictedRemarksIcon" src="/SCES/assets/images/outstanding.png" alt="remarks.png">
                     <div class="stats-col">
-                        <p>Predicted Remarks</p>
-                        <span id="studentPredictedRemarks"></span>
+                        <span>Predicted Remarks</span>
+                        <p id="studentPredictedRemarks"></p>
                     </div>
                 </div>
             </div>

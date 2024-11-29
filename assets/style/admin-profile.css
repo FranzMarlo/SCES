@@ -166,7 +166,7 @@
   background-color: #c5e3ff !important;
 }
 .female {
-  background-color: #ffd6e6 !important;
+  background-color: #59ADF6 !important;
 }
 .side-controller {
   width: 100%;
@@ -185,10 +185,10 @@
   border: 2px solid #ccc;
 }
 .side-controller .tab-item:hover {
-  background-color: #fce344;
+  background-color: #ADE1FB;
 }
 .side-controller .tab-item.active {
-  background-color: #fce344;
+  background-color: #ADE1FB;
 }
 .dashed-line {
   border: none;
@@ -391,18 +391,6 @@ table.dataTable tbody td.dataTables_empty {
 .fair {
   background-color: #fce344;
 }
-.completed {
-  background-color: #d2ebc4;
-}
-.pending {
-  background-color: #ffd6e6;
-}
-.quiz-score {
-  background-color: #c5e3ff;
-}
-.average {
-  background-color: #fcfd95;
-}
 .stats-panel {
   width: 100%;
   display: flex;
@@ -419,6 +407,7 @@ table.dataTable tbody td.dataTables_empty {
   padding: 20px;
   align-items: center;
   justify-content: center;
+  background-color: #ADE1FB;
 }
 .panel-box img {
   height: 50px;

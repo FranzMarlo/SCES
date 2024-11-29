@@ -213,6 +213,14 @@
                     <canvas id="lineChart"></canvas>
                 </div>
             </div>
+            <div class="graph-container">
+                <div class="full-graph">
+                    <canvas id="studentFullBarChart"></canvas>
+                </div>
+            </div>
+            <div class="full-text">
+                <span id="subjectInterpretation"></span>
+            </div>
         </div>
     </div>
 </div>

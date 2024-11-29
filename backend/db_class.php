@@ -2813,21 +2813,44 @@ class globalClass extends db_connect
         }
     }
 
-    public function checkStudentLRN($lname, $lrn, $section, $level)
-    {
-        $lastName = strtoupper($lname);
-        $dataSection = strtoupper($this->getSectionById($section));
-        $dataLevel = strtoupper($this->getLevelById($level));
-        $query = $this->conn->prepare("SELECT * FROM `student_masterlist` WHERE `lrn` = ? and `student_lname` = ? and `section` = ? and `grade_level` = ? ");
-        $query->bind_param("ssss", $lrn, $lastName, $dataSection, $dataLevel);
+    public function checkStudentLRN($lname, $lrn, $section, $level, $fname, $mname, $suffix)
+{
+    $lastName = strtoupper($lname);
+    $firstName = strtoupper($fname);
+    $middleName = strtoupper($mname);
+    $dataSection = strtoupper($this->getSectionById($section));
+    $dataLevel = strtoupper($this->getLevelById($level));
 
-        if ($query->execute()) {
-            $checkLRN = $query->get_result();
-            return $checkLRN;
-        } else {
-            return false;
-        }
+    // Normalize suffix by removing the period for consistent comparison
+    $normalizedSuffix = strtoupper(str_replace('.', '', $suffix));
+    $normalizedFirstName = strtoupper(str_replace('.', '', $firstName));
+
+    // Prepare query with suffix handling
+    $query = $this->conn->prepare("
+        SELECT * FROM `student_masterlist` 
+        WHERE `lrn` = ? 
+        AND `student_lname` = ? 
+        AND `section` = ? 
+        AND `grade_level` = ? 
+        AND (REPLACE(UPPER(`student_fname`), '.', '') LIKE ? OR REPLACE(UPPER(`student_fname`), '.', '') LIKE ?)
+        AND UPPER(`student_mname`) = ?
+    ");
+
+    // Format first name with and without the suffix
+    $firstNameWithSuffix = $normalizedFirstName . ' ' . $normalizedSuffix;
+    $firstNameWithoutSuffix = $normalizedFirstName;
+
+    // Bind parameters
+    $query->bind_param("sssssss", $lrn, $lastName, $dataSection, $dataLevel, $firstNameWithSuffix, $firstNameWithoutSuffix, $middleName);
+
+    if ($query->execute()) {
+        $checkLRN = $query->get_result();
+        return $checkLRN;
+    } else {
+        return false;
     }
+}
+
 
     public function getSectionById($sectionId)
     {
@@ -2953,12 +2976,14 @@ class globalClass extends db_connect
         }
     }
 
-    public function checkFacultyTRN($lname, $trn, $role)
+    public function checkFacultyTRN($lname, $fname, $suffix, $trn, $role)
     {
         $lastName = strtoupper($lname);
+        $firstName = strtoupper($fname);
+        $facultySuffix = strtoupper($suffix);
         $upperRole = strtoupper($role);
-        $query = $this->conn->prepare("SELECT * FROM `faculty_masterlist` WHERE `trn` = ? and `teacher_lname` = ? and `role` = ?");
-        $query->bind_param("sss", $trn, $lastName, $upperRole);
+        $query = $this->conn->prepare("SELECT * FROM `faculty_masterlist` WHERE `trn` = ? and `teacher_lname` = ? and `teacher_fname` = ? and `teacher_suffix` = ? and `role` = ?");
+        $query->bind_param("sssss", $trn, $lastName, $firstName, $facultySuffix, $upperRole);
 
         if ($query->execute()) {
             $checkTRN = $query->get_result();
@@ -2968,12 +2993,14 @@ class globalClass extends db_connect
         }
     }
 
-    public function checkAdminTRN($lname, $trn, $role)
+    public function checkAdminTRN($lname, $fname, $suffix, $trn, $role)
     {
         $lastName = strtoupper($lname);
+        $firstName = strtoupper($fname);
+        $facultySuffix = strtoupper($suffix);
         $upperRole = strtoupper($role);
-        $query = $this->conn->prepare("SELECT * FROM `faculty_masterlist` WHERE `trn` = ? and `teacher_lname` = ? and `role` = ?");
-        $query->bind_param("sss", $trn, $lastName, $upperRole);
+        $query = $this->conn->prepare("SELECT * FROM `faculty_masterlist` WHERE `trn` = ? and `teacher_lname` = ? and `teacher_fname` = ? and `teacher_suffix` = ? and `role` = ?");
+        $query->bind_param("sssss", $trn, $lastName, $firstName, $facultySuffix, $upperRole);
 
         if ($query->execute()) {
             $checkTRN = $query->get_result();

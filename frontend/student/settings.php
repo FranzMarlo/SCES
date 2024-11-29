@@ -1,7 +1,7 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/student-head.php';
 ?>
-<link rel="stylesheet" href="/SCES/assets/style/settings.css" />
+<link rel="stylesheet" href="/SCES/assets/style/student-settings.css" />
 <script src="/SCES/assets/script/settings.js"></script>
 <title>Settings | SCES Online Learning Platform</title>
 </head>

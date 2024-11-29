@@ -247,10 +247,39 @@
             <div class="full-text">
                 <span id="interpretation"></span>
             </div>
+            <div class="filter-container">
+                <div class="title-box">
+                    <img src="/SCES/assets/images/quiz-rate.png" alt="quiz-rate.png">
+                    <h1>Subject Analytics</h1>
+                </div>
+                <div class="filter-part">
+                    <select id="subjectFilterDropdown" class="filter-dropdown">
+                        <option value="All">All Subjects</option>
+                        <option value="AP">AP</option>
+                        <option value="ENG">English</option>
+                        <option value="ESP">ESP</option>
+                        <option value="FIL">Filipino</option>
+                        <option value="MAPEH">MAPEH</option>
+                        <option value="MATH">Mathematics</option>
+                        <option value="MT">Mother Tongue</option>
+                        <option value="EPP">EPP</option>
+                    </select>
+                    <select id="quarterFilterDropdown" class="filter-dropdown">
+                        <option value="All">All Quarters</option>
+                        <option value="1st">1st</option>
+                        <option value="2nd">2nd</option>
+                        <option value="3rd">3rd</option>
+                        <option value="4th">4th</option>
+                    </select>
+                </div>
+            </div>
             <div class="graph-container">
                 <div class="full-graph">
                     <canvas id="studentFullBarChart"></canvas>
                 </div>
+            </div>
+            <div class="full-text">
+                <span id="subjectInterpretation"></span>
             </div>
         </div>
     </div>

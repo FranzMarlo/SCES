@@ -244,6 +244,33 @@
             <div class="full-text">
                 <span id="interpretation"></span>
             </div>
+            <div class="filter-container">
+                <div class="title-box">
+                    <img src="/SCES/assets/images/quiz-rate.png" alt="quiz-rate.png">
+                    <h1>Overview</h1>
+                </div>
+                <div class="filter-part">
+                    <select id="yearFilterDropdown" class="filter-dropdown">
+                        <option value="All">Overtime</option>
+                        <option value="<?php echo date("Y"); ?>">Current SY</option>
+                        <?php
+                        $currentYear = date("Y") - 1;
+                        for ($year = $currentYear; $year >= 2019; $year--) {
+                            echo "<option value='$year'>$year-" . ($year + 1) . "</option>";
+                        }
+                        ?>
+                    </select>
+                    <select id="gradeFilterDropdown" class="filter-dropdown">
+                        <option value="All">All Grades</option>
+                        <option value="Grade 1">Grade 1</option>
+                        <option value="Grade 2">Grade 2</option>
+                        <option value="Grade 3">Grade 3</option>
+                        <option value="Grade 4">Grade 4</option>
+                        <option value="Grade 5">Grade 5</option>
+                        <option value="Grade 6">Grade 6</option>
+                    </select>
+                </div>
+            </div>
             <div class="graph-container">
                 <div class="full-graph">
                     <canvas id="studentFullBarChart"></canvas>

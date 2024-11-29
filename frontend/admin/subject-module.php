@@ -4,6 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/subject-head.
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/data-tables.php';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-lesson.css" />
+<link rel="stylesheet" href="/SCES/assets/style/filter.css" />
 <title><?php echo htmlspecialchars($subject['subject_title']);?> | SCES Online Learning Platform</title>
 </head>
 
