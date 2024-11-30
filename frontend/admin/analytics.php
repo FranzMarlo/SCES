@@ -4,6 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/data-tables.p
 $page = '';
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/analytics.css" />
+<link rel="stylesheet" href="/SCES/assets/style/filter.css" />
 <title>Analytics | SCES Online Learning Platform</title>
 </head>
 

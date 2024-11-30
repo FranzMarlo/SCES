@@ -6,6 +6,7 @@ $studentCount = $db->getTotalStudentBySection($_GET['section']);
 $sectionData = $db->facultyGetSectionData($_GET['section']);
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/student-section.css" />
+<link rel="stylesheet" href="/SCES/assets/style/filter.css" />
 <title><?php echo htmlspecialchars($sectionData['grade_level'] . ' - ' . $sectionData['section']); ?> | SCES Online
     Learning Platform</title>
 </head>

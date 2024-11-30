@@ -55,12 +55,6 @@
                         <span id="age"></span>
                     </div>
                 </div>
-                <div class="tab-row">
-                    <div class="tab-col">
-                        <p>Birthday</p>
-                        <span id="birthday">August 14, 2002</span>
-                    </div>
-                </div>
             </div>
             <div class="tab-panel">
                 <div class="tab-title">

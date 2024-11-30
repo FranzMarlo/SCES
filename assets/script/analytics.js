@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Create the Bar Chart
-        var barChart = new Chart(ctxBar, {
+        new Chart(ctxBar, {
           type: "bar",
           data: {
             labels: data.labels,
@@ -253,126 +253,35 @@ document.addEventListener("DOMContentLoaded", function () {
               title: {
                 display: true,
                 text: "Average GWA by Grade Level",
-                font: {
-                  size: 18,
-                },
-                padding: {
-                  top: 10,
-                  bottom: 10,
-                },
+                font: { size: 18 },
+                padding: { top: 10, bottom: 10 },
               },
-              legend: {
-                display: false,
-              },
+              legend: { display: false },
             },
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
+            scales: { y: { beginAtZero: true } },
           },
         });
 
-        // Analyze and interpret data
-        const interpretationSpan = document.getElementById("lvlInterpretation");
-
-        if (data.barData.length > 0) {
-          if (grade === "All") {
-            // Case: Grade == "all" (all grade levels)
-            let maxGWA = Math.max(...data.barData);
-            let minGWA = Math.min(...data.barData);
-            let maxGWAIndex = data.barData.indexOf(maxGWA);
-            let minGWAIndex = data.barData.indexOf(minGWA);
-            let highestGrade = data.labels[maxGWAIndex];
-            let lowestGrade = data.labels[minGWAIndex];
-
-            // Check for grade levels with GWA < 80
-            let belowThreshold = data.barData
-              .map((gwa, index) =>
-                gwa < 80 ? `${data.labels[index]} (GWA: ${gwa})` : null
-              )
-              .filter(Boolean);
-
-            interpretationSpan.textContent = `
-                        The grade level with the highest average GWA is ${highestGrade} with a GWA of ${maxGWA} while
-                        the grade level with the lowest average GWA is ${lowestGrade} with a GWA of ${minGWA}.
-                        ${
-                          belowThreshold.length > 0
-                            ? `The following grade levels show a decline with GWA below 80: ${belowThreshold.join(
-                                ", "
-                              )}.`
-                            : "No grade levels indicated a decline in students' rating."
-                        }
-                    `;
-          } else if (year !== "All" && grade !== "All") {
-            // Case: Specific Year and Grade Level
-            let selectedGWA = data.barData[0]; // Assuming data is filtered for the specific grade level
-            let declineMessage =
-              selectedGWA < 80
-                ? `The GWA ${selectedGWA} of ${grade} indicates a decline as it is below 80.`
-                : `The GWA ${selectedGWA} of ${grade} does not indicate a decline in students' rating.`;
-
-            interpretationSpan.textContent = `
-                        For ${grade} in year ${year}, the average GWA is ${selectedGWA}.
-                        ${declineMessage}
-                    `;
-          } else {
-            let significantChanges = [];
-            let overallTrend = 0;
-
-            for (let i = 1; i < data.barData.length; i++) {
-              const gradeFrom = data.labels[i - 1];
-              const gradeTo = data.labels[i];
-              const scoreFrom = data.barData[i - 1];
-              const scoreTo = data.barData[i];
-              const diff = scoreTo - scoreFrom;
-
-              overallTrend += diff;
-
-              // Check for significant improvement or decline (threshold: 1.0)
-              if (Math.abs(diff) >= 1.0) {
-                if (diff > 0) {
-                  significantChanges.push(
-                    `Significant improvement from ${scoreFrom} to ${scoreTo} (${gradeFrom} to ${gradeTo})`
-                  );
-                } else {
-                  significantChanges.push(
-                    `Significant decline from ${scoreFrom} to ${scoreTo} (${gradeFrom} to ${gradeTo})`
-                  );
-                }
-              }
-            }
-
-            let overallMessage =
-              overallTrend > 0
-                ? "an improvement in performance."
-                : overallTrend < 0
-                ? "a decline in performance."
-                : "no significant changes in performance.";
-            if (year == "All") {
-              interpretationSpan.textContent = `
-                        Through the years, the ${grade} had: ${
-                significantChanges.length > 0
-                  ? significantChanges.join(". ")
-                  : "no significant improvements or declines were observed."
-              }
-                        Overall, there is ${overallMessage}
-                    `;
-            } else {
-              interpretationSpan.textContent = `
-                        For ${grade}, ${
-                significantChanges.length > 0
-                  ? significantChanges.join(". ")
-                  : "no significant improvements or declines were observed."
-              }
-                        Overall, there is ${overallMessage}
-                    `;
-            }
-          }
-        } else {
-          interpretationSpan.textContent =
-            "No data available for the selected filters.";
-        }
+        // Fetch interpretation from Flask
+        $.ajax({
+          url: "https://predictive-model-sces-1.onrender.com/interpret-gwa",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            year: year,
+            gradeLevel: grade,
+            labels: data.labels,
+            barData: data.barData,
+          }),
+          success: function (response) {
+            document.getElementById("lvlInterpretation").textContent =
+              response.interpretation;
+          },
+          error: function () {
+            document.getElementById("lvlInterpretation").textContent =
+              "Error fetching interpretation.";
+          },
+        });
       },
     });
   }
@@ -562,6 +471,8 @@ document.addEventListener("DOMContentLoaded", function () {
       document.body.style.overflow = "auto";
       showTabContent("profileContainer");
       setActiveTab("profileTab");
+      $("#subjectFilterDropdown").val("All");
+      $("#quarterFilterDropdown").val("All");
     });
 
   document.getElementById("profileTab").addEventListener("click", function () {
@@ -827,7 +738,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         // Send the predictive data to Python API
-        fetch("http://127.0.0.1:5000/predict", {
+        fetch("https://predictive-model-sces-1.onrender.com/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -1089,20 +1000,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  $("#subjectFilterDropdown, #quarterFilterDropdown").on("change", function () {
+    var studentId = document
+      .getElementById("recordsTab")
+      .getAttribute("data-student-id");
+    initializeStudentFullBarChart(studentId);
+  });
+
   function initializeStudentFullBarChart(studentId) {
-    var section_id = document
-      .getElementById("studentModal")
-      .getAttribute("data-section");
+    const subjectFilter = $("#subjectFilterDropdown").val();
+    const quarterFilter = $("#quarterFilterDropdown").val();
+
     const ctxBar = document
       .getElementById("studentFullBarChart")
       .getContext("2d");
 
-    // Destroy previous instance if it exists
     if (Chart.getChart("studentFullBarChart")) {
       Chart.getChart("studentFullBarChart").destroy();
     }
 
-    // AJAX request to fetch data
     $.ajax({
       url: "/SCES/backend/fetch-class.php",
       type: "POST",
@@ -1110,10 +1026,10 @@ document.addEventListener("DOMContentLoaded", function () {
       data: {
         submitType: "studentFullBarChart",
         student_id: studentId,
-        section_id: section_id,
+        subject: subjectFilter,
+        quarter: quarterFilter,
       },
       success: function (data) {
-        // Define color mapping for subject codes
         const colorMapping = {
           fil: "#ff8080",
           eng: "#ffb480",
@@ -1126,10 +1042,10 @@ document.addEventListener("DOMContentLoaded", function () {
           epp: "#d9ae9d",
         };
 
-        // Map background colors based on subject codes
-        const backgroundColors = data.subjectCodes.map(
-          (code) => colorMapping[code] || "#cccccc" // Default color if code is missing
-        );
+        const backgroundColors = data.subjectCodes.map((code) => {
+          const normalizedCode = code.toLowerCase();
+          return colorMapping[normalizedCode] || "#cccccc";
+        });
 
         new Chart(ctxBar, {
           type: "bar",
@@ -1137,10 +1053,10 @@ document.addEventListener("DOMContentLoaded", function () {
             labels: data.labels,
             datasets: [
               {
-                label: "Average Score",
+                label: "Grade",
                 data: data.barData,
                 backgroundColor: backgroundColors,
-                borderColor: "#000",
+                borderColor: "#ccc",
                 borderWidth: 2,
               },
             ],
@@ -1151,7 +1067,7 @@ document.addEventListener("DOMContentLoaded", function () {
             plugins: {
               title: {
                 display: true,
-                text: "Average Score Per Subject",
+                text: "Grade Per Subject",
                 font: {
                   size: 18,
                 },
@@ -1171,11 +1087,61 @@ document.addEventListener("DOMContentLoaded", function () {
             },
           },
         });
+        if (subjectFilter == 'All'){
+          var subjectTitles = data.labels.map(getSubjectTitle);
+        }
+        else{
+          var subjectTitles = data.labels;
+        }
+        $.ajax({
+          url: "https://predictive-model-sces-1.onrender.com/interpret-grades",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            subject_filter: subjectFilter,
+            quarter_filter: quarterFilter,
+            labels: subjectTitles,
+            bar_data: data.barData,
+          }),
+          success: function (interpretationResponse) {
+            const interpretationSpan = document.getElementById(
+              "subjectInterpretation"
+            );
+            interpretationSpan.textContent =
+              interpretationResponse.interpretation;
+          },
+          error: function (xhr, status, error) {
+            console.error("Error fetching interpretation:", error);
+          },
+        });
       },
       error: function (xhr, status, error) {
         console.error("Error fetching data for student full bar chart:", error);
       },
     });
+  }
+
+  function getSubjectTitle(subject) {
+    switch (subject) {
+      case "AP":
+        return "Araling Panlipunan";
+      case "ENG":
+        return "English";
+      case "ESP":
+        return "ESP";
+      case "FIL":
+        return "Filipino";
+      case "MAPEH":
+        return "MAPEH";
+      case "MATH":
+        return "Mathematics";
+      case "MT":
+        return "Mother Tongue";
+      case "EPP":
+        return "EPP";
+      default:
+        return "Unknown Subject";
+    }
   }
 
   function getRemarksIcon(remarks) {

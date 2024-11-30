@@ -685,7 +685,9 @@ document.addEventListener("DOMContentLoaded", function () {
           { data: "subject", className: "text-center" },
           { data: "grade", className: "text-center" },
           {
-            data: "remarks", className: "text-center"},
+            data: "remarks",
+            className: "text-center",
+          },
           { data: "quarter", className: "text-center" },
           {
             data: null,
@@ -1631,6 +1633,134 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
     });
+
+  function initializeStudentFullBarChart(studentId) {
+    const ctxBar = document
+      .getElementById("studentFullBarChart")
+      .getContext("2d");
+
+    if (Chart.getChart("studentFullBarChart")) {
+      Chart.getChart("studentFullBarChart").destroy();
+    }
+
+    $.ajax({
+      url: "/SCES/backend/fetch-class.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        submitType: "studentSubjectFullBarChart",
+        student_id: studentId,
+        subject_id: subject_id, // Pass subject_id
+      },
+      success: function (data) {
+        if (!data.labels.length || !data.barData.length) {
+          $("#subjectInterpretation").text("No grades available to interpret.");
+          return;
+        }
+
+        const colorMapping = {
+          fil: "#ff8080",
+          eng: "#ffb480",
+          math: "#e1e149",
+          sci: "#42d6a4",
+          esp: "#08cad1",
+          mt: "#59adf6",
+          ap: "#f0bad1",
+          mapeh: "#a3adff",
+          epp: "#d9ae9d",
+        };
+
+        const baseColor =
+          colorMapping[data.subjectCode?.toLowerCase()] || "#cccccc";
+
+        const grades = data.barData;
+        const labels = [...data.labels]; // Use existing labels
+
+        // Send grades and labels to Flask for interpretation
+        $.ajax({
+          url: "https://predictive-model-sces-1.onrender.com/interpret-subject", // The Flask route
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            labels: labels,
+            bar_data: grades,
+          }),
+          success: function (interpretationData) {
+            if (interpretationData.error) {
+              $("#subjectInterpretation").text(interpretationData.error);
+              return;
+            }
+
+            const updatedGrades = interpretationData.grades;
+            const updatedLabels = interpretationData.labels;
+
+            const backgroundColor = Array(updatedGrades.length - 1).fill(
+              baseColor
+            );
+            if (updatedGrades.length > grades.length) {
+              backgroundColor.push("#999999");
+            }
+
+            new Chart(ctxBar, {
+              type: "bar",
+              data: {
+                labels: updatedLabels,
+                datasets: [
+                  {
+                    label: "Grade",
+                    data: updatedGrades,
+                    backgroundColor: backgroundColor,
+                    borderColor: "#ccc",
+                    borderWidth: 2,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Grades by Quarter",
+                    font: {
+                      size: 18,
+                    },
+                    padding: {
+                      top: 10,
+                      bottom: 10,
+                    },
+                  },
+                  legend: {
+                    display: false,
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    max: 100,
+                  },
+                },
+              },
+            });
+
+            $("#subjectInterpretation").text(interpretationData.interpretation);
+          },
+          error: function (xhr, status, error) {
+            console.error("Error fetching interpretation from Flask:", error);
+            $("#subjectInterpretation").text(
+              "Unable to load interpretation data."
+            );
+          },
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error("Error fetching data for student full bar chart:", error);
+        $("#subjectInterpretation").text(
+          "Unable to load data for interpretation."
+        );
+      },
+    });
+  }
 
   addGradeBtn.onclick = function () {
     var studentId = document

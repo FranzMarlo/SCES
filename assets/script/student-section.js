@@ -429,6 +429,8 @@ document.addEventListener("DOMContentLoaded", function () {
       document.body.style.overflow = "auto";
       showTabContent("profileContainer");
       setActiveTab("profileTab");
+      $("#subjectFilterDropdown").val("All");
+      $("#quarterFilterDropdown").val("All");
     });
 
   document.getElementById("profileTab").addEventListener("click", function () {
@@ -845,7 +847,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         // Send the predictive data to Python API
-        fetch("http://127.0.0.1:5000/predict", {
+        fetch("https://predictive-model-sces-1.onrender.com/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -1317,9 +1319,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function initializeStudentBarChart(lrn) {
     var ctxBar = document.getElementById("studentBarChart").getContext("2d");
 
+    // Destroy existing chart instance if it exists
     if (Chart.getChart("studentBarChart")) {
       Chart.getChart("studentBarChart").destroy();
     }
+
+    // Fetch GWA records for the bar chart
     $.ajax({
       url: "/SCES/backend/fetch-class.php",
       type: "POST",
@@ -1329,10 +1334,6 @@ document.addEventListener("DOMContentLoaded", function () {
         lrn: lrn,
       },
       success: function (data) {
-        var ctxBar = document
-          .getElementById("studentBarChart")
-          .getContext("2d");
-
         var colors = [
           "#ffd6e6",
           "#d2ebc4",
@@ -1346,7 +1347,8 @@ document.addEventListener("DOMContentLoaded", function () {
           return colors[index % colors.length];
         });
 
-        var barChart = new Chart(ctxBar, {
+        // Create the bar chart
+        new Chart(ctxBar, {
           type: "bar",
           data: {
             labels: data.labels,
@@ -1387,67 +1389,62 @@ document.addEventListener("DOMContentLoaded", function () {
           },
         });
 
-        // Add interpretation based on data
+        // Send data to the interpretation API
         const interpretationSpan = document.getElementById("interpretation");
-        if (data.barData.length > 1) {
-          let trends = [];
-          let overallTrend = 0;
+        $.ajax({
+          url: "https://predictive-model-sces-1.onrender.com/interpret", // Flask interpretation route
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            gwa_records: data.labels.map((label, index) => ({
+              grade_level: label,
+              gwa: data.barData[index],
+            })),
+          }),
+          success: function (interpretationResponse) {
+            const { insights, overall_message } = interpretationResponse;
 
-          for (let i = 1; i < data.barData.length; i++) {
-            const gradeFrom = data.labels[i - 1];
-            const gradeTo = data.labels[i];
-            const scoreFrom = data.barData[i - 1];
-            const scoreTo = data.barData[i];
-            const diff = scoreTo - scoreFrom;
-            overallTrend += diff;
-
-            if (diff > 0) {
-              trends.push(
-                `An improvement of GWA from ${scoreFrom} to ${scoreTo} in ${gradeTo}`
-              );
-            } else if (diff < 0) {
-              trends.push(
-                `A decline of GWA from ${scoreFrom} to ${scoreTo} in ${gradeTo}`
-              );
+            // Display the insights and overall message
+            if (insights && insights.length > 0) {
+              interpretationSpan.textContent = `As the student progresses through grade levels, the Bar Graph depicts: ${insights.join(
+                ". "
+              )}. ${overall_message}`;
             } else {
-              trends.push(
-                `No changes between the GWA ${scoreFrom} in ${gradeFrom} and ${scoreTo} in ${gradeTo}`
-              );
+              interpretationSpan.textContent =
+                "No insights available for this student.";
             }
-          }
-
-          let overallMessage =
-            overallTrend > 0
-              ? "an overall improvement in performance."
-              : overallTrend < 0
-              ? "an overall decline in performance."
-              : "no significant change in performance.";
-
-          interpretationSpan.textContent = `As the student progresses through grade levels, the Bar Graph depicts: ${trends.join(
-            ". "
-          )}. Overall, the student exhibits ${overallMessage}`;
-        } else if (data.barData.length === 1) {
-          interpretationSpan.textContent =
-            "Only one grade level data is available. Unable to analyze transitions.";
-        } else {
-          interpretationSpan.textContent =
-            "No data available for this student.";
-        }
+          },
+          error: function () {
+            interpretationSpan.textContent =
+              "Failed to fetch interpretation data.";
+          },
+        });
+      },
+      error: function () {
+        alert("Failed to fetch GWA data.");
       },
     });
   }
 
+  $("#subjectFilterDropdown, #quarterFilterDropdown").on("change", function () {
+    var studentId = document
+      .getElementById("recordsTab")
+      .getAttribute("data-student-id");
+    initializeStudentFullBarChart(studentId);
+  });
+
   function initializeStudentFullBarChart(studentId) {
+    const subjectFilter = $("#subjectFilterDropdown").val();
+    const quarterFilter = $("#quarterFilterDropdown").val();
+
     const ctxBar = document
       .getElementById("studentFullBarChart")
       .getContext("2d");
 
-    // Destroy previous instance if it exists
     if (Chart.getChart("studentFullBarChart")) {
       Chart.getChart("studentFullBarChart").destroy();
     }
 
-    // AJAX request to fetch data
     $.ajax({
       url: "/SCES/backend/fetch-class.php",
       type: "POST",
@@ -1455,10 +1452,10 @@ document.addEventListener("DOMContentLoaded", function () {
       data: {
         submitType: "studentFullBarChart",
         student_id: studentId,
-        section_id: section_id,
+        subject: subjectFilter,
+        quarter: quarterFilter,
       },
       success: function (data) {
-        // Define color mapping for subject codes
         const colorMapping = {
           fil: "#ff8080",
           eng: "#ffb480",
@@ -1471,10 +1468,10 @@ document.addEventListener("DOMContentLoaded", function () {
           epp: "#d9ae9d",
         };
 
-        // Map background colors based on subject codes
-        const backgroundColors = data.subjectCodes.map(
-          (code) => colorMapping[code] || "#cccccc" // Default color if code is missing
-        );
+        const backgroundColors = data.subjectCodes.map((code) => {
+          const normalizedCode = code.toLowerCase();
+          return colorMapping[normalizedCode] || "#cccccc";
+        });
 
         new Chart(ctxBar, {
           type: "bar",
@@ -1482,10 +1479,10 @@ document.addEventListener("DOMContentLoaded", function () {
             labels: data.labels,
             datasets: [
               {
-                label: "Average Score",
+                label: "Grade",
                 data: data.barData,
                 backgroundColor: backgroundColors,
-                borderColor: "#000",
+                borderColor: "#ccc",
                 borderWidth: 2,
               },
             ],
@@ -1496,7 +1493,7 @@ document.addEventListener("DOMContentLoaded", function () {
             plugins: {
               title: {
                 display: true,
-                text: "Average Score Per Subject",
+                text: "Grade Per Subject",
                 font: {
                   size: 18,
                 },
@@ -1516,11 +1513,61 @@ document.addEventListener("DOMContentLoaded", function () {
             },
           },
         });
+        if (subjectFilter == 'All'){
+          var subjectTitles = data.labels.map(getSubjectTitle);
+        }
+        else{
+          var subjectTitles = data.labels;
+        }
+        $.ajax({
+          url: "https://predictive-model-sces-1.onrender.com/interpret-grades",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            subject_filter: subjectFilter,
+            quarter_filter: quarterFilter,
+            labels: subjectTitles,
+            bar_data: data.barData,
+          }),
+          success: function (interpretationResponse) {
+            const interpretationSpan = document.getElementById(
+              "subjectInterpretation"
+            );
+            interpretationSpan.textContent =
+              interpretationResponse.interpretation;
+          },
+          error: function (xhr, status, error) {
+            console.error("Error fetching interpretation:", error);
+          },
+        });
       },
       error: function (xhr, status, error) {
         console.error("Error fetching data for student full bar chart:", error);
       },
     });
+  }
+
+  function getSubjectTitle(subject) {
+    switch (subject) {
+      case "AP":
+        return "Araling Panlipunan";
+      case "ENG":
+        return "English";
+      case "ESP":
+        return "ESP";
+      case "FIL":
+        return "Filipino";
+      case "MAPEH":
+        return "MAPEH";
+      case "MATH":
+        return "Mathematics";
+      case "MT":
+        return "Mother Tongue";
+      case "EPP":
+        return "EPP";
+      default:
+        return "Unknown Subject";
+    }
   }
 
   function initializeSectionFullBarChart() {

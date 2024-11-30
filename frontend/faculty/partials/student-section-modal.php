@@ -247,27 +247,26 @@
             <div class="filter-container">
                 <div class="title-box">
                     <img src="/SCES/assets/images/quiz-rate.png" alt="quiz-rate.png">
-                    <h1>Overview</h1>
+                    <h1>Subject Analytics</h1>
                 </div>
                 <div class="filter-part">
-                    <select id="yearFilterDropdown" class="filter-dropdown">
-                        <option value="All">Overtime</option>
-                        <option value="<?php echo date("Y"); ?>">Current SY</option>
-                        <?php
-                        $currentYear = date("Y") - 1;
-                        for ($year = $currentYear; $year >= 2019; $year--) {
-                            echo "<option value='$year'>$year-" . ($year + 1) . "</option>";
-                        }
-                        ?>
+                    <select id="subjectFilterDropdown" class="filter-dropdown">
+                        <option value="All">All Subjects</option>
+                        <option value="AP">AP</option>
+                        <option value="ENG">English</option>
+                        <option value="ESP">ESP</option>
+                        <option value="FIL">Filipino</option>
+                        <option value="MAPEH">MAPEH</option>
+                        <option value="MATH">Mathematics</option>
+                        <option value="MT">Mother Tongue</option>
+                        <option value="EPP">EPP</option>
                     </select>
-                    <select id="gradeFilterDropdown" class="filter-dropdown">
-                        <option value="All">All Grades</option>
-                        <option value="Grade 1">Grade 1</option>
-                        <option value="Grade 2">Grade 2</option>
-                        <option value="Grade 3">Grade 3</option>
-                        <option value="Grade 4">Grade 4</option>
-                        <option value="Grade 5">Grade 5</option>
-                        <option value="Grade 6">Grade 6</option>
+                    <select id="quarterFilterDropdown" class="filter-dropdown">
+                        <option value="All">All Quarters</option>
+                        <option value="1st">1st</option>
+                        <option value="2nd">2nd</option>
+                        <option value="3rd">3rd</option>
+                        <option value="4th">4th</option>
                     </select>
                 </div>
             </div>
@@ -275,6 +274,9 @@
                 <div class="full-graph">
                     <canvas id="studentFullBarChart"></canvas>
                 </div>
+            </div>
+            <div class="full-text">
+                <span id="subjectInterpretation"></span>
             </div>
         </div>
     </div>

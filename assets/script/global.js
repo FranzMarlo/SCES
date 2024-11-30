@@ -1474,7 +1474,26 @@ $("#promoteStudentForm").on("submit", function (e) {
     success: function (response) {
       console.log(response);
       if (response == "200") {
-        showReloadAlert("success", "Student Promoted To Next Grade Level");
+        
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Student Promoted To Next Grade Level",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                promoteStudentModal.style.display = "none";
+                $("#promoteStudentForm")[0].reset();
+                if ($.fn.DataTable.isDataTable("#studentsTable")) {
+                  $("#studentsTable").DataTable().ajax.reload(null, false); // Keep the current page
+                }
+              }
+            });
+          }
+        );
       } else if (response == "483") {
         showAlert("warning", "Please Select New Section For Student");
       } else if (response == "484") {
@@ -1501,10 +1520,29 @@ $("#retainStudentForm").on("submit", function (e) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
       if (response == "200") {
-        showReloadAlert("success", "Student Assigned To New Section For Grade Level");
-      } else if (response == "483") {
+        
+        $.getScript(
+          "/SCES/vendor/node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+          function () {
+            Swal.fire({
+              icon: "success",
+              title: "Student Assigned To New Section For Grade Level",
+              confirmButtonColor: "#4CAF50",
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                retainStudentModal.style.display = "none";
+                $("#retainStudentForm")[0].reset();
+                if ($.fn.DataTable.isDataTable("#studentsTable")) {
+                  $("#studentsTable").DataTable().ajax.reload(null, false); // Keep the current page
+                }
+              }
+            });
+          }
+        );
+      }
+      else if (response == "483") {
         showAlert("warning", "Please Select New Section For Student");
       } else if (response == "484") {
         showReloadAlert("error", "Updating Student Records Failed", "Please Try Again Later");

@@ -1034,11 +1034,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const ctxBar = document
       .getElementById("studentFullBarChart")
       .getContext("2d");
-  
+
     if (Chart.getChart("studentFullBarChart")) {
       Chart.getChart("studentFullBarChart").destroy();
     }
-  
+
     $.ajax({
       url: "/SCES/backend/fetch-class.php",
       type: "POST",
@@ -1053,7 +1053,7 @@ document.addEventListener("DOMContentLoaded", function () {
           $("#subjectInterpretation").text("No grades available to interpret.");
           return;
         }
-  
+
         const colorMapping = {
           fil: "#ff8080",
           eng: "#ffb480",
@@ -1065,138 +1065,89 @@ document.addEventListener("DOMContentLoaded", function () {
           mapeh: "#a3adff",
           epp: "#d9ae9d",
         };
-  
+
         const baseColor =
           colorMapping[data.subjectCode?.toLowerCase()] || "#cccccc";
-  
+
         const grades = data.barData;
         const labels = [...data.labels]; // Use existing labels
-  
-        let predictedGrade = null;
-        let missingMessage = "";
-  
-        // Ensure that labels include "1st Quarter" and "2nd Quarter"
-        const hasFirstQuarter = labels.includes("1st Quarter");
-        const hasSecondQuarter = labels.includes("2nd Quarter");
-  
-        if (hasFirstQuarter && hasSecondQuarter) {
-          // Prediction logic
-          if (grades.length <= 3) {
-            const changes = [];
-            for (let i = 1; i < grades.length; i++) {
-              changes.push(grades[i] - grades[i - 1]);
+
+        // Send grades and labels to Flask for interpretation
+        $.ajax({
+          url: "https://predictive-model-sces-1.onrender.com/interpret-subject", // The Flask route
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            labels: labels,
+            bar_data: grades,
+          }),
+          success: function (interpretationData) {
+            if (interpretationData.error) {
+              $("#subjectInterpretation").text(interpretationData.error);
+              return;
             }
-  
-            const averageChange =
-              changes.reduce((sum, change) => sum + change, 0) / changes.length;
-            predictedGrade = Math.round(
-              grades[grades.length - 1] + averageChange
+
+            const updatedGrades = interpretationData.grades;
+            const updatedLabels = interpretationData.labels;
+
+            const backgroundColor = Array(updatedGrades.length - 1).fill(
+              baseColor
             );
-            grades.push(predictedGrade);
-  
-            // Add the formatted label only for the predicted value
-            labels.push(formatQuarterLabel(grades.length));
-          }
-        } else {
-          // Prepare the message for missing quarters
-          const missingQuarters = [];
-          if (!hasFirstQuarter) missingQuarters.push("1st Quarter");
-          if (!hasSecondQuarter) missingQuarters.push("2nd Quarter");
-  
-          missingMessage = `Prediction skipped: Missing data for ${missingQuarters.join(
-            " and "
-          )}.`;
-        }
-  
-        // Generate the backgroundColor array
-        const backgroundColor = Array(grades.length - 1).fill(baseColor);
-        if (predictedGrade !== null) {
-          backgroundColor.push("#999999"); // Gray color for the predicted grade
-        }
-  
-        // Generate the chart
-        new Chart(ctxBar, {
-          type: "bar",
-          data: {
-            labels: labels, // Labels, including the formatted predicted label
-            datasets: [
-              {
-                label: "Grade",
-                data: grades, // Grades, including predicted grade
-                backgroundColor: backgroundColor, // Colors for each bar
-                borderColor: "#ccc",
-                borderWidth: 2,
+            if (updatedGrades.length > grades.length) {
+              backgroundColor.push("#999999");
+            }
+
+            new Chart(ctxBar, {
+              type: "bar",
+              data: {
+                labels: updatedLabels,
+                datasets: [
+                  {
+                    label: "Grade",
+                    data: updatedGrades,
+                    backgroundColor: backgroundColor,
+                    borderColor: "#ccc",
+                    borderWidth: 2,
+                  },
+                ],
               },
-            ],
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Grades by Quarter",
+                    font: {
+                      size: 18,
+                    },
+                    padding: {
+                      top: 10,
+                      bottom: 10,
+                    },
+                  },
+                  legend: {
+                    display: false,
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    max: 100,
+                  },
+                },
+              },
+            });
+
+            $("#subjectInterpretation").text(interpretationData.interpretation);
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              title: {
-                display: true,
-                text: "Grades by Quarter",
-                font: {
-                  size: 18,
-                },
-                padding: {
-                  top: 10,
-                  bottom: 10,
-                },
-              },
-              legend: {
-                display: false,
-              },
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 100, // Assuming grades are out of 100
-              },
-            },
+          error: function (xhr, status, error) {
+            console.error("Error fetching interpretation from Flask:", error);
+            $("#subjectInterpretation").text(
+              "Unable to load interpretation data."
+            );
           },
         });
-  
-        // Interpretation logic
-        let interpretation = "";
-  
-        if (grades.length > 1) {
-          const changes = [];
-          for (let i = 1; i < grades.length - 1; i++) {
-            changes.push(grades[i] - grades[i - 1]);
-          }
-  
-          const allPositiveOrZero = changes.every((change) => change >= 0);
-          const allNegativeOrZero = changes.every((change) => change <= 0);
-  
-          if (allPositiveOrZero) {
-            interpretation =
-              "The student's grades have shown consistent improvement across quarters.";
-          } else if (allNegativeOrZero) {
-            interpretation =
-              "The student's grades have consistently declined across quarters.";
-          } else if (changes.every((change) => change === 0)) {
-            interpretation =
-              "The student's grades have remained consistent across quarters.";
-          } else {
-            interpretation =
-              "The student's grades have varied across quarters.";
-          }
-  
-          if (predictedGrade !== null) {
-            interpretation += ` The predicted grade for the next quarter is ${predictedGrade}.`;
-          }
-        } else {
-          interpretation = "Insufficient number of grades to determine trends.";
-        }
-  
-        // Append the prediction skipped message if applicable
-        if (missingMessage) {
-          interpretation += ` ${missingMessage}`;
-        }
-  
-        // Set the final interpretation text
-        $("#subjectInterpretation").text(interpretation);
       },
       error: function (xhr, status, error) {
         console.error("Error fetching data for student full bar chart:", error);
@@ -1205,19 +1156,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
       },
     });
-  
-
-    // Function to format the predicted quarter label
-    function formatQuarterLabel(quarterNumber) {
-      switch (quarterNumber) {
-        case 3:
-          return "3rd Quarter";
-        case 4:
-          return "4th Quarter";
-        default:
-          return `${quarterNumber} Quarter`;
-      }
-    }
   }
 
   function initializeRecordsTable() {
