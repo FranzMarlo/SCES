@@ -847,7 +847,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         // Send the predictive data to Python API
-        fetch("https://predictive-model-sces-1.onrender.com/predict", {
+        fetch("http://127.0.0.1:5000/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var bodyElement = document.querySelector("body");
   var section_id = bodyElement.getAttribute("data-section");
   var subject_id = bodyElement.getAttribute("data-subject");
+  var subject_name = bodyElement.getAttribute("data-subject-name");
   var addLessonModal = document.getElementById("addLessonModal");
   var addLessonBtn = document.getElementById("addLesson");
   var closeBtn = document.querySelector(".close-btn");
@@ -1072,14 +1073,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const grades = data.barData;
         const labels = [...data.labels]; // Use existing labels
 
-        // Send grades and labels to Flask for interpretation
+        // Send grades, labels, and subject_name to Flask for interpretation
         $.ajax({
-          url: "https://predictive-model-sces-1.onrender.com/interpret-subject", // The Flask route
+          url: "http://127.0.0.1:5000/interpret-subject", // The Flask route
           type: "POST",
           contentType: "application/json",
           data: JSON.stringify({
             labels: labels,
             bar_data: grades,
+            subject_name: subject_name, // Add subject_name here
           }),
           success: function (interpretationData) {
             if (interpretationData.error) {

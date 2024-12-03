@@ -11,7 +11,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/data-tables
   data-subject="<?php echo htmlspecialchars($_GET['subject'] ?? '', ENT_QUOTES); ?>"
   data-gradeLevel="<?php echo htmlspecialchars($subject['grade_level'] ?? '', ENT_QUOTES); ?>"
   data-level="<?php echo htmlspecialchars($subject['level_id'] ?? '', ENT_QUOTES); ?>"
-  data-title="<?php echo htmlspecialchars($subject['subject_title'] ?? '', ENT_QUOTES); ?>"></body>
+  data-title="<?php echo htmlspecialchars($subject['subject_title'] ?? '', ENT_QUOTES); ?>"
+  data-subject-name="<?php echo htmlspecialchars($subject['subject'] ?? '', ENT_QUOTES); ?>">
+</body>
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-popup.php';
 ?>

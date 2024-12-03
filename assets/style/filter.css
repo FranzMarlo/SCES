@@ -43,6 +43,10 @@
   background-color: #f5f5f5;
   cursor: pointer;
   transition: all 0.3s ease;
+  background-image: none!important;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  appearance: auto;
 }
 .filter-dropdown:focus,
 .filter-dropdown:hover {

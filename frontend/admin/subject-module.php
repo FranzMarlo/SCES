@@ -5,7 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/data-tables.p
 ?>
 <link rel="stylesheet" href="/SCES/assets/style/admin-lesson.css" />
 <link rel="stylesheet" href="/SCES/assets/style/filter.css" />
-<title><?php echo htmlspecialchars($subject['subject_title']);?> | SCES Online Learning Platform</title>
+<title><?php echo htmlspecialchars($subject['subject']);?> | SCES Online Learning Platform</title>
 </head>
 
 <body data-section="<?php echo htmlspecialchars($_GET['section'] ?? '', ENT_QUOTES); ?>"
@@ -13,7 +13,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/data-tables.p
   data-teacher="<?php echo htmlspecialchars($_GET['teacher'] ?? '', ENT_QUOTES); ?>"
   data-gradeLevel="<?php echo htmlspecialchars($subject['grade_level'] ?? '', ENT_QUOTES); ?>"
   data-level="<?php echo htmlspecialchars($subject['level_id'] ?? '', ENT_QUOTES); ?>"
-  data-title="<?php echo htmlspecialchars($subject['subject_title'] ?? '', ENT_QUOTES); ?>">
+  data-title="<?php echo htmlspecialchars($subject['subject_title'] ?? '', ENT_QUOTES); ?>"
+  data-subject-name="<?php echo htmlspecialchars($subject['subject'] ?? '', ENT_QUOTES); ?>">
   <?php
   include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/admin/partials/admin-popup.php';
   ?>

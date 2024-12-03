@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
+from xgboost import XGBRegressor
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.preprocessing import StandardScaler
 import joblib
 
 # Load CSV data
@@ -38,8 +39,14 @@ X = features_df[["recent_gwa", "cumulative_gwa", "gwa_trend"]]
 y_next_gwa = features_df["next_gwa"]
 y_success_rate = features_df["success_rate"]
 
+# Split the data for training and testing
 X_train_gwa, X_test_gwa, y_train_gwa, y_test_gwa = train_test_split(X, y_next_gwa, test_size=0.2, random_state=42)
 X_train_sr, X_test_sr, y_train_sr, y_test_sr = train_test_split(X, y_success_rate, test_size=0.2, random_state=42)
+
+# Normalize the features using StandardScaler
+scaler = StandardScaler()
+X_train_sr_scaled = scaler.fit_transform(X_train_sr)  # Fit and transform on training data
+X_test_sr_scaled = scaler.transform(X_test_sr)  # Only transform test data
 
 # Train GWA Prediction Model
 gwa_model = LinearRegression()
@@ -51,18 +58,27 @@ print("GWA Prediction Model")
 print("MSE:", mean_squared_error(y_test_gwa, y_pred_gwa))
 print("R^2:", r2_score(y_test_gwa, y_pred_gwa))
 
-# Train Success Rate Prediction Model
-success_rate_model = RandomForestRegressor(n_estimators=100, random_state=42)
-success_rate_model.fit(X_train_sr, y_train_sr)
-y_pred_sr = success_rate_model.predict(X_test_sr)
+# Train Success Rate Prediction Model with XGBoost
+success_rate_model = XGBRegressor(
+    n_estimators=100,        # Number of trees
+    learning_rate=0.1,       # Step size shrinkage
+    max_depth=5,             # Maximum tree depth
+    random_state=42,         # For reproducibility
+    objective='reg:squarederror',  # For regression tasks
+)
+
+# Train the model on scaled features
+success_rate_model.fit(X_train_sr_scaled, y_train_sr)
+y_pred_sr = success_rate_model.predict(X_test_sr_scaled)
 
 # Evaluate Success Rate Prediction Model
-print("\nSuccess Rate Prediction Model")
+print("\nSuccess Rate Prediction Model (XGBoost)")
 print("MSE:", mean_squared_error(y_test_sr, y_pred_sr))
 print("R^2:", r2_score(y_test_sr, y_pred_sr))
 
 # Save Models
 joblib.dump(gwa_model, "gwa_model.pkl")
 joblib.dump(success_rate_model, "success_rate_model.pkl")
+joblib.dump(scaler, "scaler.pkl")  # Save the scaler for future use
 
-print("\nModels saved: gwa_model.pkl, success_rate_model.pkl")
+print("\nModels saved: gwa_model.pkl, success_rate_model.pkl, scaler.pkl")

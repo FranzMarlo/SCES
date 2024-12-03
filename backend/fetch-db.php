@@ -2401,7 +2401,7 @@ class fetchClass extends db_connect
             FROM
                 score_tbl score
             INNER JOIN
-                student_tbl students ON students.student_id = score.student_id
+                student_record students ON students.student_id = score.student_id
             INNER JOIN
                 section_tbl section ON students.section_id = section.section_id
             INNER JOIN
