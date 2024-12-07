@@ -563,4 +563,9 @@ select option {
     color: #fff;
     font-weight: bold;
   }
+  .in-part{
+    display: flex;
+    row-gap: 5px;
+    flex-direction: column;
+  }
 }

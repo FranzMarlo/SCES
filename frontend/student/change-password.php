@@ -21,12 +21,13 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/password-he
                 <div class="column right">
                     <div class="form-wrapper">
                         <form id="studChangePass">
+                            <img src="/SCES/assets/images/logo.png" alt="sces logo" class="logo-img" />
                             <h1>Set Up New Password</h1>
                             <div class="input-icons-recover">
                                 <span>Enter and confirm your new password. Your new password must be at least 6
                                     characters.</span>
                             </div>
-                            <input type="hidden" name="email" id="email" value="<?php echo htmlspecialchars($email);?>">
+                            <input type="hidden" name="email" id="email" value="<?php echo htmlspecialchars($email); ?>">
                             <div class="input-icons">
                                 <label for="password">
                                     <i class="fa-solid fa-lock icon"></i>

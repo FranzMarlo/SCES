@@ -49,11 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Initialize on page load
     setActiveTab();
-
-    document.querySelectorAll(".archive-btn").forEach((editLink) => {
-      editLink.addEventListener("click", function () {
-        const subjectId = this.getAttribute("data-subject-id");
-        openPopupMenu.classList.remove("show");
+    document
+    .getElementById("subjectContainer")
+    .addEventListener("click", function (e) {
+      // Check if the clicked element is the archive button
+      if (e.target.classList.contains("archive-btn")) {
+        const subjectId = e.target.getAttribute("data-subject-id");
+        openPopupMenu?.classList.remove("show"); // Close the popup menu
         Swal.fire({
           title: "Do you want to archive this subject?",
           text: "Archived subjects won't be visible to students",
@@ -75,12 +77,14 @@ document.addEventListener("DOMContentLoaded", function () {
             });
           }
         });
-      });
+      }
     });
-  
-    document.querySelectorAll(".not-archive-btn").forEach((editLink) => {
-      editLink.addEventListener("click", function () {
-        const subjectId = this.getAttribute("data-subject-id");
+    document
+    .getElementById("archivedContainer")
+    .addEventListener("click", function (e) {
+      
+      if (e.target.classList.contains("not-archive-btn")) {
+        const subjectId = e.target.getAttribute("data-subject-id");
         openPopupMenu.classList.remove("show");
         Swal.fire({
           title: "Do you want to re-enable this subject?",
@@ -103,8 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
             });
           }
         });
-      });
+      }
     });
+
     function archiveSubject(subjectId) {
       fetch("/SCES/backend/global.php", {
         method: "POST",
@@ -125,7 +130,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 allowOutsideClick: false,
               }).then((result) => {
                 if (result.isConfirmed) {
-                  window.location.reload();
+                  updateSubjectList();
+                  updateArchiveList();
                 }
               });
               break;
@@ -169,7 +175,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 allowOutsideClick: false,
               }).then((result) => {
                 if (result.isConfirmed) {
-                  window.location.reload();
+                  updateSubjectList();
+                  updateArchiveList();
                 }
               });
               break;
@@ -192,6 +199,82 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         })
         .catch((error) => console.error("Error fetching subject data:", error));
+    }
+    function updateSubjectList() {
+      // Retain the current search term
+      const searchInput = document.getElementById("subjectSearch");
+      const searchTerm = searchInput.value.toLowerCase();
+  
+      // Fetch updated subjects
+      fetch("/SCES/backend/global.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "submitType=facultyRefreshSubject",
+      })
+        .then((response) => response.text())
+        .then((html) => {
+          const subjectContainer = document.getElementById("subjectContainer");
+          subjectContainer.innerHTML = html;
+  
+          // Reapply the search filter
+          if (searchTerm.trim() !== "") {
+            filterSubjects();
+          }
+          updateSubjectNoDataBox();
+          updateArchivedNoDataBox();
+        })
+        .catch((error) => console.error("Error updating subject list:", error));
+    }
+    
+    function updateArchiveList() {
+      // Retain the current search term
+      const searchInput = document.getElementById("subjectSearch");
+      const searchTerm = searchInput.value.toLowerCase();
+  
+      // Fetch updated subjects
+      fetch("/SCES/backend/global.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "submitType=facultyRefreshArchived",
+      })
+        .then((response) => response.text())
+        .then((html) => {
+          const subjectContainer = document.getElementById("archivedContainer");
+          subjectContainer.innerHTML = html;
+  
+          // Reapply the search filter
+          if (searchTerm.trim() !== "") {
+            filterSubjects();
+          }
+          updateSubjectNoDataBox();
+          updateArchivedNoDataBox();
+        })
+        .catch((error) => console.error("Error updating subject list:", error));
+    }
+    function updateSubjectNoDataBox() {
+      const subjectContainer = document.getElementById("subjectContainer");
+      const subjectItems = subjectContainer.querySelectorAll(".subject-item");
+
+      if (subjectItems.length === 0) {
+        subjectContainer.classList.add("no-data-box-centered");
+    } else {
+        subjectContainer.classList.remove("no-data-box-centered");
+    }
+    }
+
+    function updateArchivedNoDataBox() {
+      const subjectContainer = document.getElementById("archivedContainer");
+      const subjectItems = subjectContainer.querySelectorAll(".subject-item");
+
+      if (subjectItems.length === 0) {
+          subjectContainer.classList.add("no-data-box-centered");
+      } else {
+          subjectContainer.classList.remove("no-data-box-centered");
+      }
     }
   });
   

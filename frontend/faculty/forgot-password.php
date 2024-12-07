@@ -19,6 +19,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/head.php';
             <div class="column right">
                 <div class="form-wrapper">
                     <form id="facultyForgotPass">
+                        <img src="/SCES/assets/images/logo.png" alt="sces logo" class="logo-img" />
                         <h1>Recover Account</h1>
                         <div class="input-icons-recover">
                             <span>Please enter your registered email. After verification, a password reset link will be

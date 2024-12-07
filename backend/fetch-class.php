@@ -377,16 +377,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = $fetchDb->fetchAverageGWAWithFilter($year, $gradeLevel);
 
         if ($data) {
-
             echo json_encode([
                 'labels' => $data['labels'],
-                'barData' => $data['averageGwaValues']
+                'barData' => $data['averageGwaValues'],
+                'studentCounts' => $data['studentCounts']
             ]);
         } else {
-
             echo json_encode([
                 'labels' => [],
-                'barData' => []
+                'barData' => [],
+                'studentCounts' => []
             ]);
         }
     } else if ($submitType === 'fetchStudentsDataTable') {
@@ -729,45 +729,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'barData' => []
             ]);
         }
-    } else if ($submitType === 'analyticsAverageScoreByGradeLevelWithFilter') {
-        $year = $_POST['year'];
-        $gradeLevel = $_POST['gradeLevel'];
-
-        $students = $fetchDb->getAllStudentsWithFilter($year, $gradeLevel);
-
-        $grades = [];
-        $scores = [];
-
-        if (!empty($students)) {
-            foreach ($students as $student) {
-                $studentId = $student['student_id'];
-                $studentData = $fetchDb->studentFetchScoresByGradeLevelWithFilter($studentId, $year, $gradeLevel);
-
-                if (empty($grades)) {
-                    $grades = $studentData['grades'];
-                    $scores = array_fill(0, count($grades), 0); // Initialize scores with zeroes
-                }
-
-                foreach ($studentData['scores'] as $index => $avgScore) {
-                    $scores[$index] += $avgScore;
-                }
-            }
-
-            $studentCount = count($students);
-            $averageScoresByGradeLevel = array_map(function ($totalScore) use ($studentCount) {
-                return $studentCount > 0 ? $totalScore / $studentCount : 0;
-            }, $scores);
-
-            echo json_encode([
-                'labels' => $grades,
-                'barData' => $averageScoresByGradeLevel
-            ]);
-        } else {
-            echo json_encode([
-                'labels' => [],
-                'barData' => []
-            ]);
-        }
     } else if ($submitType === 'facultyGetGWA') {
         $studentId = $_POST['student_id'];
         $lrn = $fetchDb->getStudentLRN($studentId);
@@ -929,16 +890,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($submitType === 'analyticsPanelData') {
         $year = $_POST['year'];
         $gradeLevel = $_POST['gradeLevel'];
-
+        $honors = 'PROMOTED WITH HONORS';
+        $passed = 'PROMOTED';
         $totalStudents = $fetchDb->fetchTotalStudentsWithFilter($year, $gradeLevel);
         $totalTeachers = $fetchDb->fetchTotalTeachersWithFilter($year, $gradeLevel);
-        $totalLessons = $fetchDb->fetchTotalLessonsWithFilter($year, $gradeLevel);
-        $totalQuizzes = $fetchDb->fetchTotalQuizzesWithFilter($year, $gradeLevel);
+        $totalHonors = $fetchDb->fetchStudentCountWithFilter($year, $gradeLevel, $honors);
+        $totalPassed = $fetchDb->fetchStudentCountWithFilter($year, $gradeLevel, $passed);
 
         $panelData['totalStudents'] = $totalStudents;
         $panelData['totalTeachers'] = $totalTeachers;
-        $panelData['totalLessons'] = $totalLessons;
-        $panelData['totalQuizzes'] = $totalQuizzes;
+        $panelData['totalHonors'] = $totalHonors;
+        $panelData['totalPassed'] = $totalPassed;
         echo json_encode($panelData);
 
     } elseif ($submitType === 'fetchGradeDetails') {
@@ -1170,8 +1132,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $subjectCode = null;
 
             foreach ($gradesData as $grade) {
-                $labels[] = $grade['quarter'] . " Quarter"; 
-                $barData[] = (float) $grade['grade']; 
+                $labels[] = $grade['quarter'] . " Quarter";
+                $barData[] = (float) $grade['grade'];
                 $subjectCode = $grade['subject_code'];
             }
 
@@ -1185,6 +1147,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'labels' => [],
                 'barData' => [],
                 'subjectCode' => null,
+            ]);
+        }
+    } else if ($submitType === 'analyticsBarChartWithFilter') {
+        $year = $_POST['year'];
+        $gradeLevel = $_POST['gradeLevel'];
+
+        $grades = $fetchDb->fetchMaxMinGradeWithFilter($year, $gradeLevel);
+
+        if ($grades) {
+            $labels = [];
+            $maxGrades = [];
+            $minGrades = [];
+
+            foreach ($grades as $grade) {
+                $labels[] = $grade['grade_level'];
+                $maxGrades[] = $grade['max_grade'];
+                $minGrades[] = $grade['min_grade'];
+            }
+
+            echo json_encode([
+                'labels' => $labels,
+                'maxGrades' => $maxGrades,
+                'minGrades' => $minGrades
+            ]);
+        } else {
+            echo json_encode([
+                'labels' => [],
+                'maxGrades' => [],
+                'minGrades' => []
             ]);
         }
     } else {

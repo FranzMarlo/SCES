@@ -60,7 +60,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
             <div class="quiz-dropdown-content">
               <div class="quiz-dropdown-title">
                 <img src="/SCES/assets/images/quiz-past.png" alt="quiz-past.png">
-                <h1>Past Quizzes</h1>
+                <h1>Quizzes</h1>
               </div>
               <?php if ($pastQuizzes): ?>
                 <?php foreach ($pastQuizzes as $index => $quiz): ?>
@@ -83,7 +83,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/student/partials/helper.php'
         <div class="quiz-container">
           <div class="tab-controller">
             <div class="tab" id="pending-tab">Pending Quizzes</div>
-            <div class="tab" id="past-tab">Past Quizzes</div>
+            <div class="tab" id="past-tab">Quizzes</div>
           </div>
           <div class="sub-container" id="activeQuizContainer">
             <div class="pending-container">

@@ -47,7 +47,7 @@ $page = '';
                                     <div class="id-row">
                                         <div class="id-col-full">
                                             <p>NAME</p>
-                                            <span><?php echo htmlspecialchars(getPronoun($gender) . ' ' .  strtoupper($teacherLname) .' '. strtoupper($teacherLname)); ?></span>
+                                            <span><?php echo htmlspecialchars(getPronoun($gender) . ' ' .  strtoupper($teacherFname) .' '. strtoupper($teacherLname)); ?></span>
                                         </div>
                                     </div>
                                     <div class="id-row">

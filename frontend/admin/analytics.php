@@ -68,25 +68,22 @@ $page = '';
                         </div>
                     </div>
                     <div class="stats-box pastel-yellow">
-                        <img src="/SCES/assets/images/quiz-lesson.png" alt="quiz-lesson.png">
+                        <img src="/SCES/assets/images/outstanding.png" alt="outstanding.png">
                         <div class="stats-col">
-                            <span id="totalLessons"></span>
-                            <p>Total Lessons</p>
+                            <span id="totalHonors"></span>
+                            <p>Total Honors</p>
                         </div>
                     </div>
                     <div class="stats-box pastel-blue">
-                        <img src="/SCES/assets/images/quiz-question.png" alt="quiz-question.png">
+                        <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
                         <div class="stats-col">
-                            <span id="totalQuizzes"></span>
-                            <p>Total Quizzes</p>
+                            <span id="totalPassed"></span>
+                            <p>Total Passed</p>
                         </div>
                     </div>
                 </div>
                 <div class="graph-container">
-                    <div class="graph">
-                        <canvas id="lineChart"></canvas>
-                    </div>
-                    <div class="graph">
+                    <div class="full-graph">
                         <canvas id="barChart"></canvas>
                     </div>
                 </div>
@@ -96,16 +93,16 @@ $page = '';
                     </div>
                 </div>
                 <div class="full-text">
-                    <span id="lvlInterpretation">Hi</span>
+                    <span id="lvlInterpretation"></span>
                 </div>
                 <div class="title-box">
                     <img src="/SCES/assets/images/quiz-score.png" alt="quiz-score.png">
-                    <h1>Top Performing Students</h1>
+                    <h1>Top 10 Performing Students</h1>
                 </div>
                 <div class="table-container">
                     <table id="rankingTable" class="table">
                         <thead>
-                            <tr class="pink">                              
+                            <tr class="pink">
                             </tr>
                         </thead>
                         <tbody id="rankingTableBody">
@@ -122,4 +119,5 @@ $page = '';
     ?>
     <script src="/SCES/assets/script/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
-    <script src="/SCES/assets/script/analytics.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="/SCES/assets/script/admin-analytics.js"></script>

@@ -379,6 +379,7 @@ def interpret_gwa():
         grade = data.get('gradeLevel', 'All')
         labels = data.get('labels', [])
         bar_data = data.get('barData', [])
+        student_counts = data.get('studentCounts', [])
 
         # Validate input
         if not labels or not bar_data or len(labels) != len(bar_data):
@@ -394,17 +395,19 @@ def interpret_gwa():
             min_gwa_index = bar_data.index(min_gwa)
             highest_grade = labels[max_gwa_index]
             lowest_grade = labels[min_gwa_index]
+            highest_students = student_counts[max_gwa_index]
+            lowest_students = student_counts[min_gwa_index]
 
-            # Check for grade levels with GWA < 80
             below_threshold = [
-                f"{labels[i]} (GWA: {gwa})"
+                f"{labels[i]} (GWA: {gwa}, Students: {student_counts[i]})"
                 for i, gwa in enumerate(bar_data)
                 if gwa < 80
             ]
 
             interpretation = (
-                f"The grade level with the highest average GWA is {highest_grade} with a GWA of {max_gwa}, "
-                f"while the grade level with the lowest average GWA is {lowest_grade} with a GWA of {min_gwa}. "
+                f"The grade level with the highest average GWA is {highest_grade} with a GWA of {max_gwa} "
+                f"for a total of {highest_students} students, while the grade level with the lowest average GWA is {lowest_grade} "
+                f"with a GWA of {min_gwa} for a total of {lowest_students} students. "
             )
             if below_threshold:
                 interpretation += (
@@ -416,13 +419,14 @@ def interpret_gwa():
 
         def analyze_specific_grade():
             selected_gwa = bar_data[0]  # Assuming data is filtered for the specific grade level
+            selected_students = student_counts[0] if student_counts else 0
             if selected_gwa < 80:
                 return (
-                    f"The GWA {selected_gwa} of {grade} indicates a decline as it is below 80."
+                    f"The {selected_students} {grade} students with an average GWA of {selected_gwa} indicates a decline as it is below 80."
                 )
             else:
                 return (
-                    f"The GWA {selected_gwa} of {grade} does not indicate a decline in students' rating."
+                   f"The {selected_students} {grade} students with an average GWA of {selected_gwa} is decent as it is above 80."
                 )
 
         def analyze_trends():
@@ -438,15 +442,16 @@ def interpret_gwa():
 
                 overall_trend += diff
 
-                # Check for significant improvement or decline (threshold: 1.0)
                 if abs(diff) >= 1.0:
                     if diff > 0:
                         significant_changes.append(
-                            f"Significant improvement from {score_from} to {score_to} ({grade_from} to {grade_to})"
+                            f"Significant improvement from {score_from} to {score_to} ({grade_from} to {grade_to}) "
+                            f"with {student_counts[i]} students."
                         )
                     else:
                         significant_changes.append(
-                            f"Significant decline from {score_from} to {score_to} ({grade_from} to {grade_to})"
+                            f"Significant decline from {score_from} to {score_to} ({grade_from} to {grade_to}) "
+                            f"with {student_counts[i]} students."
                         )
 
             overall_message = (
@@ -485,7 +490,6 @@ def interpret_gwa():
         return jsonify({
             "error": str(e)
         }), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True)

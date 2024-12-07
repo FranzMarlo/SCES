@@ -2551,14 +2551,18 @@ class globalClass extends db_connect
     }
 
     public function checkSectionName($section, $gradeLevel)
-    {
-        $query = $this->conn->prepare("SELECT * FROM section_tbl WHERE section= ? AND level_id = ?");
-        $query->bind_param("ss", $section, $gradeLevel);
-        if ($query->execute()) {
-            $result = $query->get_result();
-            return $result;
-        }
+{
+    $currentYear = date('Y');
+    $query = $this->conn->prepare("SELECT * FROM section_tbl WHERE section = ? AND level_id = ? AND year = ?");
+    $query->bind_param("sss", $section, $gradeLevel, $currentYear);
+
+    if ($query->execute()) {
+        $result = $query->get_result();
+        return $result;
+    } else {
+        return false;
     }
+}
 
     public function addSection($teacherId, $levelId, $section, $short)
     {

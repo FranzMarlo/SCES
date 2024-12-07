@@ -89,7 +89,10 @@ $page = '';
                                         </button>
                                         <div class="subject-in-title" onclick="hiddenLink(this)">
                                             <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
-                                            <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                                            <div class="in-part">
+                                                <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                                                <span><?php echo htmlspecialchars('SY: ' . ($subject['year'] - 1) . ' - ' . $subject['year']); ?></span>
+                                            </div>
                                         </div>
                                         <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>"
                                             alt="<?php echo htmlspecialchars($subject['icon']); ?>">
@@ -97,6 +100,7 @@ $page = '';
                                     <div class="subject-title" onclick="hiddenLink(this)">
                                         <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
                                         <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                                        <span><?php echo htmlspecialchars('SY: ' . ($subject['year'] - 1) . ' - ' . $subject['year']); ?></span>
                                     </div>
                                     <div class="popup-menu">
                                         <ul>
@@ -135,7 +139,10 @@ $page = '';
                                         </button>
                                         <div class="subject-in-title" onclick="hiddenLink(this)">
                                             <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
-                                            <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
+                                            <div class="in-part">
+                                                <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
+                                                <span><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?></span>
+                                            </div>
                                         </div>
                                         <img src="/SCES/assets/images/<?php echo htmlspecialchars($archive['icon']); ?>"
                                             alt="<?php echo htmlspecialchars($archive['icon']); ?>">
@@ -143,12 +150,10 @@ $page = '';
                                     <div class="subject-title" onclick="hiddenLink(this)">
                                         <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
                                         <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
+                                        <span><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?></span>
                                     </div>
                                     <div class="popup-menu">
                                         <ul>
-                                            <li><a href="javascript:void(0)" class="edit-btn"
-                                                    data-subject-id="<?php echo htmlspecialchars($archive['subject_id']); ?>">Edit</a>
-                                            </li>
                                             <li><a href="javascript:void(0)" class="not-archive-btn"
                                                     data-subject-id="<?php echo htmlspecialchars($archive['subject_id']); ?>">Enable</a>
                                             </li>

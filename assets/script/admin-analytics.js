@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("totalTeachers").textContent =
           data.totalTeachers || 0;
         document.getElementById("totalHonors").textContent =
-          data.totalHonors || 0;
+          data.totalHonors || "N/A";
         document.getElementById("totalPassed").textContent =
-          data.totalPassed || 0;
+          data.totalPassed || "N/A";
       })
       .catch((error) => {
         console.error("Error fetching panel data:", error);

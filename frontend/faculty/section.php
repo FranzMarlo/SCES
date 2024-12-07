@@ -43,8 +43,7 @@ $page = '';
                         id="sectionContainer">
                         <?php if ($sections): ?>
                             <?php foreach ($sections as $section): ?>
-                                <div class="section-item"
-                                    data-section-year="<?php echo htmlspecialchars($section['year']); ?>"
+                                <div class="section-item" data-section-year="<?php echo htmlspecialchars($section['year']); ?>"
                                     data-section-section="<?php echo htmlspecialchars($section['section']); ?>"
                                     data-section-level="<?php echo htmlspecialchars($section['grade_level']); ?>">
                                     <a href="/SCES/frontend/faculty/student-section.php?section=<?php echo $section['section_id']; ?>"
@@ -55,8 +54,12 @@ $page = '';
                                         </button>
                                         <div class="icon-text-in" onclick="sectionLink(this)">
                                             <span><?php echo htmlspecialchars($section['grade_level'] . ' - ' . $section['section']); ?></span>
-                                            <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?>
-                                            </p>
+                                            <div class="in-part">
+                                                <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?>
+                                                </p>
+                                                <p><?php echo htmlspecialchars('SY: ' . ($section['year'] - 1) . ' - ' . $section['year']); ?>
+                                                </p>
+                                            </div>
                                         </div>
                                         <img src="/SCES/assets/images/<?php echo $section['short']; ?>.png"
                                             alt="<?php echo $section['short']; ?> icon">
@@ -64,6 +67,8 @@ $page = '';
                                     <div class="icon-text" onclick="sectionLink(this)">
                                         <span><?php echo htmlspecialchars($section['grade_level'] . ' - ' . $section['section']); ?></span>
                                         <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?>
+                                        </p>
+                                        <p><?php echo htmlspecialchars('SY: ' . ($section['year'] - 1) . ' - ' . $section['year']); ?>
                                         </p>
                                     </div>
                                     <div class="popup-menu">
@@ -97,8 +102,12 @@ $page = '';
                                         </button>
                                         <div class="icon-text-in" onclick="sectionLink(this)">
                                             <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
-                                            <p><?php echo htmlspecialchars(getAdviser($archive['gender'], $archive['teacher_lname'], $archive['teacher_fname'])); ?>
-                                            </p>
+                                            <div class="in-part">
+                                                <p><?php echo htmlspecialchars(getAdviser($archive['gender'], $archive['teacher_lname'], $archive['teacher_fname'])); ?>
+                                                </p>
+                                                <p><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?>
+                                                </p>
+                                            </div>
                                         </div>
                                         <img src="/SCES/assets/images/<?php echo $archive['short']; ?>.png"
                                             alt="<?php echo $archive['short']; ?> icon">
@@ -106,6 +115,8 @@ $page = '';
                                     <div class="icon-text" onclick="sectionLink(this)">
                                         <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
                                         <p><?php echo htmlspecialchars(getAdviser($archive['gender'], $archive['teacher_lname'], $archive['teacher_fname'])); ?>
+                                        </p>
+                                        <p><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?>
                                         </p>
                                     </div>
                                     <div class="popup-menu">

@@ -87,7 +87,7 @@
 .icon-text-in {
   display: none;
   flex-direction: column;
-  gap: 2px;
+  row-gap: 25px;
 }
 .icon-text-in span {
   font-weight: bold;
@@ -96,6 +96,11 @@
 }
 .icon-text-in p {
   font-size: 0.8rem;
+}
+.in-part{
+  display: flex;
+  row-gap: 5px;
+  flex-direction: column;
 }
 .G1 {
   background-color: #d2ebc4;

@@ -1,6 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/faculty-head.php';
-$page = 'SCES Faculty';
+$page = 'Sta. Clara Elementary School Faculty';
 $totalStudents = $db->getTotalTeacherStudent($teacherId);
 $totalLessons = $db->getTotalTeacherLesson($teacherId);
 $totalSubjects = $db->getTotalTeacherSubject($teacherId);

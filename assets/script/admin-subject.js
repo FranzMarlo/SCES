@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialize on page load
   setActiveTab();
-  
+
   const addSubjectBtn = document.getElementById("addSubjectBtn");
   const addSubjectModal = document.getElementById("addSubjectModal");
   const addSubjectForm = document.getElementById("addSubjectForm");
@@ -85,46 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
       addSubjectModal.style.display = "none";
       document.body.style.overflow = "auto";
     }
-  });
-
-  document.querySelectorAll(".edit-btn").forEach((editLink) => {
-    editLink.addEventListener("click", function () {
-      const subjectId = this.getAttribute("data-subject-id");
-      openPopupMenu.classList.remove("show");
-      editSubjectModal.style.display = "flex";
-      document.body.style.overflow = "hidden";
-
-      fetch("/SCES/backend/fetch-class.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `submitType=fetchSubjectDetails&subject_id=${subjectId}`,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // Fetch options and set values after they are populated
-          fetchOptions(data.level_id, "editSubject", "getSubjects", "Subject");
-          fetchOptions(data.level_id, "editSection", "getSections", "Section");
-
-          // Wait for dropdowns to be populated before setting values
-          setTimeout(() => {
-            document.getElementById("editSubjectIdHolder").value =
-              data.subject_id;
-            document.getElementById("editSubjectHolder").value = data.subject;
-            document.getElementById("editLevelIdHolder").value = data.level_id;
-            document.getElementById("editSectionIdHolder").value =
-              data.section_id;
-            document.getElementById("editTeacherIdHolder").value =
-              data.teacher_id;
-            document.getElementById("editGradeLevel").value = data.level_id;
-            document.getElementById("editSubject").value = data.subject;
-            document.getElementById("editSection").value = data.section_id;
-            document.getElementById("editTeacher").value = data.teacher_id;
-          }, 50);
-        })
-        .catch((error) => console.error("Error fetching subject data:", error));
-    });
   });
 
   closeEditSubjectModal.addEventListener("click", function () {
@@ -194,61 +154,123 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-  document.querySelectorAll(".archive-btn").forEach((editLink) => {
-    editLink.addEventListener("click", function () {
-      const subjectId = this.getAttribute("data-subject-id");
-      openPopupMenu.classList.remove("show");
-      Swal.fire({
-        title: "Do you want to archive this subject?",
-        text: "Archived subjects won't be visible to instructors and students",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-        confirmButtonColor: "#4caf50",
-        cancelButtonColor: "#f44336",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          archiveSubject(subjectId);
-        } else {
-          Swal.fire({
-            title: "Operation Cancelled",
-            icon: "info",
-            confirmButtonText: "Ok",
-            confirmButtonColor: "#4caf50",
-          });
-        }
-      });
-    });
-  });
+  document
+    .getElementById("subjectContainer")
+    .addEventListener("click", function (e) {
+      // Check if the clicked element is the archive button
+      if (e.target.classList.contains("archive-btn")) {
+        const subjectId = e.target.getAttribute("data-subject-id");
+        openPopupMenu?.classList.remove("show"); // Close the popup menu
+        Swal.fire({
+          title: "Do you want to archive this subject?",
+          text: "Archived subjects won't be visible to instructors and students",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          confirmButtonColor: "#4caf50",
+          cancelButtonColor: "#f44336",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            archiveSubject(subjectId);
+          } else {
+            Swal.fire({
+              title: "Operation Cancelled",
+              icon: "info",
+              confirmButtonText: "Ok",
+              confirmButtonColor: "#4caf50",
+            });
+          }
+        });
+      }
 
-  document.querySelectorAll(".not-archive-btn").forEach((editLink) => {
-    editLink.addEventListener("click", function () {
-      const subjectId = this.getAttribute("data-subject-id");
-      openPopupMenu.classList.remove("show");
-      Swal.fire({
-        title: "Do you want to re-enable this subject?",
-        text: "Archived subjects are not visible to instructors and students",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-        confirmButtonColor: "#4caf50",
-        cancelButtonColor: "#f44336",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          toggleArchivedSubject(subjectId);
-        } else {
-          Swal.fire({
-            title: "Operation Cancelled",
-            icon: "info",
-            confirmButtonText: "Ok",
-            confirmButtonColor: "#4caf50",
-          });
-        }
-      });
+      // Check if the clicked element is the edit button
+      if (e.target.classList.contains("edit-btn")) {
+        const subjectId = e.target.getAttribute("data-subject-id");
+
+        // Close any open popup menu
+        openPopupMenu?.classList.remove("show");
+
+        // Open the edit subject modal
+        editSubjectModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+
+        // Fetch the subject details
+        fetch("/SCES/backend/fetch-class.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `submitType=fetchSubjectDetails&subject_id=${subjectId}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Fetch options and set values after they are populated
+            fetchOptions(
+              data.level_id,
+              "editSubject",
+              "getSubjects",
+              "Subject"
+            );
+            fetchOptions(
+              data.level_id,
+              "editSection",
+              "getSections",
+              "Section"
+            );
+
+            // Wait for dropdowns to be populated before setting values
+            setTimeout(() => {
+              document.getElementById("editSubjectIdHolder").value =
+                data.subject_id;
+              document.getElementById("editSubjectHolder").value = data.subject;
+              document.getElementById("editLevelIdHolder").value =
+                data.level_id;
+              document.getElementById("editSectionIdHolder").value =
+                data.section_id;
+              document.getElementById("editTeacherIdHolder").value =
+                data.teacher_id;
+              document.getElementById("editGradeLevel").value = data.level_id;
+              document.getElementById("editSubject").value = data.subject;
+              document.getElementById("editSection").value = data.section_id;
+              document.getElementById("editTeacher").value = data.teacher_id;
+            }, 50);
+          })
+          .catch((error) =>
+            console.error("Error fetching subject data:", error)
+          );
+      }
     });
-  });
+  document
+    .getElementById("archivedContainer")
+    .addEventListener("click", function (e) {
+      if (e.target.classList.contains("not-archive-btn")) {
+        const subjectId = e.target.getAttribute("data-subject-id");
+        openPopupMenu.classList.remove("show");
+        Swal.fire({
+          title: "Do you want to re-enable this subject?",
+          text: "Archived subjects are not visible to instructors and students",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          confirmButtonColor: "#4caf50",
+          cancelButtonColor: "#f44336",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            toggleArchivedSubject(subjectId);
+          } else {
+            Swal.fire({
+              title: "Operation Cancelled",
+              icon: "info",
+              confirmButtonText: "Ok",
+              confirmButtonColor: "#4caf50",
+            });
+          }
+        });
+      }
+    });
+
   function archiveSubject(subjectId) {
     fetch("/SCES/backend/global.php", {
       method: "POST",
@@ -269,7 +291,9 @@ document.addEventListener("DOMContentLoaded", function () {
               allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.reload();
+                updateSubjectList();
+                updateArchiveList();
+                updateNoDataBox();
               }
             });
             break;
@@ -293,6 +317,35 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch((error) => console.error("Error fetching subject data:", error));
   }
+  function updateSubjectList() {
+    // Retain the current search term
+    const searchInput = document.getElementById("subjectSearch");
+    const searchTerm = searchInput.value.toLowerCase();
+
+    // Fetch updated subjects
+    fetch("/SCES/backend/global.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "submitType=refreshSubject",
+    })
+      .then((response) => response.text())
+      .then((html) => {
+        // Update the subject container with refreshed data
+        const subjectContainer = document.getElementById("subjectContainer");
+        subjectContainer.innerHTML = html;
+
+        // Reapply the search filter
+        if (searchTerm.trim() !== "") {
+          filterSubjects();
+        }
+        updateSubjectNoDataBox();
+        updateArchivedNoDataBox();
+      })
+      .catch((error) => console.error("Error updating subject list:", error));
+  }
+
   function toggleArchivedSubject(subjectId) {
     fetch("/SCES/backend/global.php", {
       method: "POST",
@@ -313,7 +366,8 @@ document.addEventListener("DOMContentLoaded", function () {
               allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.reload();
+                updateSubjectList();
+                updateArchiveList();
               }
             });
             break;
@@ -336,6 +390,56 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .catch((error) => console.error("Error fetching subject data:", error));
+  }
+
+  function updateArchiveList() {
+    // Retain the current search term
+    const searchInput = document.getElementById("subjectSearch");
+    const searchTerm = searchInput.value.toLowerCase();
+
+    // Fetch updated subjects
+    fetch("/SCES/backend/global.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "submitType=refreshArchived",
+    })
+      .then((response) => response.text())
+      .then((html) => {
+        // Update the subject container with refreshed data
+        const subjectContainer = document.getElementById("archivedContainer");
+        subjectContainer.innerHTML = html;
+
+        // Reapply the search filter
+        if (searchTerm.trim() !== "") {
+          filterSubjects();
+        }
+        updateSubjectNoDataBox();
+        updateArchivedNoDataBox();
+      })
+      .catch((error) => console.error("Error updating subject list:", error));
+  }
+  function updateSubjectNoDataBox() {
+    const subjectContainer = document.getElementById("subjectContainer");
+    const subjectItems = subjectContainer.querySelectorAll(".subject-item");
+
+    if (subjectItems.length === 0) {
+      subjectContainer.classList.add("no-data-box-centered");
+    } else {
+      subjectContainer.classList.remove("no-data-box-centered");
+    }
+  }
+
+  function updateArchivedNoDataBox() {
+    const subjectContainer = document.getElementById("archivedContainer");
+    const subjectItems = subjectContainer.querySelectorAll(".subject-item");
+
+    if (subjectItems.length === 0) {
+      subjectContainer.classList.add("no-data-box-centered");
+    } else {
+      subjectContainer.classList.remove("no-data-box-centered");
+    }
   }
 });
 

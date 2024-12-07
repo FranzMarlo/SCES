@@ -1943,7 +1943,7 @@ if (isset($_POST['submitType'])) {
         }
     } else if ($_POST['submitType'] === 'addSectionData') {
         $addGradeLevel = validate($_POST['addGradeLevel']);
-        $addSection = ucwords(strtolower(validate($_POST['addSection'])));
+        $addSection = validate($_POST['addSection']);
         $addTeacher = validate($_POST['addTeacher']);
         $checkSection = $db->checkSectionName($addSection, $addGradeLevel);
         if ($checkSection->num_rows > 0) {
@@ -1981,7 +1981,7 @@ if (isset($_POST['submitType'])) {
         $editSectionIdHolder = $_POST['editSectionIdHolder'];
         $editTeacherIdHolder = $_POST['editTeacherIdHolder'];
         $editGradeLevel = validate($_POST['editGradeLevel']);
-        $editSection = ucwords(strtolower(validate($_POST['editSection'])));
+        $editSection = validate($_POST['editSection']);
         $editTeacher = validate($_POST['editTeacher']);
         $checkSection = $db->checkSectionName($editSection, $editGradeLevel);
         if (
@@ -2378,6 +2378,205 @@ if (isset($_POST['submitType'])) {
             echo '400';
             exit();
         }
+    } else if ($_POST['submitType'] === 'refreshSubject') {
+        $subjects = $db->getAdminSubjects();
+
+        if ($subjects):
+            foreach ($subjects as $subject): ?>
+                <div class="subject-item"
+                    data-subject-name="<?php echo htmlspecialchars($subject['subject']); ?>"
+                    data-subject-year="<?php echo htmlspecialchars($subject['year']); ?>"
+                    data-subject-section="<?php echo htmlspecialchars($subject['section']); ?>"
+                    data-subject-level="<?php echo htmlspecialchars($subject['grade_level']); ?>">
+                    <a href="/SCES/frontend/admin/subject-module.php?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject_id']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>&teacher=<?php echo urlencode($subject['teacher_id']); ?>"
+                        class="hidden-link"></a>
+                    <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>"
+                        onclick="hiddenLink(this)">
+                        <button class="subject-btn" onclick="subjectBtn(event, this)">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <div class="subject-in-title" onclick="hiddenLink(this)">
+                            <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
+                            <div class="in-part">
+                                <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                                <span><?php echo htmlspecialchars('SY: ' . ($subject['year'] - 1) . ' - ' . $subject['year']); ?></span>
+                            </div>
+                        </div>
+                        <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>"
+                            alt="<?php echo htmlspecialchars($subject['icon']); ?>">
+                    </div>
+                    <div class="subject-title" onclick="hiddenLink(this)">
+                        <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
+                        <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                        <span><?php echo htmlspecialchars('SY: ' . ($subject['year'] - 1) . ' - ' . $subject['year']); ?></span>
+                    </div>
+                    <div class="popup-menu">
+                        <ul>
+                            <li><a href="javascript:void(0)" class="edit-btn"
+                                    data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Edit</a>
+                            </li>
+                            <li><a href="javascript:void(0)" class="archive-btn"
+                                    data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Archive</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            <?php endforeach;?>
+        <?php else: ?>
+            <div class="no-data-box">
+                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                <h1>No subject found.</h1>
+            </div>
+        <?php endif;
+        exit;
+    } else if ($_POST['submitType'] === 'refreshArchived') {
+        $archived = $db->getAdminArchivedSubjects();
+
+        if ($archived):
+            foreach ($archived as $archive): ?>
+                <div class="subject-item"
+                    data-subject-name="<?php echo htmlspecialchars($archive['subject']); ?>"
+                    data-subject-year="<?php echo htmlspecialchars($archive['year']); ?>"
+                    data-subject-section="<?php echo htmlspecialchars($archive['section']); ?>"
+                    data-subject-level="<?php echo htmlspecialchars($archive['grade_level']); ?>">
+                    <a href="/SCES/frontend/admin/subject-module.php?section=<?php echo urlencode($archive['section_id']); ?>&subject=<?php echo urlencode($archive['subject_id']); ?>&gradelevel=<?php echo urlencode($archive['level_id']); ?>&teacher=<?php echo urlencode($archive['teacher_id']); ?>"
+                        class="hidden-link"></a>
+                    <div class="subject-icon <?php echo strtolower($archive['subject_code']); ?>"
+                        onclick="hiddenLink(this)">
+                        <button class="subject-btn" onclick="subjectBtn(event, this)">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <div class="subject-in-title" onclick="hiddenLink(this)">
+                            <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
+                            <div class="in-part">
+                                <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
+                                <span><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?></span>
+                            </div>
+                        </div>
+                        <img src="/SCES/assets/images/<?php echo htmlspecialchars($archive['icon']); ?>"
+                            alt="<?php echo htmlspecialchars($archive['icon']); ?>">
+                    </div>
+                    <div class="subject-title" onclick="hiddenLink(this)">
+                        <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
+                        <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
+                        <span><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?></span>
+                    </div>
+                    <div class="popup-menu">
+                        <ul>
+                            <li><a href="javascript:void(0)" class="not-archive-btn"
+                                    data-subject-id="<?php echo htmlspecialchars($archive['subject_id']); ?>">Enable</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="no-data-box">
+                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                <h1>No archived subject found.</h1>
+            </div>
+        <?php endif;
+        exit;
+    } else if ($_POST['submitType'] === 'facultyRefreshSubject') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $subjects = $db->getFacultySubjects($teacherId);
+
+        if ($subjects):
+            foreach ($subjects as $subject): ?>
+                <div class="subject-item"
+                    data-subject-name="<?php echo htmlspecialchars($subject['subject']); ?>"
+                    data-subject-year="<?php echo htmlspecialchars($subject['year']); ?>"
+                    data-subject-section="<?php echo htmlspecialchars($subject['section']); ?>"
+                    data-subject-level="<?php echo htmlspecialchars($subject['grade_level']); ?>">
+                    <a href="/SCES/frontend/faculty/subject-module.php?section=<?php echo urlencode($subject['section_id']); ?>&subject=<?php echo urlencode($subject['subject_id']); ?>&gradelevel=<?php echo urlencode($subject['level_id']); ?>"
+                    class="hidden-link"></a>
+                    <div class="subject-icon <?php echo strtolower($subject['subject_code']); ?>"
+                        onclick="hiddenLink(this)">
+                        <button class="subject-btn" onclick="subjectBtn(event, this)">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <div class="subject-in-title" onclick="hiddenLink(this)">
+                            <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
+                            <div class="in-part">
+                                <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                                <span><?php echo htmlspecialchars('SY: ' . ($subject['year'] - 1) . ' - ' . $subject['year']); ?></span>
+                            </div>
+                        </div>
+                        <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>"
+                            alt="<?php echo htmlspecialchars($subject['icon']); ?>">
+                    </div>
+                    <div class="subject-title" onclick="hiddenLink(this)">
+                        <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
+                        <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
+                        <span><?php echo htmlspecialchars('SY: ' . ($subject['year'] - 1) . ' - ' . $subject['year']); ?></span>
+                    </div>
+                    <div class="popup-menu">
+                        <ul>
+                            <li><a href="javascript:void(0)" class="archive-btn"
+                                    data-subject-id="<?php echo htmlspecialchars($subject['subject_id']); ?>">Archive</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            <?php endforeach;?>
+        <?php else: ?>
+            <div class="no-data-box">
+                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                <h1>No subject found.</h1>
+            </div>
+        <?php endif;
+        exit;
+    } else if ($_POST['submitType'] === 'facultyRefreshArchived') {
+        session_start();
+        $teacherId = $_SESSION['teacher_id'];
+        $archived = $db->getArchivedFacultySubjects($teacherId);
+
+        if ($archived):
+            foreach ($archived as $archive): ?>
+                <div class="subject-item"
+                    data-subject-name="<?php echo htmlspecialchars($archive['subject']); ?>"
+                    data-subject-year="<?php echo htmlspecialchars($archive['year']); ?>"
+                    data-subject-section="<?php echo htmlspecialchars($archive['section']); ?>"
+                    data-subject-level="<?php echo htmlspecialchars($archive['grade_level']); ?>">
+                    <a href="/SCES/frontend/faculty/subject-module.php?section=<?php echo urlencode($archive['section_id']); ?>&subject=<?php echo urlencode($archive['subject_id']); ?>&gradelevel=<?php echo urlencode($archive['level_id']); ?>"
+                    class="hidden-link"></a>
+                    <div class="subject-icon <?php echo strtolower($archive['subject_code']); ?>"
+                        onclick="hiddenLink(this)">
+                        <button class="subject-btn" onclick="subjectBtn(event, this)">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <div class="subject-in-title" onclick="hiddenLink(this)">
+                            <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
+                            <div class="in-part">
+                                <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
+                                <span><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?></span>
+                            </div>
+                        </div>
+                        <img src="/SCES/assets/images/<?php echo htmlspecialchars($archive['icon']); ?>"
+                            alt="<?php echo htmlspecialchars($archive['icon']); ?>">
+                    </div>
+                    <div class="subject-title" onclick="hiddenLink(this)">
+                        <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
+                        <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
+                        <span><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?></span>
+                    </div>
+                    <div class="popup-menu">
+                        <ul>
+                            <li><a href="javascript:void(0)" class="not-archive-btn"
+                                    data-subject-id="<?php echo htmlspecialchars($archive['subject_id']); ?>">Enable</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="no-data-box">
+                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                <h1>No archived subject found.</h1>
+            </div>
+        <?php endif;
+        exit;
     } else {
         echo '400';
     }

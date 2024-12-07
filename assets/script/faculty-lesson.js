@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
             imageElement.onerror = function () {
               this.src = "/SCES/storage/student/images/default-profile.png";
             };
-            document.getElementById("studId").textContent = student.student_id;
+            document.getElementById("studId").textContent = subject_name;
             document
               .getElementById("studentRecordsTab")
               .setAttribute("data-student-id", student.student_id);
@@ -1593,7 +1593,7 @@ document.addEventListener("DOMContentLoaded", function () {
             imageElement.onerror = function () {
               this.src = "/SCES/storage/student/images/default-profile.png";
             };
-            document.getElementById("studId").textContent = student.student_id;
+            document.getElementById("studId").textContent = subject_name;
             document
               .getElementById("studentRecordsTab")
               .setAttribute("data-student-id", student.student_id);

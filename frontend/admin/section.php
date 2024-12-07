@@ -60,8 +60,12 @@ $page = '';
                                         </button>
                                         <div class="icon-text-in" onclick="sectionLink(this)">
                                             <span><?php echo htmlspecialchars($section['grade_level'] . ' - ' . $section['section']); ?></span>
-                                            <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?>
-                                            </p>
+                                            <div class="in-part">
+                                                <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?>
+                                                </p>
+                                                <p><?php echo htmlspecialchars('SY: ' . ($section['year'] - 1) . ' - ' . $section['year']); ?>
+                                                </p>
+                                            </div>
                                         </div>
                                         <img src="/SCES/assets/images/<?php echo $section['short']; ?>.png"
                                             alt="<?php echo $section['short']; ?> icon">
@@ -69,6 +73,8 @@ $page = '';
                                     <div class="icon-text" onclick="sectionLink(this)">
                                         <span><?php echo htmlspecialchars($section['grade_level'] . ' - ' . $section['section']); ?></span>
                                         <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?>
+                                        </p>
+                                        <p><?php echo htmlspecialchars('SY: ' . ($section['year'] - 1) . ' - ' . $section['year']); ?>
                                         </p>
                                     </div>
                                     <div class="popup-menu">
@@ -107,8 +113,12 @@ $page = '';
                                         </button>
                                         <div class="icon-text-in" onclick="sectionLink(this)">
                                             <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
-                                            <p><?php echo htmlspecialchars(getAdviser($archive['gender'], $archive['teacher_lname'], $archive['teacher_fname'])); ?>
-                                            </p>
+                                            <div class="in-part">
+                                                <p><?php echo htmlspecialchars(getAdviser($archive['gender'], $archive['teacher_lname'], $archive['teacher_fname'])); ?>
+                                                </p>
+                                                <p><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?>
+                                                </p>
+                                            </div>
                                         </div>
                                         <img src="/SCES/assets/images/<?php echo $archive['short']; ?>.png"
                                             alt="<?php echo $archive['short']; ?> icon">
@@ -117,6 +127,8 @@ $page = '';
                                         <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
                                         <p><?php echo htmlspecialchars(getAdviser($archive['gender'], $archive['teacher_lname'], $archive['teacher_fname'])); ?>
                                         </p>
+                                        <p><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?>
+                                                </p>
                                     </div>
                                     <div class="popup-menu">
                                         <ul>

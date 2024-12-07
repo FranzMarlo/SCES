@@ -21,6 +21,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SCES/frontend/faculty/partials/password-he
                 <div class="column right">
                     <div class="form-wrapper">
                         <form id="facultyChangePass">
+                            <img src="/SCES/assets/images/logo.png" alt="sces logo" class="logo-img" />
                             <h1>Set Up New Password</h1>
                             <div class="input-icons-recover">
                                 <span>Enter and confirm your new password. Your new password must be at least 6

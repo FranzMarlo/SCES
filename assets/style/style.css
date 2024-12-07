@@ -70,6 +70,11 @@ body {
   flex-direction: column;
   justify-content: center;
 }
+.logo-img{
+  align-self: center;
+  height: 130px;
+  width: 130px;
+}
 .link-text{
   right: 10px;
   font-size: 0.9rem;
@@ -124,7 +129,8 @@ a.button-container{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 70px;
+  padding: 20px;
+  padding-bottom: 40px;
 }
 .form-wrapper form.form-40px {
   padding: 30px;
@@ -285,7 +291,10 @@ input[type="number"]::-webkit-outer-spin-button {
 .error-container a:hover {
   background-color: #FFDADA;
 }
-@media (width < 1199px) {
+@media (max-width: 1200px) {
+   .input-icons-span {
+    width: 80%;
+  }
   .separator {
     margin-left: 10px;
     width: 100%;
@@ -329,12 +338,19 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 3rem;
   }
 }
-@media (width < 992px) {
+@media (max-width: 992px) {
   .form-wrapper form h1 {
     font-size: 1.5rem;
   }
+  .input-icons-span {
+    width: 85%;
+  }
+  .logo-img{
+    height: 120px;
+    width: 120px;
+  }
 }
-@media (width < 767px) {
+@media (max-width: 768px) {
   .opening {
     padding-top: 10px;
   }
@@ -408,8 +424,16 @@ input[type="number"]::-webkit-outer-spin-button {
   .form-wrapper form .input-icons select {
     height: 40px;
   }
+  .logo-img{
+    height: 110px;
+    width: 110px;
+  }
 }
-@media (width < 600px) {
+@media (max-width: 600px) {
+  .logo-img{
+    height: 100px;
+    width: 100px;
+  }
   .opening {
     padding-top: 10px;
   }
