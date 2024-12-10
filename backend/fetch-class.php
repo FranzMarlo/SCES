@@ -1159,23 +1159,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $labels = [];
             $maxGrades = [];
             $minGrades = [];
+            $maxSubjects = [];
+            $minSubjects = [];
 
             foreach ($grades as $grade) {
-                $labels[] = $grade['grade_level'];
-                $maxGrades[] = $grade['max_grade'];
-                $minGrades[] = $grade['min_grade'];
+                if ($year === 'All' && $gradeLevel === 'All') {
+                    $labels[] = $grade['grade_level'];
+                    $maxGrades[] = $grade['max_grade'];
+                    $minGrades[] = $grade['min_grade'];
+                    $maxSubjects[] = $grade['max_subject'];
+                    $minSubjects[] = $grade['min_subject'];
+                } elseif ($year === 'All') {
+                    $labels[] = $grade['subject'];
+                    $maxGrades[] = $grade['max_grade'];
+                    $minGrades[] = $grade['min_grade'];
+                } elseif ($gradeLevel === 'All') {
+                    $labels[] = $grade['grade_level'];
+                    $maxGrades[] = $grade['max_grade'];
+                    $minGrades[] = $grade['min_grade'];
+                    $maxSubjects[] = $grade['max_subject'];
+                    $minSubjects[] = $grade['min_subject'];
+                } else {
+                    $labels[] = $grade['subject'];
+                    $maxGrades[] = $grade['max_grade'];
+                    $minGrades[] = $grade['min_grade'];
+                }
             }
 
             echo json_encode([
                 'labels' => $labels,
                 'maxGrades' => $maxGrades,
-                'minGrades' => $minGrades
+                'minGrades' => $minGrades,
+                'maxSubjects' => $maxSubjects,
+                'minSubjects' => $minSubjects
             ]);
         } else {
             echo json_encode([
                 'labels' => [],
                 'maxGrades' => [],
-                'minGrades' => []
+                'minGrades' => [],
+                'maxSubjects' => [],
+                'minSubjects' => []
             ]);
         }
     } else {

@@ -65,6 +65,16 @@ $page = '';
                             <div class="tab-item" id="archivedTab">Archived</div>
                         </div>
                         <div class="search-container">
+                            <select id="yearFilterDropdown" class="filter-dropdown">
+                                <option value="all">All Years</option>
+                                <option value="<?php echo date("Y"); ?>">Current SY</option>
+                                <?php
+                                $currentYear = date("Y") - 1;
+                                for ($year = $currentYear; $year >= 2019; $year--) {
+                                    echo "<option value='$year'>$year-" . ($year + 1) . "</option>";
+                                }
+                                ?>
+                            </select>
                             <input type="text" id="subjectSearch" placeholder="Search Subject"
                                 onkeyup="filterSubjects()">
                             <i class="fa fa-search search-icon"></i>

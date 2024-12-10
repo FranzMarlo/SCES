@@ -3562,7 +3562,7 @@ class fetchClass extends db_connect
                 section_tbl section ON record.section_id = section.section_id
             INNER JOIN 
                 subject_tbl subject ON record.section_id = subject.section_id
-            IINNER JOIN 
+            INNER JOIN 
                 grade_tbl grade ON subject.subject_id = grade.subject_id AND grade.student_id = student.student_id
             WHERE 
                 grade.grade IS NOT NULL
@@ -4800,83 +4800,145 @@ class fetchClass extends db_connect
     {
         if ($year === 'All' && $gradeLevel === 'All') {
             $query = $this->conn->prepare("
-        SELECT 
-            level_tbl.grade_level,
-            MAX(grade_tbl.grade) AS max_grade,
-            MIN(grade_tbl.grade) AS min_grade
-        FROM 
-            grade_tbl
-        INNER JOIN
-            subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
-        INNER JOIN
-            level_tbl ON subject_tbl.level_id = level_tbl.level_id
-        GROUP BY level_tbl.grade_level
+            SELECT 
+                level_tbl.grade_level AS grade_level,
+                MAX(CASE WHEN grade_tbl.grade = max_grades.max_grade THEN subject_tbl.subject END) AS max_subject,
+                max_grades.max_grade AS max_grade,
+                MAX(CASE WHEN grade_tbl.grade = min_grades.min_grade THEN subject_tbl.subject END) AS min_subject,
+                min_grades.min_grade AS min_grade
+            FROM 
+                grade_tbl
+            INNER JOIN
+                subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
+            INNER JOIN
+                level_tbl ON subject_tbl.level_id = level_tbl.level_id
+            INNER JOIN 
+                (SELECT 
+                    level_tbl.grade_level, 
+                    MAX(grade_tbl.grade) AS max_grade 
+                 FROM 
+                    grade_tbl
+                 INNER JOIN 
+                    subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
+                 INNER JOIN 
+                    level_tbl ON subject_tbl.level_id = level_tbl.level_id
+                 GROUP BY 
+                    level_tbl.grade_level
+                ) max_grades ON max_grades.grade_level = level_tbl.grade_level
+            INNER JOIN 
+                (SELECT 
+                    level_tbl.grade_level, 
+                    MIN(grade_tbl.grade) AS min_grade 
+                 FROM 
+                    grade_tbl
+                 INNER JOIN 
+                    subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
+                 INNER JOIN 
+                    level_tbl ON subject_tbl.level_id = level_tbl.level_id
+                 GROUP BY 
+                    level_tbl.grade_level
+                ) min_grades ON min_grades.grade_level = level_tbl.grade_level
+            GROUP BY 
+                level_tbl.grade_level, max_grades.max_grade, min_grades.min_grade
         ");
         } elseif ($year === 'All') {
             $query = $this->conn->prepare("
-        SELECT 
-            level_tbl.grade_level,
-            MAX(grade_tbl.grade) AS max_grade,
-            MIN(grade_tbl.grade) AS min_grade
-        FROM 
-            grade_tbl
-        INNER JOIN
-            subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
-        INNER JOIN
-            level_tbl ON subject_tbl.level_id = level_tbl.level_id
-        WHERE 
-            level_tbl.grade_level = ?
-        GROUP BY level_tbl.grade_level
+            SELECT 
+                subject_tbl.subject AS subject,
+                MAX(grade_tbl.grade) AS max_grade,
+                MIN(grade_tbl.grade) AS min_grade
+            FROM 
+                grade_tbl
+            INNER JOIN
+                subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
+            INNER JOIN
+                level_tbl ON subject_tbl.level_id = level_tbl.level_id
+            WHERE 
+                level_tbl.grade_level = ?
+            GROUP BY 
+                subject_tbl.subject
         ");
             $query->bind_param("s", $gradeLevel);
         } elseif ($gradeLevel === 'All') {
             $query = $this->conn->prepare("
-        SELECT 
-            level_tbl.grade_level,
-            MAX(grade_tbl.grade) AS max_grade,
-            MIN(grade_tbl.grade) AS min_grade
-        FROM 
-            grade_tbl
-        INNER JOIN
-            subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
-        INNER JOIN
-            level_tbl ON subject_tbl.level_id = level_tbl.level_id
-        WHERE 
-            subject_tbl.year = ?
-        GROUP BY level_tbl.grade_level
+            SELECT 
+                level_tbl.grade_level AS grade_level,
+                MAX(CASE WHEN grade_tbl.grade = max_grades.max_grade THEN subject_tbl.subject END) AS max_subject,
+                max_grades.max_grade AS max_grade,
+                MAX(CASE WHEN grade_tbl.grade = min_grades.min_grade THEN subject_tbl.subject END) AS min_subject,
+                min_grades.min_grade AS min_grade
+            FROM 
+                grade_tbl
+            INNER JOIN
+                subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
+            INNER JOIN
+                level_tbl ON subject_tbl.level_id = level_tbl.level_id
+            INNER JOIN 
+                (SELECT 
+                    level_tbl.grade_level, 
+                    MAX(grade_tbl.grade) AS max_grade 
+                 FROM 
+                    grade_tbl
+                 INNER JOIN 
+                    subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
+                 INNER JOIN 
+                    level_tbl ON subject_tbl.level_id = level_tbl.level_id
+                 WHERE 
+                    subject_tbl.year = ?
+                 GROUP BY 
+                    level_tbl.grade_level
+                ) max_grades ON max_grades.grade_level = level_tbl.grade_level
+            INNER JOIN 
+                (SELECT 
+                    level_tbl.grade_level, 
+                    MIN(grade_tbl.grade) AS min_grade 
+                 FROM 
+                    grade_tbl
+                 INNER JOIN 
+                    subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
+                 INNER JOIN 
+                    level_tbl ON subject_tbl.level_id = level_tbl.level_id
+                 WHERE 
+                    subject_tbl.year = ?
+                 GROUP BY 
+                    level_tbl.grade_level
+                ) min_grades ON min_grades.grade_level = level_tbl.grade_level
+            WHERE 
+                subject_tbl.year = ?
+            GROUP BY 
+                level_tbl.grade_level, max_grades.max_grade, min_grades.min_grade
         ");
-            $query->bind_param("i", $year);
+            $query->bind_param("iii", $year, $year, $year);
         } else {
             $query = $this->conn->prepare("
-        SELECT 
-            level_tbl.grade_level,
-            MAX(grade_tbl.grade) AS max_grade,
-            MIN(grade_tbl.grade) AS min_grade
-        FROM 
-            grade_tbl
-        INNER JOIN
-            subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
-        INNER JOIN
-            level_tbl ON subject_tbl.level_id = level_tbl.level_id
-        WHERE 
-            subject_tbl.year = ?
-        AND 
-            level_tbl.grade_level = ?
-        GROUP BY level_tbl.grade_level
+            SELECT 
+                subject_tbl.subject AS subject,
+                MAX(grade_tbl.grade) AS max_grade,
+                MIN(grade_tbl.grade) AS min_grade
+            FROM 
+                grade_tbl
+            INNER JOIN
+                subject_tbl ON grade_tbl.subject_id = subject_tbl.subject_id
+            INNER JOIN
+                level_tbl ON subject_tbl.level_id = level_tbl.level_id
+            WHERE 
+                subject_tbl.year = ?
+            AND 
+                level_tbl.grade_level = ?
+            GROUP BY 
+                subject_tbl.subject
         ");
             $query->bind_param("is", $year, $gradeLevel);
         }
 
-        if ($query->execute()) {
-            $result = $query->get_result();
-            $data = [];
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
+        if (isset($query)) {
+            if ($query->execute()) {
+                $result = $query->get_result();
+                return $result->fetch_all(MYSQLI_ASSOC);
             }
-            return $data; // Return all grouped data
         }
 
-        return null; // Return null if query fails
+        return null;
     }
 
 }

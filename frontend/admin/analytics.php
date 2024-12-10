@@ -71,14 +71,14 @@ $page = '';
                         <img src="/SCES/assets/images/outstanding.png" alt="outstanding.png">
                         <div class="stats-col">
                             <span id="totalHonors"></span>
-                            <p>Total Honors</p>
+                            <p>Total Honor Student</p>
                         </div>
                     </div>
                     <div class="stats-box pastel-blue">
                         <img src="/SCES/assets/images/quiz-passed.png" alt="quiz-passed.png">
                         <div class="stats-col">
                             <span id="totalPassed"></span>
-                            <p>Total Passed</p>
+                            <p>Total Passed Student</p>
                         </div>
                     </div>
                 </div>
@@ -120,4 +120,4 @@ $page = '';
     <script src="/SCES/assets/script/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-    <script src="/SCES/assets/script/admin-analytics.js"></script>
+    <script src="/SCES/assets/script/analytics.js"></script>

@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+  document
+  .getElementById("yearSectionFilter")
+  .addEventListener("change", filterSections);
   const sectionTab = document.getElementById("sectionTab");
   const archivedTab = document.getElementById("archivedTab");
   const sectionContainer = document.getElementById("sectionContainer");

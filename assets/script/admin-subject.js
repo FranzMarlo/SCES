@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+  document
+  .getElementById("yearFilterDropdown")
+  .addEventListener("change", filterSubjects);
   const subjectTab = document.getElementById("subjectTab");
   const archivedTab = document.getElementById("archivedTab");
   const subjectContainer = document.getElementById("subjectContainer");

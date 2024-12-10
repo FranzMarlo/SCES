@@ -36,6 +36,16 @@ $page = '';
                             <div class="tab-item" id="archivedTab">Archived</div>
                         </div>
                         <div class="search-container">
+                            <select id="yearSectionFilter" class="filter-dropdown">
+                                <option value="all">All Years</option>
+                                <option value="<?php echo date("Y"); ?>">Current SY</option>
+                                <?php
+                                $currentYear = date("Y") - 1;
+                                for ($year = $currentYear; $year >= 2019; $year--) {
+                                    echo "<option value='$year'>$year-" . ($year + 1) . "</option>";
+                                }
+                                ?>
+                            </select>
                             <input type="text" id="sectionSearch" placeholder="Search Section"
                                 onkeyup="filterSections()">
                             <i class="fa fa-search search-icon"></i>
@@ -128,7 +138,7 @@ $page = '';
                                         <p><?php echo htmlspecialchars(getAdviser($archive['gender'], $archive['teacher_lname'], $archive['teacher_fname'])); ?>
                                         </p>
                                         <p><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?>
-                                                </p>
+                                        </p>
                                     </div>
                                     <div class="popup-menu">
                                         <ul>

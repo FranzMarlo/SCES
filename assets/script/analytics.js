@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function initializeBarChart(year, grade) {
     var ctxBar = document.getElementById("barChart").getContext("2d");
 
+    // Destroy existing chart instance if it exists
     if (Chart.getChart("barChart")) {
       Chart.getChart("barChart").destroy();
     }
@@ -71,21 +72,27 @@ document.addEventListener("DOMContentLoaded", function () {
         gradeLevel: grade,
       },
       success: function (data) {
+        const labels = data.labels || ["No Data"];
+        const maxGrades = data.maxGrades || [0];
+        const minGrades = data.minGrades || [0];
+        const maxSubjects = data.maxSubjects || [];
+        const minSubjects = data.minSubjects || [];
+
         new Chart(ctxBar, {
           type: "bar",
           data: {
-            labels: data.labels || ["No Data"],
+            labels: labels,
             datasets: [
               {
                 label: "Highest Grade",
-                data: data.maxGrades || [0],
+                data: maxGrades,
                 backgroundColor: "#8CD47E",
                 borderColor: "#ccc",
                 borderWidth: 2,
               },
               {
                 label: "Lowest Grade",
-                data: data.minGrades || [0],
+                data: minGrades,
                 backgroundColor: "#FF6961",
                 borderColor: "#ccc",
                 borderWidth: 2,
@@ -98,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
             plugins: {
               title: {
                 display: true,
-                text: "Highest and Lowest Grades by Grade Level",
+                text: "Highest and Lowest Grades",
                 font: {
                   size: 18,
                 },
@@ -110,6 +117,31 @@ document.addEventListener("DOMContentLoaded", function () {
               legend: {
                 display: true,
                 position: "bottom",
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    const datasetIndex = tooltipItem.datasetIndex; // 0: Highest Grade, 1: Lowest Grade
+                    const value = tooltipItem.raw; // Grade value
+                    const gradeType =
+                      datasetIndex === 0 ? "Highest Grade" : "Lowest Grade";
+
+                    let tooltipText = `${gradeType}: ${value}`;
+
+                    if (grade === "All") {
+                      const maxSubject = maxSubjects[tooltipItem.dataIndex];
+                      const minSubject = minSubjects[tooltipItem.dataIndex];
+
+                      if (datasetIndex === 0 && maxSubject) {
+                        tooltipText += `, Subject: ${maxSubject}`;
+                      } else if (datasetIndex === 1 && minSubject) {
+                        tooltipText += `, Subject: ${minSubject}`;
+                      }
+                    }
+
+                    return tooltipText;
+                  },
+                },
               },
             },
             scales: {

@@ -2,12 +2,15 @@ function filterSubjects() {
   const searchTerm = document
     .getElementById("subjectSearch")
     .value.toLowerCase();
+  const selectedYear = document
+    .getElementById("yearFilterDropdown")
+    .value.toLowerCase();
   const subjectItems = document.querySelectorAll(".subject-item");
 
   let anyVisibleSubject = false;
   let anyVisibleArchived = false;
 
-  // Loop through all subject items and filter by search term
+  // Loop through all subject items and filter by search term and year
   subjectItems.forEach(function (subjectItem) {
     const subjectName = subjectItem
       .getAttribute("data-subject-name")
@@ -22,13 +25,15 @@ function filterSubjects() {
       .getAttribute("data-subject-level")
       .toLowerCase();
 
-    // Check if the item matches the search term
-    if (
+    // Check if the item matches the search term and the selected year
+    const matchesSearchTerm =
       subjectName.includes(searchTerm) ||
-      subjectYear.includes(searchTerm) ||
       subjectSection.includes(searchTerm) ||
-      subjectLevel.includes(searchTerm)
-    ) {
+      subjectLevel.includes(searchTerm);
+
+    const matchesYear = selectedYear === "all" || subjectYear === selectedYear;
+
+    if (matchesSearchTerm && matchesYear) {
       // Show the item if it belongs to either the subject or archived container
       if (subjectItem.closest("#subjectContainer")) {
         subjectItem.style.display = "flex";
@@ -38,7 +43,7 @@ function filterSubjects() {
         anyVisibleArchived = true;
       }
     } else {
-      subjectItem.style.display = "none"; // Hide if it doesn't match the search term
+      subjectItem.style.display = "none"; // Hide if it doesn't match the criteria
     }
   });
 
@@ -60,7 +65,6 @@ function filterSubjects() {
       document.getElementById("subjectContainer").appendChild(noDataBoxSubject);
     }
   } else if (noDataBoxSubject) {
-    // Remove the no-data-box if subjects are visible
     document
       .getElementById("subjectContainer")
       .classList.remove("no-data-box-centered");
@@ -98,12 +102,15 @@ function filterSections() {
   const searchTerm = document
     .getElementById("sectionSearch")
     .value.toLowerCase();
+  const yearFilter = document
+    .getElementById("yearSectionFilter")
+    .value.toLowerCase(); // Get selected year from the dropdown
   const sectionItems = document.querySelectorAll(".section-item");
 
   let anyVisibleSection = false;
   let anyVisibleArchived = false;
 
-  // Loop through all section items and filter by search term
+  // Loop through all section items and filter by search term and selected year
   sectionItems.forEach(function (sectionItem) {
     const adviserName = sectionItem
       .getAttribute("data-section-adviser")
@@ -118,12 +125,13 @@ function filterSections() {
       .getAttribute("data-section-level")
       .toLowerCase();
 
-    // Check if the item matches the search term
+    // Check if the item matches both the search term and selected year
     if (
-      adviserName.includes(searchTerm) ||
-      sectionYear.includes(searchTerm) ||
-      sectionSection.includes(searchTerm) ||
-      sectionLevel.includes(searchTerm)
+      (adviserName.includes(searchTerm) ||
+        sectionYear.includes(searchTerm) ||
+        sectionSection.includes(searchTerm) ||
+        sectionLevel.includes(searchTerm)) &&
+      (yearFilter === "all" || sectionYear === yearFilter)
     ) {
       // Show the item if it belongs to either the section or archived container
       if (sectionItem.closest("#sectionContainer")) {
@@ -134,7 +142,7 @@ function filterSections() {
         anyVisibleArchived = true;
       }
     } else {
-      sectionItem.style.display = "none"; // Hide if it doesn't match the search term
+      sectionItem.style.display = "none"; // Hide if it doesn't match the search term or selected year
     }
   });
 
@@ -147,9 +155,9 @@ function filterSections() {
       noDataBoxSection = document.createElement("div");
       noDataBoxSection.classList.add("no-data-box");
       noDataBoxSection.innerHTML = `
-                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
-                <h1>No section found.</h1>
-            `;
+                  <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                  <h1>No section found.</h1>
+              `;
       document
         .getElementById("sectionContainer")
         .classList.add("no-data-box-centered");
@@ -172,9 +180,9 @@ function filterSections() {
       noDataBoxArchived = document.createElement("div");
       noDataBoxArchived.classList.add("no-data-box");
       noDataBoxArchived.innerHTML = `
-                <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
-                <h1>No archived section found.</h1>
-            `;
+                  <img src="/SCES/assets/images/no-data-icon.png" alt="no-data-icon.png">
+                  <h1>No archived section found.</h1>
+              `;
       document
         .getElementById("archivedContainer")
         .classList.add("no-data-box-centered");
@@ -194,12 +202,15 @@ function facultyFilterSections() {
   const searchTerm = document
     .getElementById("sectionSearch")
     .value.toLowerCase();
+  const yearFilter = document
+    .getElementById("yearSectionFilter")
+    .value.toLowerCase(); // Get the selected year from the dropdown
   const sectionItems = document.querySelectorAll(".section-item");
 
   let anyVisibleSection = false;
   let anyVisibleArchived = false;
 
-  // Loop through all section items and filter by search term
+  // Loop through all section items and filter by search term and selected year
   sectionItems.forEach(function (sectionItem) {
     const sectionYear = sectionItem
       .getAttribute("data-section-year")
@@ -211,11 +222,12 @@ function facultyFilterSections() {
       .getAttribute("data-section-level")
       .toLowerCase();
 
-    // Check if the item matches the search term
+    // Check if the item matches both the search term and the selected year
     if (
-      sectionYear.includes(searchTerm) ||
-      sectionSection.includes(searchTerm) ||
-      sectionLevel.includes(searchTerm)
+      (sectionYear.includes(searchTerm) ||
+        sectionSection.includes(searchTerm) ||
+        sectionLevel.includes(searchTerm)) &&
+      (yearFilter === "all" || sectionYear === yearFilter)
     ) {
       // Show the item if it belongs to either the section or archived container
       if (sectionItem.closest("#sectionContainer")) {
@@ -226,7 +238,7 @@ function facultyFilterSections() {
         anyVisibleArchived = true;
       }
     } else {
-      sectionItem.style.display = "none"; // Hide if it doesn't match the search term
+      sectionItem.style.display = "none"; // Hide if it doesn't match the search term or selected year
     }
   });
 
@@ -281,3 +293,4 @@ function facultyFilterSections() {
     document.getElementById("archivedContainer").removeChild(noDataBoxArchived);
   }
 }
+
