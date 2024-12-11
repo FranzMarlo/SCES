@@ -207,7 +207,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // Retain the current search term
       const searchInput = document.getElementById("subjectSearch");
       const searchTerm = searchInput.value.toLowerCase();
-  
+      const selectFilter = document.getElementById("yearFilterDropdown");
+      const yearValue = selectFilter.value;
+
       // Fetch updated subjects
       fetch("/SCES/backend/global.php", {
         method: "POST",
@@ -225,6 +227,9 @@ document.addEventListener("DOMContentLoaded", function () {
           if (searchTerm.trim() !== "") {
             filterSubjects();
           }
+          if (yearValue !== 'All'){
+            filterSubjects();
+          }
           updateSubjectNoDataBox();
           updateArchivedNoDataBox();
         })
@@ -235,7 +240,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // Retain the current search term
       const searchInput = document.getElementById("subjectSearch");
       const searchTerm = searchInput.value.toLowerCase();
-  
+      const selectFilter = document.getElementById("yearFilterDropdown");
+      const yearValue = selectFilter.value;
       // Fetch updated subjects
       fetch("/SCES/backend/global.php", {
         method: "POST",
@@ -251,6 +257,9 @@ document.addEventListener("DOMContentLoaded", function () {
   
           // Reapply the search filter
           if (searchTerm.trim() !== "") {
+            filterSubjects();
+          }
+          if (yearValue !== 'All'){
             filterSubjects();
           }
           updateSubjectNoDataBox();
