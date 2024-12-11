@@ -73,7 +73,7 @@ $page = '';
                                             <div class="in-part">
                                                 <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?>
                                                 </p>
-                                                <p><?php echo htmlspecialchars('SY: ' . ($section['year'] - 1) . ' - ' . $section['year']); ?>
+                                                <p><?php echo htmlspecialchars('SY: ' . $section['year']  . ' - ' . ($section['year'] + 1)); ?>
                                                 </p>
                                             </div>
                                         </div>
@@ -84,7 +84,7 @@ $page = '';
                                         <span><?php echo htmlspecialchars($section['grade_level'] . ' - ' . $section['section']); ?></span>
                                         <p><?php echo htmlspecialchars(getAdviser($section['gender'], $section['teacher_lname'], $section['teacher_fname'])); ?>
                                         </p>
-                                        <p><?php echo htmlspecialchars('SY: ' . ($section['year'] - 1) . ' - ' . $section['year']); ?>
+                                        <p><?php echo htmlspecialchars('SY: ' . $section['year']  . ' - ' . ($section['year'] + 1)); ?>
                                         </p>
                                     </div>
                                     <div class="popup-menu">
@@ -126,7 +126,7 @@ $page = '';
                                             <div class="in-part">
                                                 <p><?php echo htmlspecialchars(getAdviser($archive['gender'], $archive['teacher_lname'], $archive['teacher_fname'])); ?>
                                                 </p>
-                                                <p><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?>
+                                                <p><?php echo htmlspecialchars('SY: ' . $archive['year'] . ' - ' . ($archive['year'] + 1)); ?>
                                                 </p>
                                             </div>
                                         </div>
@@ -137,7 +137,7 @@ $page = '';
                                         <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
                                         <p><?php echo htmlspecialchars(getAdviser($archive['gender'], $archive['teacher_lname'], $archive['teacher_fname'])); ?>
                                         </p>
-                                        <p><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?>
+                                        <p><?php echo htmlspecialchars('SY: ' . $archive['year'] . ' - ' . ($archive['year'] + 1)); ?>
                                         </p>
                                     </div>
                                     <div class="popup-menu">

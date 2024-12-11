@@ -101,7 +101,7 @@ $page = '';
                                             <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
                                             <div class="in-part">
                                                 <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
-                                                <span><?php echo htmlspecialchars('SY: ' . ($subject['year'] - 1) . ' - ' . $subject['year']); ?></span>
+                                                <span><?php echo htmlspecialchars('SY: ' . $subject['year'] . ' - ' . ($subject['year'] + 1)); ?></span>
                                             </div>
                                         </div>
                                         <img src="/SCES/assets/images/<?php echo htmlspecialchars($subject['icon']); ?>"
@@ -110,7 +110,7 @@ $page = '';
                                     <div class="subject-title" onclick="hiddenLink(this)">
                                         <h1><?php echo htmlspecialchars($subject['subject']); ?></h1>
                                         <span><?php echo htmlspecialchars($subject['grade_level'] . ' - ' . $subject['section']); ?></span>
-                                        <span><?php echo htmlspecialchars('SY: ' . ($subject['year'] - 1) . ' - ' . $subject['year']); ?></span>
+                                        <span><?php echo htmlspecialchars('SY: ' . $subject['year'] . ' - ' . ($subject['year'] + 1)); ?></span>
                                     </div>
                                     <div class="popup-menu">
                                         <ul>
@@ -151,7 +151,7 @@ $page = '';
                                             <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
                                             <div class="in-part">
                                                 <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
-                                                <span><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?></span>
+                                                <span><?php echo htmlspecialchars('SY: ' . $archive['year'] . ' - ' . ($archive['year'] + 1)); ?></span>
                                             </div>
                                         </div>
                                         <img src="/SCES/assets/images/<?php echo htmlspecialchars($archive['icon']); ?>"
@@ -160,7 +160,7 @@ $page = '';
                                     <div class="subject-title" onclick="hiddenLink(this)">
                                         <h1><?php echo htmlspecialchars($archive['subject']); ?></h1>
                                         <span><?php echo htmlspecialchars($archive['grade_level'] . ' - ' . $archive['section']); ?></span>
-                                        <span><?php echo htmlspecialchars('SY: ' . ($archive['year'] - 1) . ' - ' . $archive['year']); ?></span>
+                                        <span><?php echo htmlspecialchars('SY: ' . $archive['year'] . ' - ' . ($archive['year'] + 1)); ?></span>
                                     </div>
                                     <div class="popup-menu">
                                         <ul>
