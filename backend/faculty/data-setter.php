@@ -19,7 +19,7 @@ if (isset($_SESSION['teacher_id'])) {
     $contactNumber = $_SESSION['contact_number'];
     $passwordChange = $_SESSION['password_change'];
     $emailVerification = $_SESSION['email_verification'];
-    $title = ($gender == 'Female') ? 'Ma\'am' : 'Sir';
+    $title = ($gender == 'Female') ? 'Ms.' : 'Mr.';
     $middleInitial = getMiddleInitial($teacherMname);
     $suffix = getSuffix($teacherSuffix);
     $firstName = getFirstName($teacherFname);

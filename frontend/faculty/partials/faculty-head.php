@@ -22,5 +22,5 @@ $current_page = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <link rel="stylesheet" href="/SCES/assets/style/admin.css" />
   <link rel="icon" href="/SCES/assets/images/logo.png" type="image/x-icon" />
-  <script src="https://kit.fontawesome.com/c835ba47b5.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/SCES/assets/font-awesome/css/all.css">
   <script src="/SCES/vendor/node_modules/chart.js/dist/chart.umd.js"></script>

@@ -232,10 +232,7 @@
                 </div>
             </div>
             <div class="graph-container">
-                <div class="graph">
-                    <canvas id="studentLineChart"></canvas>
-                </div>
-                <div class="graph">
+                <div class="full-graph">
                     <canvas id="studentBarChart"></canvas>
                 </div>
             </div>
@@ -249,7 +246,7 @@
                 </div>
                 <div class="filter-part">
                     <select id="subjectFilterDropdown" class="filter-dropdown">
-                        <option value="All">All Subjects</option>
+                    <option value="All">All Subjects</option>
                         <option value="AP">AP</option>
                         <option value="ENG">English</option>
                         <option value="ESP">ESP</option>
@@ -257,6 +254,7 @@
                         <option value="MAPEH">MAPEH</option>
                         <option value="MATH">Mathematics</option>
                         <option value="MT">Mother Tongue</option>
+                        <option value="SCI">Science</option>
                         <option value="EPP">EPP</option>
                     </select>
                     <select id="quarterFilterDropdown" class="filter-dropdown">

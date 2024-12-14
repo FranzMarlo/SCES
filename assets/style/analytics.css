@@ -473,6 +473,13 @@ table.dataTable tbody td.dataTables_empty {
   padding: 10px 15px;
   text-align: justify;
 }
+.full-text ul{
+  margin-top: 15px;
+}
+.full-text ul li {
+  margin-left: 20px; 
+  margin-bottom: 5px; /* Space between list items */
+}
 #interpretation{
   width: 100%;
   font-size: 1.1rem;

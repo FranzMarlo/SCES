@@ -461,7 +461,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       populatePanelData(studentId);
       getStudentGWA(studentId);
-      initializeStudentLineChart(studentId);
       initializeStudentBarChart(lrn);
       initializeStudentFullBarChart(studentId);
       showTabContent("analyticsContainer");
@@ -847,7 +846,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         // Send the predictive data to Python API
-        fetch("http://127.0.0.1:5000/predict", {
+        fetch("https://predictive-model-sces-1.onrender.com/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -1099,115 +1098,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-  function initializeStudentLineChart(studentId) {
-    var ctxLine = document.getElementById("studentLineChart").getContext("2d");
-
-    if (Chart.getChart("studentLineChart")) {
-      Chart.getChart("studentLineChart").destroy();
-    }
-
-    $.ajax({
-      url: "/SCES/backend/fetch-class.php",
-      type: "POST",
-      data: {
-        submitType: "studentAverageScoreByMonth",
-        student_id: studentId,
-        section_id: section_id,
-      },
-      success: function (response) {
-        const chartData = JSON.parse(response);
-        const months = chartData.labels || [];
-        const scores = chartData.lineData || [];
-
-        if (scores.length === 0) {
-          showAlert("info", "No Data Available For Student");
-          ctxLine.chart = new Chart(ctxLine, {
-            type: "line",
-            data: {
-              labels: ["No Data"],
-              datasets: [
-                {
-                  data: [0], // No data
-                  borderColor: "#ccc",
-                  backgroundColor: "rgba(200, 200, 200, 0.5)",
-                  fill: true,
-                  tension: 0.4,
-                },
-              ],
-            },
-            options: {
-              maintainAspectRatio: false,
-              responsive: true,
-              plugins: {
-                legend: false, // Disable the legend
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  title: false, // Remove title for y-axis
-                },
-                x: {
-                  title: false, // Remove title for x-axis
-                },
-              },
-            },
-          });
-        } else {
-          ctxLine.chart = new Chart(ctxLine, {
-            type: "line",
-            data: {
-              labels: months,
-              datasets: [
-                {
-                  label: "", // Remove label from the dataset
-                  data: scores,
-                  borderColor: "#ddd1ff", // Use #ddd1ff color for the line
-                  backgroundColor: "rgba(221, 209, 255, 0.5)",
-                  fill: true,
-                  tension: 0.4, // Curve the line
-                  pointBackgroundColor: "#fff",
-                  pointBorderColor: "#ddd1ff",
-                  pointHoverRadius: 5,
-                },
-              ],
-            },
-            options: {
-              maintainAspectRatio: false,
-              responsive: true,
-              plugins: {
-                legend: false, // Disable the legend
-                title: {
-                  display: true,
-                  text: "Average Score Per Month", // Add chart title
-                  font: {
-                    size: 17,
-                    weight: "bold",
-                  },
-                  padding: {
-                    top: 5,
-                    bottom: 10,
-                  },
-                },
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  title: false, // Remove title for y-axis
-                },
-                x: {
-                  title: false, // Remove title for x-axis
-                },
-              },
-            },
-          });
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error fetching data: ", error);
-      },
-    });
-  }
-
   function initializeSectionLineChart() {
     var ctxLine = document.getElementById("sectionLineChart").getContext("2d");
 
@@ -1334,21 +1224,11 @@ document.addEventListener("DOMContentLoaded", function () {
         lrn: lrn,
       },
       success: function (data) {
-        var colors = [
-          "#ffd6e6",
-          "#d2ebc4",
-          "#fcfd95",
-          "#c5e3ff",
-          "#ddd1ff",
-          "#fec590",
-        ];
+        var ctxBar = document
+          .getElementById("studentBarChart")
+          .getContext("2d");
 
-        var backgroundColors = data.labels.map((label, index) => {
-          return colors[index % colors.length];
-        });
-
-        // Create the bar chart
-        new Chart(ctxBar, {
+        var barChart = new Chart(ctxBar, {
           type: "bar",
           data: {
             labels: data.labels,
@@ -1356,8 +1236,8 @@ document.addEventListener("DOMContentLoaded", function () {
               {
                 label: "GWA",
                 data: data.barData,
-                backgroundColor: backgroundColors,
-                borderColor: "#000",
+                backgroundColor: "#59ADF6",
+                borderColor: "#ccc",
                 borderWidth: 2,
               },
             ],
@@ -1384,44 +1264,81 @@ document.addEventListener("DOMContentLoaded", function () {
             scales: {
               y: {
                 beginAtZero: true,
+                max: 100,
               },
             },
           },
         });
 
-        // Send data to the interpretation API
         const interpretationSpan = document.getElementById("interpretation");
-        $.ajax({
-          url: "https://predictive-model-sces-1.onrender.com/interpret", // Flask interpretation route
-          type: "POST",
-          contentType: "application/json",
-          data: JSON.stringify({
-            gwa_records: data.labels.map((label, index) => ({
-              grade_level: label,
-              gwa: data.barData[index],
-            })),
-          }),
-          success: function (interpretationResponse) {
+        const gwaRecords = data.labels.map((label, index) => ({
+          grade_level: label,
+          gwa: data.barData[index],
+        }));
+
+        fetch("https://predictive-model-sces-1.onrender.com/interpret", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ gwa_records: gwaRecords }),
+        })
+          .then((response) => response.json())
+          .then((interpretationResponse) => {
             const { insights, overall_message } = interpretationResponse;
 
-            // Display the insights and overall message
+            // Clear any existing content in the interpretation span
+            interpretationSpan.innerHTML = "";
+
             if (insights && insights.length > 0) {
-              interpretationSpan.textContent = `As the student progresses through grade levels, the Bar Graph depicts: ${insights.join(
-                ". "
-              )}. ${overall_message}`;
+              // Create a list element to hold the insights
+              const insightsList = document.createElement("ul");
+
+              // Populate the list with insights and FontAwesome icons
+              insights.forEach((insight) => {
+                const listItem = document.createElement("li");
+
+                // Determine the trend and append the appropriate FontAwesome icon
+                const icon = document.createElement("i");
+                if (insight.includes("Improvement in GWA")) {
+                  icon.className = "fas fa-arrow-up"; // FontAwesome up arrow
+                  icon.style.color = "green";
+                } else if (insight.includes("Decline in GWA")) {
+                  icon.className = "fas fa-arrow-down"; // FontAwesome down arrow
+                  icon.style.color = "red";
+                } else if (insight.includes("No changes in GWA")) {
+                  icon.className = "fas fa-minus"; // FontAwesome dash
+                  icon.style.color = "goldenrod";
+                }
+
+                listItem.textContent = insight + " "; // Add a space before the icon
+                listItem.appendChild(icon);
+                insightsList.appendChild(listItem);
+              });
+
+              // Append the insights list and overall message to the span
+              interpretationSpan.appendChild(
+                document.createTextNode(
+                  "Based on the analysis of the student's performance across grade levels, the following insights were identified:"
+                )
+              );
+              interpretationSpan.appendChild(insightsList);
+              interpretationSpan.appendChild(document.createElement("br"));
+              interpretationSpan.appendChild(
+                document.createTextNode(overall_message)
+              );
             } else {
               interpretationSpan.textContent =
                 "No insights available for this student.";
             }
-          },
-          error: function () {
+          })
+          .catch(() => {
             interpretationSpan.textContent =
               "Failed to fetch interpretation data.";
-          },
-        });
+          });
       },
       error: function () {
-        alert("Failed to fetch GWA data.");
+        interpretationSpan.textContent = "Failed to fetch GWA data.";
       },
     });
   }
@@ -1509,14 +1426,14 @@ document.addEventListener("DOMContentLoaded", function () {
             scales: {
               y: {
                 beginAtZero: true,
+                max: 100,
               },
             },
           },
         });
-        if (subjectFilter == 'All'){
+        if (subjectFilter == "All") {
           var subjectTitles = data.labels.map(getSubjectTitle);
-        }
-        else{
+        } else {
           var subjectTitles = data.labels;
         }
         $.ajax({
@@ -1533,8 +1450,53 @@ document.addEventListener("DOMContentLoaded", function () {
             const interpretationSpan = document.getElementById(
               "subjectInterpretation"
             );
-            interpretationSpan.textContent =
-              interpretationResponse.interpretation;
+            interpretationSpan.innerHTML = ""; // Clear previous content
+
+            if (subjectFilter != "All") {
+              // Create a structure for displaying initial, trends (bulleted), and overall message
+              const initialPara = document.createElement("p");
+              initialPara.textContent = interpretationResponse.initial;
+
+              const trendsList = document.createElement("ul");
+              interpretationResponse.trends.forEach((trend) => {
+                const listItem = document.createElement("li");
+
+                // Create a text node for the trend description
+                const trendText = document.createTextNode(trend);
+
+                // Add FontAwesome icon based on the trend content
+                const icon = document.createElement("i");
+                if (trend.includes("An improvement")) {
+                  icon.className = "fas fa-arrow-up"; // FontAwesome up arrow
+                  icon.style.color = "green"; // Green for improvement
+                } else if (trend.includes("A decline")) {
+                  icon.className = "fas fa-arrow-down"; // FontAwesome down arrow
+                  icon.style.color = "red"; // Red for decline
+                } else if (trend.includes("No changes")) {
+                  icon.className = "fas fa-minus"; // FontAwesome dash
+                  icon.style.color = "goldenrod"; // Yellow for no changes
+                }
+                icon.style.marginLeft = "8px"; // Add spacing before the icon
+
+                // Append the trend text and the icon to the list item
+                listItem.appendChild(trendText);
+                listItem.appendChild(icon);
+                trendsList.appendChild(listItem);
+              });
+
+              const overallPara = document.createElement("p");
+              overallPara.textContent = interpretationResponse.overall_message;
+
+              // Append all elements to the interpretation span
+              interpretationSpan.appendChild(initialPara);
+              interpretationSpan.appendChild(trendsList);
+              interpretationSpan.appendChild(overallPara);
+            } else {
+              // Fallback if trends data is missing
+              interpretationSpan.textContent =
+                interpretationResponse.interpretation ||
+                "No interpretation available.";
+            }
           },
           error: function (xhr, status, error) {
             console.error("Error fetching interpretation:", error);
@@ -1565,6 +1527,8 @@ document.addEventListener("DOMContentLoaded", function () {
         return "Mother Tongue";
       case "EPP":
         return "EPP";
+      case "SCI":
+        return "Science";
       default:
         return "Unknown Subject";
     }

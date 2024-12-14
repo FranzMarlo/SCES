@@ -130,35 +130,50 @@ def interpret():
 
             if diff > 0:
                 insights.append(
-                    f"An improvement in GWA from {gwa_from} to {gwa_to} between {grade_from} and {grade_to}"
+                    f"Improvement in GWA from {gwa_from} to {gwa_to} between {grade_from} and {grade_to}."
                 )
             elif diff < 0:
                 insights.append(
-                    f"A decline in GWA from {gwa_from} to {gwa_to} between {grade_from} and {grade_to}"
+                    f"Decline in GWA from {gwa_from} to {gwa_to} between {grade_from} and {grade_to}."
                 )
             else:
                 insights.append(
-                    f"No changes in GWA from {grade_from} to {grade_to}"
+                    f"No changes in GWA between {grade_from} and {grade_to}."
                 )
 
-        # Determine overall trend
+        # Determine overall trend and provide recommendations
         if overall_trend > 0:
-            overall_message = "Overall, the student shows an improvement in performance."
+            overall_message = (
+                "Overall, the student's academic performance shows a notable improvement. "
+                "This progress reflects the student's commendable effort and dedication. Continue to encourage the student by recognizing their achievements, "
+                "providing opportunities for advanced learning or enrichment activities, and offering constructive feedback to sustain this upward trajectory. "
+                "Collaborating with the student to set specific academic goals can further reinforce this progress."
+            )
         elif overall_trend < 0:
-            overall_message = "Overall, the student shows a decline in performance."
+            overall_message = (
+                "Overall, the student's academic performance shows a decline, indicating potential areas of difficulty. "
+                "Identify specific subjects or areas where the student is struggling and provide targeted support. "
+                "Consider to held a consultation with the student to better address the student's needs. "
+                "Lastly, maintain regular communication with the student to understand any challenges and provide timely interventions to help improve performance."
+            )
         else:
-            overall_message = "Overall, there is no significant change in the student's performance."
+            overall_message = (
+                "Overall, the student's academic performance has remained stable without significant changes. "
+                "While consistency is commendable, encouraging the student to strive for growth by assigning more challenging tasks, "
+                "promoting participation in extracurricular academic opportunities, and offering personalized feedback to identify and develop areas for improvement would be beneficial. "
+                "Providing support to the student in setting higher academic goals and monitoring progress can help the student unlock their full potential."
+            )
 
-        # Return only necessary components
         response = {
             "overall_message": overall_message,
-            "insights": insights  # Keep detailed insights here if needed
+            "insights": insights,
         }
         return jsonify(response)
 
     except Exception as e:
         # Handle exceptions
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/interpret-grades', methods=['POST'])
 def interpret_grades():
@@ -179,33 +194,43 @@ def interpret_grades():
             return jsonify({
                 "interpretation": "Only one grade is available to perform analysis."
                 if len(bar_data) == 1 else "No grade data available for analysis."
-            })
+            }), 200
 
         if subject_filter == "All":
             if all(grade == bar_data[0] for grade in bar_data):
                 if bar_data[0] < 80:
-                    interpretation = "The student has difficulties in all subjects."
+                    interpretation = (
+                        "The student has consistent difficulties across all subjects. "
+                        "Identify the root causes of these challenges, such as the specific lessons for each subject. "
+                        "Providing additional support, learning resources, and assessments may help address these difficulties."
+                    )
                 else:
-                    interpretation = "The student excels in all subjects."
-                return jsonify({
-                    "interpretation": interpretation
-                })
+                    interpretation = (
+                        "The student excels consistently across all subjects. "
+                        "Provide enrichment opportunities, such as advanced learning tasks or quizzes, to further challenge the student and nurture their potential."
+                    )
+                return jsonify({"interpretation": interpretation}), 200
 
+            max_index = bar_data.index(max(bar_data))
+            min_index = bar_data.index(min(bar_data))
             if quarter_filter == "All":
-                max_index = bar_data.index(max(bar_data))
-                min_index = bar_data.index(min(bar_data))
                 interpretation = (
-                    f"The student excels in {labels[max_index]} "
-                    f"and has difficulties in {labels[min_index]}."
+                    f"The student excels in {labels[max_index]} and has difficulties in {labels[min_index]}. "
+                    f"Provide additional support to the student on {labels[min_index]} by holding a consultation and identifying the specific lessons that the student had difficulties with. "
+                    f"Meanwhile, recognizing the achievements and excellence of the student in {labels[max_index]} can help the student to boost their confidence to strive harder in studying."
                 )
             else:
-                max_index = bar_data.index(max(bar_data))
-                min_index = bar_data.index(min(bar_data))
                 interpretation = (
-                    f"In the {quarter_filter} quarter, the student excels in {labels[max_index]} "
-                    f"and has difficulties in {labels[min_index]}."
+                    f"In the {quarter_filter} quarter, the student excels in {labels[max_index]} and has difficulties in {labels[min_index]}. "
+                    f"Provide focused support to the student for {labels[min_index]} and sustain the high performance in {labels[max_index]} by offering engaging and challenging quizzes or assessments."
                 )
+            return jsonify({"interpretation": interpretation}), 200
+
         else:
+            if quarter_filter == "All":
+                initial = "Based on the analysis of the student's grade on the subject across grade levels, the following insights were identified:"
+            else:
+                initial = f"Based on the analysis of the student's grade on the subject during " + quarter_filter + " Quarter across grade levels, the following insights were identified:"
             trends = []
             overall_trend = 0
 
@@ -218,38 +243,29 @@ def interpret_grades():
                 overall_trend += diff
 
                 if diff > 0:
-                    trends.append(
-                        f"An improvement of grades from {score_from} to {score_to} in {grade_to}."
-                    )
+                    trends.append(f"An improvement of grades from {score_from} to {score_to} in {grade_to}.")
                 elif diff < 0:
-                    trends.append(
-                        f"A decline of grades from {score_from} to {score_to} in {grade_to}."
-                    )
+                    trends.append(f"A decline of grades from {score_from} to {score_to} in {grade_to}.")
                 else:
-                    trends.append(
-                        f"No changes in grades between {score_from} in {grade_from} and {score_to} in {grade_to}."
-                    )
+                    trends.append(f"No changes in grades between {score_from} in {grade_from} and {score_to} in {grade_to}.")
 
             overall_message = (
-                "an overall improvement in performance."
+                "Overall, the student showed an improvement in performance on the subject. "
+                "Continue to foster effective learning environments and recognize the student's efforts, while introducing advanced learning opportunities to sustain improvement."
                 if overall_trend > 0 else
-                "an overall decline in performance."
+                "Overall, the student showed a decline in performance on the subject. "
+                "Focus closely on the student to identify underlying issues and implement strategies for improvement, such as personalized learning plans or additional support."
                 if overall_trend < 0 else
-                "no significant change in performance."
+                "Overall, there are no significant changes in the performance of the student on the subject. "
+                "Motivate the student to aim for higher achievement by setting challenging yet attainable goals and providing encouragement."
             )
 
-            trends_message = ' '.join(trends) if trends else ""
-            if trends_message:
-                trends_message += " "  # Add a space after trends for proper separation
-
-            interpretation = (
-                f"The bar graph depicts: {trends_message}"
-                f"Overall, the student exhibits {overall_message}"
-            )
-
-        return jsonify({
-            "interpretation": interpretation
-        })
+            response = {
+                "initial": initial,
+                "trends": trends,
+                "overall_message": overall_message
+            }
+            return jsonify(response), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -303,62 +319,53 @@ def interpret_subject():
                 prediction_made = True
 
         # Interpretation logic
+        # Interpretation logic
         interpretation = ""
 
+        # Add prediction or prediction-skipped message
+        if prediction_made and predicted_grade is not None:
+            prediction_message = f"Based on the previous grades, the predicted grade for the next quarter ({labels[-1]}) is {predicted_grade}. This suggests that the student {'will likely maintain an excellent academic performance in ' + subject_name if predicted_grade >= 85 else 'needs improvement in ' + subject_name}. To improve or maintain the performance in the subject, encourage the student to focus on studying harder."
+        elif not prediction_made and missing_quarters:
+            prediction_message = f"Prediction skipped: Missing grades for {', '.join(missing_quarters)}. Please provide more data for accurate predictions."
+        else:
+            prediction_message = ""
+
+        # Overall summary with consistency analysis
         if len(bar_data) > 1:
-            # Exclude the predicted grade from comparisons
             grade_differences = [
                 bar_data[i] - bar_data[i - 1] for i in range(1, len(bar_data) - (1 if prediction_made else 0))
             ]
 
-            # Detailed interpretation for each quarter
-            quarter_differences = []
-            for i, diff in enumerate(grade_differences):
-                if diff > 0:
-                    quarter_differences.append(
-                        f"The grade improved by {diff} from {labels[i]} to {labels[i + 1]}."
-                    )
-                elif diff < 0:
-                    quarter_differences.append(
-                        f"The grade dropped by {abs(diff)} from {labels[i]} to {labels[i + 1]}."
-                    )
-                else:
-                    quarter_differences.append(
-                        f"The grade remained the same between {labels[i]} and {labels[i + 1]}."
-                    )
-
-            interpretation += " ".join(quarter_differences)
-
-        else:
-            interpretation += "Insufficient number of grades to determine trends."
-
-        # Add prediction or prediction skipped message
-        if prediction_made and predicted_grade is not None:
-            prediction_message = f"The predicted grade of the student for the next quarter is {predicted_grade}."
-        elif not prediction_made and missing_quarters:
-            prediction_message = f"Prediction skipped: Missing grades for {', '.join(missing_quarters)}."
-        else:
-            prediction_message = ""
-
-        # Overall summary
-        if len(bar_data) > 1:
             all_positive_or_zero = all(diff >= 0 for diff in grade_differences)
             all_negative_or_zero = all(diff <= 0 for diff in grade_differences)
             all_zero_changes = all(diff == 0 for diff in grade_differences)
 
             if all_zero_changes:
-                overall_message = "Overall, the student's grades remained consistent across quarters."
+                overall_message = (
+                    "The student's grades have stayed the same across all the quarters which shows a consistent academic performance in subject.  "
+                    "It might be helpful to encourage the student to pursue higher goals for continued growth."
+                )
             elif all_positive_or_zero:
-                overall_message = "Overall, the student's grades have shown an improvement in the subject across quarters."
+                overall_message = (
+                    "The student's grades have improved each quarter, which is a great achievement for the student. "
+                    "To keep this trend, encourage the student to maintain focus on studying while striving for improvement."
+                )
             elif all_negative_or_zero:
-                overall_message = "Overall, the student's grades have shown a decline in the subject across quarters."
+                overall_message = (
+                    "The student's grades have gone down each quarter. This could mean that the student is facing challenges. "
+                    "Consider providing extra support and identify the specific lessons in " + subject_name + " where the students need help."
+                )
             else:
-                overall_message = "Overall, the student's grades varied across quarters."
+                overall_message = (
+                    "The student's grades have been unstable across quarters. This shows inconsistent performance. "
+                    "Helping the student build better study routines and monitoring progress can lead to steady improvement in " + subject_name + "."
+                )
         else:
-            overall_message = ""
+            overall_message = "Not enough data is available to provide insights into the student's performance over time."
+
 
         # Combine all messages with the proper order
-        interpretation = " ".join(filter(None, [interpretation, prediction_message, overall_message]))
+        interpretation = " ".join(filter(None, [prediction_message, overall_message]))
 
         return jsonify({
             "interpretation": interpretation,

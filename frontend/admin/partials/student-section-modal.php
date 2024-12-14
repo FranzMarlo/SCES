@@ -234,16 +234,11 @@
                 </div>
             </div>
             <div class="graph-container">
-                <div class="graph">
-                    <canvas id="studentLineChart"></canvas>
-                </div>
-                <div class="graph">
+                <div class="full-graph">
                     <canvas id="studentBarChart"></canvas>
                 </div>
             </div>
-            <div class="full-text">
-                <span id="interpretation"></span>
-            </div>
+            <div class="full-text" id="interpretation"></div>
             <div class="filter-container">
                 <div class="title-box">
                     <img src="/SCES/assets/images/quiz-rate.png" alt="quiz-rate.png">
@@ -259,6 +254,7 @@
                         <option value="MAPEH">MAPEH</option>
                         <option value="MATH">Mathematics</option>
                         <option value="MT">Mother Tongue</option>
+                        <option value="SCI">Science</option>
                         <option value="EPP">EPP</option>
                     </select>
                     <select id="quarterFilterDropdown" class="filter-dropdown">
