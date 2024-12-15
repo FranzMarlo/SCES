@@ -88,7 +88,7 @@
   flex-direction: column;
   width: 100%;
   border: 2px solid #ccc;
-  min-height: 550px;
+  min-height: 600px;
 }
 .item-container {
   display: none;

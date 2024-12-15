@@ -54,59 +54,63 @@ document.addEventListener("DOMContentLoaded", function () {
     setActiveTab(activeTab);
   });
 
-  document.querySelectorAll(".archive-btn").forEach((editLink) => {
-    editLink.addEventListener("click", function () {
-      const sectionId = this.getAttribute("data-section-id");
-      openPopupMenu.classList.remove("show");
-      Swal.fire({
-        title: "Do you want to archive this section?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-        confirmButtonColor: "#4caf50",
-        cancelButtonColor: "#f44336",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          archiveSection(sectionId);
-        } else {
-          Swal.fire({
-            title: "Operation Cancelled",
-            icon: "info",
-            confirmButtonText: "Ok",
-            confirmButtonColor: "#4caf50",
-          });
-        }
-      });
+  document
+    .getElementById("sectionContainer")
+    .addEventListener("click", function (e) {
+      if (e.target.classList.contains("archive-btn")) {
+        const sectionId = e.target.getAttribute("data-section-id");
+        openPopupMenu.classList.remove("show");
+        Swal.fire({
+          title: "Do you want to archive this section?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          confirmButtonColor: "#4caf50",
+          cancelButtonColor: "#f44336",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            archiveSection(sectionId);
+          } else {
+            Swal.fire({
+              title: "Operation Cancelled",
+              icon: "info",
+              confirmButtonText: "Ok",
+              confirmButtonColor: "#4caf50",
+            });
+          }
+        });
+      }
     });
-  });
 
-  document.querySelectorAll(".not-archive-btn").forEach((editLink) => {
-    editLink.addEventListener("click", function () {
-      const sectionId = this.getAttribute("data-section-id");
-      openPopupMenu.classList.remove("show");
-      Swal.fire({
-        title: "Do you want to re-enable this section?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-        confirmButtonColor: "#4caf50",
-        cancelButtonColor: "#f44336",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          toggleArchivedSection(sectionId);
-        } else {
-          Swal.fire({
-            title: "Operation Cancelled",
-            icon: "info",
-            confirmButtonText: "Ok",
-            confirmButtonColor: "#4caf50",
-          });
-        }
-      });
+  document
+    .getElementById("archivedContainer")
+    .addEventListener("click", function (e) {
+      if (e.target.classList.contains("not-archive-btn")) {
+        const sectionId = e.target.getAttribute("data-section-id");
+        openPopupMenu.classList.remove("show");
+        Swal.fire({
+          title: "Do you want to re-enable this section?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          confirmButtonColor: "#4caf50",
+          cancelButtonColor: "#f44336",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            toggleArchivedSection(sectionId);
+          } else {
+            Swal.fire({
+              title: "Operation Cancelled",
+              icon: "info",
+              confirmButtonText: "Ok",
+              confirmButtonColor: "#4caf50",
+            });
+          }
+        });
+      }
     });
-  });
 
   function archiveSection(sectionId) {
     fetch("/SCES/backend/global.php", {
@@ -128,7 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
               allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.reload();
+                updateSectionList();
+                updateArchiveList();
               }
             });
             break;
@@ -173,7 +178,8 @@ document.addEventListener("DOMContentLoaded", function () {
               allowOutsideClick: false,
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.reload();
+                updateSectionList();
+                updateArchiveList();
               }
             });
             break;
@@ -196,6 +202,90 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .catch((error) => console.error("Error fetching section data:", error));
+  }
+
+  function updateSectionList() {
+    const searchInput = document.getElementById("sectionSearch");
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectFilter = document.getElementById("yearSectionFilter");
+    const yearValue = selectFilter.value;
+
+    fetch("/SCES/backend/global.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "submitType=facultyRefreshSection",
+    })
+      .then((response) => response.text())
+      .then((html) => {
+        // Update the subject container with refreshed data
+        const sectionContainer = document.getElementById("sectionContainer");
+        sectionContainer.innerHTML = html;
+
+        // Reapply the search filter
+        if (searchTerm.trim() !== "") {
+          facultyFilterSections();
+        }
+        if (yearValue !== "All") {
+          facultyFilterSections();
+        }
+        updateSectionNoDataBox();
+        updateArchivedNoDataBox();
+      })
+      .catch((error) => console.error("Error updating section list:", error));
+  }
+
+  function updateArchiveList() {
+    // Retain the current search term
+    const searchInput = document.getElementById("sectionSearch");
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectFilter = document.getElementById("yearSectionFilter");
+    const yearValue = selectFilter.value;
+
+    // Fetch updated subjects
+    fetch("/SCES/backend/global.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "submitType=facultyRefreshArchivedSection",
+    })
+      .then((response) => response.text())
+      .then((html) => {
+        const sectionContainer = document.getElementById("archivedContainer");
+        sectionContainer.innerHTML = html;
+        if (searchTerm.trim() !== "") {
+          facultyFilterSections();
+        }
+        if (yearValue !== "All") {
+          facultyFilterSections();
+        }
+        updateSectionNoDataBox();
+        updateArchivedNoDataBox();
+      })
+      .catch((error) => console.error("Error updating subject list:", error));
+  }
+  function updateSectionNoDataBox() {
+    const sectionContainer = document.getElementById("sectionContainer");
+    const sectionItems = sectionContainer.querySelectorAll(".section-item");
+
+    if (sectionItems.length === 0) {
+      sectionContainer.classList.add("no-data-box-centered");
+    } else {
+      sectionContainer.classList.remove("no-data-box-centered");
+    }
+  }
+
+  function updateArchivedNoDataBox() {
+    const sectionContainer = document.getElementById("archivedContainer");
+    const sectionItems = sectionContainer.querySelectorAll(".section-item");
+
+    if (sectionItems.length === 0) {
+      sectionContainer.classList.add("no-data-box-centered");
+    } else {
+      sectionContainer.classList.remove("no-data-box-centered");
+    }
   }
 });
 

@@ -1,20 +1,32 @@
-        overall_message = (
-                "Overall, the student's academic performance shows a notable improvement. "
-                "This progress reflects commendable effort and dedication. Instructors recommend that the student continue employing effective study strategies, "
-                "participate actively in class discussions, and seek out advanced materials or challenges to sustain this upward trajectory. "
-                "Setting specific academic goals with instructor guidance can further solidify this progress."
-            )
-        elif overall_trend < 0:
-            overall_message = (
-                "Overall, the student's academic performance has declined, indicating potential areas of difficulty. "
-                "Instructors recommend focused interventions, including regular consultations with teachers, targeted review sessions on weaker subjects, "
-                "and increased participation in supplemental activities like tutoring or group studies. "
-                "Addressing this decline promptly with guidance from instructors can help the student regain momentum and improve overall performance."
-            )
-        else:
-            overall_message = (
-                "Overall, the student's academic performance has remained stable without significant changes. "
-                "While maintaining consistency is commendable, instructors encourage the student to aim for growth by taking on more challenging tasks, "
-                "engaging in extracurricular academic opportunities, and actively seeking feedback from teachers. "
-                "Collaborating with instructors to set higher academic goals and identifying areas for improvement can help the student unlock their full potential."
-            )
+        trends = []
+            overall_trend = 0
+
+            for i in range(1, len(bar_data)):
+                diff = bar_data[i] - bar_data[i - 1]
+                overall_trend += diff
+                grade_from = labels[i - 1]
+                grade_to = labels[i]
+
+                if abs(diff) > 0:  # Significant change
+                    direction = "Improvement" if diff > 0 else "Decline"
+                    trends.append(f"{direction} from {grade_from} (GWA: {bar_data[i-1]}) to {grade_to} (GWA: {bar_data[i]}).")
+
+            if trends:
+                overall_message = (
+                    "an improvement" if overall_trend > 0
+                    else "a decline" if overall_trend < 0
+                    else "no significant change"
+                )
+                return {
+                    "introduction": f"Based on the chart above, the {grade} had significant changes such as:",
+                    "trends": trends,
+                    "conclusion": f"Overall, there is {overall_message} in performance.",
+                    "recommendation": "Investigate the causes of changes and maintain strategies to ensure consistent improvement."
+                }
+            else:
+                return {
+                    "introduction": f"Based on the chart above, no significant changes were observed for {grade}.",
+                    "trends": [],
+                    "conclusion": "Overall, performance remained consistent with no major fluctuations.",
+                    "recommendation": "Continue monitoring performance trends while maintaining current strategies."
+                }

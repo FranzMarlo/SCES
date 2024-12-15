@@ -296,7 +296,6 @@ document.addEventListener("DOMContentLoaded", function () {
               if (result.isConfirmed) {
                 updateSubjectList();
                 updateArchiveList();
-                updateNoDataBox();
               }
             });
             break;

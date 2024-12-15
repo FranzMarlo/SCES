@@ -242,11 +242,39 @@ document.addEventListener("DOMContentLoaded", function () {
             gradeLevel: grade,
             labels: data.labels,
             barData: data.barData,
-            studentCounts: data.studentCounts, // Include student counts
+            studentCounts: data.studentCounts,
           }),
           success: function (response) {
-            document.getElementById("lvlInterpretation").textContent =
-              response.interpretation;
+            const container = document.getElementById("lvlInterpretation");
+
+            // Clear previous content
+            container.innerHTML = "";
+
+            // Add introduction
+            const intro = document.createElement("p");
+            intro.textContent = response.introduction;
+            container.appendChild(intro);
+
+            // Add trends as bullet points
+            if (response.trends && response.trends.length > 0) {
+              const ul = document.createElement("ul");
+              response.trends.forEach((trend) => {
+                const li = document.createElement("li");
+                li.textContent = trend;
+                ul.appendChild(li);
+              });
+              container.appendChild(ul);
+            }
+
+            // Add conclusion
+            const conclusion = document.createElement("p");
+            conclusion.textContent = `Conclusion: ${response.conclusion}`;
+            container.appendChild(conclusion);
+
+            // Add recommendation
+            const recommendation = document.createElement("p");
+            recommendation.textContent = `Recommendation: ${response.recommendation}`;
+            container.appendChild(recommendation);
           },
           error: function () {
             document.getElementById("lvlInterpretation").textContent =

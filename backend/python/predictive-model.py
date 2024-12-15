@@ -185,18 +185,18 @@ def interpret_grades():
         labels = data.get('labels', [])
         bar_data = data.get('bar_data', [])
 
-        if not labels or not bar_data:
-            return jsonify({
-                "interpretation": "No data available to analyze."
-            }), 200
-
-        if len(bar_data) < 2:
-            return jsonify({
-                "interpretation": "Only one grade is available to perform analysis."
-                if len(bar_data) == 1 else "No grade data available for analysis."
-            }), 200
-
         if subject_filter == "All":
+            if not labels or not bar_data:
+                return jsonify({
+                    "interpretation": "No data available to analyze."
+                }), 200
+
+            if len(bar_data) < 2:
+                return jsonify({
+                    "interpretation": "Only one grade is available, cannot perform analysis."
+                    if len(bar_data) == 1 else "No grade data available for analysis."
+                }), 200
+            
             if all(grade == bar_data[0] for grade in bar_data):
                 if bar_data[0] < 80:
                     interpretation = (
@@ -227,13 +227,37 @@ def interpret_grades():
             return jsonify({"interpretation": interpretation}), 200
 
         else:
+            if not bar_data:
+                # No grade data available for the specific subject
+                return jsonify({
+                    "initial": "No grade data is available for this subject.",
+                    "trends": [],
+                    "overall_message": "No performance trends can be analyzed without sufficient data."
+                }), 200
+
+            if len(bar_data) == 1:
+                # Only one grade is available for the specific subject
+                single_grade = bar_data[0]
+                return jsonify({
+                    "initial": f"The student has only one grade ({single_grade}) available for analysis in the subject.",
+                    "trends": [],
+                    "overall_message": "With only one grade, trends cannot be established."
+                }), 200
+
+            # Rest of the logic for multiple grades continues below
             if quarter_filter == "All":
                 initial = "Based on the analysis of the student's grade on the subject across grade levels, the following insights were identified:"
             else:
-                initial = f"Based on the analysis of the student's grade on the subject during " + quarter_filter + " Quarter across grade levels, the following insights were identified:"
+                initial = f"Based on the analysis of the student's grade on the subject during {quarter_filter} Quarter across grade levels, the following insights were identified:"
+
+            # Initialize trend counters
+            improvements = 0
+            declines = 0
+            no_changes = 0
             trends = []
             overall_trend = 0
 
+            # Analyze grade trends
             for i in range(1, len(bar_data)):
                 grade_from = labels[i - 1]
                 grade_to = labels[i]
@@ -243,22 +267,36 @@ def interpret_grades():
                 overall_trend += diff
 
                 if diff > 0:
+                    improvements += 1
                     trends.append(f"An improvement of grades from {score_from} to {score_to} in {grade_to}.")
                 elif diff < 0:
+                    declines += 1
                     trends.append(f"A decline of grades from {score_from} to {score_to} in {grade_to}.")
                 else:
+                    no_changes += 1
                     trends.append(f"No changes in grades between {score_from} in {grade_from} and {score_to} in {grade_to}.")
 
-            overall_message = (
-                "Overall, the student showed an improvement in performance on the subject. "
-                "Continue to foster effective learning environments and recognize the student's efforts, while introducing advanced learning opportunities to sustain improvement."
-                if overall_trend > 0 else
-                "Overall, the student showed a decline in performance on the subject. "
-                "Focus closely on the student to identify underlying issues and implement strategies for improvement, such as personalized learning plans or additional support."
-                if overall_trend < 0 else
-                "Overall, there are no significant changes in the performance of the student on the subject. "
-                "Motivate the student to aim for higher achievement by setting challenging yet attainable goals and providing encouragement."
-            )
+            # Determine overall message based on trend counts
+            if improvements > declines:
+                overall_message = (
+                    "Overall, the student showed an improvement in performance on the subject. "
+                    "Continue to foster effective learning environments and recognize the student's efforts, while introducing advanced learning opportunities to sustain improvement."
+                )
+            elif declines > improvements:
+                overall_message = (
+                    "Overall, the student showed a decline in performance on the subject. "
+                    "Focus closely on the student to identify underlying issues and implement strategies for improvement, such as personalized learning plans or additional support."
+                )
+            elif improvements == declines and (improvements > 0 or declines > 0):
+                overall_message = (
+                    "Overall, the student's performance fluctuated across grade levels. "
+                    "Encourage consistent efforts and provide support to achieve steady progress."
+                )
+            else:
+                overall_message = (
+                    "Overall, there are no significant changes in the performance of the student on the subject. "
+                    "Motivate the student to aim for higher achievement by setting challenging yet attainable goals and providing encouragement."
+                )
 
             response = {
                 "initial": initial,
@@ -266,6 +304,7 @@ def interpret_grades():
                 "overall_message": overall_message
             }
             return jsonify(response), 200
+
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -353,12 +392,12 @@ def interpret_subject():
             elif all_negative_or_zero:
                 overall_message = (
                     "The student's grades have gone down each quarter. This could mean that the student is facing challenges. "
-                    "Consider providing extra support and identify the specific lessons in " + subject_name + " where the students need help."
+                    "Consider providing extra support and identify the specific lessons in " + subject_name + " where the student needs help."
                 )
             else:
                 overall_message = (
                     "The student's grades have been unstable across quarters. This shows inconsistent performance. "
-                    "Helping the student build better study routines and monitoring progress can lead to steady improvement in " + subject_name + "."
+                    "Helping the student build better study routines and monitoring progress can lead to steady improvement in the subject."
                 )
         else:
             overall_message = "Not enough data is available to provide insights into the student's performance over time."
@@ -391,112 +430,116 @@ def interpret_gwa():
         # Validate input
         if not labels or not bar_data or len(labels) != len(bar_data):
             return jsonify({
-                "interpretation": "Invalid data or no data available for the selected filters."
+                "introduction": "No valid data available for the selected filters.",
+                "trends": [],
+                "conclusion": "Please check your data source.",
+                "recommendation": ""
             }), 200
 
         # Helper functions
         def analyze_all_grades():
+            trends = []
             max_gwa = max(bar_data)
             min_gwa = min(bar_data)
             max_gwa_index = bar_data.index(max_gwa)
             min_gwa_index = bar_data.index(min_gwa)
-            highest_grade = labels[max_gwa_index]
-            lowest_grade = labels[min_gwa_index]
-            highest_students = student_counts[max_gwa_index]
-            lowest_students = student_counts[min_gwa_index]
+
+            trends.append(f"Highest GWA: {labels[max_gwa_index]} with an average GWA of {max_gwa} for a total of {student_counts[max_gwa_index]} students.")
+            trends.append(f"Lowest GWA: {labels[min_gwa_index]} with an average GWA of {min_gwa} for a total of {student_counts[min_gwa_index]} students.")
 
             below_threshold = [
-                f"{labels[i]} (GWA: {gwa}, Students: {student_counts[i]})"
+                f"The {student_counts[i]} students of {labels[i]} indicates a decline in performance as the average GWA {gwa} is lower than 80."
                 for i, gwa in enumerate(bar_data)
                 if gwa < 80
             ]
 
-            interpretation = (
-                f"The grade level with the highest average GWA is {highest_grade} with a GWA of {max_gwa} "
-                f"for a total of {highest_students} students, while the grade level with the lowest average GWA is {lowest_grade} "
-                f"with a GWA of {min_gwa} for a total of {lowest_students} students. "
-            )
             if below_threshold:
-                interpretation += (
-                    f"The following grade levels show a decline with GWA below 80: {', '.join(below_threshold)}."
-                )
-            else:
-                interpretation += "No grade levels indicated a decline in students' rating."
-            return interpretation
+                trends.extend(below_threshold)
+
+            return {
+                "introduction": "Based on the chart above, the following insights are identified:",
+                "trends": trends,
+                "conclusion": "Significant differences in performance exist among the grade levels.",
+                "recommendation": "Focus on improving the learning strategies for grade levels with low performance through interventions like tutoring, mentoring, or enhanced teaching strategies."
+            }
 
         def analyze_specific_grade():
-            selected_gwa = bar_data[0]  # Assuming data is filtered for the specific grade level
+            selected_gwa = bar_data[0]
             selected_students = student_counts[0] if student_counts else 0
+            trends = [f"The {selected_students} students from {grade} achieved an average GWA of {selected_gwa}"]
+
             if selected_gwa < 80:
-                return (
-                    f"The {selected_students} {grade} students with an average GWA of {selected_gwa} indicates a decline as it is below 80."
-                )
+                conclusion = f"The {selected_students} students from {grade} in year {year} indicates a need for improvement."
+                recommendation = f"Identifying the specific lessons for each subjects that the {selected_students} students had a hard time can enhance the learning strategies for the next {grade} students."
             else:
-                return (
-                   f"The {selected_students} {grade} students with an average GWA of {selected_gwa} is decent as it is above 80."
-                )
+                conclusion = f"The {selected_students} students from {grade} in year {year} reflects good performance."
+                recommendation = f"Maintaining or enhancing the learning strategies for the new {grade} students can sustain improvement of the grade level in academic performance."
+
+            return {
+                "introduction": f"Analysis for the performance of {grade} in year {year}:",
+                "trends": trends,
+                "conclusion": conclusion,
+                "recommendation": recommendation
+            }
 
         def analyze_trends():
-            significant_changes = []
+            trends = []
             overall_trend = 0
 
             for i in range(1, len(bar_data)):
-                grade_from = labels[i - 1]
-                grade_to = labels[i]
-                score_from = bar_data[i - 1]
-                score_to = bar_data[i]
-                diff = score_to - score_from
-
+                diff = bar_data[i] - bar_data[i - 1]
                 overall_trend += diff
+                grade_from = labels[i - 1][:4]
+                grade_to = labels[i][:4]
+                student_from = student_counts[i - 1]
+                student_to = student_counts[i]
 
-                if abs(diff) >= 1.0:
+                if abs(diff) > 0:  # Significant change
                     if diff > 0:
-                        significant_changes.append(
-                            f"Significant improvement from {score_from} to {score_to} ({grade_from} to {grade_to}) "
-                            f"with {student_counts[i]} students."
-                        )
+                        trends.append(f"An improvement from the {bar_data[i-1]} average GWA of {student_from} students from year {grade_from} to {bar_data[i]} average GWA of {student_to} students of year {grade_to}.")
+                    elif diff < 0:
+                        trends.append(f"A decline from the {bar_data[i-1]} average GWA of {student_from} students from year {grade_from} to {bar_data[i]} average GWA of {student_to} students of year {grade_to}.")
                     else:
-                        significant_changes.append(
-                            f"Significant decline from {score_from} to {score_to} ({grade_from} to {grade_to}) "
-                            f"with {student_counts[i]} students."
-                        )
-
-            overall_message = (
-                "an improvement in performance." if overall_trend > 0
-                else "a decline in performance." if overall_trend < 0
-                else "no significant changes in performance."
-            )
-
-            if year == "All":
-                return (
-                    f"Through the years, the {grade} had: "
-                    f"{' '.join(significant_changes) if significant_changes else 'no significant improvements or declines were observed.'} "
-                    f"Overall, there is {overall_message}"
+                        trends.append(f"No significant changes between the average GWA of {student_from} students from year {grade_from} and average GWA of {student_to} students of year {grade_to}.")
+            if trends:
+                overall_message = (
+                    "an improvement" if overall_trend > 0
+                    else "a decline" if overall_trend < 0
+                    else "no significant change"
                 )
+                return {
+                    "introduction": f"Based on the chart above, the {grade} had significant changes such as:",
+                    "trends": trends,
+                    "conclusion": f"Overall, there is {overall_message} in performance.",
+                    "recommendation": f"Investigate the causes of changes and maintain learning strategies to ensure consistent improvement."
+                }
             else:
-                return (
-                    f"For {grade}, "
-                    f"{' '.join(significant_changes) if significant_changes else 'no significant improvements or declines were observed.'} "
-                    f"Overall, there is {overall_message}"
-                )
-
+                return {
+                    "introduction": f"Based on the chart above, no significant changes were observed for {grade}.",
+                    "trends": [],
+                    "conclusion": "Overall, performance remained consistent with no major fluctuations.",
+                    "recommendation": "Continue monitoring performance trends while maintaining current learning strategies."
+                }
         # Main logic
         if grade == "All":
-            interpretation = analyze_all_grades()
+            result = analyze_all_grades()
         elif year != "All" and grade != "All":
-            interpretation = analyze_specific_grade()
+            result = analyze_specific_grade()
         else:
-            interpretation = analyze_trends()
+            result = analyze_trends()
 
-        # Return the interpretation
-        return jsonify({
-            "interpretation": interpretation
-        })
+        # Return structured response
+        return jsonify(result)
 
     except Exception as e:
         return jsonify({
-            "error": str(e)
+            "introduction": "An error occurred during analysis.",
+            "trends": [],
+            "conclusion": "Unable to process the request.",
+            "recommendation": str(e)
         }), 500
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

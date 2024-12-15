@@ -1453,49 +1453,54 @@ document.addEventListener("DOMContentLoaded", function () {
             interpretationSpan.innerHTML = ""; // Clear previous content
 
             if (subjectFilter != "All") {
-              // Create a structure for displaying initial, trends (bulleted), and overall message
-              const initialPara = document.createElement("p");
-              initialPara.textContent = interpretationResponse.initial;
-
-              const trendsList = document.createElement("ul");
-              interpretationResponse.trends.forEach((trend) => {
-                const listItem = document.createElement("li");
-
-                // Create a text node for the trend description
-                const trendText = document.createTextNode(trend);
-
-                // Add FontAwesome icon based on the trend content
-                const icon = document.createElement("i");
-                if (trend.includes("An improvement")) {
-                  icon.className = "fas fa-arrow-up"; // FontAwesome up arrow
-                  icon.style.color = "green"; // Green for improvement
-                } else if (trend.includes("A decline")) {
-                  icon.className = "fas fa-arrow-down"; // FontAwesome down arrow
-                  icon.style.color = "red"; // Red for decline
-                } else if (trend.includes("No changes")) {
-                  icon.className = "fas fa-minus"; // FontAwesome dash
-                  icon.style.color = "goldenrod"; // Yellow for no changes
-                }
-                icon.style.marginLeft = "8px"; // Add spacing before the icon
-
-                // Append the trend text and the icon to the list item
-                listItem.appendChild(trendText);
-                listItem.appendChild(icon);
-                trendsList.appendChild(listItem);
-              });
-
-              const overallPara = document.createElement("p");
-              overallPara.textContent = interpretationResponse.overall_message;
-
-              // Append all elements to the interpretation span
-              interpretationSpan.appendChild(initialPara);
-              interpretationSpan.appendChild(trendsList);
-              interpretationSpan.appendChild(overallPara);
+              const trends = interpretationResponse.trends; // Ensure trends is at least an empty array
+              const overallMessage = interpretationResponse.overall_message;
+            
+              if (trends.length === 0) {
+                interpretationSpan.textContent = overallMessage;
+              } else {
+                // Create a structure for displaying initial, trends (bulleted), and overall message
+                const initialPara = document.createElement("p");
+                initialPara.textContent = interpretationResponse.initial || "Insights based on the data are as follows:";
+            
+                const trendsList = document.createElement("ul");
+                trends.forEach((trend) => {
+                  const listItem = document.createElement("li");
+            
+                  // Create a text node for the trend description
+                  const trendText = document.createTextNode(trend);
+            
+                  // Add FontAwesome icon based on the trend content
+                  const icon = document.createElement("i");
+                  if (trend.includes("An improvement")) {
+                    icon.className = "fas fa-arrow-up"; // FontAwesome up arrow
+                    icon.style.color = "green"; // Green for improvement
+                  } else if (trend.includes("A decline")) {
+                    icon.className = "fas fa-arrow-down"; // FontAwesome down arrow
+                    icon.style.color = "red"; // Red for decline
+                  } else if (trend.includes("No changes")) {
+                    icon.className = "fas fa-minus"; // FontAwesome dash
+                    icon.style.color = "goldenrod"; // Yellow for no changes
+                  }
+                  icon.style.marginLeft = "8px"; // Add spacing before the icon
+            
+                  // Append the trend text and the icon to the list item
+                  listItem.appendChild(trendText);
+                  listItem.appendChild(icon);
+                  trendsList.appendChild(listItem);
+                });
+            
+                const overallPara = document.createElement("p");
+                overallPara.textContent = overallMessage;
+            
+                // Append all elements to the interpretation span
+                interpretationSpan.appendChild(initialPara);
+                interpretationSpan.appendChild(trendsList);
+                interpretationSpan.appendChild(overallPara);
+              }
             } else {
-              // Fallback if trends data is missing
               interpretationSpan.textContent =
-                interpretationResponse.interpretation ||
-                "No interpretation available.";
+                interpretationResponse.interpretation || "No interpretation available.";
             }
           },
           error: function (xhr, status, error) {
