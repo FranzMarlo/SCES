@@ -1088,7 +1088,7 @@ document.addEventListener("DOMContentLoaded", function () {
               $("#subjectInterpretation").text(interpretationData.error);
               return;
             }
-
+            $("#subjectInterpretation").html = "";
             const updatedGrades = interpretationData.grades;
             const updatedLabels = interpretationData.labels;
 
@@ -1097,6 +1097,64 @@ document.addEventListener("DOMContentLoaded", function () {
             );
             if (updatedGrades.length > grades.length) {
               backgroundColor.push("#999999");
+            }
+
+            const hasWarning =
+              updatedGrades.some((grade) => grade < 80) ||
+              (interpretationData.predicted_grade !== null &&
+                interpretationData.predicted_grade < 80);
+
+            const legendHtml = `
+            <legend style="color: ${hasWarning ? "red" : "green"};">
+              ${
+                hasWarning
+                  ? `<img src="/SCES/assets/images/at-risk.png" alt="Warning"> Student At Risk`
+                  : `<img src="/SCES/assets/images/quiz-passed.png" alt="Check"> No Warnings Found`
+              }
+            </legend>
+          `;
+            if (
+              interpretationData.prediction_message !== "" &&
+              interpretationData.low_grades.length > 0
+            ) {
+              // Create a list of low grades as <li> elements
+              const lowGradesList = interpretationData.low_grades
+                .map((grade) => `<li>${grade}</li>`)
+                .join("");
+
+              // Insert the HTML content, including the bullet list for low grades
+              $("#subjectInterpretation").html(`
+              ${legendHtml}
+              <p><strong>Predicted Grade For ${interpretationData.next_quarter}:</strong> ${interpretationData.predicted_grade}</p>
+              <p><strong>Student has unusual grade found from the following:</strong></p>
+              <ul>
+                ${lowGradesList}
+              </ul>
+              <p><strong>Recommendation:</strong> ${interpretationData.recommendation}</p>
+            `);
+            } else if (interpretationData.prediction_message !== "") {
+              $("#subjectInterpretation").html(`
+                ${legendHtml}
+                <p><strong>Predicted Grade For ${interpretationData.next_quarter}:</strong> ${interpretationData.predicted_grade}</p>
+                <p><strong>Recommendation:</strong> ${interpretationData.recommendation}</p>
+              `);
+            } else if (interpretationData.low_grades.length > 0) {
+              const lowGradesList = interpretationData.low_grades
+                .map((grade) => `<li>${grade}</li>`)
+                .join("");
+              $("#subjectInterpretation").html(`
+                ${legendHtml}
+                <p><strong>Student has unusual grade found from the following:</strong></p>
+                  <ul>
+                    ${lowGradesList}
+                  </ul>
+                <p><strong>Recommendation:</strong> ${interpretationData.recommendation}</p>
+              `);
+            } else {
+              $("#subjectInterpretation").html(`
+                ${legendHtml}
+                <p class="centered">${interpretationData.recommendation}</p>
+              `);
             }
 
             new Chart(ctxBar, {
@@ -1140,8 +1198,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
               },
             });
-
-            $("#subjectInterpretation").text(interpretationData.interpretation);
           },
           error: function (xhr, status, error) {
             console.error("Error fetching interpretation from Flask:", error);

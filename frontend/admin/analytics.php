@@ -92,9 +92,8 @@ $page = '';
                         <canvas id="fullBarChart"></canvas>
                     </div>
                 </div>
-                <div class="full-text">
-                    <span id="lvlInterpretation"></span>
-                </div>
+                <fieldset class="full-text" id="lvlInterpretation">
+                </fieldset>
                 <div class="title-box">
                     <img src="/SCES/assets/images/quiz-score.png" alt="quiz-score.png">
                     <h1>Top 10 Performing Students</h1>

@@ -1678,7 +1678,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const grades = data.barData;
         const labels = [...data.labels]; // Use existing labels
 
-        // Send grades and labels to Flask for interpretation
+        // Send grades, labels, and subject_name to Flask for interpretation
         $.ajax({
           url: "http://127.0.0.1:5000/interpret-subject", // The Flask route
           type: "POST",

@@ -238,7 +238,7 @@
                     <canvas id="studentBarChart"></canvas>
                 </div>
             </div>
-            <div class="full-text" id="interpretation"></div>
+            <fieldset class="full-text" id="interpretation"></fieldset>
             <div class="filter-container">
                 <div class="title-box">
                     <img src="/SCES/assets/images/quiz-rate.png" alt="quiz-rate.png">
@@ -271,9 +271,8 @@
                     <canvas id="studentFullBarChart"></canvas>
                 </div>
             </div>
-            <div class="full-text">
-                <span id="subjectInterpretation"></span>
-            </div>
+            <fieldset class="full-text" id="subjectInterpretation">
+            </fieldset>
         </div>
     </div>
 </div>

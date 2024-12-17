@@ -789,12 +789,29 @@ select option {
   padding: 10px 15px;
   text-align: justify;
 }
-.full-text ul{
-  margin-top: 15px;
+.full-text legend{
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
 }
-.full-text ul li {
-  margin-left: 20px; 
-  margin-bottom: 5px; /* Space between list items */
+.full-text legend img{
+  width: 2rem; 
+  height: 2rem;
+}
+.full-text p{
+  margin-bottom: 8px;
+}
+.full-text ul{
+  margin-left: 20px;
+}
+.full-text ul li{
+  margin-bottom: 8px;
+}
+p.centered{
+  text-align: center;
+  font-size: 1.2rem;
 }
 #interpretation{
   width: 100%;

@@ -244,37 +244,108 @@ document.addEventListener("DOMContentLoaded", function () {
             barData: data.barData,
             studentCounts: data.studentCounts,
           }),
-          success: function (response) {
-            const container = document.getElementById("lvlInterpretation");
+          success: function (interpretationResponse) {
+            const interpretationSpan =
+              document.getElementById("lvlInterpretation");
+            interpretationSpan.innerHTML = "";
 
-            // Clear previous content
-            container.innerHTML = "";
+            const hasWarning = interpretationResponse.warning === 0;
 
-            // Add introduction
-            const intro = document.createElement("p");
-            intro.textContent = response.introduction;
-            container.appendChild(intro);
+            const legendHtml = `
+              <legend style="color: ${hasWarning ? "red" : "green"};">
+                ${
+                  hasWarning
+                    ? `<img src="/SCES/assets/images/at-risk.png" alt="Warning"> Action Required`
+                    : `<img src="/SCES/assets/images/quiz-passed.png" alt="Check"> No Warnings Found`
+                }
+              </legend>
+            `;
+            const interpretation = interpretationResponse.interpretation
+              ? `<p><strong>${interpretationResponse.interpretation}</strong></p>`
+              : "";
 
-            // Add trends as bullet points
-            if (response.trends && response.trends.length > 0) {
-              const ul = document.createElement("ul");
-              response.trends.forEach((trend) => {
-                const li = document.createElement("li");
-                li.textContent = trend;
-                ul.appendChild(li);
-              });
-              container.appendChild(ul);
+            let insightsHtml = "";
+
+            if (grade === "All" && year === "All") {
+              if (
+                interpretationResponse.trends &&
+                interpretationResponse.trends.length > 0
+              ) {
+                const trendsList = interpretationResponse.trends
+                .map((trend) => {
+                    iconHtml = `<i class="fas fa-arrow-down" style="color: red;"></i>`;
+                  return `<li>${trend} ${iconHtml}</li>`;
+                })
+                .join("");
+                insightsHtml = `
+                  <p><strong>Highest Average GWA: </strong>${interpretationResponse.highest} <i class="fas fa-arrow-up" style="color: green;"></i></p>
+                  <p><strong>${interpretationResponse.initial}</strong></p>
+                  <ul>${trendsList}</ul>
+                  `;
+              } else {
+                let iconHtml = "";
+                insightsHtml = `
+                <p><strong>Highest Average GWA: </strong>${interpretationResponse.highest} <i class="fas fa-arrow-up" style="color: green;"></i></p>
+                <p><strong>Lowest Average GWA:  </strong>${interpretationResponse.lowest} <i class="fas fa-arrow-down" style="color: red;"></i></p>
+                `;
+              }
+            }
+            if (grade === "All" && year !== "All") {
+              if (
+                interpretationResponse.trends &&
+                interpretationResponse.trends.length > 0
+              ) {
+                const trendsList = interpretationResponse.trends
+                .map((trend) => {
+                    iconHtml = `<i class="fas fa-arrow-down" style="color: red;"></i>`;
+                  return `<li>${trend} ${iconHtml}</li>`;
+                })
+                .join("");
+                insightsHtml = `
+                  <p><strong>Highest Average GWA: </strong>${interpretationResponse.highest} <i class="fas fa-arrow-up" style="color: green;"></i></p>
+                  <p><strong>${interpretationResponse.initial}</strong></p>
+                  <ul>${trendsList}</ul>
+                  `;
+              } else {
+                let iconHtml = "";
+                insightsHtml = `
+                <p><strong>Highest Average GWA: </strong>${interpretationResponse.highest} <i class="fas fa-arrow-up" style="color: green;"></i></p>
+                <p><strong>Lowest Average GWA: </strong>${interpretationResponse.lowest} <i class="fas fa-arrow-down" style="color: red;"></i></p>
+                `;
+              }
+            }
+            if (grade !== "All" && year === "All") {
+              const trendsList = interpretationResponse.trends
+                .map((trend) => {
+                  let iconHtml = "";
+                  if (trend.includes("Improvement")) {
+                    iconHtml = `<i class="fas fa-arrow-up" style="color: green;"></i>`;
+                  } else if (trend.includes("Decline")) {
+                    iconHtml = `<i class="fas fa-arrow-down" style="color: red;"></i>`;
+                  } else if (trend.includes("No significant")) {
+                    iconHtml = `<i class="fas fa-minus" style="color: goldenrod;"></i>`;
+                  }
+                  return `<li>${trend} ${iconHtml}</li>`;
+                })
+                .join("");
+
+              insightsHtml = `
+                <p><strong>${interpretationResponse.initial}</strong></p>
+                <ul>${trendsList}</ul>
+              `;
             }
 
-            // Add conclusion
-            const conclusion = document.createElement("p");
-            conclusion.textContent = `Conclusion: ${response.conclusion}`;
-            container.appendChild(conclusion);
+            const recommendation = interpretationResponse.recommendation
+              ? `<p><strong>Recommendation: </strong>${interpretationResponse.recommendation}</p>`
+              : "";
 
-            // Add recommendation
-            const recommendation = document.createElement("p");
-            recommendation.textContent = `Recommendation: ${response.recommendation}`;
-            container.appendChild(recommendation);
+            // Combine everything into a single HTML block
+            interpretationSpan.innerHTML = `
+              ${legendHtml}
+              ${interpretation}
+              ${insightsHtml}
+              ${recommendation}
+            `;
           },
           error: function () {
             document.getElementById("lvlInterpretation").textContent =
@@ -784,10 +855,6 @@ document.addEventListener("DOMContentLoaded", function () {
         lrn: lrn,
       },
       success: function (data) {
-        var ctxBar = document
-          .getElementById("studentBarChart")
-          .getContext("2d");
-
         var barChart = new Chart(ctxBar, {
           type: "bar",
           data: {
@@ -809,28 +876,19 @@ document.addEventListener("DOMContentLoaded", function () {
               title: {
                 display: true,
                 text: "GWA by Grade Level",
-                font: {
-                  size: 18,
-                },
-                padding: {
-                  top: 10,
-                  bottom: 10,
-                },
+                font: { size: 18 },
+                padding: { top: 10, bottom: 10 },
               },
-              legend: {
-                display: false,
-              },
+              legend: { display: false },
             },
             scales: {
-              y: {
-                beginAtZero: true,
-                max: 100,
-              },
+              y: { beginAtZero: true, max: 100 },
             },
           },
         });
 
-        const interpretationSpan = document.getElementById("interpretation");
+        const interpretationElement = document.getElementById("interpretation");
+
         const gwaRecords = data.labels.map((label, index) => ({
           grade_level: label,
           gwa: data.barData[index],
@@ -838,67 +896,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
         fetch("http://127.0.0.1:5000/interpret", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ gwa_records: gwaRecords }),
         })
           .then((response) => response.json())
-          .then((interpretationResponse) => {
-            const { insights, overall_message } = interpretationResponse;
-
-            // Clear any existing content in the interpretation span
-            interpretationSpan.innerHTML = "";
-
-            if (insights && insights.length > 0) {
-              // Create a list element to hold the insights
-              const insightsList = document.createElement("ul");
-
-              // Populate the list with insights and FontAwesome icons
-              insights.forEach((insight) => {
-                const listItem = document.createElement("li");
-
-                // Determine the trend and append the appropriate FontAwesome icon
-                const icon = document.createElement("i");
-                if (insight.includes("Improvement in GWA")) {
-                  icon.className = "fas fa-arrow-up"; // FontAwesome up arrow
-                  icon.style.color = "green";
-                } else if (insight.includes("Decline in GWA")) {
-                  icon.className = "fas fa-arrow-down"; // FontAwesome down arrow
-                  icon.style.color = "red";
-                } else if (insight.includes("No changes in GWA")) {
-                  icon.className = "fas fa-minus"; // FontAwesome dash
-                  icon.style.color = "goldenrod";
-                }
-
-                listItem.textContent = insight + " "; // Add a space before the icon
-                listItem.appendChild(icon);
-                insightsList.appendChild(listItem);
-              });
-
-              // Append the insights list and overall message to the span
-              interpretationSpan.appendChild(
-                document.createTextNode(
-                  "Based on the analysis of the student's performance across grade levels, the following insights were identified:"
-                )
-              );
-              interpretationSpan.appendChild(insightsList);
-              interpretationSpan.appendChild(document.createElement("br"));
-              interpretationSpan.appendChild(
-                document.createTextNode(overall_message)
-              );
-            } else {
-              interpretationSpan.textContent =
-                "No insights available for this student.";
+          .then((interpretationData) => {
+            if (interpretationData.error) {
+              interpretationElement.innerHTML = `<p style="color: red;">${interpretationData.error}</p>`;
+              return;
             }
+
+            const hasWarning = interpretationData.warning === 0;
+
+            const legendHtml = `
+              <legend style="color: ${hasWarning ? "red" : "green"};">
+                ${
+                  hasWarning
+                    ? `<img src="/SCES/assets/images/at-risk.png" alt="Warning"> Action Required`
+                    : `<img src="/SCES/assets/images/quiz-passed.png" alt="Check"> No Warnings Found`
+                }
+              </legend>
+            `;
+            const overallMessage = interpretationData.overall_message
+              ? `<p><strong>${interpretationData.overall_message}</strong></p>`
+              : "";
+            let insightsHtml = "";
+            if (
+              interpretationData.insights &&
+              interpretationData.insights.length > 0
+            ) {
+              const insightsList = interpretationData.insights
+                .map((insight) => {
+                  let iconHtml = "";
+                  if (insight.includes("Improvement in GWA")) {
+                    iconHtml = `<i class="fas fa-arrow-up" style="color: green;"></i>`;
+                  } else if (insight.includes("Decline in GWA")) {
+                    iconHtml = `<i class="fas fa-arrow-down" style="color: red;"></i>`;
+                  } else if (insight.includes("No changes in GWA")) {
+                    iconHtml = `<i class="fas fa-minus" style="color: goldenrod;"></i>`;
+                  }
+                  return `<li>${insight} ${iconHtml}</li>`;
+                })
+                .join("");
+
+              insightsHtml = `
+                <p><strong>Student's GWA across grade level:</strong></p>
+                <ul>${insightsList}</ul>
+              `;
+            } else {
+              insightsHtml = `<p>No insights available for this student.</p>`;
+            }
+            const recommendation = interpretationData.recommendation
+              ? `<p><strong>Recommendation: </strong>${interpretationData.recommendation}</p>`
+              : "";
+
+            // Combine everything into a single HTML block
+            interpretationElement.innerHTML = `
+              ${legendHtml}
+              ${overallMessage}
+              ${insightsHtml}
+              ${recommendation}
+            `;
           })
           .catch(() => {
-            interpretationSpan.textContent =
-              "Failed to fetch interpretation data.";
+            interpretationElement.innerHTML = `<p style="color: red;">Failed to fetch interpretation data.</p>`;
           });
       },
       error: function () {
-        interpretationSpan.textContent = "Failed to fetch GWA data.";
+        document.getElementById(
+          "interpretation"
+        ).innerHTML = `<p style="color: red;">Failed to fetch GWA data.</p>`;
       },
     });
   }
@@ -971,31 +1038,22 @@ document.addEventListener("DOMContentLoaded", function () {
               title: {
                 display: true,
                 text: "Grade Per Subject",
-                font: {
-                  size: 18,
-                },
-                padding: {
-                  top: 10,
-                  bottom: 10,
-                },
+                font: { size: 18 },
+                padding: { top: 10, bottom: 10 },
               },
-              legend: {
-                display: false,
-              },
+              legend: { display: false },
             },
             scales: {
-              y: {
-                beginAtZero: true,
-                max: 100,
-              },
+              y: { beginAtZero: true, max: 100 },
             },
           },
         });
-        if (subjectFilter == "All") {
-          var subjectTitles = data.labels.map(getSubjectTitle);
-        } else {
-          var subjectTitles = data.labels;
-        }
+
+        const subjectTitles =
+          subjectFilter === "All"
+            ? data.labels.map(getSubjectTitle)
+            : data.labels;
+
         $.ajax({
           url: "http://127.0.0.1:5000/interpret-grades",
           type: "POST",
@@ -1012,59 +1070,85 @@ document.addEventListener("DOMContentLoaded", function () {
             );
             interpretationSpan.innerHTML = ""; // Clear previous content
 
-            if (subjectFilter != "All") {
-              // Create a structure for displaying initial, trends (bulleted), and overall message
-              const initialPara = document.createElement("p");
-              initialPara.textContent = interpretationResponse.initial;
+            const hasWarning = interpretationResponse.warning === 0;
 
-              const trendsList = document.createElement("ul");
-              interpretationResponse.trends.forEach((trend) => {
-                const listItem = document.createElement("li");
-
-                // Create a text node for the trend description
-                const trendText = document.createTextNode(trend);
-
-                // Add FontAwesome icon based on the trend content
-                const icon = document.createElement("i");
-                if (trend.includes("An improvement")) {
-                  icon.className = "fas fa-arrow-up"; // FontAwesome up arrow
-                  icon.style.color = "green"; // Green for improvement
-                } else if (trend.includes("A decline")) {
-                  icon.className = "fas fa-arrow-down"; // FontAwesome down arrow
-                  icon.style.color = "red"; // Red for decline
-                } else if (trend.includes("No changes")) {
-                  icon.className = "fas fa-minus"; // FontAwesome dash
-                  icon.style.color = "goldenrod"; // Yellow for no changes
+            const legendHtml = `
+              <legend style="color: ${hasWarning ? "red" : "green"};">
+                ${
+                  hasWarning
+                    ? `<img src="/SCES/assets/images/at-risk.png" alt="Warning"> Action Required`
+                    : `<img src="/SCES/assets/images/quiz-passed.png" alt="Check"> No Warnings Found`
                 }
-                icon.style.marginLeft = "8px"; // Add spacing before the icon
+              </legend>
+            `;
 
-                // Append the trend text and the icon to the list item
-                listItem.appendChild(trendText);
-                listItem.appendChild(icon);
-                trendsList.appendChild(listItem);
-              });
+            const interpretation = interpretationResponse.interpretation
+              ? `<p><strong>${interpretationResponse.interpretation}</strong></p>`
+              : "";
 
-              const overallPara = document.createElement("p");
-              overallPara.textContent = interpretationResponse.overall_message;
+            let insightsHtml = "";
+            if (
+              interpretationResponse.trends &&
+              interpretationResponse.trends.length > 0
+            ) {
+              const trendsList = interpretationResponse.trends
+                .map((trend) => {
+                  let iconHtml = "";
+                  if (trend.includes("Improvement")) {
+                    iconHtml = `<i class="fas fa-arrow-up" style="color: green;"></i>`;
+                  } else if (trend.includes("Decline")) {
+                    iconHtml = `<i class="fas fa-arrow-down" style="color: red;"></i>`;
+                  } else if (trend.includes("No changes")) {
+                    iconHtml = `<i class="fas fa-minus" style="color: goldenrod;"></i>`;
+                  }
+                  return `<li>${trend} ${iconHtml}</li>`;
+                })
+                .join("");
 
-              // Append all elements to the interpretation span
-              interpretationSpan.appendChild(initialPara);
-              interpretationSpan.appendChild(trendsList);
-              interpretationSpan.appendChild(overallPara);
+              insightsHtml = `
+                <p><strong>${interpretationResponse.initial}</strong></p>
+                <ul>${trendsList}</ul>
+              `;
             } else {
-              // Fallback if trends data is missing
-              interpretationSpan.textContent =
-                interpretationResponse.interpretation ||
-                "No interpretation available.";
+              if (
+                interpretationResponse.strength &&
+                interpretationResponse.weakness
+              ) {
+                let iconHtml = "";
+                insightsHtml = `
+              <p><strong>Excels In: </strong>${interpretationResponse.strength} <i class="fas fa-arrow-up" style="color: green;"></i></p>
+              <p><strong>Difficulties In: </strong>${interpretationResponse.weakness} <i class="fas fa-arrow-down" style="color: red;"></i></p>
+              `;
+              } else {
+                insightsHtml = "";
+              }
             }
+
+            const recommendation = interpretationResponse.recommendation
+              ? `<p><strong>Recommendation: </strong>${interpretationResponse.recommendation}</p>`
+              : "";
+
+            // Combine everything into a single HTML block
+            interpretationSpan.innerHTML = `
+              ${legendHtml}
+              ${interpretation}
+              ${insightsHtml}
+              ${recommendation}
+            `;
           },
           error: function (xhr, status, error) {
-            console.error("Error fetching interpretation:", error);
+            const interpretationSpan = document.getElementById(
+              "subjectInterpretation"
+            );
+            interpretationSpan.innerHTML = `<p style="color: red;">Failed to fetch interpretation data.</p>`;
           },
         });
       },
       error: function (xhr, status, error) {
-        console.error("Error fetching data for student full bar chart:", error);
+        const interpretationSpan = document.getElementById(
+          "subjectInterpretation"
+        );
+        interpretationSpan.innerHTML = `<p style="color: red;">Error fetching data for student full bar chart</p>`;
       },
     });
   }

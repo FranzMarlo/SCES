@@ -201,7 +201,8 @@
             </div>
             <div class="modal-stats-container">
                 <div class="modal-stats-box completed">
-                    <img id="studentPredictedPerformanceIcon" src="/SCES/assets/images/passed.png" alt="performance.png">
+                    <img id="studentPredictedPerformanceIcon" src="/SCES/assets/images/passed.png"
+                        alt="performance.png">
                     <div class="stats-col">
                         <span>Predicted Performance</span>
                         <p id="studentPredictedPerformance"></p>
@@ -216,7 +217,7 @@
                 </div>
             </div>
             <div class="stats-container">
-            <div class="modal-stats-box average">
+                <div class="modal-stats-box average">
                     <img src="/SCES/assets/images/gwa.png" alt="gwa.png">
                     <div class="stats-col">
                         <span>Predicted GWA</span>
@@ -236,9 +237,8 @@
                     <canvas id="studentBarChart"></canvas>
                 </div>
             </div>
-            <div class="full-text">
-                <span id="interpretation"></span>
-            </div>
+            <fieldset class="full-text" id="interpretation">
+            </fieldset>
             <div class="filter-container">
                 <div class="title-box">
                     <img src="/SCES/assets/images/quiz-rate.png" alt="quiz-rate.png">
@@ -246,7 +246,7 @@
                 </div>
                 <div class="filter-part">
                     <select id="subjectFilterDropdown" class="filter-dropdown">
-                    <option value="All">All Subjects</option>
+                        <option value="All">All Subjects</option>
                         <option value="AP">AP</option>
                         <option value="ENG">English</option>
                         <option value="ESP">ESP</option>
@@ -271,9 +271,8 @@
                     <canvas id="studentFullBarChart"></canvas>
                 </div>
             </div>
-            <div class="full-text">
-                <span id="subjectInterpretation"></span>
-            </div>
+            <fieldset class="full-text" id="subjectInterpretation">
+            </fieldset>
         </div>
     </div>
 </div>

@@ -8,6 +8,30 @@
   padding: 10px 15px;
   text-align: justify;
 }
+.full-text legend{
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
+.full-text legend img{
+  width: 2rem; 
+  height: 2rem;
+}
+.full-text p{
+  margin-bottom: 8px;
+}
+.full-text ul{
+  margin-left: 20px;
+}
+.full-text ul li{
+  margin-bottom: 8px;
+}
+p.centered{
+  text-align: center;
+  font-size: 1.2rem;
+}
 .filter-container .title-box {
   display: flex;
   flex-direction: row;
